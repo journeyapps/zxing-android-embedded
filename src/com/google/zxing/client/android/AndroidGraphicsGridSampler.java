@@ -16,14 +16,11 @@
 
 package com.google.zxing.client.android;
 
+import android.graphics.Matrix;
 import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.detector.AlignmentPattern;
-import com.google.zxing.qrcode.detector.FinderPattern;
-import com.google.zxing.qrcode.detector.GridSampler;
-
-import android.graphics.Matrix;
+import com.google.zxing.common.GridSampler;
 
 /**
  * Implementation based on Android's
@@ -36,49 +33,22 @@ import android.graphics.Matrix;
 public final class AndroidGraphicsGridSampler extends GridSampler {
 
   @Override
-  protected BitMatrix sampleGrid(MonochromeBitmapSource image,
-                                 FinderPattern topLeft,
-                                 FinderPattern topRight,
-                                 FinderPattern bottomLeft,
-                                 AlignmentPattern alignmentPattern,
-                                 int dimension) throws ReaderException {
-    float dimMinusThree = (float) dimension - 3.5f;
-    float bottomRightX, bottomRightY;
-    float sourceBottomRightX, sourceBottomRightY;
-    if (alignmentPattern != null) {
-      bottomRightX = alignmentPattern.getX();
-      bottomRightY = alignmentPattern.getY();
-      sourceBottomRightX = sourceBottomRightY = dimMinusThree - 3.0f;
-    } else {
-      // Don't have an alignment pattern, just make up the bottom-right point
-      bottomRightX = (topRight.getX() - topLeft.getX()) + bottomLeft.getX();
-      bottomRightY = (topRight.getY() - topLeft.getY()) + bottomLeft.getY();
-      sourceBottomRightX = sourceBottomRightY = dimMinusThree;
-    }
+  public BitMatrix sampleGrid(MonochromeBitmapSource image,
+                              int dimension,
+                              float p1ToX, float p1ToY,
+                              float p2ToX, float p2ToY,
+                              float p3ToX, float p3ToY,
+                              float p4ToX, float p4ToY,
+                              float p1FromX, float p1FromY,
+                              float p2FromX, float p2FromY,
+                              float p3FromX, float p3FromY,
+                              float p4FromX, float p4FromY) throws ReaderException {
 
     Matrix transformMatrix = new Matrix();
     boolean succeeded = transformMatrix.setPolyToPoly(
-      new float[] {
-        topLeft.getX(),
-        topLeft.getY(),
-        topRight.getX(),
-        topRight.getY(),
-        bottomLeft.getX(),
-        bottomLeft.getY(),
-        bottomRightX,
-        bottomRightY
-      },
+      new float[] { p1FromX, p1FromY, p2FromX, p2FromY, p3FromX, p3FromY, p4FromX, p4FromY },
       0,
-      new float[] {
-        3.5f,
-        3.5f,
-        dimMinusThree,
-        3.5f,
-        3.5f,
-        dimMinusThree,
-        sourceBottomRightX,
-        sourceBottomRightY,
-      },
+      new float[] { p1ToX, p1ToY, p2ToX, p2ToY, p3ToX, p3ToY, p4ToX, p4ToY },
       0,
       4
     );
