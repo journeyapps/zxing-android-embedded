@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android;
 
+import android.app.Dialog;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
@@ -323,18 +324,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     Intent intent = new Intent(Intent.ACTION_VIEW);
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
     int itemId = item.getItemId();
-    if(itemId == R.id.menu_share) {
-      intent.setClassName(this, ShareActivity.class.getName());
-      startActivity(intent);
-    } else if(itemId == R.id.menu_history) {
-      intent.setClassName(this, HistoryActivity.class.getName());
-      startActivityForResult(intent, HISTORY_REQUEST_CODE);
-    } else if(itemId == R.id.menu_settings) {
-      intent.setClassName(this, PreferencesActivity.class.getName());
-      startActivity(intent);
-    } else if(itemId == R.id.menu_help) {
-      intent.setClassName(this, HelpActivity.class.getName());
-      startActivity(intent);
+    if(itemId == R.id.menu_about) {
+      showDialog(R.id.menu_about);
     } else {
       return super.onOptionsItemSelected(item);
     }
@@ -657,24 +648,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    * it to a value stored as a preference.
    */
   private boolean showHelpOnFirstLaunch() {
-    try {
-      PackageInfo info = getPackageManager().getPackageInfo(PACKAGE_NAME, 0);
-      int currentVersion = info.versionCode;
-      SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-      int lastVersion = prefs.getInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN, 0);
-      if (currentVersion > lastVersion) {
-        prefs.edit().putInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN, currentVersion).commit();
-        Intent intent = new Intent(this, HelpActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        // Show the default page on a clean install, and the what's new page on an upgrade.
-        String page = lastVersion == 0 ? HelpActivity.DEFAULT_PAGE : HelpActivity.WHATS_NEW_PAGE;
-        intent.putExtra(HelpActivity.REQUESTED_PAGE_KEY, page);
-        startActivity(intent);
-        return true;
-      }
-    } catch (PackageManager.NameNotFoundException e) {
-      Log.w(TAG, e);
-    }
+    // Library project: we do not ever want to confuse the user with a help screen.
     return false;
   }
 
@@ -730,5 +704,18 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   public void drawViewfinder() {
     viewfinderView.drawViewfinder();
+  }
+
+  @Override
+  protected Dialog onCreateDialog(int id, Bundle args) {
+    if(id == R.id.menu_about) {
+      AlertDialog.Builder builder = new AlertDialog.Builder(this);
+      builder.setTitle(getString(R.string.app_name));
+      builder.setMessage(getString(R.string.msg_about));
+      builder.setPositiveButton(R.string.button_ok, null);
+      return builder.create();
+    } else {
+      return super.onCreateDialog(id, args);
+    }
   }
 }

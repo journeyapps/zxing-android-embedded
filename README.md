@@ -32,14 +32,6 @@ public Maven repository. It is assumed that you are familiar with Android projec
             android:windowSoftInputMode="stateAlwaysHidden"
             android:taskAffinity="com.embarkmobile.zxing"/>
 
-    <activity android:name="com.google.zxing.client.android.HelpActivity" android:screenOrientation="user"
-            android:taskAffinity="com.embarkmobile.zxing">
-        <intent-filter>
-            <action android:name="android.intent.action.VIEW"/>
-            <category android:name="android.intent.category.DEFAULT"/>
-        </intent-filter>
-    </activity>
-
 ### Launch the intent:
 
         // We explicitly specify the class, so the packaged class is always used, even if BarcodeScanner is also
