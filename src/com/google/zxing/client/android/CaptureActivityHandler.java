@@ -73,58 +73,56 @@ public final class CaptureActivityHandler extends Handler {
 
   @Override
   public void handleMessage(Message message) {
-    switch (message.what) {
-      case R.id.restart_preview:
-        Log.d(TAG, "Got restart preview message");
-        restartPreviewAndDecode();
-        break;
-      case R.id.decode_succeeded:
-        Log.d(TAG, "Got decode succeeded message");
-        state = State.SUCCESS;
-        Bundle bundle = message.getData();
-        Bitmap barcode = bundle == null ? null :
-            (Bitmap) bundle.getParcelable(DecodeThread.BARCODE_BITMAP);
-        activity.handleDecode((Result) message.obj, barcode);
-        break;
-      case R.id.decode_failed:
-        // We're decoding as fast as possible, so when one decode fails, start another.
-        state = State.PREVIEW;
-        cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
-        break;
-      case R.id.return_scan_result:
-        Log.d(TAG, "Got return scan result message");
-        activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
-        activity.finish();
-        break;
-      case R.id.launch_product_query:
-        Log.d(TAG, "Got product query message");
-        String url = (String) message.obj;
+    if (message.what == R.id.restart_preview) {
+      Log.d(TAG, "Got restart preview message");
+      restartPreviewAndDecode();
 
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        intent.setData(Uri.parse(url));
+    } else if (message.what == R.id.decode_succeeded) {
+      Log.d(TAG, "Got decode succeeded message");
+      state = State.SUCCESS;
+      Bundle bundle = message.getData();
+      Bitmap barcode = bundle == null ? null :
+              (Bitmap) bundle.getParcelable(DecodeThread.BARCODE_BITMAP);
+      activity.handleDecode((Result) message.obj, barcode);
 
-        ResolveInfo resolveInfo =
-            activity.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-        String browserPackageName = null;
-        if (resolveInfo.activityInfo != null) {
-          browserPackageName = resolveInfo.activityInfo.packageName;
-          Log.d(TAG, "Using browser in package " + browserPackageName);
-        }
+    } else if (message.what == R.id.decode_failed) {// We're decoding as fast as possible, so when one decode fails, start another.
+      state = State.PREVIEW;
+      cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
 
-        // Needed for default Android browser / Chrome only apparently
-        if ("com.android.browser".equals(browserPackageName) || "com.android.chrome".equals(browserPackageName)) {
-          intent.setPackage(browserPackageName);
-          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-          intent.putExtra(Browser.EXTRA_APPLICATION_ID, browserPackageName);
-        }
+    } else if (message.what == R.id.return_scan_result) {
+      Log.d(TAG, "Got return scan result message");
+      activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
+      activity.finish();
 
-        try {
-          activity.startActivity(intent);
-        } catch (ActivityNotFoundException anfe) {
-          Log.w(TAG, "Can't find anything to handle VIEW of URI " + url);
-        }
-        break;
+    } else if (message.what == R.id.launch_product_query) {
+      Log.d(TAG, "Got product query message");
+      String url = (String) message.obj;
+
+      Intent intent = new Intent(Intent.ACTION_VIEW);
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+      intent.setData(Uri.parse(url));
+
+      ResolveInfo resolveInfo =
+              activity.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+      String browserPackageName = null;
+      if (resolveInfo.activityInfo != null) {
+        browserPackageName = resolveInfo.activityInfo.packageName;
+        Log.d(TAG, "Using browser in package " + browserPackageName);
+      }
+
+      // Needed for default Android browser / Chrome only apparently
+      if ("com.android.browser".equals(browserPackageName) || "com.android.chrome".equals(browserPackageName)) {
+        intent.setPackage(browserPackageName);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(Browser.EXTRA_APPLICATION_ID, browserPackageName);
+      }
+
+      try {
+        activity.startActivity(intent);
+      } catch (ActivityNotFoundException anfe) {
+        Log.w(TAG, "Can't find anything to handle VIEW of URI " + url);
+      }
+
     }
   }
 
