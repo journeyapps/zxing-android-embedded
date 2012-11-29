@@ -16,27 +16,22 @@
 
 package com.google.zxing.client.android;
 
-import android.app.Dialog;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.camera.CameraManager;
-import com.google.zxing.client.android.history.HistoryActivity;
 import com.google.zxing.client.android.history.HistoryItem;
 import com.google.zxing.client.android.history.HistoryManager;
 import com.google.zxing.client.android.result.ResultButtonListener;
 import com.google.zxing.client.android.result.ResultHandler;
 import com.google.zxing.client.android.result.ResultHandlerFactory;
 import com.google.zxing.client.android.result.supplement.SupplementalInfoRetriever;
-import com.google.zxing.client.android.share.ShareActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -324,8 +319,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     Intent intent = new Intent(Intent.ACTION_VIEW);
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
     int itemId = item.getItemId();
-    if(itemId == R.id.menu_about) {
-      showDialog(R.id.menu_about);
+    if(itemId == R.id.menu_help) {
+      intent.setClassName(this, HelpActivity.class.getName());
+      startActivity(intent);
     } else {
       return super.onOptionsItemSelected(item);
     }
@@ -704,18 +700,5 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   public void drawViewfinder() {
     viewfinderView.drawViewfinder();
-  }
-
-  @Override
-  protected Dialog onCreateDialog(int id, Bundle args) {
-    if(id == R.id.menu_about) {
-      AlertDialog.Builder builder = new AlertDialog.Builder(this);
-      builder.setTitle(getString(R.string.app_name));
-      builder.setMessage(getString(R.string.msg_about));
-      builder.setPositiveButton(R.string.button_ok, null);
-      return builder.create();
-    } else {
-      return super.onCreateDialog(id, args);
-    }
   }
 }

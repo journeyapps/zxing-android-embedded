@@ -31,6 +31,8 @@ public Maven repository. It is assumed that you are familiar with Android projec
             android:stateNotNeeded="true" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:taskAffinity="com.embarkmobile.zxing"/>
+    <activity android:name="com.google.zxing.client.android.HelpActivity" android:screenOrientation="user"
+            android:taskAffinity="com.embarkmobile.zxing"/>
 
 ### Launch the intent:
 
