@@ -49,38 +49,6 @@
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
-      <intent-filter>
-        <action android:name="com.google.zxing.client.android.SCAN"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-      </intent-filter>
-      <!-- Allow web apps to launch Barcode Scanner by linking to http://zxing.appspot.com/scan. -->
-      <intent-filter>
-        <action android:name="android.intent.action.VIEW"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-        <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:host="zxing.appspot.com" android:path="/scan" android:scheme="http"/>
-      </intent-filter>
-      <!-- We also support a Google Product Search URL. -->
-      <intent-filter>
-        <action android:name="android.intent.action.VIEW"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-        <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:host="www.google.com" android:path="/m/products/scan" android:scheme="http"/>
-      </intent-filter>
-      <!-- And the UK version. -->
-      <intent-filter>
-        <action android:name="android.intent.action.VIEW"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-        <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:host="www.google.co.uk" android:path="/m/products/scan" android:scheme="http"/>
-      </intent-filter>
-      <!-- Support zxing://scan/?... like iPhone app -->
-      <intent-filter>
-        <action android:name="android.intent.action.VIEW"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-        <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:host="scan" android:path="/" android:scheme="zxing"/>
-      </intent-filter>
     </activity>
     <activity android:label="@string/preferences_name" android:name=".PreferencesActivity" android:stateNotNeeded="true">
     </activity>
@@ -100,36 +68,6 @@
         <action android:name="android.intent.action.SEND"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <data android:mimeType="text/plain"/>
-      </intent-filter>
-    </activity>
-    <activity android:configChanges="orientation|keyboardHidden" android:label="@string/sbc_name" android:name=".book.SearchBookContentsActivity" android:screenOrientation="landscape" android:stateNotNeeded="true">
-      <intent-filter>
-        <action android:name="com.google.zxing.client.android.SEARCH_BOOK_CONTENTS"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-      </intent-filter>
-    </activity>
-    <activity android:label="@string/share_name" android:name=".share.ShareActivity" android:screenOrientation="user" android:stateNotNeeded="true" android:theme="@android:style/Theme.Light">
-      <intent-filter>
-        <action android:name="com.google.zxing.client.android.SHARE"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-      </intent-filter>
-    </activity>
-    <activity android:label="@string/history_title" android:name=".history.HistoryActivity" android:stateNotNeeded="true">
-      <intent-filter>
-        <action android:name="android.intent.action.VIEW"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-      </intent-filter>
-    </activity>
-    <activity android:label="@string/bookmark_picker_name" android:name=".share.BookmarkPickerActivity" android:stateNotNeeded="true">
-      <intent-filter>
-        <action android:name="android.intent.action.PICK"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-      </intent-filter>
-    </activity>
-    <activity android:configChanges="orientation" android:label="@string/app_picker_name" android:name=".share.AppPickerActivity" android:stateNotNeeded="true">
-      <intent-filter>
-        <action android:name="android.intent.action.PICK"/>
-        <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </activity>
     <activity android:name=".HelpActivity" android:screenOrientation="user">
