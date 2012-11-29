@@ -22,7 +22,7 @@ public Maven repository. It is assumed that you are familiar with Android projec
     <dependency>
         <groupId>com.embarkmobile</groupId>
         <artifactId>zxing-android-minimal</artifactId>
-        <version>2.2-SNAPSHOT</version>
+        <version>1.0.0</version>
         <type>apklib</type>
         <scope>compile</scope>
     </dependency>
@@ -48,6 +48,37 @@ public Maven repository. It is assumed that you are familiar with Android projec
         // We still need to explicitly define the action, so CaptureActivity sees us as an external source.
         intent.setAction(com.google.zxing.client.android.Intents.Scan.ACTION);
         startActivity(intent);
+
+## Deploy
+
+To deploy to your own repository, add the following to your settings.xml (typically in `~/.m2/settings.xml`):
+
+    <profiles>
+        <profile>
+            <id>repository-properties</id>
+            <properties>
+                <repo.id>your-repo-id</repo.id>
+                <repo.url>https://your/repo/url</repo.url>
+                <repo.name>Your Repo Name</repo.name>
+            </properties>
+        </profile>
+    </profiles>
+
+    <activeProfiles>
+        <activeProfile>repository-properties</activeProfile>
+    </activeProfiles>
+
+    <servers>
+        <server>
+            <id>your-repo-id</id><!-- must match repo.id above -->
+            <username>your-username</username>
+            <password>your-password</password>
+        </server>
+    </servers>
+
+Then run:
+
+    mvn clean deploy
 
 ## License
 

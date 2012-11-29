@@ -72,4 +72,13 @@
         </plugins>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>${repo.id}</id>
+            <name>${repo.name}</name>
+            <url>${repo.url}</url>
+        </repository>
+    </distributionManagement>
+
+
 </project>
