@@ -6,7 +6,7 @@
 
     <groupId>com.embarkmobile</groupId>
     <artifactId>zxing-android-minimal</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
     <packaging>apklib</packaging>
 
 
@@ -47,7 +47,7 @@
                 <!-- See http://code.google.com/p/maven-android-plugin/ -->
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.4.1</version>
                 <configuration>
                     <sdk>
                         <!-- platform or api level (api level 16 = platform 4.1.1.4)-->

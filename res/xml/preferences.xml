@@ -96,9 +96,4 @@
         android:title="@string/preferences_disable_exposure_title"/>
      -->
   </PreferenceCategory>
-  <PreferenceCategory android:title="@string/preferences_try_bsplus">
-    <com.google.zxing.client.android.pref.BSPlusPreference
-        android:title="@string/preferences_try_bsplus"
-        android:summary="@string/preferences_try_bsplus_summary"/>
-  </PreferenceCategory>
 </PreferenceScreen>

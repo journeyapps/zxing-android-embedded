@@ -27,6 +27,7 @@ public Maven repository. It is assumed that you are familiar with Android projec
         <scope>compile</scope>
     </dependency>
 
+
 ### Add to your AndroidManifest.xml:
 
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -35,10 +36,14 @@ public Maven repository. It is assumed that you are familiar with Android projec
     <activity android:clearTaskOnLaunch="true" android:configChanges="orientation|keyboardHidden"
             android:name="com.google.zxing.client.android.CaptureActivity" android:screenOrientation="landscape"
             android:stateNotNeeded="true" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:taskAffinity="com.embarkmobile.zxing"/>
-    <activity android:name="com.google.zxing.client.android.HelpActivity" android:screenOrientation="user"
-            android:taskAffinity="com.embarkmobile.zxing"/>
+            android:windowSoftInputMode="stateAlwaysHidden"/>
+    <activity android:name="com.google.zxing.client.android.HelpActivity" android:screenOrientation="user"/>
+
+### Alternatively: Enable manifest merging in your project's pom.xml
+
+This is a fairly new feature in the maven-android-plugin, and not documented yet.
+
+See [https://github.com/jayway/maven-android-plugin/pull/135](https://github.com/jayway/maven-android-plugin/pull/135) for details.
 
 ### Launch the intent:
 
