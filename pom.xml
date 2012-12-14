@@ -6,7 +6,7 @@
 
     <groupId>com.embarkmobile</groupId>
     <artifactId>zxing-android-minimal</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <packaging>apklib</packaging>
 
 
@@ -53,21 +53,8 @@
                         <!-- platform or api level (api level 16 = platform 4.1.1.4)-->
                         <platform>16</platform>
                     </sdk>
-                    <manifest>
-                        <versionName />
-                        <!-- default to project.version -->
-                        <versionCodeUpdateFromVersion>true</versionCodeUpdateFromVersion>
-                    </manifest>
                 </configuration>
                 <extensions>true</extensions>
-                <executions>
-                    <execution>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>manifest-update</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
