@@ -69,7 +69,7 @@ public final class EncodeActivity extends Activity {
     } else {
       String action = intent.getAction();
       if (Intents.Encode.ACTION.equals(action) || Intent.ACTION_SEND.equals(action)) {
-        setContentView(R.layout.encode);
+        setContentView(R.layout.zxing_encode);
       } else {
         finish();
       }
@@ -79,7 +79,7 @@ public final class EncodeActivity extends Activity {
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     MenuInflater menuInflater = getMenuInflater();
-    menuInflater.inflate(R.menu.encode, menu);
+    menuInflater.inflate(R.menu.zxing_encode, menu);
     boolean useVcard = qrCodeEncoder != null && qrCodeEncoder.isUseVCard();
     int encodeNameResource = useVcard ? R.string.menu_encode_mecard : R.string.menu_encode_vcard;
     MenuItem encodeItem = menu.findItem(R.id.menu_encode);
@@ -164,7 +164,7 @@ public final class EncodeActivity extends Activity {
     }
 
     Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
-    intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + " - " + encoder.getTitle());
+    intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.zxing_app_name) + " - " + encoder.getTitle());
     intent.putExtra(Intent.EXTRA_TEXT, contents);
     intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + barcodeFile.getAbsolutePath()));
     intent.setType("image/png");

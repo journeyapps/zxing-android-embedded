@@ -103,14 +103,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     Window window = getWindow();
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    setContentView(R.layout.capture);
+    setContentView(R.layout.zxing_capture);
 
     hasSurface = false;
     inactivityTimer = new InactivityTimer(this);
     beepManager = new BeepManager(this);
     ambientLightManager = new AmbientLightManager(this);
 
-    PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+    PreferenceManager.setDefaultValues(this, R.xml.zxing_preferences, false);
 
     showHelpOnFirstLaunch();
   }
@@ -277,7 +277,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     MenuInflater menuInflater = getMenuInflater();
-    menuInflater.inflate(R.menu.capture, menu);
+    menuInflater.inflate(R.menu.zxing_capture, menu);
     return super.onCreateOptionsMenu(menu);
   }
 
@@ -488,7 +488,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   private void displayFrameworkBugMessageAndExit() {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setTitle(getString(R.string.app_name));
+    builder.setTitle(getString(R.string.zxing_app_name));
     builder.setMessage(getString(R.string.msg_camera_framework_bug));
     builder.setPositiveButton(R.string.button_ok, new FinishListener(this));
     builder.setOnCancelListener(new FinishListener(this));

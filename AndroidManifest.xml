@@ -13,8 +13,7 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
- -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" android:versionCode="102" android:versionName="1.0.1" package="com.google.zxing.client.android">
+ --><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="110" android:versionName="1.1.0" package="com.google.zxing.client.android">
 
   <uses-permission android:name="android.permission.CAMERA"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
@@ -38,8 +37,7 @@
   <!-- Donut-specific flags which allow us to run on any dpi screens. -->
   <supports-screens android:anyDensity="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true" android:xlargeScreens="true"/>
 
-  <application android:icon="@drawable/launcher_icon" android:label="@string/app_name">
-
+  <application>
       <activity android:clearTaskOnLaunch="true" android:configChanges="orientation|keyboardHidden" android:name="com.google.zxing.client.android.CaptureActivity" android:screenOrientation="landscape" android:stateNotNeeded="true" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:windowSoftInputMode="stateAlwaysHidden"/>
       <activity android:name="com.google.zxing.client.android.HelpActivity" android:screenOrientation="user"/>
   </application>
