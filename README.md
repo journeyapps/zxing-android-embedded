@@ -22,7 +22,7 @@ public Maven repository. It is assumed that you are familiar with Android projec
     <dependency>
         <groupId>com.embarkmobile</groupId>
         <artifactId>zxing-android-minimal</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.1</version>
         <type>apklib</type>
         <scope>compile</scope>
     </dependency>
