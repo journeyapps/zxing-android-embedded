@@ -1,6 +1,6 @@
 # ZXing Android Minimal
 
-This is a port of the [http://code.google.com/p/zxing/](ZXing Android Barcode Scanner application) as a minimal Android
+This is a port of the [ZXing Android Barcode Scanner application](http://code.google.com/p/zxing/) as a minimal Android
 library project, for embedding in other Android applications. This is not affiliated with the official ZXing project.
 
 Generally it is recommended to scan a barcode [via intents](http://code.google.com/p/zxing/wiki/ScanningViaIntent).
