@@ -39,20 +39,15 @@ public Maven repository. It is assumed that you are familiar with Android projec
             android:windowSoftInputMode="stateAlwaysHidden"/>
     <activity android:name="com.google.zxing.client.android.HelpActivity" android:screenOrientation="user"/>
 
-### Alternatively: Enable manifest merging in your project's pom.xml
+### Alternative: Enable manifest merging in your project's pom.xml
 
 This is a fairly new feature in the maven-android-plugin, and not documented yet.
 
 See [https://github.com/jayway/maven-android-plugin/pull/135](https://github.com/jayway/maven-android-plugin/pull/135) for details.
 
-### Launch the intent:
+### Launch the intent using the bundled IntentIntegrator:
 
-        // We explicitly specify the class, so the packaged class is always used, even if BarcodeScanner is also
-        // installed.
-        Intent intent = new Intent(this, com.google.zxing.client.android.CaptureActivity.class);
-        // We still need to explicitly define the action, so CaptureActivity sees us as an external source.
-        intent.setAction(com.google.zxing.client.android.Intents.Scan.ACTION);
-        startActivity(intent);
+        IntentIntegrator.initiateScan(this);
 
 ## Deploy
 
