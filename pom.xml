@@ -104,17 +104,10 @@
 
     <distributionManagement>
         <repository>
-          <uniqueVersion>false</uniqueVersion>
-          <id>Team-Library</id>
-          <name>The team repository</name>
-          <url>${env.MAVEN_DEPLOY}</url>
+            <id>${repo.id}</id> 
+ 	    <name>${repo.name}</name> 
+ 	    <url>${repo.url}</url>
         </repository>
-        <snapshotRepository>
-          <uniqueVersion>true</uniqueVersion>
-          <id>Local-Snapshot</id>
-          <name>The local snapshot repository</name>
-          <url>${env.MAVEN_INSTALL}</url>
-        </snapshotRepository>
     </distributionManagement>
   <!-- Properties –––––––––––––––––––––––––––––––––––––––––––– {{{1 ––––– -->
   <properties>

@@ -22,8 +22,8 @@ GOTO :eof
 
 import scala.sys.process._
 
-"git" :: "add" :: "." :: Nil !;
-"git" :: "pull" :: "https://github.com/krischik/zxing-android-minimal.git" :: Nil !;
+"git" :: "add"  :: "." :: Nil !;
+"git" :: "commit" :: "--message" :: argv (0) :: Nil !;
 "git" :: "push" :: Nil !;
 
 // vim: set wrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
