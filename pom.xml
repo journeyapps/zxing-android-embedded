@@ -6,15 +6,22 @@
 
     <groupId>com.embarkmobile</groupId>
     <artifactId>zxing-android-minimal</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <packaging>apklib</packaging>
 
 
     <dependencies>
+      <!--
+      – You need Android-Deployer for this dependency to work. Don't search, there is
+      – no ready made deployment to be found. You need to download and delopy it yourself.
+      – But then is the most up-to-date android dependency.
+      –
+      – https://github.com/mosabua/maven-android-sdk-deployer.git
+      -->
         <dependency>
-            <groupId>com.google.android</groupId>
+            <groupId>android</groupId>
             <artifactId>android</artifactId>
-            <version>4.1.1.4</version>
+            <version>${android.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -25,13 +32,50 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.intellij</groupId>
+            <artifactId>annotations</artifactId>
+            <scope>compile</scope>
+            <version>9.0.4</version>
+        </dependency>
+
     </dependencies>
 
 
     <build>
         <finalName>${project.artifactId}</finalName>
-
         <sourceDirectory>src</sourceDirectory>
+
+      <!--
+      – You never know which transport is neede to fill a local repository
+      -->
+        <extensions>
+          <extension>
+            <groupId>org.apache.maven.wagon</groupId>
+            <artifactId>wagon-ssh</artifactId>
+            <version>2.3</version>
+          </extension>
+          <extension>
+            <groupId>org.apache.maven.wagon</groupId>
+            <artifactId>wagon-scm</artifactId>
+            <version>2.3</version>
+          </extension>
+          <extension>
+            <groupId>org.jvnet.wagon-svn</groupId>
+            <artifactId>wagon-svn</artifactId>
+            <version>1.12</version>
+          </extension>
+          <extension>
+            <groupId>org.apache.maven.scm</groupId>
+            <artifactId>maven-scm-manager-plexus</artifactId>
+            <version>1.8.1</version>
+          </extension>
+          <extension>
+            <groupId>org.apache.maven.scm</groupId>
+            <artifactId>maven-scm-provider-svnexe</artifactId>
+            <version>1.8</version>
+          </extension>
+        </extensions>
 
         <plugins>
             <plugin>
@@ -50,8 +94,7 @@
                 <version>3.4.1</version>
                 <configuration>
                     <sdk>
-                        <!-- platform or api level (api level 16 = platform 4.1.1.4)-->
-                        <platform>16</platform>
+                        <platform>${android.platform}</platform>
                     </sdk>
                 </configuration>
                 <extensions>true</extensions>
@@ -66,6 +109,51 @@
             <url>${repo.url}</url>
         </repository>
     </distributionManagement>
+
+  <!-- Profiles –––––––––––––––––––––––––––––––––––––––––––––– {{{1 ––––– -->
+  <profiles>
+    <!-- Release ––––––––––––––––––––––––––––––––––––––––––––––– {{{2 ––––– -->
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar</goal>
+                  <goal>test-jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-documentation</id>
+                <goals>
+                  <goal>jar</goal>
+                  <goal>test-jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––– }}}2 ––––– -->
+  </profiles>
+  <!-- Properties –––––––––––––––––––––––––––––––––––––––––––– {{{1 ––––– -->
+  <properties>
+    <android.platform>17</android.platform>
+    <android.version>4.2_r1</android.version>
+  </properties>
+  <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––– }}}1 ––––– -->
 
 
 </project>
