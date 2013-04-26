@@ -109,6 +109,45 @@
             <url>${repo.url}</url>
         </repository>
     </distributionManagement>
+
+  <!-- Profiles –––––––––––––––––––––––––––––––––––––––––––––– {{{1 ––––– -->
+  <profiles>
+    <!-- Release ––––––––––––––––––––––––––––––––––––––––––––––– {{{2 ––––– -->
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar</goal>
+                  <goal>test-jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-documentation</id>
+                <goals>
+                  <goal>jar</goal>
+                  <goal>test-jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––– }}}2 ––––– -->
+  </profiles>
   <!-- Properties –––––––––––––––––––––––––––––––––––––––––––– {{{1 ––––– -->
   <properties>
     <android.platform>17</android.platform>
