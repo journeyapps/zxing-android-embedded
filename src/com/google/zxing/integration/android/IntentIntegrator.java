@@ -1,17 +1,10 @@
 package com.google.zxing.integration.android;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
 import android.view.Display;
 import com.google.zxing.client.android.Intents;
-
-import java.lang.CharSequence;import java.lang.Math;import java.lang.String;import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * TODO: update these docs - a lot of it is not relevant anymore.
@@ -97,7 +90,7 @@ public final class IntentIntegrator {
         // check which types of codes to scan for
         if (stringDesiredBarcodeFormats != null) {
             // set the desired barcode types
-            intentScan.putExtra("SCAN_FORMATS", stringDesiredBarcodeFormats);
+            intentScan.putExtra(Intents.Scan.FORMATS, stringDesiredBarcodeFormats);
 
             String formats = stringDesiredBarcodeFormats.toString();
             // Hack to use a wider viewfinder for CODE 39 barcodes. This should probably be in the main code instead.
@@ -116,8 +109,8 @@ public final class IntentIntegrator {
                 int desiredWidth = displayWidth * 9 / 10;
                 int desiredHeight = Math.min(displayHeight * 3 / 4, 400);    // Limit to 400px
 
-                intentScan.putExtra("SCAN_WIDTH", desiredWidth);
-                intentScan.putExtra("SCAN_HEIGHT", desiredHeight);
+                intentScan.putExtra(Intents.Scan.WIDTH, desiredWidth);
+                intentScan.putExtra(Intents.Scan.HEIGHT, desiredHeight);
             }
         }
 
@@ -130,8 +123,37 @@ public final class IntentIntegrator {
         activity.startActivityForResult(intentScan, REQUEST_CODE);
     }
 
+   /**
+    * <p>Set flash light mode</p>
+    *
+    * @author "Martin Krischik" <martin.krischik@noser.com>
+    * @param context
+    *    context needed to access the shared preferenes.
+    * @param lightMode
+    *    desired mode for the flash light
+    */
+   public static void setFlashlight (
+      @NotNull final android.content.Context context,
+      @NotNull final com.google.zxing.client.android.camera.FrontLightMode lightMode)
+   {
+      // android.util.Log.d (IntentIntegrator.TAG, "+ setFlashlight");
+      // android.util.Log.v (IntentIntegrator.TAG, "> context   : " + context);
+      // android.util.Log.v (IntentIntegrator.TAG, "> lightMode : " + lightMode);
 
-    /**
+      final android.content.SharedPreferences sharedPrefs =
+         android.preference.PreferenceManager.getDefaultSharedPreferences (context);
+      final android.content.SharedPreferences.Editor editor = sharedPrefs.edit ();
+
+      editor.putString (
+         com.google.zxing.client.android.PreferencesActivity.KEY_FRONT_LIGHT_MODE,
+         lightMode.name ());
+      editor.apply ();
+
+      // android.util.Log.d (IntentIntegrator.TAG, "- setFlashlight");
+      return;
+   } // setFlashlight
+
+   /**
      * <p>Call this from your {@link android.app.Activity}'s
      * {@link android.app.Activity#onActivityResult(int, int, android.content.Intent)} method.</p>
      *
@@ -160,17 +182,17 @@ public final class IntentIntegrator {
      */
     public static void shareText(Activity activity, CharSequence text) {
         // TODO: fix this
-        Intent intent = new Intent();
+        final Intent intent = new Intent();
         intent.setAction(PACKAGE + ".ENCODE");
 
-        intent.putExtra("ENCODE_TYPE", "TEXT_TYPE");
-        intent.putExtra("ENCODE_DATA", text);
+        intent.putExtra(Intents.Encode.TYPE, "TEXT_TYPE");
+        intent.putExtra(Intents.Encode.DATA, text);
 
-        activity.startActivity(intent);
+        activity.startActivity (intent);
     }
 
     private static Intent createScanIntent(Activity activity) {
-        Intent intent = new Intent(activity, com.google.zxing.client.android.CaptureActivity.class);
+        final Intent intent = new Intent(activity, com.google.zxing.client.android.CaptureActivity.class);
         intent.setAction(Intents.Scan.ACTION);
         return intent;
     }
