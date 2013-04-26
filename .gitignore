@@ -1,3 +1,4 @@
 gen
 target
-
+*.jar
+.backups

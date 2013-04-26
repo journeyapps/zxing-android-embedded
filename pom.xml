@@ -30,8 +30,35 @@
 
     <build>
         <finalName>${project.artifactId}</finalName>
-
         <sourceDirectory>src</sourceDirectory>
+
+        <extensions>
+          <extension>
+            <groupId>org.apache.maven.wagon</groupId>
+            <artifactId>wagon-ssh</artifactId>
+            <version>2.3</version>
+          </extension>
+          <extension>
+            <groupId>org.apache.maven.wagon</groupId>
+            <artifactId>wagon-scm</artifactId>
+            <version>2.3</version>
+          </extension>
+          <extension>
+            <groupId>org.jvnet.wagon-svn</groupId>
+            <artifactId>wagon-svn</artifactId>
+            <version>1.12</version>
+          </extension>
+          <extension>
+            <groupId>org.apache.maven.scm</groupId>
+            <artifactId>maven-scm-manager-plexus</artifactId>
+            <version>1.8.1</version>
+          </extension>
+          <extension>
+            <groupId>org.apache.maven.scm</groupId>
+            <artifactId>maven-scm-provider-svnexe</artifactId>
+            <version>1.8.1</version>
+          </extension>
+        </extensions>
 
         <plugins>
             <plugin>
@@ -61,10 +88,22 @@
 
     <distributionManagement>
         <repository>
-            <id>${repo.id}</id>
-            <name>${repo.name}</name>
-            <url>${repo.url}</url>
+          <uniqueVersion>false</uniqueVersion>
+          <id>Team-Library</id>
+          <name>The team repository</name>
+          <url>${env.MAVEN_DEPLOY}</url>
         </repository>
+        <snapshotRepository>
+          <uniqueVersion>true</uniqueVersion>
+          <id>Local-Snapshot</id>
+          <name>The local snapshot repository</name>
+          <url>${env.MAVEN_INSTALL}</url>
+        </snapshotRepository>
+        <site>
+          <id>Team-Site</id>
+          <name>The team site</name>
+          <url>${env.MAVEN_SITE}/ZXing</url>
+        </site>
     </distributionManagement>
 
 
