@@ -35,8 +35,8 @@
         <dependency>
             <groupId>com.intellij</groupId>
             <artifactId>annotations</artifactId>
-  	    <scope>compile</scope>
-  	    <version>9.0.4</version>
+            <scope>compile</scope>
+            <version>9.0.4</version>
         </dependency>
 
     </dependencies>
@@ -104,9 +104,9 @@
 
     <distributionManagement>
         <repository>
-            <id>${repo.id}</id> 
- 	    <name>${repo.name}</name> 
- 	    <url>${repo.url}</url>
+            <id>${repo.id}</id>
+            <name>${repo.name}</name>
+            <url>${repo.url}</url>
         </repository>
     </distributionManagement>
   <!-- Properties –––––––––––––––––––––––––––––––––––––––––––– {{{1 ––––– -->
