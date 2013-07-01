@@ -1,3 +1,5 @@
 gen
 target
+.gradle
+build
 
