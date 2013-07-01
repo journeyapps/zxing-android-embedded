@@ -6,7 +6,7 @@
 
     <groupId>com.embarkmobile</groupId>
     <artifactId>zxing-android-minimal</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <packaging>apklib</packaging>
 
 
