@@ -2,4 +2,6 @@ gen
 target
 .gradle
 build
+.idea
+maven-repository
 

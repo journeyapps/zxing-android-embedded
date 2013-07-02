@@ -9,6 +9,10 @@ buildscript {
 }
 
 apply plugin: 'android-library'
+apply plugin: 'maven'
+
+version = '1.1.2'
+group = 'com.embarkmobile'
 
 repositories {
     mavenCentral()
@@ -36,3 +40,9 @@ android {
 
 
 
+
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: "file:maven-repository/")
+    }
+}
