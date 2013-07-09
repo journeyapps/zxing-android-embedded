@@ -19,8 +19,10 @@ package com.google.zxing.client.android;
 import android.content.ActivityNotFoundException;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.BitmapFactory;
 import android.provider.Browser;
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
 import com.google.zxing.client.android.camera.CameraManager;
 
@@ -34,6 +36,7 @@ import android.os.Message;
 import android.util.Log;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * This class handles all the messaging which comprises the state machine for capture.
@@ -57,10 +60,11 @@ public final class CaptureActivityHandler extends Handler {
 
   CaptureActivityHandler(CaptureActivity activity,
                          Collection<BarcodeFormat> decodeFormats,
+                         Map<DecodeHintType,?> baseHints,
                          String characterSet,
                          CameraManager cameraManager) {
     this.activity = activity;
-    decodeThread = new DecodeThread(activity, decodeFormats, characterSet,
+    decodeThread = new DecodeThread(activity, decodeFormats, baseHints, characterSet,
         new ViewfinderResultPointCallback(activity.getViewfinderView()));
     decodeThread.start();
     state = State.SUCCESS;
@@ -81,9 +85,18 @@ public final class CaptureActivityHandler extends Handler {
       Log.d(TAG, "Got decode succeeded message");
       state = State.SUCCESS;
       Bundle bundle = message.getData();
-      Bitmap barcode = bundle == null ? null :
-              (Bitmap) bundle.getParcelable(DecodeThread.BARCODE_BITMAP);
-      activity.handleDecode((Result) message.obj, barcode);
+      Bitmap barcode = null;
+      float scaleFactor = 1.0f;
+      if (bundle != null) {
+        byte[] compressedBitmap = bundle.getByteArray(DecodeThread.BARCODE_BITMAP);
+        if (compressedBitmap != null) {
+          barcode = BitmapFactory.decodeByteArray(compressedBitmap, 0, compressedBitmap.length, null);
+          // Mutable copy:
+          barcode = barcode.copy(Bitmap.Config.ARGB_8888, true);
+        }
+        scaleFactor = bundle.getFloat(DecodeThread.BARCODE_SCALED_FACTOR);
+      }
+      activity.handleDecode((Result) message.obj, barcode, scaleFactor);
 
     } else if (message.what == R.id.decode_failed) {// We're decoding as fast as possible, so when one decode fails, start another.
       state = State.PREVIEW;
@@ -119,7 +132,7 @@ public final class CaptureActivityHandler extends Handler {
 
       try {
         activity.startActivity(intent);
-      } catch (ActivityNotFoundException anfe) {
+      } catch (ActivityNotFoundException ignored) {
         Log.w(TAG, "Can't find anything to handle VIEW of URI " + url);
       }
 

@@ -16,11 +16,21 @@
 
 package com.google.zxing.client.android;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.camera.CameraManager;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.net.Uri;
@@ -28,17 +38,27 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.text.ClipboardManager;
 import android.util.Log;
-import android.view.*;
+import android.util.TypedValue;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.Result;
-import com.google.zxing.ResultMetadataType;
-import com.google.zxing.ResultPoint;
-import com.google.zxing.client.android.camera.CameraManager;
+import android.widget.Toast;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
@@ -80,6 +100,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private IntentSource source;
   private String sourceUrl;
   private Collection<BarcodeFormat> decodeFormats;
+  private Map<DecodeHintType,?> decodeHints;
   private String characterSet;
   private InactivityTimer inactivityTimer;
   private BeepManager beepManager;
@@ -171,6 +192,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         // Scan the formats the intent requested, and return the result to the calling activity.
         source = IntentSource.NATIVE_APP_INTENT;
         decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
+        decodeHints = DecodeHintManager.parseDecodeHints(intent);
 
         if (intent.hasExtra(Intents.Scan.WIDTH) && intent.hasExtra(Intents.Scan.HEIGHT)) {
           int width = intent.getIntExtra(Intents.Scan.WIDTH, 0);
@@ -202,6 +224,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         sourceUrl = dataString;
         Uri inputUri = Uri.parse(dataString);
         decodeFormats = DecodeFormatManager.parseDecodeFormats(inputUri);
+        // Allow a sub-set of the hints to be specified by the caller.
+        decodeHints = DecodeHintManager.parseDecodeHints(inputUri);
 
       }
 
@@ -338,7 +362,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    * @param rawResult The contents of the barcode.
    * @param barcode   A greyscale bitmap of the camera data which was decoded.
    */
-  public void handleDecode(Result rawResult, Bitmap barcode) {
+  public void handleDecode(Result rawResult, Bitmap barcode, float scaleFactor) {
     inactivityTimer.onActivity();
     lastResult = rawResult;
 
@@ -346,7 +370,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     if (fromLiveScan) {
       // Then not from history, so beep/vibrate and we have an image to draw on
       beepManager.playBeepSoundAndVibrate();
-      drawResultPoints(barcode, rawResult);
+      drawResultPoints(barcode, scaleFactor, rawResult);
     }
 
     handleDecodeExternally(rawResult, barcode);
@@ -356,9 +380,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    * Superimpose a line for 1D or dots for 2D to highlight the key features of the barcode.
    *
    * @param barcode   A bitmap of the captured image.
+   * @param scaleFactor amount by which thumbnail was scaled
    * @param rawResult The decoded results which contains the points to draw.
    */
-  private void drawResultPoints(Bitmap barcode, Result rawResult) {
+  private void drawResultPoints(Bitmap barcode, float scaleFactor, Result rawResult) {
     ResultPoint[] points = rawResult.getResultPoints();
     if (points != null && points.length > 0) {
       Canvas canvas = new Canvas(barcode);
@@ -366,24 +391,30 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       paint.setColor(getResources().getColor(R.color.result_points));
       if (points.length == 2) {
         paint.setStrokeWidth(4.0f);
-        drawLine(canvas, paint, points[0], points[1]);
+        drawLine(canvas, paint, points[0], points[1], scaleFactor);
       } else if (points.length == 4 &&
                  (rawResult.getBarcodeFormat() == BarcodeFormat.UPC_A ||
                   rawResult.getBarcodeFormat() == BarcodeFormat.EAN_13)) {
         // Hacky special case -- draw two lines, for the barcode and metadata
-        drawLine(canvas, paint, points[0], points[1]);
-        drawLine(canvas, paint, points[2], points[3]);
+        drawLine(canvas, paint, points[0], points[1], scaleFactor);
+        drawLine(canvas, paint, points[2], points[3], scaleFactor);
       } else {
         paint.setStrokeWidth(10.0f);
         for (ResultPoint point : points) {
-          canvas.drawPoint(point.getX(), point.getY(), paint);
+          canvas.drawPoint(scaleFactor * point.getX(), scaleFactor * point.getY(), paint);
         }
       }
     }
   }
 
-  private static void drawLine(Canvas canvas, Paint paint, ResultPoint a, ResultPoint b) {
-    canvas.drawLine(a.getX(), a.getY(), b.getX(), b.getY(), paint);
+  private static void drawLine(Canvas canvas, Paint paint, ResultPoint a, ResultPoint b, float scaleFactor) {
+    if (a != null && b != null) {
+      canvas.drawLine(scaleFactor * a.getX(), 
+                      scaleFactor * a.getY(), 
+                      scaleFactor * b.getX(), 
+                      scaleFactor * b.getY(), 
+                      paint);
+    }
   }
 
   // Briefly show the contents of the barcode, then handle the result outside Barcode Scanner.
@@ -472,7 +503,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       cameraManager.openDriver(surfaceHolder);
       // Creating the handler starts the preview, which can also throw a RuntimeException.
       if (handler == null) {
-        handler = new CaptureActivityHandler(this, decodeFormats, characterSet, cameraManager);
+        handler = new CaptureActivityHandler(this, decodeFormats, decodeHints, characterSet, cameraManager);
       }
       decodeOrStoreSavedBitmap(null, null);
     } catch (IOException ioe) {

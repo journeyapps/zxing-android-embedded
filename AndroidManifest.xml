@@ -34,7 +34,11 @@
   <!-- TODO make this not required again after android.hardware.camera.any is available -->
 
   <!-- Donut-specific flags which allow us to run on any dpi screens. -->
-  <supports-screens android:anyDensity="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true" android:xlargeScreens="true"/>
+  <supports-screens android:xlargeScreens="true"
+                    android:largeScreens="true"
+                    android:normalScreens="true"
+                    android:smallScreens="true"
+                    android:anyDensity="true"/>
 
   <application>
       <activity android:clearTaskOnLaunch="true" android:configChanges="orientation|keyboardHidden" android:name="com.google.zxing.client.android.CaptureActivity" android:screenOrientation="landscape" android:stateNotNeeded="true" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:windowSoftInputMode="stateAlwaysHidden"/>

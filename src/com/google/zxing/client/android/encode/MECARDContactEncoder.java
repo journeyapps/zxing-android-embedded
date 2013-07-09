@@ -37,6 +37,7 @@ final class MECARDContactEncoder extends ContactEncoder {
     }
   };
   private static final char TERMINATOR = ';';
+  private static final Pattern NOT_DIGITS = Pattern.compile("[^0-9]+");
 
   @Override
   public String[] encode(Iterable<String> names,
@@ -44,11 +45,11 @@ final class MECARDContactEncoder extends ContactEncoder {
                          Iterable<String> addresses,
                          Iterable<String> phones,
                          Iterable<String> emails,
-                         String url,
+                         Iterable<String> urls,
                          String note) {
     StringBuilder newContents = new StringBuilder(100);
-    StringBuilder newDisplayContents = new StringBuilder(100);
     newContents.append("MECARD:");
+    StringBuilder newDisplayContents = new StringBuilder(100);
     appendUpToUnique(newContents, newDisplayContents, "N", names, 1, new Formatter() {
       @Override
       public String format(String source) {
@@ -60,14 +61,18 @@ final class MECARDContactEncoder extends ContactEncoder {
     appendUpToUnique(newContents, newDisplayContents, "TEL", phones, Integer.MAX_VALUE, new Formatter() {
       @Override
       public String format(String source) {
-        return PhoneNumberUtils.formatNumber(source);
+        return keepOnlyDigits(PhoneNumberUtils.formatNumber(source));
       }
     });
     appendUpToUnique(newContents, newDisplayContents, "EMAIL", emails, Integer.MAX_VALUE, null);
-    append(newContents, newDisplayContents, "URL", url);
+    appendUpToUnique(newContents, newDisplayContents, "URL", urls, Integer.MAX_VALUE, null);
     append(newContents, newDisplayContents, "NOTE", note);
     newContents.append(';');
     return new String[] { newContents.toString(), newDisplayContents.toString() };
+  }
+  
+  private static String keepOnlyDigits(CharSequence s) {
+    return s == null ? null : NOT_DIGITS.matcher(s).replaceAll("");
   }
   
   private static void append(StringBuilder newContents, 

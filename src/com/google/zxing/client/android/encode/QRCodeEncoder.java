@@ -181,7 +181,7 @@ final class QRCodeEncoder {
     if (bundle == null) {
       throw new WriterException("No extras");
     }
-    Uri uri = (Uri) bundle.getParcelable(Intent.EXTRA_STREAM);
+    Uri uri = bundle.getParcelable(Intent.EXTRA_STREAM);
     if (uri == null) {
       throw new WriterException("No EXTRA_STREAM");
     }
@@ -259,6 +259,7 @@ final class QRCodeEncoder {
           emails.add(bundle.getString(Contents.EMAIL_KEYS[x]));
         }
         String url = bundle.getString(Contents.URL_KEY);
+        Collection<String> urls = url == null ? null : Collections.singletonList(url);
         String note = bundle.getString(Contents.NOTE_KEY);
 
         ContactEncoder mecardEncoder = useVCard ? new VCardContactEncoder() : new MECARDContactEncoder();
@@ -267,7 +268,7 @@ final class QRCodeEncoder {
                                                 Collections.singleton(address),
                                                 phones,
                                                 emails,
-                                                url,
+                                                urls,
                                                 note);
         // Make sure we've encoded at least one field.
         if (encoded[1].length() > 0) {
@@ -300,7 +301,7 @@ final class QRCodeEncoder {
                                       toIterable(contact.getAddresses()),
                                       toIterable(contact.getPhoneNumbers()),
                                       toIterable(contact.getEmails()),
-                                      contact.getURL(),
+                                      toIterable(contact.getURLs()),
                                       null);
     // Make sure we've encoded at least one field.
     if (encoded[1].length() > 0) {
@@ -325,10 +326,9 @@ final class QRCodeEncoder {
       hints = new EnumMap<EncodeHintType,Object>(EncodeHintType.class);
       hints.put(EncodeHintType.CHARACTER_SET, encoding);
     }
-    MultiFormatWriter writer = new MultiFormatWriter();
     BitMatrix result;
     try {
-      result = writer.encode(contentsToEncode, format, dimension, dimension, hints);
+      result = new MultiFormatWriter().encode(contentsToEncode, format, dimension, dimension, hints);
     } catch (IllegalArgumentException iae) {
       // Unsupported format
       return null;
