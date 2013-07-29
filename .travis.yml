@@ -17,7 +17,7 @@ before_install:
 
 install:
     - ./gradlew tasks
-    - mvn install -DskipTests=true
+    - mvn install -X
 
 script:
     - ./gradlew build
