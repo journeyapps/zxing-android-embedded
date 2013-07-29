@@ -6,29 +6,53 @@ library project, for embedding in other Android applications. This is not affili
 Generally it is recommended to scan a barcode [via intents](http://code.google.com/p/zxing/wiki/ScanningViaIntent).
 If however that is not possible, you can embed the barcode scanner in your application by using this library.
 
-## Usage
+## Adding aar dependency with Gradle
 
-Currently the only supported use of this project is through Maven. However, it is not currently published to any
-public Maven repository. It is assumed that you are familiar with Android projects on Maven.
+Add the following to your build.gradle file:
 
-### Download and build the project
+    repositories {
+        mavenCentral()
 
-    git clone git@github.com:embarkmobile/zxing-android-minimal.git
-    cd zxing-android-minimal
-    mvn clean install
+        maven {
+            url "https://raw.github.com/embarkmobile/zxing-android-minimal/mvn-repo/maven-repository/"
+        }
+    }
 
-### Add as a dependency to your Android project's pom.xml:
+    dependencies {
+        compile 'com.embarkmobile:zxing-android-minimal:1.1.4@aar'
+    }
+
+
+## Adding apklib dependency with Maven
+
+Add as a dependency to your Android project's pom.xml:
+
+    <repositories>
+        <repository>
+            <id>zxing-android-minimal</id>
+            <name>ZXing Android Minimal</name>
+            <url>https://raw.github.com/embarkmobile/zxing-android-minimal/mvn-repo/maven-repository</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
 
     <dependency>
         <groupId>com.embarkmobile</groupId>
         <artifactId>zxing-android-minimal</artifactId>
-        <version>1.1.1</version>
+        <version>1.1.4</version>
         <type>apklib</type>
         <scope>compile</scope>
     </dependency>
 
 
-### Add to your AndroidManifest.xml:
+Make sure manifest merging in your project's pom.xml. See [https://github.com/jayway/maven-android-plugin/pull/135](https://github.com/jayway/maven-android-plugin/pull/135) for details.
+
+Alternatively - *only if not using manifest merging* - add to your AndroidManifest.xml:
 
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.FLASHLIGHT"/>
@@ -39,46 +63,20 @@ public Maven repository. It is assumed that you are familiar with Android projec
             android:windowSoftInputMode="stateAlwaysHidden"/>
     <activity android:name="com.google.zxing.client.android.HelpActivity" android:screenOrientation="user"/>
 
-### Alternative: Enable manifest merging in your project's pom.xml
 
-This is a fairly new feature in the maven-android-plugin, and not documented yet.
+## Usage
 
-See [https://github.com/jayway/maven-android-plugin/pull/135](https://github.com/jayway/maven-android-plugin/pull/135) for details.
+Launch the intent using the bundled IntentIntegrator:
 
-### Launch the intent using the bundled IntentIntegrator:
+    IntentIntegrator.initiateScan(this);    // `this` is the current Activity or Context
 
-        IntentIntegrator.initiateScan(this);
+## Building locally
 
-## Deploy
+    ./gradlew assemble
 
-To deploy to your own repository, add the following to your settings.xml (typically in `~/.m2/settings.xml`):
+To produce .aar artifacts:
 
-    <profiles>
-        <profile>
-            <id>repository-properties</id>
-            <properties>
-                <repo.id>your-repo-id</repo.id>
-                <repo.url>https://your/repo/url</repo.url>
-                <repo.name>Your Repo Name</repo.name>
-            </properties>
-        </profile>
-    </profiles>
-
-    <activeProfiles>
-        <activeProfile>repository-properties</activeProfile>
-    </activeProfiles>
-
-    <servers>
-        <server>
-            <id>your-repo-id</id><!-- must match repo.id above -->
-            <username>your-username</username>
-            <password>your-password</password>
-        </server>
-    </servers>
-
-Then run:
-
-    mvn clean deploy
+    ./gradlew uploadArchives
 
 ## License
 
