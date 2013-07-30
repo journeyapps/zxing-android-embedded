@@ -16,9 +16,9 @@ before_install:
     - echo yes | android update sdk --filter platform-tools,build-tools-18.0.0,android-17,android-16,extra-android-support,extra-google-m2repository,extra-android-m2repository --no-ui --force
 
 install:
-    - ./gradlew tasks
+    - TERM=dumb ./gradlew tasks
     - mvn install
 
 script:
-    - ./gradlew build
+    - TERM=dumb ./gradlew build
     - mvn install
