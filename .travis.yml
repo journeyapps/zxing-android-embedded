@@ -5,7 +5,7 @@ before_install:
     # Install base Android SDK
     - sudo apt-get update -qq
     - sudo apt-get install -qq libstdc++6:i386 lib32z1
-    - export COMPONENTS=build-tools-18.0.0,android-17,android-16,extra-android-support,extra-google-m2repository,extra-android-m2repository
+    - export COMPONENTS=build-tools-18.1.0,android-17,android-16,extra-android-support,extra-google-m2repository,extra-android-m2repository
     - curl -L https://raw.github.com/embarkmobile/android-sdk-installer/master/android-sdk-installer | bash /dev/stdin --install=$COMPONENTS
     - source ~/.android-sdk-installer/env
 
