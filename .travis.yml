@@ -3,17 +3,10 @@ jdk: oraclejdk7
 
 before_install:
     # Install base Android SDK
-    - sudo apt-get update -qq
-    - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq libc6:i386 libgcc1:i386 gcc-4.6-base:i386 libstdc++5:i386 libstdc++6:i386 lib32z1 libreadline6-dev:i386 libncurses5-dev:i386; fi
-    - wget -O android-sdk.tgz http://dl.google.com/android/android-sdk_r22.0.4-linux.tgz
-    - tar xzf android-sdk.tgz
-    - export ANDROID_HOME=$PWD/android-sdk-linux
-    - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
-
-    # Install required Android components.
-    # Note that the command below only accepts the first license. This is actually convenient, since
-    # it prevents the installation of the ATOM and MIPS emulator images.
-    - echo yes | android update sdk --filter platform-tools,build-tools-18.0.0,android-17,android-16,extra-android-support,extra-google-m2repository,extra-android-m2repository --no-ui --force
+    - sudo apt-get install -qq libstdc++6:i386 lib32z1
+    - export COMPONENTS=build-tools-18.0.0,android-17,android-16,extra-android-support,extra-google-m2repository,extra-android-m2repository
+    - curl -L https://raw.github.com/embarkmobile/android-sdk-installer/master/android-sdk-installer | bash /dev/stdin --install=$COMPONENTS
+    - source ~/.android-sdk-installer/env
 
 install:
     - TERM=dumb ./gradlew tasks
