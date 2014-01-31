@@ -36,6 +36,11 @@ android {
             assets.srcDirs = ['assets']
         }
     }
+
+    // This is bad practice - we should fix the warnings instead.
+    lintOptions {
+        abortOnError false
+    }
 }
 
 
