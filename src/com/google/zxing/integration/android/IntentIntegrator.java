@@ -3,6 +3,7 @@ package com.google.zxing.integration.android;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -92,32 +93,22 @@ public final class IntentIntegrator {
      *                                    like to scan for.
      */
     public static void initiateScan(Activity activity, CharSequence stringDesiredBarcodeFormats, String prompt) {
+        Intent intent = createScanIntent(activity, stringDesiredBarcodeFormats, prompt);
+
+        activity.startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    public static Intent createScanIntent(Activity activity, CharSequence formats, String prompt) {
         Intent intentScan = createScanIntent(activity);
 
         // check which types of codes to scan for
-        if (stringDesiredBarcodeFormats != null) {
+        if (formats != null) {
             // set the desired barcode types
-            intentScan.putExtra("SCAN_FORMATS", stringDesiredBarcodeFormats);
+            intentScan.putExtra("SCAN_FORMATS", formats);
 
-            String formats = stringDesiredBarcodeFormats.toString();
-            // Hack to use a wider viewfinder for CODE 39 barcodes. This should probably be in the main code instead.
-            if (formats.contains("CODE_39") && !formats.contains(QR_CODE_TYPES)) {
-                Display display = activity.getWindowManager().getDefaultDisplay();
-                int displayWidth = display.getWidth();
-                int displayHeight = display.getHeight();
-                if (displayHeight > displayWidth) {
-                    // This is portrait dimensions, but the barcode scanner is always in landscape mode.
-                    int temp = displayWidth;
-                    //noinspection SuspiciousNameCombination
-                    displayWidth = displayHeight;
-                    displayHeight = temp;
-                }
-
-                int desiredWidth = displayWidth * 9 / 10;
-                int desiredHeight = Math.min(displayHeight * 3 / 4, 400);    // Limit to 400px
-
-                intentScan.putExtra("SCAN_WIDTH", desiredWidth);
-                intentScan.putExtra("SCAN_HEIGHT", desiredHeight);
+            // Hack to use a wider viewfinder for 1D barcodes. This should probably be in the main code instead.
+            if(shouldBeWide(formats)) {
+                setWide(activity, intentScan);
             }
         }
 
@@ -126,8 +117,47 @@ public final class IntentIntegrator {
         }
         intentScan.putExtra("RESULT_DISPLAY_DURATION_MS", 0L);
 
+        return intentScan;
+    }
 
-        activity.startActivityForResult(intentScan, REQUEST_CODE);
+    /**
+     * Heuristics for whether or not the barcode scanning rectangle should be wide or not.
+     *
+     * Current heuristics make it wide if 1D barcode formats are scanned, and no QR codes.
+     *
+     * @param formats the barcode formats to scan, comma-separated
+     * @return true if it should be wide
+     */
+    public static boolean shouldBeWide(CharSequence formats) {
+        String formatsString = formats.toString();
+        boolean scan1d = formatsString.contains("CODE") || formatsString.contains("EAN") || formatsString.contains("UPC");
+        boolean scanQR = formatsString.contains(QR_CODE_TYPES);
+        return scan1d && !scanQR;
+    }
+
+    /**
+     * Set a scan intent to use a wide rectangle, suitable for 1D barcode formats.
+     *
+     * @param activity the activity, used to measure display size
+     * @param intent the scanning intent
+     */
+    public static void setWide(Activity activity, Intent intent) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        int displayWidth = display.getWidth();
+        int displayHeight = display.getHeight();
+        if (displayHeight > displayWidth) {
+            // This is portrait dimensions, but the barcode scanner is always in landscape mode.
+            int temp = displayWidth;
+            //noinspection SuspiciousNameCombination
+            displayWidth = displayHeight;
+            displayHeight = temp;
+        }
+
+        int desiredWidth = displayWidth * 9 / 10;
+        int desiredHeight = Math.min(displayHeight * 3 / 4, 400);    // Limit to 400px
+
+        intent.putExtra("SCAN_WIDTH", desiredWidth);
+        intent.putExtra("SCAN_HEIGHT", desiredHeight);
     }
 
 
@@ -169,8 +199,14 @@ public final class IntentIntegrator {
         activity.startActivity(intent);
     }
 
-    private static Intent createScanIntent(Activity activity) {
-        Intent intent = new Intent(activity, com.google.zxing.client.android.CaptureActivity.class);
+    /**
+     * Creates the simplest possible scan intent, with no options set.
+     *
+     * @param context the activity
+     * @return the scan intent
+     */
+    public static Intent createScanIntent(Context context) {
+        Intent intent = new Intent(context, com.google.zxing.client.android.CaptureActivity.class);
         intent.setAction(Intents.Scan.ACTION);
         return intent;
     }
