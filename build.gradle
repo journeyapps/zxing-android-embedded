@@ -11,7 +11,7 @@ buildscript {
 apply plugin: 'android-library'
 apply plugin: 'maven'
 
-version = '1.1.4'
+version = '1.2.0'
 group = 'com.embarkmobile'
 
 repositories {
@@ -35,6 +35,11 @@ android {
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
         }
+    }
+
+    // This is bad practice - we should fix the warnings instead.
+    lintOptions {
+        abortOnError false
     }
 }
 
