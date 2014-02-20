@@ -26,44 +26,9 @@ Add the following to your build.gradle file:
 
 ## Adding apklib dependency with Maven
 
-Add as a dependency to your Android project's pom.xml:
+Support for Maven apklib is dropped in version 1.2.0.
 
-    <repositories>
-        <repository>
-            <id>zxing-android-minimal</id>
-            <name>ZXing Android Minimal</name>
-            <url>https://raw.github.com/embarkmobile/zxing-android-minimal/mvn-repo/maven-repository</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-    </repositories>
-
-    <dependency>
-        <groupId>com.embarkmobile</groupId>
-        <artifactId>zxing-android-minimal</artifactId>
-        <version>1.1.4</version>
-        <type>apklib</type>
-        <scope>compile</scope>
-    </dependency>
-
-
-Make sure manifest merging in your project's pom.xml. See [https://github.com/jayway/maven-android-plugin/pull/135](https://github.com/jayway/maven-android-plugin/pull/135) for details.
-
-Alternatively - *only if not using manifest merging* - add to your AndroidManifest.xml:
-
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.FLASHLIGHT"/>
-
-    <activity android:clearTaskOnLaunch="true" android:configChanges="orientation|keyboardHidden"
-            android:name="com.google.zxing.client.android.CaptureActivity" android:screenOrientation="landscape"
-            android:stateNotNeeded="true" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
-    <activity android:name="com.google.zxing.client.android.HelpActivity" android:screenOrientation="user"/>
-
+Use the [1.1.x branch](https://github.com/embarkmobile/zxing-android-minimal/tree/1.1.x) if you need to use this from a Maven project.
 
 ## Usage
 

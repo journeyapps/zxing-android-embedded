@@ -11,8 +11,7 @@ before_install:
 
 install:
     - TERM=dumb ./gradlew tasks
-    - mvn install
 
 script:
     - TERM=dumb ./gradlew build
-    - mvn install
+
