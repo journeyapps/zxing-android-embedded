@@ -20,7 +20,7 @@ Add the following to your build.gradle file:
 
     dependencies {
         compile 'com.google.zxing:core:2.2'
-        compile 'com.embarkmobile:zxing-android-minimal:1.1.4@aar'
+        compile 'com.embarkmobile:zxing-android-minimal:1.2.0@aar'
     }
 
 
