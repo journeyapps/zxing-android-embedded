@@ -24,6 +24,12 @@ Add the following to your build.gradle file:
     }
 
 
+## Adding library into your AndroidManifest.xml
+If  you receive a ActivityNotFoundException try add this line into your manifest
+
+    <uses-library android:name="com.google.zxing.client.android" android:required="true" />
+
+
 ## Adding apklib dependency with Maven
 
 Support for Maven apklib is dropped in version 1.2.0.
