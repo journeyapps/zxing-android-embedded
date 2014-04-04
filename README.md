@@ -44,6 +44,14 @@ To produce .aar artifacts:
 
     ./gradlew uploadArchives
 
+
+## Sponsored by
+
+[Journey][1] - Build enterprise mobile apps for iOS and Android. Work in the cloud, code in JavaScript and forget about back-end development.
+
+
 ## License
 
 [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+[1]: http://journeyapps.com
