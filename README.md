@@ -10,18 +10,20 @@ If however that is not possible, you can embed the barcode scanner in your appli
 
 Add the following to your build.gradle file:
 
-    repositories {
-        mavenCentral()
+```groovy
+repositories {
+    mavenCentral()
 
-        maven {
-            url "https://raw.github.com/embarkmobile/zxing-android-minimal/mvn-repo/maven-repository/"
-        }
+    maven {
+        url "https://raw.github.com/embarkmobile/zxing-android-minimal/mvn-repo/maven-repository/"
     }
+}
 
-    dependencies {
-        compile 'com.google.zxing:core:2.2'
-        compile 'com.embarkmobile:zxing-android-minimal:1.2.0@aar'
-    }
+dependencies {
+    compile 'com.google.zxing:core:2.2'
+    compile 'com.embarkmobile:zxing-android-minimal:1.2.0@aar'
+}
+```
 
 
 ## Adding apklib dependency with Maven
@@ -34,7 +36,22 @@ Use the [1.1.x branch](https://github.com/embarkmobile/zxing-android-minimal/tre
 
 Launch the intent using the bundled IntentIntegrator:
 
-    IntentIntegrator.initiateScan(this);    // `this` is the current Activity or Context
+```java
+IntentIntegrator.initiateScan(this);    // `this` is the current Activity
+```
+
+Use a custom layout:
+
+```java
+Intent intent = IntentIntegrator.createScanIntent(this);
+IntentIntegrator.setCaptureLayout(intent, layoutResourceId);
+IntentIntegrator.startIntent(intent);
+```
+
+See [doc/custom_capture_layout.xml](doc/custom_capture_layout.xml) for an example of a custom
+layout with a cancel button.
+
+See [IntentIntegrator](src/com/google/zxing/integration/android/IntentIntegrator.java) for more options.
 
 ## Building locally
 

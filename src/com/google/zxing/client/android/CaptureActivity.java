@@ -16,21 +16,11 @@
 
 package com.google.zxing.client.android;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.Result;
-import com.google.zxing.ResultMetadataType;
-import com.google.zxing.ResultPoint;
-import com.google.zxing.client.android.camera.CameraManager;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.net.Uri;
@@ -38,9 +28,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.text.ClipboardManager;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,17 +36,20 @@ import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.camera.CameraManager;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
@@ -88,6 +79,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                  ResultMetadataType.SUGGESTED_PRICE,
                  ResultMetadataType.ERROR_CORRECTION_LEVEL,
                  ResultMetadataType.POSSIBLE_COUNTRY);
+  public static final java.lang.String ZXING_CAPTURE_LAYOUT_ID_KEY = "ZXING_CAPTURE_LAYOUT_ID_KEY";
 
   private CameraManager cameraManager;
   private CaptureActivityHandler handler;
@@ -105,6 +97,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private InactivityTimer inactivityTimer;
   private BeepManager beepManager;
   private AmbientLightManager ambientLightManager;
+
+  private Button cancelButton;
 
   ViewfinderView getViewfinderView() {
     return viewfinderView;
@@ -124,7 +118,15 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     Window window = getWindow();
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    setContentView(R.layout.zxing_capture);
+
+    // If the resource id with a layout was provided, set up this leyout
+    Bundle extras = getIntent().getExtras();
+
+    int zxingCaptureLayoutResourceId = R.layout.zxing_capture;
+    if (extras != null) {
+        zxingCaptureLayoutResourceId = extras.getInt(ZXING_CAPTURE_LAYOUT_ID_KEY, R.layout.zxing_capture);
+    }
+    setContentView (zxingCaptureLayoutResourceId);
 
     hasSurface = false;
     inactivityTimer = new InactivityTimer(this);
@@ -134,6 +136,19 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     PreferenceManager.setDefaultValues(this, R.xml.zxing_preferences, false);
 
     showHelpOnFirstLaunch();
+
+    cancelButton = (Button) findViewById(R.id.back_button);
+
+    // Since the layout can be dynamically set by the Intent, cancelButton may not be present
+    if (cancelButton != null) {
+      cancelButton.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View view) {
+                  finish();
+              }
+          });
+    }
+
   }
 
   @Override

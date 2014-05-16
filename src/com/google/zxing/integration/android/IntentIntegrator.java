@@ -1,18 +1,17 @@
 package com.google.zxing.integration.android;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
+import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
+import android.os.Build;
 import android.view.Display;
-import com.google.zxing.client.android.Intents;
+import android.view.WindowManager;
 
-import java.lang.CharSequence;import java.lang.Math;import java.lang.String;import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import com.google.zxing.client.android.CaptureActivity;
+import com.google.zxing.client.android.Intents;
 
 /**
  * TODO: update these docs - a lot of it is not relevant anymore.
@@ -81,10 +80,51 @@ public final class IntentIntegrator {
     }
 
 
+    /**
+     * Change the layout used by the intent.
+     *
+     * @param intent the scanning intent
+     * @param resourceId the layout resource id to use.
+     */
+    public static void setCaptureLayout(Intent intent, int resourceId) {
+        intent.putExtra(CaptureActivity.ZXING_CAPTURE_LAYOUT_ID_KEY, resourceId);
+    }
+
+    /**
+     * Set a prompt to display on the capture screen, instead of using the default.
+     *
+     * @param intent the scanning intent
+     * @param prompt the prompt to display
+     */
+    public static void setPrompt(Intent intent, String prompt) {
+        if (prompt != null) {
+            intent.putExtra("PROMPT_MESSAGE", prompt);
+        }
+    }
+
+    /**
+     * Set the duration that the result should be displayed after scanning.
+     *
+     * @param intent the scanning intent
+     * @param ms time to display the result in ms
+     */
+    public static void setResultDisplayDuration(Intent intent, long ms) {
+        intent.putExtra("RESULT_DISPLAY_DURATION_MS", 0L);
+    }
+
     public static void initiateScan(Activity activity, CharSequence stringDesiredBarcodeFormats) {
         initiateScan(activity, stringDesiredBarcodeFormats, null);
     }
 
+    public static void startIntent(Intent intent, Activity activity) {
+        activity.startActivityForResult(intent, REQUEST_CODE);
+    }
+
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static void startIntent(Intent intent, Fragment fragment) {
+        fragment.startActivityForResult(intent, REQUEST_CODE);
+    }
 
     /**
      * Invokes scanning.
@@ -95,11 +135,11 @@ public final class IntentIntegrator {
     public static void initiateScan(Activity activity, CharSequence stringDesiredBarcodeFormats, String prompt) {
         Intent intent = createScanIntent(activity, stringDesiredBarcodeFormats, prompt);
 
-        activity.startActivityForResult(intent, REQUEST_CODE);
+        startIntent(intent, activity);
     }
 
-    public static Intent createScanIntent(Activity activity, CharSequence formats, String prompt) {
-        Intent intentScan = createScanIntent(activity);
+    public static Intent createScanIntent(Context context, CharSequence formats, String prompt) {
+        Intent intentScan = createScanIntent(context);
 
         // check which types of codes to scan for
         if (formats != null) {
@@ -108,14 +148,12 @@ public final class IntentIntegrator {
 
             // Hack to use a wider viewfinder for 1D barcodes. This should probably be in the main code instead.
             if(shouldBeWide(formats)) {
-                setWide(activity, intentScan);
+                setWide(context, intentScan);
             }
         }
 
-        if (prompt != null) {
-            intentScan.putExtra("PROMPT_MESSAGE", prompt);
-        }
-        intentScan.putExtra("RESULT_DISPLAY_DURATION_MS", 0L);
+        setPrompt(intentScan, prompt);
+        setResultDisplayDuration(intentScan, 0L);
 
         return intentScan;
     }
@@ -138,11 +176,12 @@ public final class IntentIntegrator {
     /**
      * Set a scan intent to use a wide rectangle, suitable for 1D barcode formats.
      *
-     * @param activity the activity, used to measure display size
+     * @param context the context, used to measure display size
      * @param intent the scanning intent
      */
-    public static void setWide(Activity activity, Intent intent) {
-        Display display = activity.getWindowManager().getDefaultDisplay();
+    public static void setWide(Context context, Intent intent) {
+        WindowManager window = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = window.getDefaultDisplay();
         int displayWidth = display.getWidth();
         int displayHeight = display.getHeight();
         if (displayHeight > displayWidth) {
