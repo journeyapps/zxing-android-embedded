@@ -35,21 +35,25 @@ Use the [1.1.x branch](https://github.com/embarkmobile/zxing-android-minimal/tre
 ## Usage
 
 Launch the intent using the bundled IntentIntegrator:
-
 ```java
 IntentIntegrator.initiateScan(this);    // `this` is the current Activity
 ```
 
 Use a custom layout:
-
 ```java
 Intent intent = IntentIntegrator.createScanIntent(this);
 IntentIntegrator.setCaptureLayout(intent, layoutResourceId);
-IntentIntegrator.startIntent(intent);
+IntentIntegrator.startIntent(intent, this);
 ```
 
 See [doc/custom_capture_layout.xml](doc/custom_capture_layout.xml) for an example of a custom
 layout with a cancel button.
+
+Use from a fragment:
+```java
+Intent intent = IntentIntegrator.createScanIntent(this);    // `this` is the current Fragment
+IntentIntegrator.startIntent(intent, this);
+```
 
 See [IntentIntegrator](src/com/google/zxing/integration/android/IntentIntegrator.java) for more options.
 
