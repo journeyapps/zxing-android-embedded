@@ -46,7 +46,7 @@ IntentIntegrator.setCaptureLayout(intent, layoutResourceId);
 IntentIntegrator.startIntent(intent, this);
 ```
 
-See [doc/custom_capture_layout.xml](doc/custom_capture_layout.xml) for an example of a custom
+See [sample/src/main/res/layout/custom_capture_layout.xml](custom_capture_layout.xml) for an example of a custom
 layout with a cancel button.
 
 Use from a fragment:
@@ -55,15 +55,15 @@ Intent intent = IntentIntegrator.createScanIntent(this);    // `this` is the cur
 IntentIntegrator.startIntent(intent, this);
 ```
 
-See [IntentIntegrator](src/com/google/zxing/integration/android/IntentIntegrator.java) for more options.
+See [IntentIntegrator](zxing-android/src/com/google/zxing/integration/android/IntentIntegrator.java) for more options.
 
 ## Building locally
 
-    ./gradlew assemble
+    ./gradlew zxing-android:assemble
 
 To produce .aar artifacts:
 
-    ./gradlew uploadArchives
+    ./gradlew zxing-android:uploadArchives
 
 
 ## Sponsored by
