@@ -1,18 +1,12 @@
 package com.google.zxing.integration.android;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
 import android.view.Display;
-import com.google.zxing.client.android.Intents;
 
-import java.lang.CharSequence;import java.lang.Math;import java.lang.String;import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import com.google.zxing.client.android.CaptureActivity;
+import com.google.zxing.client.android.Intents;
 
 /**
  * TODO: update these docs - a lot of it is not relevant anymore.
@@ -80,6 +74,18 @@ public final class IntentIntegrator {
         initiateScan(activity, null);
     }
 
+
+    /**
+     *
+     * Invokes scanning with custom layout resource as a layout to the camera scan
+     * @param activity
+     * @param captureLayoutResourceId
+     */
+    public static void initiateScan(Activity activity, int captureLayoutResourceId) {
+        Intent intent = createScanIntent(activity);
+        intent.putExtra(CaptureActivity.ZXING_CAPTURE_LAYOUT_ID_KEY, captureLayoutResourceId);
+        activity.startActivityForResult(intent, REQUEST_CODE);
+    }
 
     public static void initiateScan(Activity activity, CharSequence stringDesiredBarcodeFormats) {
         initiateScan(activity, stringDesiredBarcodeFormats, null);

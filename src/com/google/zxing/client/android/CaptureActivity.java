@@ -79,8 +79,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                  ResultMetadataType.SUGGESTED_PRICE,
                  ResultMetadataType.ERROR_CORRECTION_LEVEL,
                  ResultMetadataType.POSSIBLE_COUNTRY);
+    public static final java.lang.String ZXING_CAPTURE_LAYOUT_ID_KEY = "ZXING_CAPTURE_LAYOUT_ID_KEY";
 
-  private CameraManager cameraManager;
+    private CameraManager cameraManager;
   private CaptureActivityHandler handler;
   private Result savedResultToShow;
   private ViewfinderView viewfinderView;
@@ -117,7 +118,15 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     Window window = getWindow();
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    setContentView(R.layout.zxing_capture);
+
+      // If the resource id with a layout was provided, set up this leyout
+    Bundle extras = getIntent().getExtras();
+
+    int zxingCaptureLayoutResourceId = R.layout.zxing_capture;
+    if (extras != null) {
+        zxingCaptureLayoutResourceId = extras.getInt(ZXING_CAPTURE_LAYOUT_ID_KEY, R.layout.zxing_capture);
+    }
+    setContentView (zxingCaptureLayoutResourceId);
 
     hasSurface = false;
     inactivityTimer = new InactivityTimer(this);
@@ -129,12 +138,18 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     showHelpOnFirstLaunch();
 
       cancelButton = (Button) findViewById(R.id.back_button_on_overlay);
-      cancelButton.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-              finish();
-          }
-      });
+      /**
+       * Since the layout can be dynamically set by the Intent, cancelButton may not be present
+       */
+      if (cancelButton!= null){
+          cancelButton.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View view) {
+                  finish();
+              }
+          });
+      }
+
   }
 
   @Override
