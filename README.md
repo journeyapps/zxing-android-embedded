@@ -35,6 +35,14 @@ Use the [1.1.x branch](https://github.com/embarkmobile/zxing-android-minimal/tre
 Launch the intent using the bundled IntentIntegrator:
 
     IntentIntegrator.initiateScan(this);    // `this` is the current Activity or Context
+    
+    IntentIntegrator.initiateScan(this, layoutResourceId);    // `this` is the current Activity or Context
+    
+    //layoutResourceId is the id of a layout resource that should be used in the CaptureActivity (so in the screen that displayes the actual scanner). 
+    
+    // Additionaly, if you want to have the 'Cancel' button in the layout (which responds to the click causing the scanner to close, just give this button back_button_on_overlay id.
+    
+    
 
 ## Building locally
 
