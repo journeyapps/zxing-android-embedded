@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ZXing Sample</string>
+    <string name="scan_barcode">Scan Barcode</string>
+    <string name="custom_layout">Custom Layout</string>
+
+</resources>
