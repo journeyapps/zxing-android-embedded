@@ -59,11 +59,11 @@ See [IntentIntegrator](src/com/google/zxing/integration/android/IntentIntegrator
 
 ## Building locally
 
-    ./gradlew assemble
+    ./gradlew zxing-android:assemble
 
 To produce .aar artifacts:
 
-    ./gradlew uploadArchives
+    ./gradlew zxing-android:uploadArchives
 
 
 ## Sponsored by
