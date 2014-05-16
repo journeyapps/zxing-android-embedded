@@ -21,7 +21,7 @@ repositories {
 
 dependencies {
     compile 'com.google.zxing:core:2.2'
-    compile 'com.embarkmobile:zxing-android-minimal:1.2.0@aar'
+    compile 'com.embarkmobile:zxing-android-minimal:1.2.1@aar'
 }
 ```
 
