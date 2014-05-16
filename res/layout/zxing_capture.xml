@@ -198,13 +198,29 @@
     </LinearLayout>
 
   </LinearLayout>
+    <LinearLayout
+        android:layout_gravity="bottom|center_horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-  <TextView android:id="@+id/status_view"
+    <TextView android:id="@+id/status_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:background="@color/transparent"
             android:text="@string/msg_default_status"
             android:textColor="@color/status_text"/>
+
+    <Button android:id="@+id/back_button_on_overlay"
+        android:layout_marginTop="10dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:height="60dp"
+        android:textAlignment="center"
+        android:layout_gravity="bottom|center_horizontal"
+        android:text="@string/button_cancel"/>
+
+    </LinearLayout>
 
 </FrameLayout>

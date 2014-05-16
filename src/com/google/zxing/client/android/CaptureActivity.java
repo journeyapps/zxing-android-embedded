@@ -16,21 +16,11 @@
 
 package com.google.zxing.client.android;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.Result;
-import com.google.zxing.ResultMetadataType;
-import com.google.zxing.ResultPoint;
-import com.google.zxing.client.android.camera.CameraManager;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.net.Uri;
@@ -38,9 +28,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.text.ClipboardManager;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,17 +36,20 @@ import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.camera.CameraManager;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
@@ -106,6 +97,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private BeepManager beepManager;
   private AmbientLightManager ambientLightManager;
 
+  private Button cancelButton;
+
   ViewfinderView getViewfinderView() {
     return viewfinderView;
   }
@@ -134,6 +127,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     PreferenceManager.setDefaultValues(this, R.xml.zxing_preferences, false);
 
     showHelpOnFirstLaunch();
+
+      cancelButton = (Button) findViewById(R.id.back_button_on_overlay);
+      cancelButton.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+              finish();
+          }
+      });
   }
 
   @Override
