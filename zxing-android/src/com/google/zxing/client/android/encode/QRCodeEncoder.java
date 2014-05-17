@@ -122,7 +122,7 @@ final class QRCodeEncoder {
       if (data != null && data.length() > 0) {
         contents = data;
         displayContents = data;
-        title = activity.getString(R.string.contents_text);
+        title = activity.getString(R.string.zxing_contents_text);
       }
     }
     return contents != null && contents.length() > 0;
@@ -171,7 +171,7 @@ final class QRCodeEncoder {
     } else {
       displayContents = contents;
     }
-    title = activity.getString(R.string.contents_text);
+    title = activity.getString(R.string.zxing_contents_text);
   }
 
   // Handles send intents from the Contacts app, retrieving a contact as a VCARD.
@@ -219,28 +219,28 @@ final class QRCodeEncoder {
       if (data != null && data.length() > 0) {
         contents = data;
         displayContents = data;
-        title = activity.getString(R.string.contents_text);
+        title = activity.getString(R.string.zxing_contents_text);
       }
     } else if (type.equals(Contents.Type.EMAIL)) {
       String data = ContactEncoder.trim(intent.getStringExtra(Intents.Encode.DATA));
       if (data != null) {
         contents = "mailto:" + data;
         displayContents = data;
-        title = activity.getString(R.string.contents_email);
+        title = activity.getString(R.string.zxing_contents_email);
       }
     } else if (type.equals(Contents.Type.PHONE)) {
       String data = ContactEncoder.trim(intent.getStringExtra(Intents.Encode.DATA));
       if (data != null) {
         contents = "tel:" + data;
         displayContents = PhoneNumberUtils.formatNumber(data);
-        title = activity.getString(R.string.contents_phone);
+        title = activity.getString(R.string.zxing_contents_phone);
       }
     } else if (type.equals(Contents.Type.SMS)) {
       String data = ContactEncoder.trim(intent.getStringExtra(Intents.Encode.DATA));
       if (data != null) {
         contents = "sms:" + data;
         displayContents = PhoneNumberUtils.formatNumber(data);
-        title = activity.getString(R.string.contents_sms);
+        title = activity.getString(R.string.zxing_contents_sms);
       }
     } else if (type.equals(Contents.Type.CONTACT)) {
 
@@ -274,7 +274,7 @@ final class QRCodeEncoder {
         if (encoded[1].length() > 0) {
           contents = encoded[0];
           displayContents = encoded[1];
-          title = activity.getString(R.string.contents_contact);
+          title = activity.getString(R.string.zxing_contents_contact);
         }
 
       }
@@ -288,7 +288,7 @@ final class QRCodeEncoder {
         if (latitude != Float.MAX_VALUE && longitude != Float.MAX_VALUE) {
           contents = "geo:" + latitude + ',' + longitude;
           displayContents = latitude + "," + longitude;
-          title = activity.getString(R.string.contents_location);
+          title = activity.getString(R.string.zxing_contents_location);
         }
       }
     }
@@ -307,7 +307,7 @@ final class QRCodeEncoder {
     if (encoded[1].length() > 0) {
       contents = encoded[0];
       displayContents = encoded[1];
-      title = activity.getString(R.string.contents_contact);
+      title = activity.getString(R.string.zxing_contents_contact);
     }
   }
 

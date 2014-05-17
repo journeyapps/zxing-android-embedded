@@ -65,7 +65,7 @@ public final class HelpActivity extends Activity {
     super.onCreate(icicle);
     setContentView(R.layout.zxing_help);
 
-    webView = (WebView)findViewById(R.id.help_contents);
+    webView = (WebView)findViewById(R.id.zxing_help_contents);
     webView.setWebViewClient(new HelpClient());
 
     // Froyo has a bug with calling onCreate() twice in a row, which causes the What's New page
@@ -85,9 +85,9 @@ public final class HelpActivity extends Activity {
       webView.loadUrl(BASE_URL + DEFAULT_PAGE);
     }
 
-    backButton = (Button) findViewById(R.id.back_button);
+    backButton = (Button) findViewById(R.id.zxing_back_button);
     backButton.setOnClickListener(backListener);
-    View doneButton = findViewById(R.id.done_button);
+    View doneButton = findViewById(R.id.zxing_done_button);
     doneButton.setOnClickListener(doneListener);
   }
 

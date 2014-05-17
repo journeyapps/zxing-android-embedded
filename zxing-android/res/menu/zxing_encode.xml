@@ -16,11 +16,11 @@
  -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
   <item android:id="@+id/menu_share"
-        android:title="@string/menu_share"
+        android:title="@string/zxing_menu_share"
         android:icon="@android:drawable/ic_menu_share"
         android:orderInCategory="1"/>
   <item android:id="@+id/menu_encode"
-        android:title="@string/menu_encode_vcard"
+        android:title="@string/zxing_menu_encode_vcard"
         android:icon="@android:drawable/ic_menu_sort_alphabetically"
         android:orderInCategory="2"/>
 </menu>

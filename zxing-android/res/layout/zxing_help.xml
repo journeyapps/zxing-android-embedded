@@ -19,7 +19,7 @@
               android:layout_height="fill_parent"
               android:orientation="vertical">
 
-  <WebView android:id="@+id/help_contents"
+  <WebView android:id="@+id/zxing_help_contents"
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
            android:layout_weight="1"/>
@@ -30,20 +30,20 @@
       android:layout_weight="0"
       android:orientation="horizontal"
       android:gravity="center"
-      android:paddingTop="@dimen/half_padding"
+      android:paddingTop="@dimen/zxing_half_padding"
       android:weightSum="1">
 
-    <Button android:id="@+id/back_button"
+    <Button android:id="@+id/zxing_back_button"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="@string/button_back"/>
+            android:text="@string/zxing_button_back"/>
 
-    <Button android:id="@+id/done_button"
+    <Button android:id="@+id/zxing_done_button"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="@string/button_done"/>
+            android:text="@string/zxing_button_done"/>
 
   </LinearLayout>
 

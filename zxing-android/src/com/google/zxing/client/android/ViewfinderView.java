@@ -63,10 +63,10 @@ public final class ViewfinderView extends View {
     // Initialize these once for performance rather than calling them every time in onDraw().
     paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     Resources resources = getResources();
-    maskColor = resources.getColor(R.color.viewfinder_mask);
-    resultColor = resources.getColor(R.color.result_view);
-    laserColor = resources.getColor(R.color.viewfinder_laser);
-    resultPointColor = resources.getColor(R.color.possible_result_points);
+    maskColor = resources.getColor(R.color.zxing_viewfinder_mask);
+    resultColor = resources.getColor(R.color.zxing_result_view);
+    laserColor = resources.getColor(R.color.zxing_viewfinder_laser);
+    resultPointColor = resources.getColor(R.color.zxing_possible_result_points);
     scannerAlpha = 0;
     possibleResultPoints = new ArrayList<ResultPoint>(5);
     lastPossibleResultPoints = null;

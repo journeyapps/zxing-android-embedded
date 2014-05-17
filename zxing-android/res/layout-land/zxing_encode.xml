@@ -18,11 +18,11 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:fillViewport="true"
-              android:background="@color/encode_view"
+              android:background="@color/zxing_encode_view"
               android:orientation="horizontal"
               android:gravity="center">
 
-  <ImageView android:id="@+id/image_view"
+  <ImageView android:id="@+id/zxing_image_view"
              android:layout_width="wrap_content"
              android:layout_height="fill_parent"
              android:layout_gravity="center_vertical"
@@ -33,12 +33,12 @@
             android:layout_gravity="center_vertical"
             android:gravity="center">
 
-    <TextView android:id="@+id/contents_text_view"
+    <TextView android:id="@+id/zxing_contents_text_view"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_gravity="center_vertical"
               android:gravity="center"
-              android:textColor="@color/contents_text"
+              android:textColor="@color/zxing_contents_text"
               android:paddingRight="8dip"
               android:paddingTop="8dip"
               android:paddingBottom="8dip"/>

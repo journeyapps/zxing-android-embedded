@@ -19,11 +19,11 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:fillViewport="true"
-              android:background="@color/encode_view"
+              android:background="@color/zxing_encode_view"
               android:orientation="vertical"
               android:gravity="center">
 
-  <ImageView android:id="@+id/image_view"
+  <ImageView android:id="@+id/zxing_image_view"
              android:layout_width="fill_parent"
              android:layout_height="wrap_content"
              android:layout_gravity="center_horizontal"
@@ -34,15 +34,15 @@
               android:layout_gravity="center_horizontal"
               android:gravity="center">
 
-    <TextView android:id="@+id/contents_text_view"
+    <TextView android:id="@+id/zxing_contents_text_view"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
               android:layout_gravity="center_horizontal"
               android:gravity="center"
-              android:textColor="@color/contents_text"
-              android:paddingBottom="@dimen/standard_padding"
-              android:paddingLeft="@dimen/standard_padding"
-              android:paddingRight="@dimen/standard_padding"/>
+              android:textColor="@color/zxing_contents_text"
+              android:paddingBottom="@dimen/zxing_standard_padding"
+              android:paddingLeft="@dimen/zxing_standard_padding"
+              android:paddingRight="@dimen/zxing_standard_padding"/>
 
   </ScrollView>
 

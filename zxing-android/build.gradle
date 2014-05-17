@@ -25,6 +25,7 @@ dependencies {
 
 
 android {
+    resourcePrefix 'zxing_'
     compileSdkVersion 19
     buildToolsVersion '19.1'
 

@@ -137,7 +137,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     showHelpOnFirstLaunch();
 
-    cancelButton = (Button) findViewById(R.id.back_button);
+    cancelButton = (Button) findViewById(R.id.zxing_back_button);
 
     // Since the layout can be dynamically set by the Intent, cancelButton may not be present
     if (cancelButton != null) {
@@ -162,18 +162,18 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     // off screen.
     cameraManager = new CameraManager(getApplication());
 
-    viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
+    viewfinderView = (ViewfinderView) findViewById(R.id.zxing_viewfinder_view);
     viewfinderView.setCameraManager(cameraManager);
 
-    resultView = findViewById(R.id.result_view);
-    statusView = (TextView) findViewById(R.id.status_view);
+    resultView = findViewById(R.id.zxing_result_view);
+    statusView = (TextView) findViewById(R.id.zxing_status_view);
 
     handler = null;
     lastResult = null;
 
     resetStatusView();
 
-    SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
+    SurfaceView surfaceView = (SurfaceView) findViewById(R.id.zxing_preview_view);
     SurfaceHolder surfaceHolder = surfaceView.getHolder();
     if (hasSurface) {
       // The activity was paused but not stopped, so the surface still exists. Therefore
@@ -272,7 +272,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     ambientLightManager.stop();
     cameraManager.closeDriver();
     if (!hasSurface) {
-      SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
+      SurfaceView surfaceView = (SurfaceView) findViewById(R.id.zxing_preview_view);
       SurfaceHolder surfaceHolder = surfaceView.getHolder();
       surfaceHolder.removeCallback(this);
     }
@@ -344,7 +344,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         savedResultToShow = result;
       }
       if (savedResultToShow != null) {
-        Message message = Message.obtain(handler, R.id.decode_succeeded, savedResultToShow);
+        Message message = Message.obtain(handler, R.id.zxing_decode_succeeded, savedResultToShow);
         handler.sendMessage(message);
       }
       savedResultToShow = null;
@@ -404,7 +404,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     if (points != null && points.length > 0) {
       Canvas canvas = new Canvas(barcode);
       Paint paint = new Paint();
-      paint.setColor(getResources().getColor(R.color.result_points));
+      paint.setColor(getResources().getColor(R.color.zxing_result_points));
       if (points.length == 2) {
         paint.setStrokeWidth(4.0f);
         drawLine(canvas, paint, points[0], points[1], scaleFactor);
@@ -485,7 +485,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           }
         }
       }
-      sendReplyMessage(R.id.return_scan_result, intent, resultDurationMS);
+      sendReplyMessage(R.id.zxing_return_scan_result, intent, resultDurationMS);
       
     }
   }
@@ -538,22 +538,22 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private void displayFrameworkBugMessageAndExit() {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle(getString(R.string.zxing_app_name));
-    builder.setMessage(getString(R.string.msg_camera_framework_bug));
-    builder.setPositiveButton(R.string.button_ok, new FinishListener(this));
+    builder.setMessage(getString(R.string.zxing_msg_camera_framework_bug));
+    builder.setPositiveButton(R.string.zxing_button_ok, new FinishListener(this));
     builder.setOnCancelListener(new FinishListener(this));
     builder.show();
   }
 
   public void restartPreviewAfterDelay(long delayMS) {
     if (handler != null) {
-      handler.sendEmptyMessageDelayed(R.id.restart_preview, delayMS);
+      handler.sendEmptyMessageDelayed(R.id.zxing_restart_preview, delayMS);
     }
     resetStatusView();
   }
 
   private void resetStatusView() {
     resultView.setVisibility(View.GONE);
-    statusView.setText(R.string.msg_default_status);
+    statusView.setText(R.string.zxing_msg_default_status);
     statusView.setVisibility(View.VISIBLE);
     viewfinderView.setVisibility(View.VISIBLE);
     lastResult = null;
