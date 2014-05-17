@@ -41,6 +41,8 @@ android {
     // This is bad practice - we should fix the warnings instead.
     lintOptions {
         abortOnError false
+        // Unfortunately we can't set minSdkVersion to the real min version, so we disable the warnings.
+        disable 'NewApi', 'InlinedApi', 'UnusedAttribute'
     }
 
     compileOptions {
