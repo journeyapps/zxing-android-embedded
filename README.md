@@ -47,7 +47,11 @@ IntentIntegrator.startIntent(intent, this);
 ```
 
 See [sample/src/main/res/layout/custom_capture_layout.xml](custom_capture_layout.xml) for an example of a custom
-layout with a cancel button.
+layout with a cancel button. If you want to have a working cancel button on your layout, give it the id: 
+
+    R.id.back_button 
+    
+and the CaptureActivity will handle the bahaviour upon click.
 
 Use from a fragment:
 ```java
