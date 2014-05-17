@@ -25,8 +25,6 @@ import android.os.Bundle;
 import android.view.Display;
 import android.view.WindowManager;
 
-import com.google.zxing.client.android.encode.EncodeActivity;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -296,7 +294,7 @@ public class IntentIntegrator {
      * @return the intent
      */
     public Intent createScanIntent() {
-        Intent intentScan = new Intent(activity, com.google.zxing.client.android.CaptureActivity.class);
+        Intent intentScan = new Intent(activity, getCaptureActivity());
         intentScan.setAction("com.google.zxing.client.android.SCAN");
 
         // check which types of codes to scan for
@@ -414,7 +412,7 @@ public class IntentIntegrator {
      * @param type type of data to encode. See {@code com.google.zxing.client.android.Contents.Type} constants.
      */
     public final void shareText(CharSequence text, CharSequence type) {
-        Intent intent = new Intent(activity, EncodeActivity.class);
+        Intent intent = new Intent(activity, getEncodeActivity());
         intent.setAction("com.google.zxing.client.android.ENCODE");
 
         intent.putExtra("ENCODE_TYPE", type);
@@ -428,6 +426,31 @@ public class IntentIntegrator {
 
     private static List<String> list(String... values) {
         return Collections.unmodifiableList(Arrays.asList(values));
+    }
+
+    protected Class<?> getCaptureActivity() {
+        try {
+            return Class.forName(getScannerPackage() + ".CaptureActivity");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Could not find CaptureActivity. Make sure one of the zxing-android libraries are loaded.", e);
+        }
+    }
+
+    protected Class<?> getEncodeActivity() {
+        try {
+            return Class.forName(getScannerPackage() + ".encode.EncodeActivity");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Could not find EncodeActivity. Make sure one of the zxing-android libraries are loaded.", e);
+        }
+    }
+
+    private static String getScannerPackage() {
+        try {
+            Class.forName("com.google.zxing.client.android.CaptureActivity");
+            return "com.google.zxing.client.android";
+        } catch (ClassNotFoundException e) {
+            return "com.google.zxing.client.androidlegacy";
+        }
     }
 
     private void attachMoreExtras(Intent intent) {

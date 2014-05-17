@@ -1,4 +1,5 @@
 include ':zxing-android'
+include ':zxing-android-legacy'
 include ':integration'
 include ':sample'
 include ':sample-nosupport'

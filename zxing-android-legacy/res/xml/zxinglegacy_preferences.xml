@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2008 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <PreferenceCategory >
+    <CheckBoxPreference
+        android:key="preferences_decode_1D"
+        android:defaultValue="true"/>
+    <CheckBoxPreference
+        android:key="preferences_decode_QR"
+        android:defaultValue="true"
+        />
+    <CheckBoxPreference
+        android:key="preferences_decode_Data_Matrix"
+        android:defaultValue="true"
+        />
+  </PreferenceCategory>
+  <PreferenceCategory >
+    <CheckBoxPreference
+        android:key="preferences_play_beep"
+        android:defaultValue="true"
+        />
+    <CheckBoxPreference
+        android:key="preferences_vibrate"
+        android:defaultValue="false"
+        />
+    <CheckBoxPreference
+        android:key="preferences_copy_to_clipboard"
+        android:defaultValue="true"
+        />
+    <CheckBoxPreference
+        android:key="preferences_remember_duplicates"
+        android:defaultValue="false"/>
+    <CheckBoxPreference
+        android:key="preferences_supplemental"
+        android:defaultValue="true"/>
+  </PreferenceCategory>
+  <PreferenceCategory >
+    <EditTextPreference
+        android:key="preferences_custom_product_search"/>
+  </PreferenceCategory>
+  <PreferenceCategory >
+    <ListPreference
+        android:entryValues="@array/zxinglegacy_preferences_front_light_values"
+        android:key="preferences_front_light_mode"
+        android:defaultValue="OFF"/>
+    <CheckBoxPreference
+        android:key="preferences_auto_focus"
+        android:defaultValue="true"
+        />
+    <CheckBoxPreference
+        android:key="preferences_invert_scan"
+        android:defaultValue="false"/>
+    <CheckBoxPreference
+        android:key="preferences_bulk_mode"
+        android:defaultValue="false"/>
+    <ListPreference
+        android:key="preferences_search_country"
+        android:defaultValue="-"
+        android:entries="@array/zxinglegacy_country_codes"
+        android:entryValues="@array/zxinglegacy_country_codes"
+        />
+  </PreferenceCategory>
+  <PreferenceCategory >
+    <CheckBoxPreference
+        android:key="preferences_disable_continuous_focus"
+        android:defaultValue="true"/>
+    <!--
+    <CheckBoxPreference
+        android:key="preferences_disable_exposure"
+        android:defaultValue="false"
+        />
+     -->
+  </PreferenceCategory>
+</PreferenceScreen>

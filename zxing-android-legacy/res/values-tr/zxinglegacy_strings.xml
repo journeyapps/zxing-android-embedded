@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2012 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="zxinglegacy_app_name">Barkod Tarayıcısı</string>
+
+
+
+
+  <string name="zxinglegacy_button_back">Geri</string>
+
+  <string name="zxinglegacy_button_cancel">İptal</string>
+
+
+  <string name="zxinglegacy_button_done">Tamam</string>
+
+
+
+
+  <string name="zxinglegacy_button_ok">Tamam</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <string name="zxinglegacy_contents_contact">Kişi bilgisi</string>
+  <string name="zxinglegacy_contents_email">Email adresi</string>
+  <string name="zxinglegacy_contents_location">Coğrafi koordinatlar</string>
+  <string name="zxinglegacy_contents_phone">Telefon numarası</string>
+  <string name="zxinglegacy_contents_sms">SMS adresi</string>
+  <string name="zxinglegacy_contents_text">Düz metin</string>
+
+
+
+
+
+
+
+  <string name="zxinglegacy_menu_encode_mecard">MECARD kullanın</string>
+  <string name="zxinglegacy_menu_encode_vcard">VCard kullanın</string>
+  <string name="zxinglegacy_menu_help">Yardım</string>
+
+
+  <string name="zxinglegacy_menu_share">Paylaş</string>
+
+  <string name="zxinglegacy_msg_camera_framework_bug">Üzgünüz, Android kamera bir sorunla karşılaştı. Cihazı yeniden başlatmanız gerekebilir.</string>
+  <string name="zxinglegacy_msg_default_format">Biçim</string>
+  <string name="zxinglegacy_msg_default_meta">Metadata</string>
+
+  <string name="zxinglegacy_msg_default_status">Barkodu taramak için vizördeki dikdörtgenin içerisine yerleştirin.</string>
+  <string name="zxinglegacy_msg_default_time">Süre</string>
+  <string name="zxinglegacy_msg_default_type">Tür</string>
+  <string name="zxinglegacy_msg_encode_contents_failed">Sağlanan verilerden bir barkod kodlanamadı.</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <string name="zxinglegacy_msg_unmount_usb">Lütfen USB depolamayı devre dışı bırakın.</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</resources>

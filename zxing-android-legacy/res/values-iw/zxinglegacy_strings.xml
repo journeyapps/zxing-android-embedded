@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2012 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="zxinglegacy_app_name">סורק ברקודים</string>
+
+
+
+
+  <string name="zxinglegacy_button_back">חזרה</string>
+
+  <string name="zxinglegacy_button_cancel">ביטול</string>
+
+
+  <string name="zxinglegacy_button_done">סיים</string>
+
+
+
+
+  <string name="zxinglegacy_button_ok">אישור</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <string name="zxinglegacy_contents_contact">פרטי איש קשר</string>
+  <string name="zxinglegacy_contents_email">כתובת דואר אלקטרוני</string>
+  <string name="zxinglegacy_contents_location">קואורדינטות גאוגרפיות</string>
+  <string name="zxinglegacy_contents_phone">מספר טלפון</string>
+  <string name="zxinglegacy_contents_sms">כתובת SMS</string>
+  <string name="zxinglegacy_contents_text">טקסט רגיל</string>
+
+
+
+
+
+
+
+  <string name="zxinglegacy_menu_encode_mecard">השתמש MECARD</string>
+  <string name="zxinglegacy_menu_encode_vcard">השתמש vCard</string>
+  <string name="zxinglegacy_menu_help">עזרה</string>
+
+
+  <string name="zxinglegacy_menu_share">שתף</string>
+
+  <string name="zxinglegacy_msg_camera_framework_bug">סליחה, מצלמת האנדרואיד נתקלה בבעיה. ייתכן שיהיה עליך להפעיל מחדש את המכשיר.</string>
+  <string name="zxinglegacy_msg_default_format">פורמט</string>
+  <string name="zxinglegacy_msg_default_meta">מטה-נתונים</string>
+
+  <string name="zxinglegacy_msg_default_status">הצב ברקוד בתוך המלבן כדי לסרוק אותו.</string>
+  <string name="zxinglegacy_msg_default_time">זמן</string>
+  <string name="zxinglegacy_msg_default_type">סוג</string>
+  <string name="zxinglegacy_msg_encode_contents_failed">לא היתה אפשרות לקודד ברקוד מהנתונים שסופקו.</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <string name="zxinglegacy_msg_unmount_usb">סליחה, כרטיס הזכרון אינו נגיש.</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</resources>

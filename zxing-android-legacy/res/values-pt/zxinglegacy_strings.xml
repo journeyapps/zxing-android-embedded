@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2012 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="zxinglegacy_app_name">Barcode Scanner</string>
+
+
+
+
+  <string name="zxinglegacy_button_back">Voltar</string>
+
+  <string name="zxinglegacy_button_cancel">Cancelar</string>
+
+
+  <string name="zxinglegacy_button_done">Feito</string>
+
+
+
+
+  <string name="zxinglegacy_button_ok">OK</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <string name="zxinglegacy_contents_contact">Informação de contacto</string>
+  <string name="zxinglegacy_contents_email">Endereço de e-mail</string>
+  <string name="zxinglegacy_contents_location">Coordenadas geográficas</string>
+  <string name="zxinglegacy_contents_phone">Número de telefone</string>
+  <string name="zxinglegacy_contents_sms">Endereço SMS</string>
+  <string name="zxinglegacy_contents_text">Texto simples</string>
+
+
+
+
+
+
+
+  <string name="zxinglegacy_menu_encode_mecard">Usar MECARD</string>
+  <string name="zxinglegacy_menu_encode_vcard">Usar vCard</string>
+  <string name="zxinglegacy_menu_help">Ajuda</string>
+
+
+  <string name="zxinglegacy_menu_share">Partilhar</string>
+
+  <string name="zxinglegacy_msg_camera_framework_bug">Desculpe, a câmera do Android encontrou um problema. Poderá precisar de reiniciar o dispositivo.</string>
+  <string name="zxinglegacy_msg_default_format">Formato</string>
+  <string name="zxinglegacy_msg_default_meta">Metadata</string>
+
+  <string name="zxinglegacy_msg_default_status">Alinhar código de barras com o exemplo para ser lido.</string>
+  <string name="zxinglegacy_msg_default_time">Tempo</string>
+  <string name="zxinglegacy_msg_default_type">Tipo</string>
+  <string name="zxinglegacy_msg_encode_contents_failed">Não foi possível codificar o código de barradas apartir dos dados fornecidos.</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <string name="zxinglegacy_msg_unmount_usb">Desculpe, o cartão SD não está disponível.</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</resources>

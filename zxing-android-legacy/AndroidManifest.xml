@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2008 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.google.zxing.client.androidlegacy">
+
+  <uses-permission android:name="android.permission.CAMERA"/>
+  <uses-permission android:name="android.permission.VIBRATE"/>
+  <uses-permission android:name="android.permission.FLASHLIGHT"/>
+
+  <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="10"/>
+
+  <!-- Don't require camera, as this requires a rear camera. This allows it to work on the Nexus 7 -->
+  <uses-feature android:name="android.hardware.camera" android:required="false"/>
+  <uses-feature android:name="android.hardware.camera.front" android:required="false"/>
+  <!-- TODO replace above two with next line after Android 4.2 -->
+  <!-- <uses-feature android:name="android.hardware.camera.any"/> -->
+  <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
+  <uses-feature android:name="android.hardware.camera.flash" android:required="false"/>
+  <uses-feature android:name="android.hardware.screen.landscape" android:required="false" />
+  <uses-feature android:name="android.hardware.wifi" android:required="false"/>
+  <!-- TODO make this not required again after android.hardware.camera.any is available -->
+
+  <!-- Donut-specific flags which allow us to run on any dpi screens. -->
+  <supports-screens android:xlargeScreens="true"
+                    android:largeScreens="true"
+                    android:normalScreens="true"
+                    android:smallScreens="true"
+                    android:anyDensity="true"/>
+
+  <application>
+      <activity android:clearTaskOnLaunch="true" android:configChanges="orientation|keyboardHidden" android:name=".CaptureActivity" android:screenOrientation="landscape" android:stateNotNeeded="true" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:windowSoftInputMode="stateAlwaysHidden"/>
+      <activity android:name=".HelpActivity" android:screenOrientation="user"/>
+      <activity android:name=".encode.EncodeActivity" android:screenOrientation="user"/>
+  </application>
+
+</manifest>

@@ -1,0 +1,10 @@
+body {
+  font-family:sans-serif;
+}
+ul.touchable li {
+  padding-top:8px;
+  padding-bottom:8px;
+}
+p.imgcenter {
+  text-align:center;
+}

@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2012 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="zxinglegacy_app_name">Barcode Scanner</string>
+
+
+
+
+  <string name="zxinglegacy_button_back">Wstecz</string>
+
+  <string name="zxinglegacy_button_cancel">Anuluj</string>
+
+
+  <string name="zxinglegacy_button_done">Gotowe</string>
+
+
+
+
+  <string name="zxinglegacy_button_ok">OK</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <string name="zxinglegacy_contents_contact">Informacje o kontakcie</string>
+  <string name="zxinglegacy_contents_email">Adres email</string>
+  <string name="zxinglegacy_contents_location">Współrzędne geograficzne</string>
+  <string name="zxinglegacy_contents_phone">Numer telefonu</string>
+  <string name="zxinglegacy_contents_sms">Adres SMS</string>
+  <string name="zxinglegacy_contents_text">Zwykły tekst</string>
+
+
+
+
+
+
+
+  <string name="zxinglegacy_menu_encode_mecard">Użyj MECARD</string>
+  <string name="zxinglegacy_menu_encode_vcard">Użyj vCard</string>
+  <string name="zxinglegacy_menu_help">Pomoc</string>
+
+
+  <string name="zxinglegacy_menu_share">Udostępnij</string>
+
+  <string name="zxinglegacy_msg_camera_framework_bug">Przepraszamy, aparat Android napotkał problem. Może wystąpić potrzeba ponownego uruchomienia urządzenia.</string>
+  <string name="zxinglegacy_msg_default_format">Format</string>
+  <string name="zxinglegacy_msg_default_meta">Metadanych</string>
+
+  <string name="zxinglegacy_msg_default_status">Umieść kod paskowy w prostokącie wizjera aby zeskanować.</string>
+  <string name="zxinglegacy_msg_default_time">Czas</string>
+  <string name="zxinglegacy_msg_default_type">Typ</string>
+  <string name="zxinglegacy_msg_encode_contents_failed">Nie można zakodować kodu paskowego z dostarczonych danych.</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <string name="zxinglegacy_msg_unmount_usb">Niestety, karta SD nie jest dostępna.</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</resources>
