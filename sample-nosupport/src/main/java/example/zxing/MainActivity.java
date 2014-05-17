@@ -1,9 +1,9 @@
 package example.zxing;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +23,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void scanBarcode(View view) {
-        new IntentIntegrator(this).initiateScan();
+        new IntentIntegrator((Activity)this).initiateScan();
     }
 
     public void scanBarcodeCustomLayout(View view) {
@@ -85,7 +85,7 @@ public class MainActivity extends ActionBarActivity {
         }
 
         public void scanFromFragment() {
-            IntentIntegrator.forSupportFragment(this).initiateScan();
+            IntentIntegrator.forFragment(this).initiateScan();
         }
 
         private void displayToast() {

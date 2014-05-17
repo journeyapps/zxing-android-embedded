@@ -1,1 +1,4 @@
-include ':zxing-android', ':sample', ':integration'
+include ':zxing-android'
+include ':integration'
+include ':sample'
+include ':sample-nosupport'
