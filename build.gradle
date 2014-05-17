@@ -1,0 +1,4 @@
+subprojects {
+    version = '2.0.0-SNAPSHOT'
+    group = 'com.embarkmobile'
+}

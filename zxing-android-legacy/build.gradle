@@ -11,9 +11,6 @@ buildscript {
 apply plugin: 'android-library'
 apply plugin: 'maven'
 
-version = '1.2.1'
-group = 'com.embarkmobile'
-
 repositories {
     mavenCentral()
 }

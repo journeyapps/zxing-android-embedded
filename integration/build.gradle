@@ -7,6 +7,7 @@ buildscript {
     }
 }
 apply plugin: 'android-library'
+apply plugin: 'maven'
 
 repositories {
     mavenCentral()
@@ -24,4 +25,12 @@ android {
 
 dependencies {
     provided 'com.android.support:support-v4:19.1.0'
+}
+
+
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: "file:mvn-clone/maven-repository/")
+        pom.artifactId = 'zxing-android-integration'
+    }
 }
