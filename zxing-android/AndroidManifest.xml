@@ -20,7 +20,8 @@
   <uses-permission android:name="android.permission.VIBRATE"/>
   <uses-permission android:name="android.permission.FLASHLIGHT"/>
 
-  <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="10"/>
+  <!-- In reality, the min supported version is 15 -->
+  <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="19"/>
 
   <!-- Don't require camera, as this requires a rear camera. This allows it to work on the Nexus 7 -->
   <uses-feature android:name="android.hardware.camera" android:required="false"/>
@@ -41,9 +42,18 @@
                     android:anyDensity="true"/>
 
   <application>
-      <activity android:clearTaskOnLaunch="true" android:configChanges="orientation|keyboardHidden" android:name="com.google.zxing.client.android.CaptureActivity" android:screenOrientation="landscape" android:stateNotNeeded="true" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:windowSoftInputMode="stateAlwaysHidden"/>
-      <activity android:name="com.google.zxing.client.android.HelpActivity" android:screenOrientation="user"/>
-      <activity android:name="com.google.zxing.client.android.encode.EncodeActivity" android:screenOrientation="user"/>
+      <activity android:name="com.google.zxing.client.android.CaptureActivity"
+                android:clearTaskOnLaunch="true"
+                android:screenOrientation="sensorLandscape"
+                android:stateNotNeeded="true"
+                android:theme="@style/zxing_CaptureTheme"
+                android:windowSoftInputMode="stateAlwaysHidden"/>
+      <activity android:name="com.google.zxing.client.android.HelpActivity"
+                android:label="@string/zxing_menu_help"
+                android:screenOrientation="user"
+                android:stateNotNeeded="true"/>
+      <activity android:name="com.google.zxing.client.android.encode.EncodeActivity"
+                android:screenOrientation="user"/>
   </application>
 
 </manifest>

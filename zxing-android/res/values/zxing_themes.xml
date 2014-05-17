@@ -14,9 +14,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-  <item android:id="@+id/zxing_menu_help"
-        android:title="@string/zxing_menu_help"
-        android:icon="@android:drawable/ic_menu_help"
-        android:orderInCategory="1"/>
-</menu>
+<resources>
+  <style name="zxing_CaptureTheme" parent="android:Theme.Holo">
+    <item name="android:windowFullscreen">true</item>
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="android:windowActionBarOverlay">true</item>
+    <item name="android:windowActionModeOverlay">true</item>
+  </style>
+ </resources>

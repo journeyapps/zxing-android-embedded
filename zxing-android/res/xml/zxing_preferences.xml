@@ -17,8 +17,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
   <PreferenceCategory >
     <CheckBoxPreference
-        android:key="preferences_decode_1D"
+        android:key="preferences_decode_1D_product"
         android:defaultValue="true"/>
+      <CheckBoxPreference
+          android:key="preferences_decode_1D_industrial"
+          android:defaultValue="true"/>
     <CheckBoxPreference
         android:key="preferences_decode_QR"
         android:defaultValue="true"
@@ -26,6 +29,14 @@
     <CheckBoxPreference
         android:key="preferences_decode_Data_Matrix"
         android:defaultValue="true"
+        />
+    <CheckBoxPreference
+        android:key="preferences_decode_Aztec"
+        android:defaultValue="false"
+        />
+    <CheckBoxPreference
+        android:key="preferences_decode_PDF417"
+        android:defaultValue="false"
         />
   </PreferenceCategory>
   <PreferenceCategory >
@@ -42,15 +53,15 @@
         android:defaultValue="true"
         />
     <CheckBoxPreference
+        android:key="preferences_auto_open_web"
+        android:defaultValue="false"
+        />
+    <CheckBoxPreference
         android:key="preferences_remember_duplicates"
         android:defaultValue="false"/>
     <CheckBoxPreference
         android:key="preferences_supplemental"
         android:defaultValue="true"/>
-  </PreferenceCategory>
-  <PreferenceCategory >
-    <EditTextPreference
-        android:key="preferences_custom_product_search"/>
   </PreferenceCategory>
   <PreferenceCategory >
     <ListPreference
@@ -67,6 +78,13 @@
     <CheckBoxPreference
         android:key="preferences_bulk_mode"
         android:defaultValue="false"/>
+      <CheckBoxPreference
+          android:key="preferences_orientation"
+          android:defaultValue="true"/>
+  </PreferenceCategory>
+  <PreferenceCategory >
+    <EditTextPreference
+        android:key="preferences_custom_product_search"/>
     <ListPreference
         android:key="preferences_search_country"
         android:defaultValue="-"
@@ -78,11 +96,15 @@
     <CheckBoxPreference
         android:key="preferences_disable_continuous_focus"
         android:defaultValue="true"/>
-    <!--
     <CheckBoxPreference
         android:key="preferences_disable_exposure"
-        android:defaultValue="false"
+        android:defaultValue="true"
         />
-     -->
+    <CheckBoxPreference
+        android:key="preferences_disable_metering"
+        android:defaultValue="true"/>
+    <CheckBoxPreference
+        android:key="preferences_disable_barcode_scene_mode"
+        android:defaultValue="true"/>
   </PreferenceCategory>
 </PreferenceScreen>

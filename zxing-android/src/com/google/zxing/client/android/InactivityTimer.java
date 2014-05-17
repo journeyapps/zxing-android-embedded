@@ -25,9 +25,6 @@ import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.util.Log;
 
-import com.google.zxing.client.android.common.executor.AsyncTaskExecInterface;
-import com.google.zxing.client.android.common.executor.AsyncTaskExecManager;
-
 /**
  * Finishes an activity after a period of inactivity if the device is on battery power.
  */
@@ -38,34 +35,44 @@ final class InactivityTimer {
   private static final long INACTIVITY_DELAY_MS = 5 * 60 * 1000L;
 
   private final Activity activity;
-  private final AsyncTaskExecInterface taskExec;
   private final BroadcastReceiver powerStatusReceiver;
-  private InactivityAsyncTask inactivityTask;
+  private boolean registered;
+  private AsyncTask<Object,Object,Object> inactivityTask;
 
   InactivityTimer(Activity activity) {
     this.activity = activity;
-    taskExec = new AsyncTaskExecManager().build();
     powerStatusReceiver = new PowerStatusReceiver();
+    registered = false;
     onActivity();
   }
 
   synchronized void onActivity() {
     cancel();
     inactivityTask = new InactivityAsyncTask();
-    taskExec.execute(inactivityTask);
+    inactivityTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
   }
 
-  public void onPause() {
+  public synchronized void onPause() {
     cancel();
-    activity.unregisterReceiver(powerStatusReceiver);
+    if (registered) {
+      activity.unregisterReceiver(powerStatusReceiver);
+      registered = false;
+    } else {
+      Log.w(TAG, "PowerStatusReceiver was never registered?");
+    }
   }
 
-  public void onResume(){
-    activity.registerReceiver(powerStatusReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+  public synchronized void onResume() {
+    if (registered) {
+      Log.w(TAG, "PowerStatusReceiver was already registered?");
+    } else {
+      activity.registerReceiver(powerStatusReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+      registered = true;
+    }
     onActivity();
   }
 
-  private synchronized  void cancel() {
+  private synchronized void cancel() {
     AsyncTask<?,?,?> task = inactivityTask;
     if (task != null) {
       task.cancel(true);

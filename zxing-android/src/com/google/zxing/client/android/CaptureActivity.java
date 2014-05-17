@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -33,6 +34,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -52,7 +54,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * This activity opens the camera and does the actual scanning on a background thread. It draws a
@@ -69,12 +70,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private static final long DEFAULT_INTENT_RESULT_DURATION_MS = 1500L;
   private static final long BULK_MODE_SCAN_DELAY_MS = 1000L;
 
-  private static final String PACKAGE_NAME = "com.google.zxing.client.android";
-  private static final String PRODUCT_SEARCH_URL_PREFIX = "http://www.google";
-  private static final String PRODUCT_SEARCH_URL_SUFFIX = "/m/products/scan";
   private static final String[] ZXING_URLS = { "http://zxing.appspot.com/scan", "zxing://scan/" };
 
-  private static final Set<ResultMetadataType> DISPLAYABLE_METADATA_TYPES =
+  private static final Collection<ResultMetadataType> DISPLAYABLE_METADATA_TYPES =
       EnumSet.of(ResultMetadataType.ISSUE_NUMBER,
                  ResultMetadataType.SUGGESTED_PRICE,
                  ResultMetadataType.ERROR_CORRECTION_LEVEL,
@@ -135,8 +133,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     PreferenceManager.setDefaultValues(this, R.xml.zxing_preferences, false);
 
-    showHelpOnFirstLaunch();
-
     cancelButton = (Button) findViewById(R.id.zxing_back_button);
 
     // Since the layout can be dynamically set by the Intent, cancelButton may not be present
@@ -171,6 +167,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     handler = null;
     lastResult = null;
 
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+    if (prefs.getBoolean(PreferencesActivity.KEY_DISABLE_AUTO_ORIENTATION, true)) {
+      setRequestedOrientation(getCurrentOrientation());
+    } else {
+      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+    }
+
     resetStatusView();
 
     SurfaceView surfaceView = (SurfaceView) findViewById(R.id.zxing_preview_view);
@@ -182,7 +186,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     } else {
       // Install the callback and wait for surfaceCreated() to init the camera.
       surfaceHolder.addCallback(this);
-      surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
     beepManager.updatePrefs();
@@ -191,8 +194,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     inactivityTimer.onResume();
 
     Intent intent = getIntent();
-
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
     source = IntentSource.NONE;
     decodeFormats = null;
@@ -217,15 +218,22 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             cameraManager.setManualFramingRect(width, height);
           }
         }
-        
+
+        if (intent.hasExtra(Intents.Scan.CAMERA_ID)) {
+          int cameraId = intent.getIntExtra(Intents.Scan.CAMERA_ID, -1);
+          if (cameraId >= 0) {
+            cameraManager.setManualCameraId(cameraId);
+          }
+        }
+
         String customPromptMessage = intent.getStringExtra(Intents.Scan.PROMPT_MESSAGE);
         if (customPromptMessage != null) {
           statusView.setText(customPromptMessage);
         }
 
       } else if (dataString != null &&
-                 dataString.contains(PRODUCT_SEARCH_URL_PREFIX) &&
-                 dataString.contains(PRODUCT_SEARCH_URL_SUFFIX)) {
+                 dataString.contains("http://www.google") &&
+                 dataString.contains("http://www.google")) {
 
         // Scan only products and send the result to mobile Product Search.
         source = IntentSource.PRODUCT_SEARCH_LINK;
@@ -249,7 +257,18 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     }
   }
-  
+
+  private int getCurrentOrientation() {
+    int rotation = getWindowManager().getDefaultDisplay().getRotation();
+    switch (rotation) {
+      case Surface.ROTATION_0:
+      case Surface.ROTATION_90:
+        return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+      default:
+        return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+    }
+  }
+
   private static boolean isZXingURL(String dataString) {
     if (dataString == null) {
       return false;
@@ -270,6 +289,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
     inactivityTimer.onPause();
     ambientLightManager.stop();
+    beepManager.close();
     cameraManager.closeDriver();
     if (!hasSurface) {
       SurfaceView surfaceView = (SurfaceView) findViewById(R.id.zxing_preview_view);
@@ -326,7 +346,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     Intent intent = new Intent(Intent.ACTION_VIEW);
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
     int itemId = item.getItemId();
-    if(itemId == R.id.menu_help) {
+    if(itemId == R.id.zxing_menu_help) {
       intent.setClassName(this, HelpActivity.class.getName());
       startActivity(intent);
     } else {
@@ -417,7 +437,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       } else {
         paint.setStrokeWidth(10.0f);
         for (ResultPoint point : points) {
-          if(point != null) {
+          if (point != null) {
             canvas.drawPoint(scaleFactor * point.getX(), scaleFactor * point.getY(), paint);
           }
         }
@@ -468,7 +488,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           intent.putExtra(Intents.Scan.RESULT_UPC_EAN_EXTENSION,
                           metadata.get(ResultMetadataType.UPC_EAN_EXTENSION).toString());
         }
-        Integer orientation = (Integer) metadata.get(ResultMetadataType.ORIENTATION);
+        Number orientation = (Number) metadata.get(ResultMetadataType.ORIENTATION);
         if (orientation != null) {
           intent.putExtra(Intents.Scan.RESULT_ORIENTATION, orientation.intValue());
         }
@@ -476,6 +496,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         if (ecLevel != null) {
           intent.putExtra(Intents.Scan.RESULT_ERROR_CORRECTION_LEVEL, ecLevel);
         }
+        @SuppressWarnings("unchecked")
         Iterable<byte[]> byteSegments = (Iterable<byte[]>) metadata.get(ResultMetadataType.BYTE_SEGMENTS);
         if (byteSegments != null) {
           int i = 0;
@@ -491,22 +512,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
   
   private void sendReplyMessage(int id, Object arg, long delayMS) {
-    Message message = Message.obtain(handler, id, arg);
-    if (delayMS > 0L) {
-      handler.sendMessageDelayed(message, delayMS);
-    } else {
-      handler.sendMessage(message);
+    if (handler != null) {
+      Message message = Message.obtain(handler, id, arg);
+      if (delayMS > 0L) {
+        handler.sendMessageDelayed(message, delayMS);
+      } else {
+        handler.sendMessage(message);
+      }
     }
-  }
-
-  /**
-   * We want the help screen to be shown automatically the first time a new version of the app is
-   * run. The easiest way to do this is to check android:versionCode from the manifest, and compare
-   * it to a value stored as a preference.
-   */
-  private boolean showHelpOnFirstLaunch() {
-    // Library project: we do not ever want to confuse the user with a help screen.
-    return false;
   }
 
   private void initCamera(SurfaceHolder surfaceHolder) {

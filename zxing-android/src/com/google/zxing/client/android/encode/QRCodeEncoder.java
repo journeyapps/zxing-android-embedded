@@ -16,7 +16,6 @@
 
 package com.google.zxing.client.android.encode;
 
-import android.provider.ContactsContract;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -30,11 +29,12 @@ import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ResultParser;
 import com.google.zxing.common.BitMatrix;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 
@@ -43,9 +43,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -61,7 +61,7 @@ final class QRCodeEncoder {
   private static final int WHITE = 0xFFFFFFFF;
   private static final int BLACK = 0xFF000000;
 
-  private final Activity activity;
+  private final Context activity;
   private String contents;
   private String displayContents;
   private String title;
@@ -69,7 +69,7 @@ final class QRCodeEncoder {
   private final int dimension;
   private final boolean useVCard;
 
-  QRCodeEncoder(Activity activity, Intent intent, int dimension, boolean useVCard) throws WriterException {
+  QRCodeEncoder(Context activity, Intent intent, int dimension, boolean useVCard) throws WriterException {
     this.activity = activity;
     this.dimension = dimension;
     this.useVCard = useVCard;
@@ -112,20 +112,20 @@ final class QRCodeEncoder {
     }
     if (format == null || format == BarcodeFormat.QR_CODE) {
       String type = intent.getStringExtra(Intents.Encode.TYPE);
-      if (type == null || type.length() == 0) {
+      if (type == null || type.isEmpty()) {
         return false;
       }
       this.format = BarcodeFormat.QR_CODE;
       encodeQRCodeContents(intent, type);
     } else {
       String data = intent.getStringExtra(Intents.Encode.DATA);
-      if (data != null && data.length() > 0) {
+      if (data != null && !data.isEmpty()) {
         contents = data;
         displayContents = data;
         title = activity.getString(R.string.zxing_contents_text);
       }
     }
-    return contents != null && contents.length() > 0;
+    return contents != null && !contents.isEmpty();
   }
 
   // Handles send intents from multitude of Android applications
@@ -158,7 +158,7 @@ final class QRCodeEncoder {
     }
 
     // Trim text to avoid URL breaking.
-    if (theContents == null || theContents.length() == 0) {
+    if (theContents == null || theContents.isEmpty()) {
       throw new WriterException("Empty EXTRA_TEXT");
     }
     contents = theContents;
@@ -187,8 +187,9 @@ final class QRCodeEncoder {
     }
     byte[] vcard;
     String vcardString;
+    InputStream stream = null;
     try {
-      InputStream stream = activity.getContentResolver().openInputStream(uri);
+      stream = activity.getContentResolver().openInputStream(uri);
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       byte[] buffer = new byte[2048];
       int bytesRead;
@@ -199,6 +200,14 @@ final class QRCodeEncoder {
       vcardString = new String(vcard, 0, vcard.length, "UTF-8");
     } catch (IOException ioe) {
       throw new WriterException(ioe);
+    } finally {
+      if (stream != null) {
+        try {
+          stream.close();
+        } catch (IOException e) {
+          // continue
+        }
+      }
     }
     Log.d(TAG, "Encoding share intent content:");
     Log.d(TAG, vcardString);
@@ -208,110 +217,129 @@ final class QRCodeEncoder {
       throw new WriterException("Result was not an address");
     }
     encodeQRCodeContents((AddressBookParsedResult) parsedResult);
-    if (contents == null || contents.length() == 0) {
+    if (contents == null || contents.isEmpty()) {
       throw new WriterException("No content to encode");
     }
   }
 
   private void encodeQRCodeContents(Intent intent, String type) {
-    if (type.equals(Contents.Type.TEXT)) {
-      String data = intent.getStringExtra(Intents.Encode.DATA);
-      if (data != null && data.length() > 0) {
-        contents = data;
-        displayContents = data;
-        title = activity.getString(R.string.zxing_contents_text);
-      }
-    } else if (type.equals(Contents.Type.EMAIL)) {
-      String data = ContactEncoder.trim(intent.getStringExtra(Intents.Encode.DATA));
-      if (data != null) {
-        contents = "mailto:" + data;
-        displayContents = data;
-        title = activity.getString(R.string.zxing_contents_email);
-      }
-    } else if (type.equals(Contents.Type.PHONE)) {
-      String data = ContactEncoder.trim(intent.getStringExtra(Intents.Encode.DATA));
-      if (data != null) {
-        contents = "tel:" + data;
-        displayContents = PhoneNumberUtils.formatNumber(data);
-        title = activity.getString(R.string.zxing_contents_phone);
-      }
-    } else if (type.equals(Contents.Type.SMS)) {
-      String data = ContactEncoder.trim(intent.getStringExtra(Intents.Encode.DATA));
-      if (data != null) {
-        contents = "sms:" + data;
-        displayContents = PhoneNumberUtils.formatNumber(data);
-        title = activity.getString(R.string.zxing_contents_sms);
-      }
-    } else if (type.equals(Contents.Type.CONTACT)) {
-
-      Bundle bundle = intent.getBundleExtra(Intents.Encode.DATA);
-      if (bundle != null) {
-
-        String name = bundle.getString(ContactsContract.Intents.Insert.NAME);
-        String organization = bundle.getString(ContactsContract.Intents.Insert.COMPANY);
-        String address = bundle.getString(ContactsContract.Intents.Insert.POSTAL);
-        Collection<String> phones = new ArrayList<String>(Contents.PHONE_KEYS.length);
-        for (int x = 0; x < Contents.PHONE_KEYS.length; x++) {
-          phones.add(bundle.getString(Contents.PHONE_KEYS[x]));
+    switch (type) {
+      case Contents.Type.TEXT: {
+        String data = intent.getStringExtra(Intents.Encode.DATA);
+        if (data != null && !data.isEmpty()) {
+          contents = data;
+          displayContents = data;
+          title = activity.getString(R.string.zxing_contents_text);
         }
-        Collection<String> emails = new ArrayList<String>(Contents.EMAIL_KEYS.length);
-        for (int x = 0; x < Contents.EMAIL_KEYS.length; x++) {
-          emails.add(bundle.getString(Contents.EMAIL_KEYS[x]));
-        }
-        String url = bundle.getString(Contents.URL_KEY);
-        Collection<String> urls = url == null ? null : Collections.singletonList(url);
-        String note = bundle.getString(Contents.NOTE_KEY);
-
-        ContactEncoder mecardEncoder = useVCard ? new VCardContactEncoder() : new MECARDContactEncoder();
-        String[] encoded = mecardEncoder.encode(Collections.singleton(name),
-                                                organization,
-                                                Collections.singleton(address),
-                                                phones,
-                                                emails,
-                                                urls,
-                                                note);
-        // Make sure we've encoded at least one field.
-        if (encoded[1].length() > 0) {
-          contents = encoded[0];
-          displayContents = encoded[1];
-          title = activity.getString(R.string.zxing_contents_contact);
-        }
-
+        break;
       }
-
-    } else if (type.equals(Contents.Type.LOCATION)) {
-      Bundle bundle = intent.getBundleExtra(Intents.Encode.DATA);
-      if (bundle != null) {
-        // These must use Bundle.getFloat(), not getDouble(), it's part of the API.
-        float latitude = bundle.getFloat("LAT", Float.MAX_VALUE);
-        float longitude = bundle.getFloat("LONG", Float.MAX_VALUE);
-        if (latitude != Float.MAX_VALUE && longitude != Float.MAX_VALUE) {
-          contents = "geo:" + latitude + ',' + longitude;
-          displayContents = latitude + "," + longitude;
-          title = activity.getString(R.string.zxing_contents_location);
+      case Contents.Type.EMAIL: {
+        String data = ContactEncoder.trim(intent.getStringExtra(Intents.Encode.DATA));
+        if (data != null) {
+          contents = "mailto:" + data;
+          displayContents = data;
+          title = activity.getString(R.string.zxing_contents_email);
         }
+        break;
+      }
+      case Contents.Type.PHONE: {
+        String data = ContactEncoder.trim(intent.getStringExtra(Intents.Encode.DATA));
+        if (data != null) {
+          contents = "tel:" + data;
+          displayContents = PhoneNumberUtils.formatNumber(data);
+          title = activity.getString(R.string.zxing_contents_phone);
+        }
+        break;
+      }
+      case Contents.Type.SMS: {
+        String data = ContactEncoder.trim(intent.getStringExtra(Intents.Encode.DATA));
+        if (data != null) {
+          contents = "sms:" + data;
+          displayContents = PhoneNumberUtils.formatNumber(data);
+          title = activity.getString(R.string.zxing_contents_sms);
+        }
+        break;
+      }
+      case Contents.Type.CONTACT: {
+
+        Bundle bundle = intent.getBundleExtra(Intents.Encode.DATA);
+        if (bundle != null) {
+
+          String name = bundle.getString(ContactsContract.Intents.Insert.NAME);
+          String organization = bundle.getString(ContactsContract.Intents.Insert.COMPANY);
+          String address = bundle.getString(ContactsContract.Intents.Insert.POSTAL);
+          List<String> phones = getAllBundleValues(bundle, Contents.PHONE_KEYS);
+          List<String> phoneTypes = getAllBundleValues(bundle, Contents.PHONE_TYPE_KEYS);
+          List<String> emails = getAllBundleValues(bundle, Contents.EMAIL_KEYS);
+          String url = bundle.getString(Contents.URL_KEY);
+          List<String> urls = url == null ? null : Collections.singletonList(url);
+          String note = bundle.getString(Contents.NOTE_KEY);
+
+          ContactEncoder encoder = useVCard ? new VCardContactEncoder() : new MECARDContactEncoder();
+          String[] encoded = encoder.encode(Collections.singletonList(name),
+                                            organization,
+                                            Collections.singletonList(address),
+                                            phones,
+                                            phoneTypes,
+                                            emails,
+                                            urls,
+                                            note);
+          // Make sure we've encoded at least one field.
+          if (!encoded[1].isEmpty()) {
+            contents = encoded[0];
+            displayContents = encoded[1];
+            title = activity.getString(R.string.zxing_contents_contact);
+          }
+
+        }
+
+        break;
+      }
+      case Contents.Type.LOCATION: {
+        Bundle bundle = intent.getBundleExtra(Intents.Encode.DATA);
+        if (bundle != null) {
+          // These must use Bundle.getFloat(), not getDouble(), it's part of the API.
+          float latitude = bundle.getFloat("LAT", Float.MAX_VALUE);
+          float longitude = bundle.getFloat("LONG", Float.MAX_VALUE);
+          if (latitude != Float.MAX_VALUE && longitude != Float.MAX_VALUE) {
+            contents = "geo:" + latitude + ',' + longitude;
+            displayContents = latitude + "," + longitude;
+            title = activity.getString(R.string.zxing_contents_location);
+          }
+        }
+        break;
       }
     }
   }
 
+  private static List<String> getAllBundleValues(Bundle bundle, String[] keys) {
+    List<String> values = new ArrayList<>(keys.length);
+    for (String key : keys) {
+      Object value = bundle.get(key);
+      values.add(value == null ? null : value.toString());
+    }
+    return values;
+  }
+
   private void encodeQRCodeContents(AddressBookParsedResult contact) {
     ContactEncoder encoder = useVCard ? new VCardContactEncoder() : new MECARDContactEncoder();
-    String[] encoded = encoder.encode(toIterable(contact.getNames()),
+    String[] encoded = encoder.encode(toList(contact.getNames()),
                                       contact.getOrg(),
-                                      toIterable(contact.getAddresses()),
-                                      toIterable(contact.getPhoneNumbers()),
-                                      toIterable(contact.getEmails()),
-                                      toIterable(contact.getURLs()),
+                                      toList(contact.getAddresses()),
+                                      toList(contact.getPhoneNumbers()),
+                                      null,
+                                      toList(contact.getEmails()),
+                                      toList(contact.getURLs()),
                                       null);
     // Make sure we've encoded at least one field.
-    if (encoded[1].length() > 0) {
+    if (!encoded[1].isEmpty()) {
       contents = encoded[0];
       displayContents = encoded[1];
       title = activity.getString(R.string.zxing_contents_contact);
     }
   }
 
-  private static Iterable<String> toIterable(String[] values) {
+  private static List<String> toList(String[] values) {
     return values == null ? null : Arrays.asList(values);
   }
 
@@ -323,7 +351,7 @@ final class QRCodeEncoder {
     Map<EncodeHintType,Object> hints = null;
     String encoding = guessAppropriateEncoding(contentsToEncode);
     if (encoding != null) {
-      hints = new EnumMap<EncodeHintType,Object>(EncodeHintType.class);
+      hints = new EnumMap<>(EncodeHintType.class);
       hints.put(EncodeHintType.CHARACTER_SET, encoding);
     }
     BitMatrix result;
