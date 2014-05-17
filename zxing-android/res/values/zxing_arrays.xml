@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-  <string-array name="zxing_country_codes">
+  <string-array name="zxing_country_codes" translatable="false">
     <item>-</item>
     <item>AR</item>
     <item>AU</item>
@@ -33,7 +33,7 @@
     <item>TW</item>
     <item>US</item>
   </string-array>
-  <string-array name="zxing_preferences_front_light_values">
+  <string-array name="zxing_preferences_front_light_values" translatable="false">
     <item>ON</item>
     <item>AUTO</item>
     <item>OFF</item>
