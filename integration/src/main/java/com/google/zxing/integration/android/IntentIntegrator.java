@@ -114,6 +114,58 @@ public class IntentIntegrator {
 
     private Collection<String> desiredBarcodeFormats;
 
+    private static final boolean HAVE_STANDARD_SCANNER;
+    private static final boolean HAVE_LEGACY_SCANNER;
+
+    private static final String STANDARD_PACKAGE_NAME = "com.google.zxing.client.android";
+    private static final String LEGACY_PACKAGE_NAME = "com.google.zxing.client.androidlegacy";
+
+    protected Class<?> getCaptureActivity() {
+        try {
+            return Class.forName(getScannerPackage() + ".CaptureActivity");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Could not find CaptureActivity. Make sure one of the zxing-android libraries are loaded.", e);
+        }
+    }
+
+    protected Class<?> getEncodeActivity() {
+        try {
+            return Class.forName(getScannerPackage() + ".encode.EncodeActivity");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Could not find EncodeActivity. Make sure one of the zxing-android libraries are loaded.", e);
+        }
+    }
+
+    private static String getScannerPackage() {
+        if(HAVE_STANDARD_SCANNER && Build.VERSION.SDK_INT >= 15) {
+            return STANDARD_PACKAGE_NAME;
+        } else if(HAVE_LEGACY_SCANNER) {
+            return LEGACY_PACKAGE_NAME;
+        } else {
+            return STANDARD_PACKAGE_NAME;
+        }
+    }
+
+    static {
+        boolean test1 = false;
+        try {
+            Class.forName(STANDARD_PACKAGE_NAME + ".CaptureActivity");
+            test1 = true;
+        } catch (ClassNotFoundException e) {
+            // Ignore
+        }
+        HAVE_STANDARD_SCANNER = test1;
+
+        boolean test2 = false;
+        try {
+            Class.forName(LEGACY_PACKAGE_NAME + ".CaptureActivity");
+            test2 = true;
+        } catch (ClassNotFoundException e) {
+            // Ignore
+        }
+        HAVE_LEGACY_SCANNER = test2;
+    }
+
     /**
      * @param activity {@link Activity} invoking the integration
      */
@@ -426,31 +478,6 @@ public class IntentIntegrator {
 
     private static List<String> list(String... values) {
         return Collections.unmodifiableList(Arrays.asList(values));
-    }
-
-    protected Class<?> getCaptureActivity() {
-        try {
-            return Class.forName(getScannerPackage() + ".CaptureActivity");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Could not find CaptureActivity. Make sure one of the zxing-android libraries are loaded.", e);
-        }
-    }
-
-    protected Class<?> getEncodeActivity() {
-        try {
-            return Class.forName(getScannerPackage() + ".encode.EncodeActivity");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Could not find EncodeActivity. Make sure one of the zxing-android libraries are loaded.", e);
-        }
-    }
-
-    private static String getScannerPackage() {
-        try {
-            Class.forName("com.google.zxing.client.android.CaptureActivity");
-            return "com.google.zxing.client.android";
-        } catch (ClassNotFoundException e) {
-            return "com.google.zxing.client.androidlegacy";
-        }
     }
 
     private void attachMoreExtras(Intent intent) {

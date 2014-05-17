@@ -29,7 +29,7 @@ import android.webkit.WebView;
 public final class HelpActivity extends Activity {
 
   private static final String BASE_URL =
-      "file:///android_asset/zxing/html/";
+      "file:///android_asset/zxing/html-en/";
 
   private WebView webView;
 
