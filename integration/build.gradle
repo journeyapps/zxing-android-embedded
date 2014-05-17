@@ -24,6 +24,4 @@ android {
 
 dependencies {
     provided 'com.android.support:support-v4:19.1.0'
-    provided project(':zxing-android')
-    provided project(':zxing-android-legacy')
 }
