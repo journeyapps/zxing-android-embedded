@@ -43,6 +43,7 @@
   <application>
       <activity android:clearTaskOnLaunch="true" android:configChanges="orientation|keyboardHidden" android:name="com.google.zxing.client.android.CaptureActivity" android:screenOrientation="landscape" android:stateNotNeeded="true" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:windowSoftInputMode="stateAlwaysHidden"/>
       <activity android:name="com.google.zxing.client.android.HelpActivity" android:screenOrientation="user"/>
+      <activity android:name="com.google.zxing.client.android.encode.EncodeActivity" android:screenOrientation="user"/>
   </application>
 
 </manifest>

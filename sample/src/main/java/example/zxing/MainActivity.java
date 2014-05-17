@@ -1,13 +1,10 @@
 package example.zxing;
 
-import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -26,13 +23,19 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void scanBarcode(View view) {
-        IntentIntegrator.initiateScan(this);
+        new IntentIntegrator(this).initiateScan();
     }
 
     public void scanBarcodeCustomLayout(View view) {
-        Intent intent = IntentIntegrator.createScanIntent(this);
-        IntentIntegrator.setCaptureLayout(intent, R.layout.custom_capture_layout);
-        IntentIntegrator.startIntent(intent, this);
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setCaptureLayout(R.layout.custom_capture_layout);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
+        integrator.autoWide();
+        integrator.initiateScan();
+    }
+
+    public void encodeBarcode(View view) {
+        new IntentIntegrator(this).shareText("Test Barcode");
     }
 
     @Override
@@ -82,8 +85,7 @@ public class MainActivity extends ActionBarActivity {
         }
 
         public void scanFromFragment() {
-            Intent intent = IntentIntegrator.createScanIntent(getActivity());
-            IntentIntegrator.startIntent(intent, this);
+            new IntentIntegrator(this).initiateScan();
         }
 
         private void displayToast() {
