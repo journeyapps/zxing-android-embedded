@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="zxing_app_name">Barkod Tarayıcısı</string>
+  <string name="zxing_app_picker_name">Uygulamalar</string>
+  <string name="zxing_bookmark_picker_name">Yer imleri</string>
+  <string name="zxing_button_add_calendar">Takvime ekle</string>
+  <string name="zxing_button_add_contact">Kişi ekle</string>
+  <string name="zxing_button_book_search">Kitap Arama</string>
+  <string name="zxing_button_cancel">İptal</string>
+  <string name="zxing_button_custom_product_search">Özel arama</string>
+  <string name="zxing_button_dial">Numaraya çağrı</string>
+  <string name="zxing_button_email">Email gönder</string>
+  <string name="zxing_button_get_directions">Yön bilgisi al</string>
+  <string name="zxing_button_mms">MMS gönder</string>
+  <string name="zxing_button_ok">Tamam</string>
+  <string name="zxing_button_open_browser">Tarayıcıyı aç</string>
+  <string name="zxing_button_product_search">Ürün arama</string>
+  <string name="zxing_button_search_book_contents">İçerik arama</string>
+  <string name="zxing_button_share_app">Uygulama paylaş</string>
+  <string name="zxing_button_share_bookmark">Yer imi paylaş</string>
+  <string name="zxing_button_share_by_email">Email ile paylaş</string>
+  <string name="zxing_button_share_by_sms">SMS ile paylaş</string>
+  <string name="zxing_button_share_clipboard">Pano</string>
+  <string name="zxing_button_share_contact">Kişi</string>
+  <string name="zxing_button_show_map">Haritayı göster</string>
+  <string name="zxing_button_sms">SMS gönder</string>
+  <string name="zxing_button_web_search">Webde ara</string>
+  <string name="zxing_button_wifi">Ağa bağlan</string>
+  <string name="zxing_contents_contact">Kişi bilgisi</string>
+  <string name="zxing_contents_email">Email adresi</string>
+  <string name="zxing_contents_location">Coğrafi koordinatlar</string>
+  <string name="zxing_contents_phone">Telefon numarası</string>
+  <string name="zxing_contents_sms">SMS adresi</string>
+  <string name="zxing_contents_text">Düz metin</string>
+  <string name="zxing_history_clear_one_history_text">Temizle</string>
+  <string name="zxing_history_clear_text">Geçmişi temizle</string>
+  <string name="zxing_history_email_title">Barkod Tarayıcı geçmişi</string>
+  <string name="zxing_history_empty">Boş</string>
+  <string name="zxing_history_empty_detail">Yok barkod taramaları kaydedildi</string>
+  <string name="zxing_history_send">Geçmişi gönder</string>
+  <string name="zxing_history_title">Geçmiş</string>
+  <string name="zxing_menu_encode_mecard">MECARD kullanın</string>
+  <string name="zxing_menu_encode_vcard">VCard kullanın</string>
+  <string name="zxing_menu_help">Yardım</string>
+  <string name="zxing_menu_history">Geçmiş</string>
+  <string name="zxing_menu_settings">Ayarlar</string>
+  <string name="zxing_menu_share">Paylaş</string>
+  <string name="zxing_msg_bulk_mode_scanned">Toplu modu: taranan ve kaydedilen barkodlar</string>
+  <string name="zxing_msg_camera_framework_bug">Üzgünüz, Android kamera bir sorunla karşılaştı. Cihazı yeniden başlatmanız gerekebilir.</string>
+  <string name="zxing_msg_default_format">Biçim</string>
+  <string name="zxing_msg_default_meta">Metadata</string>
+  <string name="zxing_msg_default_mms_subject">Merhaba</string>
+  <string name="zxing_msg_default_status">Barkodu taramak için vizördeki dikdörtgenin içerisine yerleştirin.</string>
+  <string name="zxing_msg_default_time">Süre</string>
+  <string name="zxing_msg_default_type">Tür</string>
+  <string name="zxing_msg_encode_contents_failed">Sağlanan verilerden bir barkod kodlanamadı.</string>
+  <string name="zxing_msg_error">Hata</string>
+  <string name="zxing_msg_google_books">Google</string>
+  <string name="zxing_msg_google_product">Google</string>
+  <string name="zxing_msg_intent_failed">Üzgünüz, istenen uygulama başlatılamadı. Barkod içeriği geçersiz olabilir.</string>
+  <string name="zxing_msg_invalid_value">Geçersiz değer</string>
+  <string name="zxing_msg_redirect">Yönlendirme</string>
+  <string name="zxing_msg_sbc_book_not_searchable">Üzgünüz, bu kitapla ilgili arama yapılamıyor.</string>
+  <string name="zxing_msg_sbc_failed">Üzgünüz, arama esnasında bir sorun oluştu.</string>
+  <string name="zxing_msg_sbc_no_page_returned">Dönen sayfa yok</string>
+  <string name="zxing_msg_sbc_page">Sayfa</string>
+  <string name="zxing_msg_sbc_results">Sonuçlar</string>
+  <string name="zxing_msg_sbc_searching_book">Kitap aranıyor\u2026</string>
+  <string name="zxing_msg_sbc_snippet_unavailable">Parçacık yok</string>
+  <string name="zxing_msg_share_explanation">Ekranınızda görüntülediğiniz barkodu başka bir telefonla tarayarak veri paylaşabilirsiniz.</string>
+  <string name="zxing_msg_share_text">Veya yazın bazı metin</string>
+  <string name="zxing_msg_sure">Emin misin?</string>
+  <string name="zxing_msg_unmount_usb">Lütfen USB depolamayı devre dışı bırakın.</string>
+  <string name="zxing_preferences_actions_title">Bir barkod bulunduğu zaman\u2026</string>
+  <string name="zxing_preferences_auto_focus_title">Otomatik odaklama kullanın</string>
+  <string name="zxing_preferences_auto_open_web_title">Otomatik olarak web sayfaları açın</string>
+  <string name="zxing_preferences_bulk_mode_summary">Birden fazla barkodu toplu olarak taramak ve kaydetmek için</string>
+  <string name="zxing_preferences_bulk_mode_title">Toplu tarama modu</string>
+  <string name="zxing_preferences_copy_to_clipboard_title">Panoya kopyala</string>
+  <string name="zxing_preferences_custom_product_search_summary" formatted="false">Yerine Koyma: %s = içeriği, %f = biçim, %t = tip</string>
+  <string name="zxing_preferences_custom_product_search_title">Özel arama adresi</string>
+  <string name="zxing_preferences_decode_1D_industrial_title">1D Sanayi</string>
+  <string name="zxing_preferences_decode_1D_product_title">1D Ürün</string>
+  <string name="zxing_preferences_decode_Aztec_title">Aztek</string>
+  <string name="zxing_preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="zxing_preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="zxing_preferences_decode_QR_title">QR barkodları</string>
+  <string name="zxing_preferences_device_bug_workarounds_title">Cihaz Hata Geçici Çözümler</string>
+  <string name="zxing_preferences_disable_barcode_scene_mode_title">Hayır barkod sahne modu</string>
+  <string name="zxing_preferences_disable_continuous_focus_summary">Sadece standart odaklama modunu kullanın</string>
+  <string name="zxing_preferences_disable_continuous_focus_title">Hayır sürekli odak</string>
+  <string name="zxing_preferences_disable_exposure_title">Maruziyet</string>
+  <string name="zxing_preferences_disable_metering_title">Hiçbir ölçüm</string>
+  <string name="zxing_preferences_front_light_auto">Otomatik</string>
+  <string name="zxing_preferences_front_light_off">Atıl</string>
+  <string name="zxing_preferences_front_light_on">Aktif</string>
+  <string name="zxing_preferences_front_light_summary">Bazı telefonlarda düşük ışıkta taramayı iyileştirir, ancak parlamaya neden olabilir. Tüm telefonlarda sonuç vermez.</string>
+  <string name="zxing_preferences_front_light_title">Ön ışığı kullan</string>
+  <string name="zxing_preferences_general_title">Genel ayarlar</string>
+  <string name="zxing_preferences_invert_scan_summary">Siyah zemin üzerine beyaz barkod tarama. Bazı cihazlar mevcut değildir.</string>
+  <string name="zxing_preferences_invert_scan_title">Tarama haricindekileri</string>
+  <string name="zxing_preferences_name">Ayarlar</string>
+  <string name="zxing_preferences_orientation_title">Otomatik rotasyon yok</string>
+  <string name="zxing_preferences_play_beep_title">Bip</string>
+  <string name="zxing_preferences_remember_duplicates_summary">Aynı barkoda ait farklı taramaları kayıtlarda depola</string>
+  <string name="zxing_preferences_remember_duplicates_title">Aynı barkodları hatırla</string>
+  <string name="zxing_preferences_result_title">Sonuç ayarları</string>
+  <string name="zxing_preferences_scanning_title">Barkodlar taraması \u2026</string>
+  <string name="zxing_preferences_search_country">Arama Ülke</string>
+  <string name="zxing_preferences_supplemental_summary">Barkod içeriği hakkında daha fazla bilgi almayı dene</string>
+  <string name="zxing_preferences_supplemental_title">Daha fazla bilgi </string>
+  <string name="zxing_preferences_vibrate_title">Titreşim </string>
+  <string name="zxing_result_address_book">Bulunan kişi bilgisi</string>
+  <string name="zxing_result_calendar">Bulunan takvim etkinliği</string>
+  <string name="zxing_result_email_address">Bulunan Email adresi</string>
+  <string name="zxing_result_geo">Bulunan coğrafi koordinatlar</string>
+  <string name="zxing_result_isbn">Bulunan kitap</string>
+  <string name="zxing_result_product">Bulunan ürün</string>
+  <string name="zxing_result_sms">Bulunan SMS adresi</string>
+  <string name="zxing_result_tel">Bulunan telefon numarası</string>
+  <string name="zxing_result_text">Bulunan düz metin</string>
+  <string name="zxing_result_uri">Bulunan URL</string>
+  <string name="zxing_result_wifi">Bulunan Wi-Fi konfigürasyonu</string>
+  <string name="zxing_sbc_name">Google Kitap Arama</string>
+  <string name="zxing_wifi_changing_network">Ağa bir bağlantı isteğinde\u2026</string>
+</resources>

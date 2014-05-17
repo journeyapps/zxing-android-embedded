@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="zxing_app_name">Сканер штрих-кодів</string>
+  <string name="zxing_app_picker_name">Програми</string>
+  <string name="zxing_bookmark_picker_name">Закладки</string>
+  <string name="zxing_button_add_calendar">Додати в календар</string>
+  <string name="zxing_button_add_contact">Додати контакт</string>
+  <string name="zxing_button_book_search">Пошук книги</string>
+  <string name="zxing_button_cancel">Відміна</string>
+  <string name="zxing_button_custom_product_search">Користувацький пошук</string>
+  <string name="zxing_button_dial">Набрати номер</string>
+  <string name="zxing_button_email">Відправити e-mail</string>
+  <string name="zxing_button_get_directions">Прокласти маршрут</string>
+  <string name="zxing_button_mms">Відправити MMS</string>
+  <string name="zxing_button_ok">OK</string>
+  <string name="zxing_button_open_browser">Відкрити браузер</string>
+  <string name="zxing_button_product_search">Пошук товара</string>
+  <string name="zxing_button_search_book_contents">Пошук вмісту книги</string>
+  <string name="zxing_button_share_app">Програма</string>
+  <string name="zxing_button_share_bookmark">Закладка</string>
+  <string name="zxing_button_share_by_email">Поділитись через e-mail</string>
+  <string name="zxing_button_share_by_sms">Поділитись через SMS</string>
+  <string name="zxing_button_share_clipboard">Буфер обміну</string>
+  <string name="zxing_button_share_contact">Контакт</string>
+  <string name="zxing_button_show_map">Показати карту</string>
+  <string name="zxing_button_sms">Відправити SMS</string>
+  <string name="zxing_button_web_search">Пошук в інтернеті</string>
+  <string name="zxing_button_wifi">Підключитись до мережі</string>
+  <string name="zxing_contents_contact">Контактна інформація</string>
+  <string name="zxing_contents_email">Адреса e-mail</string>
+  <string name="zxing_contents_location">Географічні координати</string>
+  <string name="zxing_contents_phone">Номер телефону</string>
+  <string name="zxing_contents_sms">Адреса для SMS</string>
+  <string name="zxing_contents_text">Текст</string>
+  <string name="zxing_history_clear_one_history_text">Видалити</string>
+  <string name="zxing_history_clear_text">Видалити історію</string>
+  <string name="zxing_history_email_title">Історія сканування</string>
+  <string name="zxing_history_empty">Пусто</string>
+  <string name="zxing_history_empty_detail">Нема збережених штрих-кодів</string>
+  <string name="zxing_history_send">Відправити історію</string>
+  <string name="zxing_history_title">Історія</string>
+  <string name="zxing_menu_encode_mecard">Використовуйте MECARD</string>
+  <string name="zxing_menu_encode_vcard">Використовуйте vCard</string>
+  <string name="zxing_menu_help">Допомога</string>
+  <string name="zxing_menu_history">Історія</string>
+  <string name="zxing_menu_settings">Налаштування</string>
+  <string name="zxing_menu_share">Поділитись</string>
+  <string name="zxing_msg_bulk_mode_scanned">Масовий режим: зберігати історію сканування</string>
+  <string name="zxing_msg_camera_framework_bug">Нажаль, виникла помилка камери. Можливо, вам знадобиться перезавантажити пристрій.</string>
+  <string name="zxing_msg_default_format">Формат</string>
+  <string name="zxing_msg_default_meta">Метадані</string>
+  <string name="zxing_msg_default_mms_subject">Привіт</string>
+  <string name="zxing_msg_default_status">Щоб відсканувати штрих-код, помістіть його в прямокутник видошукача.</string>
+  <string name="zxing_msg_default_time">Час</string>
+  <string name="zxing_msg_default_type">Тип</string>
+  <string name="zxing_msg_encode_contents_failed">Неможливо створити штрих-код з наданих даних.</string>
+  <string name="zxing_msg_error">Помилка</string>
+  <string name="zxing_msg_google_books">Google</string>
+  <string name="zxing_msg_google_product">Google</string>
+  <string name="zxing_msg_intent_failed">Нажаль, неможливо запустити дану програму. Можливо, вміст штрих-коду пошкоджено.</string>
+  <string name="zxing_msg_invalid_value">Некоректна</string>
+  <string name="zxing_msg_redirect">Переслати</string>
+  <string name="zxing_msg_sbc_book_not_searchable">Нажаль, пошук книги був невдалим.</string>
+  <string name="zxing_msg_sbc_failed">Нажаль, виникла помилка пошуку.</string>
+  <string name="zxing_msg_sbc_no_page_returned">Не знайдено жодної сторінки.</string>
+  <string name="zxing_msg_sbc_page">Сторінка</string>
+  <string name="zxing_msg_sbc_results">Результати</string>
+  <string name="zxing_msg_sbc_searching_book">Пошук книги\u2026</string>
+  <string name="zxing_msg_sbc_snippet_unavailable">Фрагмент недоступний</string>
+  <string name="zxing_msg_share_explanation">Ви можете ділитись даними, скануючи штрих-код з вашого екрану іншим телефоном.</string>
+  <string name="zxing_msg_share_text">Або введіть текст</string>
+  <string name="zxing_msg_sure">Ви впевнені?</string>
+  <string name="zxing_msg_unmount_usb">Нажаль, SD-карта недоступна.</string>
+  <string name="zxing_preferences_actions_title">Коли штрих-код знайдено\u2026</string>
+  <string name="zxing_preferences_auto_focus_title">Використовувати автофокус</string>
+  <string name="zxing_preferences_auto_open_web_title">Відкрийте веб-сторінок автоматично</string>
+  <string name="zxing_preferences_bulk_mode_summary">Постійно сканувати та зберігати штрих-коди</string>
+  <string name="zxing_preferences_bulk_mode_title">Масове сканування</string>
+  <string name="zxing_preferences_copy_to_clipboard_title">Скопіювати до буферу обміну</string>
+  <string name="zxing_preferences_custom_product_search_summary" formatted="false">Заміни: %s = вміст, %f = формат, %t = тип</string>
+  <string name="zxing_preferences_custom_product_search_title">URL користувацького пошуку</string>
+  <string name="zxing_preferences_decode_1D_industrial_title">Промислові 1D</string>
+  <string name="zxing_preferences_decode_1D_product_title">1D продукту</string>
+  <string name="zxing_preferences_decode_Aztec_title">Ацтекскій</string>
+  <string name="zxing_preferences_decode_Data_Matrix_title">Розпізнавати Data Matrix</string>
+  <string name="zxing_preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="zxing_preferences_decode_QR_title">Розпізнавати QR-коди</string>
+  <string name="zxing_preferences_device_bug_workarounds_title">Виправлення помилок пристрою</string>
+  <string name="zxing_preferences_disable_barcode_scene_mode_title">Немає режимі штрих-коду сцени</string>
+  <string name="zxing_preferences_disable_continuous_focus_summary">Стандартний режим фокусування</string>
+  <string name="zxing_preferences_disable_continuous_focus_title">Відклюти безперервне фокусування</string>
+  <string name="zxing_preferences_disable_exposure_title">Відключити експозицію</string>
+  <string name="zxing_preferences_disable_metering_title">Немає обліку</string>
+  <string name="zxing_preferences_front_light_auto">Автоматично</string>
+  <string name="zxing_preferences_front_light_off">Вимкнено</string>
+  <string name="zxing_preferences_front_light_on">Увімкнено</string>
+  <string name="zxing_preferences_front_light_summary">Покращує розпізнавання при поганому освітлення, але може викликати відблиски. Працює не на всіх пристроях.</string>
+  <string name="zxing_preferences_front_light_title">Ліхтарик</string>
+  <string name="zxing_preferences_general_title">Загальні налаштування</string>
+  <string name="zxing_preferences_invert_scan_summary">Сканування білих штрих-кодів на чорному фоні. Не працює на деяких пристроях.</string>
+  <string name="zxing_preferences_invert_scan_title">Інвертувати</string>
+  <string name="zxing_preferences_name">Налаштування</string>
+  <string name="zxing_preferences_orientation_title">Немає автоматичного повороту</string>
+  <string name="zxing_preferences_play_beep_title">Пищати</string>
+  <string name="zxing_preferences_remember_duplicates_summary">Зберігати результати сканування однакових штрих-кодів</string>
+  <string name="zxing_preferences_remember_duplicates_title">Запом\'ятовувати дублікати</string>
+  <string name="zxing_preferences_result_title">Налаштування результатів</string>
+  <string name="zxing_preferences_scanning_title">Під час сканування штрих-кодів\u2026</string>
+  <string name="zxing_preferences_search_country">Пошук країни</string>
+  <string name="zxing_preferences_supplemental_summary">Показати детальну інформацію про штрих-код</string>
+  <string name="zxing_preferences_supplemental_title">Подробиці</string>
+  <string name="zxing_preferences_vibrate_title">Вібрувати</string>
+  <string name="zxing_result_address_book">Знайдені контактні дані</string>
+  <string name="zxing_result_calendar">Знайдено подію для календаря</string>
+  <string name="zxing_result_email_address">Знайдено e-mail адресу</string>
+  <string name="zxing_result_geo">Знайдено географічні координати</string>
+  <string name="zxing_result_isbn">Знайдено книгу</string>
+  <string name="zxing_result_product">Знайдено товар</string>
+  <string name="zxing_result_sms">Знайдено адресу для SMS</string>
+  <string name="zxing_result_tel">Знайдено номер телефона</string>
+  <string name="zxing_result_text">Знайдено текст</string>
+  <string name="zxing_result_uri">Знайдено URL</string>
+  <string name="zxing_result_wifi">Знайдено конфігурацію мережі</string>
+  <string name="zxing_sbc_name">Пошук книг Google</string>
+  <string name="zxing_wifi_changing_network">Запит підключення до мережі\u2026</string>
+</resources>

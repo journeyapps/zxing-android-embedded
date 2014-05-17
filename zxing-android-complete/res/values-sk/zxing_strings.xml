@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="zxing_app_name">Barcode Scanner</string>
+  <string name="zxing_app_picker_name">Aplikácie</string>
+  <string name="zxing_bookmark_picker_name">Záložky</string>
+  <string name="zxing_button_add_calendar">Pridať do kalendára</string>
+  <string name="zxing_button_add_contact">Pridať kontakt</string>
+  <string name="zxing_button_book_search">Hľadať knihu</string>
+  <string name="zxing_button_cancel">Zrušiť</string>
+  <string name="zxing_button_custom_product_search">Vlastné vyhľadávanie</string>
+  <string name="zxing_button_dial">Vytočiť číslo</string>
+  <string name="zxing_button_email">Poslať e-mail</string>
+  <string name="zxing_button_get_directions">Získať pokyny</string>
+  <string name="zxing_button_mms">Poslať MMS</string>
+  <string name="zxing_button_ok">OK</string>
+  <string name="zxing_button_open_browser">Otvoriť prehliadač</string>
+  <string name="zxing_button_product_search">Vyhľadať produkt</string>
+  <string name="zxing_button_search_book_contents">Vyhľadať obsah</string>
+  <string name="zxing_button_share_app">Aplikácia</string>
+  <string name="zxing_button_share_bookmark">Záložka</string>
+  <string name="zxing_button_share_by_email">Zdieľať cez e-mail</string>
+  <string name="zxing_button_share_by_sms">Zdieľať cez SMS</string>
+  <string name="zxing_button_share_clipboard">Schránka</string>
+  <string name="zxing_button_share_contact">Kontakt</string>
+  <string name="zxing_button_show_map">Zobraziť mapu</string>
+  <string name="zxing_button_sms">Poslať SMS</string>
+  <string name="zxing_button_web_search">Hľadať na webe</string>
+  <string name="zxing_button_wifi">Pripojiť sa sieti</string>
+  <string name="zxing_contents_contact">Informácie o kontakte</string>
+  <string name="zxing_contents_email">E-mailová adresa</string>
+  <string name="zxing_contents_location">Geografické súradnice</string>
+  <string name="zxing_contents_phone">Telefónne číslo</string>
+  <string name="zxing_contents_sms">SMS adresa</string>
+  <string name="zxing_contents_text">Obyčajný text</string>
+  <string name="zxing_history_clear_one_history_text">Vymazať</string>
+  <string name="zxing_history_clear_text">Vymazať históriu</string>
+  <string name="zxing_history_email_title">História Barcode Scanneru</string>
+  <string name="zxing_history_empty">Prázdna</string>
+  <string name="zxing_history_empty_detail">Žiadne čiarové kódy neboli zaznamenané</string>
+  <string name="zxing_history_send">Poslať históriu</string>
+  <string name="zxing_history_title">História</string>
+  <string name="zxing_menu_encode_mecard">Použiť MECARD</string>
+  <string name="zxing_menu_encode_vcard">Použiť vCard</string>
+  <string name="zxing_menu_help">Nápoveda</string>
+  <string name="zxing_menu_history">História</string>
+  <string name="zxing_menu_settings">Nastavenia</string>
+  <string name="zxing_menu_share">Zdieľať</string>
+  <string name="zxing_msg_bulk_mode_scanned">Hromadný režim: skenovanie a ukladanie čiarových kódov</string>
+  <string name="zxing_msg_camera_framework_bug">Ospravedlňujeme sa, fotoaparát narazil na problém. Možno bude potrebné reštartovať zariadenie.</string>
+  <string name="zxing_msg_default_format">Formát</string>
+  <string name="zxing_msg_default_meta">Metadáta</string>
+  <string name="zxing_msg_default_mms_subject">Ahoj</string>
+  <string name="zxing_msg_default_status">Umiestnite čiarový kód do vnútra obdĺžnika hľadáčiku pre skenovanie.</string>
+  <string name="zxing_msg_default_time">Čas</string>
+  <string name="zxing_msg_default_type">Typ</string>
+  <string name="zxing_msg_encode_contents_failed">Nie je možné zakódovať čiarový kód z poskytnutých údajov.</string>
+  <string name="zxing_msg_error">Chyba</string>
+  <string name="zxing_msg_google_books">Google</string>
+  <string name="zxing_msg_google_product">Google</string>
+  <string name="zxing_msg_intent_failed">Ospravedlňujeme sa, požadovaná aplikácia nemohla byť spustená. Obsah čiarového kódu je možno neplatný.</string>
+  <string name="zxing_msg_invalid_value">Neplatná hodnota</string>
+  <string name="zxing_msg_redirect">Presmerovať</string>
+  <string name="zxing_msg_sbc_book_not_searchable">Ospravedlňujeme sa, táto kniha nie je prehliadateľná.</string>
+  <string name="zxing_msg_sbc_failed">Ospravedlňujeme sa, vyhľadávanie narazilo na problém.</string>
+  <string name="zxing_msg_sbc_no_page_returned">Nenašla sa žiadna stránka</string>
+  <string name="zxing_msg_sbc_page">Stránka</string>
+  <string name="zxing_msg_sbc_results">Výsledky</string>
+  <string name="zxing_msg_sbc_searching_book">Vyhľadáva sa kniha\u2026</string>
+  <string name="zxing_msg_sbc_snippet_unavailable">Úryvok nie je k dispozícii</string>
+  <string name="zxing_msg_share_explanation">Môžete zdieľať dáta zobrazením čiarového kódu na displeji vášho zariadenia a jeho zoskenovaním iným zariadením</string>
+  <string name="zxing_msg_share_text">Alebo zadajte nejaký text</string>
+  <string name="zxing_msg_sure">Ste si istí?</string>
+  <string name="zxing_msg_unmount_usb">Ospravedlňujeme sa, SD karta nie je prístupná.</string>
+  <string name="zxing_preferences_actions_title">Pri zistení čiarového kódu</string>
+  <string name="zxing_preferences_auto_focus_title">Použiť automatické zaostrenie</string>
+  <string name="zxing_preferences_auto_open_web_title">Otvorte webové stránky automaticky</string>
+  <string name="zxing_preferences_bulk_mode_summary">Skenovať a ukladať veľa čiarových kódov bez prerušenia</string>
+  <string name="zxing_preferences_bulk_mode_title">Hromadný režim skenovania</string>
+  <string name="zxing_preferences_copy_to_clipboard_title">Kopírovať do schránky</string>
+  <string name="zxing_preferences_custom_product_search_summary" formatted="false">Nahradiť: %s = obsah, %f = formát, %t = typ</string>
+  <string name="zxing_preferences_custom_product_search_title">Vlastné vyhľadávanie URL</string>
+  <string name="zxing_preferences_decode_1D_industrial_title">1D priemyselné</string>
+  <string name="zxing_preferences_decode_1D_product_title">1D tovar</string>
+  <string name="zxing_preferences_decode_Aztec_title">Aztécky</string>
+  <string name="zxing_preferences_decode_Data_Matrix_title">Dáta Matrix</string>
+  <string name="zxing_preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="zxing_preferences_decode_QR_title">QR kódy</string>
+  <string name="zxing_preferences_device_bug_workarounds_title">Možné chyby zariadenia</string>
+  <string name="zxing_preferences_disable_barcode_scene_mode_title">Bez scénického režimu čiarového kódu</string>
+  <string name="zxing_preferences_disable_continuous_focus_summary">Použiť iba štandardné zaostrenie.</string>
+  <string name="zxing_preferences_disable_continuous_focus_title">Bez nepretržitého zaostrovania</string>
+  <string name="zxing_preferences_disable_exposure_title">Bez expozície</string>
+  <string name="zxing_preferences_disable_metering_title">Bez úpravy jasu</string>
+  <string name="zxing_preferences_front_light_auto">Automatický</string>
+  <string name="zxing_preferences_front_light_off">Neaktívne</string>
+  <string name="zxing_preferences_front_light_on">Aktívne</string>
+  <string name="zxing_preferences_front_light_summary">Použiť prisvetlenie</string>
+  <string name="zxing_preferences_front_light_title">Použiť predné svetlo</string>
+  <string name="zxing_preferences_general_title">Všeobecné nastavenia</string>
+  <string name="zxing_preferences_invert_scan_summary">Skenovať biele čiarové kódy na čiernom pozadí. Nie je k dispozícii na všetkých zariadeniach.</string>
+  <string name="zxing_preferences_invert_scan_title">Invertované skenovanie</string>
+  <string name="zxing_preferences_name">Nastavenia</string>
+  <string name="zxing_preferences_orientation_title">Neotáčať automaticky</string>
+  <string name="zxing_preferences_play_beep_title">Zvuková signalizácia</string>
+  <string name="zxing_preferences_remember_duplicates_summary">Uložiť viacnásobné skenovanie do jednej histórie čiarového kódu</string>
+  <string name="zxing_preferences_remember_duplicates_title">Zapamätať si duplikáty</string>
+  <string name="zxing_preferences_result_title">Nastavenia výsledku</string>
+  <string name="zxing_preferences_scanning_title">Dekódovať čiarové kódy</string>
+  <string name="zxing_preferences_search_country">Vyhľadávať v krajine</string>
+  <string name="zxing_preferences_supplemental_summary">Skúsiť získať viac informácií o obsahu čiarového kódu</string>
+  <string name="zxing_preferences_supplemental_title">Získať viac informácií</string>
+  <string name="zxing_preferences_vibrate_title">Vibrovať</string>
+  <string name="zxing_result_address_book">Nájdená informácia o kontakte</string>
+  <string name="zxing_result_calendar">Nájdená udalosť kalendára</string>
+  <string name="zxing_result_email_address">Nájdená e-mailová adresa</string>
+  <string name="zxing_result_geo">Nájdená zemepisná súradnica</string>
+  <string name="zxing_result_isbn">Nájdená kniha</string>
+  <string name="zxing_result_product">Nájdený tovar</string>
+  <string name="zxing_result_sms">Nájdená SMS adresa</string>
+  <string name="zxing_result_tel">Nájdené telefónne číslo</string>
+  <string name="zxing_result_text">Nájdený obyčajný text</string>
+  <string name="zxing_result_uri">Nájdená URL</string>
+  <string name="zxing_result_wifi">Nájdená konfigurácia WLAN</string>
+  <string name="zxing_sbc_name">Vyhľadať v Google Knihy</string>
+  <string name="zxing_wifi_changing_network">Požiadavka na pripojenie k sieti\u2026</string>
+</resources>

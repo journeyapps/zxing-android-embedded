@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="zxing_app_name">Barcode Scanner</string>
+  <string name="zxing_app_picker_name">Applikationer</string>
+  <string name="zxing_bookmark_picker_name">Bokmärken</string>
+  <string name="zxing_button_add_calendar">Lägg till i kalender</string>
+  <string name="zxing_button_add_contact">Lägg till kontakt</string>
+  <string name="zxing_button_book_search">Boksökning</string>
+  <string name="zxing_button_cancel">Avbryt</string>
+  <string name="zxing_button_custom_product_search">Anpassad sökning</string>
+  <string name="zxing_button_dial">Slå nummer</string>
+  <string name="zxing_button_email">Skicka e-post</string>
+  <string name="zxing_button_get_directions">Få anvisningar</string>
+  <string name="zxing_button_mms">Skicka MMS</string>
+  <string name="zxing_button_ok">OK</string>
+  <string name="zxing_button_open_browser">Öppna webbläsare</string>
+  <string name="zxing_button_product_search">Produktsök</string>
+  <string name="zxing_button_search_book_contents">Sökinnehåll</string>
+  <string name="zxing_button_share_app">Applikation</string>
+  <string name="zxing_button_share_bookmark">Bokmärke</string>
+  <string name="zxing_button_share_by_email">Dela via e-post</string>
+  <string name="zxing_button_share_by_sms">Dela via SMS</string>
+  <string name="zxing_button_share_clipboard">Klippbord</string>
+  <string name="zxing_button_share_contact">Kontakt</string>
+  <string name="zxing_button_show_map">Visa karta</string>
+  <string name="zxing_button_sms">Skicka SMS</string>
+  <string name="zxing_button_web_search">Webbsök</string>
+  <string name="zxing_button_wifi">Anslut till nätverk</string>
+  <string name="zxing_contents_contact">Kontaktinfo</string>
+  <string name="zxing_contents_email">E-postadress</string>
+  <string name="zxing_contents_location">Geografiska koordinater</string>
+  <string name="zxing_contents_phone">Telefonnummer</string>
+  <string name="zxing_contents_sms">SMS-adress</string>
+  <string name="zxing_contents_text">Vanlig text</string>
+  <string name="zxing_history_clear_one_history_text">Rensa</string>
+  <string name="zxing_history_clear_text">Rensa historik</string>
+  <string name="zxing_history_email_title">Historik inskannade streckkoder</string>
+  <string name="zxing_history_empty">Tom</string>
+  <string name="zxing_history_empty_detail">Inga inskannade streckkoder har registrerats</string>
+  <string name="zxing_history_send">Skicka historik</string>
+  <string name="zxing_history_title">Historik</string>
+  <string name="zxing_menu_encode_mecard">Använd MECARD</string>
+  <string name="zxing_menu_encode_vcard">Använd vCard</string>
+  <string name="zxing_menu_help">Hjälp</string>
+  <string name="zxing_menu_history">Historik</string>
+  <string name="zxing_menu_settings">Inställningar</string>
+  <string name="zxing_menu_share">Dela</string>
+  <string name="zxing_msg_bulk_mode_scanned">Bulk-läge: streckkod har inskannats och sparats</string>
+  <string name="zxing_msg_camera_framework_bug">Det uppstod tyvärr ett fel med Androidkameran.</string>
+  <string name="zxing_msg_default_format">Format</string>
+  <string name="zxing_msg_default_meta">Metadata</string>
+  <string name="zxing_msg_default_mms_subject">Hej</string>
+  <string name="zxing_msg_default_status">Placera steckkoden inom sökarens rektangel för att läsa den.</string>
+  <string name="zxing_msg_default_time">Tid</string>
+  <string name="zxing_msg_default_type">Typ</string>
+  <string name="zxing_msg_encode_contents_failed">Det gick inte att avkoda en streckkod från den erhållna informationen.</string>
+  <string name="zxing_msg_error">Fel</string>
+  <string name="zxing_msg_google_books">Google</string>
+  <string name="zxing_msg_google_product">Google</string>
+  <string name="zxing_msg_intent_failed">Den begärda applikationen kunde tyvärr inte startas. Streckkodens innehåll kan vara ogiltigt.</string>
+  <string name="zxing_msg_invalid_value">Ogiltigt värde</string>
+  <string name="zxing_msg_redirect">Omdirigering</string>
+  <string name="zxing_msg_sbc_book_not_searchable">Den här boken är tyvärr inte sökbar.</string>
+  <string name="zxing_msg_sbc_failed">Det uppstod tyvärr ett fel vid sökning. </string>
+  <string name="zxing_msg_sbc_no_page_returned">Ingen sida funnen</string>
+  <string name="zxing_msg_sbc_page">Sida</string>
+  <string name="zxing_msg_sbc_results">Resultat</string>
+  <string name="zxing_msg_sbc_searching_book">Söker bok\u2026</string>
+  <string name="zxing_msg_sbc_snippet_unavailable">Utdrag ej tillgängligt</string>
+  <string name="zxing_msg_share_explanation">Du kan dela information genom att visa en streckkod på din skärm och sedan skanna in den med en annan telefon.</string>
+  <string name="zxing_msg_share_text">Eller skriv in text och tryck Enter</string>
+  <string name="zxing_msg_sure">Är du säker?</string>
+  <string name="zxing_msg_unmount_usb">SD-kortet är tyvärr inte tillgängligt.</string>
+  <string name="zxing_preferences_actions_title">När en streckkod hittas\u2026</string>
+  <string name="zxing_preferences_auto_focus_title">Använd autofokus</string>
+  <string name="zxing_preferences_auto_open_web_title">Öppna webbsidor automatiskt</string>
+  <string name="zxing_preferences_bulk_mode_summary">Skanna och spara flera streckkoder samtidigt</string>
+  <string name="zxing_preferences_bulk_mode_title">Bulk-inskanningläge</string>
+  <string name="zxing_preferences_copy_to_clipboard_title">Kopiera till urklipp</string>
+  <string name="zxing_preferences_custom_product_search_summary" formatted="false">Ersättningar: %s = innehåll, %f = format, %t = typ</string>
+  <string name="zxing_preferences_custom_product_search_title">Anpassad sökning URL</string>
+  <string name="zxing_preferences_decode_1D_industrial_title">1D Industriell</string>
+  <string name="zxing_preferences_decode_1D_product_title">1D Produkt</string>
+  <string name="zxing_preferences_decode_Aztec_title">Aztec</string>
+  <string name="zxing_preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="zxing_preferences_decode_PDF417_title">PDF417 (β)</string>
+  <string name="zxing_preferences_decode_QR_title">QR Code</string>
+  <string name="zxing_preferences_device_bug_workarounds_title">Bugglösningar för enhet</string>
+  <string name="zxing_preferences_disable_barcode_scene_mode_title">Inget scenläge för streckkod</string>
+  <string name="zxing_preferences_disable_continuous_focus_summary">Använd endast standardfokusläge</string>
+  <string name="zxing_preferences_disable_continuous_focus_title">Ingen kontinuerlig fokus</string>
+  <string name="zxing_preferences_disable_exposure_title">Ingen exponering</string>
+  <string name="zxing_preferences_disable_metering_title">Ingen mätning</string>
+  <string name="zxing_preferences_front_light_auto">Automatisk</string>
+  <string name="zxing_preferences_front_light_off">Inaktiv</string>
+  <string name="zxing_preferences_front_light_on">Aktiv</string>
+  <string name="zxing_preferences_front_light_summary">Förbättrar inskanning i svag belysing på vissa telefoner, men kan orsaka bländning. Ej tillgängligt på vissa enheter.</string>
+  <string name="zxing_preferences_front_light_title">Använd frontljus</string>
+  <string name="zxing_preferences_general_title">Grundläggande inställningar</string>
+  <string name="zxing_preferences_invert_scan_summary">Skanna in vita streckkoder mot svart bakgrund. Ej tillgängligt på vissa enheter. </string>
+  <string name="zxing_preferences_invert_scan_title">Invertera inskanning</string>
+  <string name="zxing_preferences_name">Inställningar</string>
+  <string name="zxing_preferences_orientation_title">Ingen automatisk rotering</string>
+  <string name="zxing_preferences_play_beep_title">Ton</string>
+  <string name="zxing_preferences_remember_duplicates_summary">Lagra flera inskanningar av samma streckkod i historik</string>
+  <string name="zxing_preferences_remember_duplicates_title">Kom ihåg dubletter</string>
+  <string name="zxing_preferences_result_title">Resultatinställningar</string>
+  <string name="zxing_preferences_scanning_title">När du skannar in streckkoder, avkoda\u2026</string>
+  <string name="zxing_preferences_search_country">Sök land</string>
+  <string name="zxing_preferences_supplemental_summary">Försök hämta mer information om streckkodens innehåll</string>
+  <string name="zxing_preferences_supplemental_title">Hämta mer info</string>
+  <string name="zxing_preferences_vibrate_title">Vibrera</string>
+  <string name="zxing_result_address_book">Hittade kontaktinformation</string>
+  <string name="zxing_result_calendar">Hittade kalenderhändelser</string>
+  <string name="zxing_result_email_address">Hittade e-postadress</string>
+  <string name="zxing_result_geo">Hittade geografiska koordinater</string>
+  <string name="zxing_result_isbn">Hittade bok</string>
+  <string name="zxing_result_product">Hittade produkt</string>
+  <string name="zxing_result_sms">Hittade SMS-adress</string>
+  <string name="zxing_result_tel">Hittade telefonnummer</string>
+  <string name="zxing_result_text">Hittade vanlig text</string>
+  <string name="zxing_result_uri">Hittade URL</string>
+  <string name="zxing_result_wifi">Hittade WLAN-konfiguration</string>
+  <string name="zxing_sbc_name">Google Book Search</string>
+  <string name="zxing_wifi_changing_network">Begär anslutning till nätverk\u2026</string>
+</resources>
