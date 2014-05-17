@@ -1,11 +1,15 @@
 package example.zxing;
 
+import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -40,7 +44,68 @@ public class MainActivity extends ActionBarActivity {
             } else {
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
             }
+        } else {
+            // This is important, otherwise the result will not be passed to the fragment
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 
+
+    /**
+     * Sample of scanning from a Fragment
+     */
+    public static class ScanFragment extends Fragment {
+        private String toast;
+
+        public ScanFragment() {
+        }
+
+        @Override
+        public void onActivityCreated(Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
+
+            displayToast();
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.fragment_scan, container, false);
+            Button scan = (Button) view.findViewById(R.id.scan_from_fragment);
+            scan.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    scanFromFragment();
+                }
+            });
+            return view;
+        }
+
+        public void scanFromFragment() {
+            Intent intent = IntentIntegrator.createScanIntent(getActivity());
+            IntentIntegrator.startIntent(intent, this);
+        }
+
+        private void displayToast() {
+            if(getActivity() != null && toast != null) {
+                Toast.makeText(getActivity(), toast, Toast.LENGTH_LONG).show();
+                toast = null;
+            }
+        }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            if(result != null) {
+                if(result.getContents() == null) {
+                    toast = "Cancelled from fragment";
+                } else {
+                    toast = "Scanned from fragment: " + result.getContents();
+                }
+
+                // At this point we may or may not have a reference to the activity
+                displayToast();
+            }
         }
     }
 }

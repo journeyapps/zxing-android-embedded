@@ -9,7 +9,7 @@ buildscript {
 apply plugin: 'android'
 
 repositories {
-        mavenCentral()
+    mavenCentral()
 }
 
 android {
@@ -31,6 +31,6 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:19.+'
     compile(project(':zxing-android')) { transitive = true }
+    compile 'com.android.support:appcompat-v7:19.+'
 }

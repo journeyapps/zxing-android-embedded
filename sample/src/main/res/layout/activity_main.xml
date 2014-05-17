@@ -22,4 +22,11 @@
         android:onClick="scanBarcodeCustomLayout"/>
 
 
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:name="example.zxing.MainActivity$ScanFragment" tools:layout="@layout/fragment_scan" />
+
+
 </LinearLayout>

@@ -120,9 +120,12 @@ public final class IntentIntegrator {
         activity.startActivityForResult(intent, REQUEST_CODE);
     }
 
+    public static void startIntent(Intent intent, android.support.v4.app.Fragment fragment) {
+        fragment.startActivityForResult(intent, REQUEST_CODE);
+    }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static void startIntent(Intent intent, Fragment fragment) {
+    public static void startIntent(Intent intent, android.app.Fragment fragment) {
         fragment.startActivityForResult(intent, REQUEST_CODE);
     }
 

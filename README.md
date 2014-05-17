@@ -51,8 +51,8 @@ layout with a cancel button.
 
 Use from a fragment:
 ```java
-Intent intent = IntentIntegrator.createScanIntent(this);    // `this` is the current Fragment
-IntentIntegrator.startIntent(intent, this);
+Intent intent = IntentIntegrator.createScanIntent(getActivity());
+IntentIntegrator.startIntent(intent, this);    // `this` is the current Fragment
 ```
 
 See [IntentIntegrator](zxing-android/src/com/google/zxing/integration/android/IntentIntegrator.java) for more options.
