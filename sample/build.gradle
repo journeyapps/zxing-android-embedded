@@ -32,6 +32,7 @@ android {
 
 dependencies {
     compile(project(':zxing-android')) { transitive = true }
+    compile(project(':zxing-android-legacy')) { transitive = true }
     compile(project(':integration'))
     compile 'com.android.support:appcompat-v7:19.+'
 }
