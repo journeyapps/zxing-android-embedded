@@ -26,7 +26,7 @@ public class MainActivity extends Activity {
         new IntentIntegrator((Activity)this).initiateScan();
     }
 
-    public void scanBarcodeCustomLayout(View view) {
+    public void scanBarcodeCustomOptions(View view) {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
         integrator.autoWide();

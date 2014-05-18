@@ -79,7 +79,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                  ResultMetadataType.SUGGESTED_PRICE,
                  ResultMetadataType.ERROR_CORRECTION_LEVEL,
                  ResultMetadataType.POSSIBLE_COUNTRY);
-  public static final java.lang.String ZXING_CAPTURE_LAYOUT_ID_KEY = "ZXING_CAPTURE_LAYOUT_ID_KEY";
+  public static final java.lang.String ZXING_CAPTURE_LAYOUT_ID_KEY = "ZXINGLEGACY_CAPTURE_LAYOUT_ID_KEY";
 
   private CameraManager cameraManager;
   private CaptureActivityHandler handler;

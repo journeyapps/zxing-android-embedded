@@ -97,13 +97,31 @@ IntentIntegrator integrator = new IntentIntegrator(this);
 integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
 integrator.setPrompt("Scan a barcode");
 integrator.setResultDisplayDuration(0);
-integrator.setCustomLayout(R.layout.my_capture_layout);
 integrator.setWide();  // Wide scanning rectangle, may work better for 1D barcodes
 integrator.setCameraId(0);  // Use a specific camera of the device
 integrator.initiateScan();
 ```
 
 See [IntentIntegrator](integration/src/main/java/com/google/zxing/integration/android/IntentIntegrator.java) for more options.
+
+### Custom Layout
+
+You can provide a custom layout for the capture activity. Note that you'll need to provide two
+different layouts if you are using both zxing-android-minimal and zxing-android-legacy.
+
+See [sample/src/main/res/layout/custom_capture_layout.xml](custom_capture_layout.xml) and
+[sample/src/main/res/layout/custom_capture_layout.xml](custom_legacy_capture_layout.xml) for
+examples.
+
+```java
+IntentIntegrator integrator = new IntentIntegrator(this);
+integrator.setCaptureLayout(R.layout.custom_layout);
+integrator.setLegacyCaptureLayout(R.layout.custom_legacy_layout);
+integrator.initiateScan();
+```
+
+For a cancel/back button, use the ids `@id/zxing_back_button` for zxing-android-minimal and
+ `@id/zxinglegacy_back_button` for zxing-android-legacy.
 
 ## Building locally
 

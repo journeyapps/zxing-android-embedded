@@ -14,23 +14,24 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-       xmlns:tools="http://schemas.android.com/tools">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent">
 
-  <SurfaceView android:id="@+id/zxing_preview_view"
+  <SurfaceView android:id="@+id/zxinglegacy_preview_view"
                android:layout_width="fill_parent"
                android:layout_height="fill_parent"/>
 
-  <com.google.zxing.client.android.ViewfinderView
-      android:id="@+id/zxing_viewfinder_view"
+  <com.google.zxing.client.androidlegacy.ViewfinderView
+      android:id="@+id/zxinglegacy_viewfinder_view"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"/>
 
-  <LinearLayout android:id="@+id/zxing_result_view"
+  <LinearLayout android:id="@+id/zxinglegacy_result_view"
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@color/zxing_result_view"
+                android:background="@color/zxinglegacy_result_view"
                 android:visibility="gone"
                 android:baselineAligned="false">
 
@@ -40,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:padding="@dimen/zxing_standard_padding">
+        android:padding="@dimen/zxinglegacy_standard_padding">
 
       <LinearLayout
           android:orientation="vertical"
@@ -48,15 +49,14 @@
           android:layout_height="fill_parent"
           android:gravity="right|center_vertical">
 
-        <ImageView android:id="@+id/zxing_barcode_image_view"
+        <ImageView android:id="@+id/zxinglegacy_barcode_image_view"
                    android:layout_width="160dip"
                    android:layout_height="wrap_content"
                    android:maxWidth="160dip"
                    android:maxHeight="160dip"
-                   android:layout_marginBottom="@dimen/zxing_half_padding"
+                   android:layout_marginBottom="@dimen/zxinglegacy_half_padding"
                    android:adjustViewBounds="true"
-                   android:scaleType="centerInside"
-                   tools:ignore="ContentDescription"/>
+                   android:scaleType="centerInside"/>
 
         <LinearLayout
           android:orientation="horizontal"
@@ -65,15 +65,15 @@
 
           <TextView android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/zxing_msg_default_format"
-                    android:textColor="@color/zxing_result_minor_text"
+                    android:text="@string/zxinglegacy_msg_default_format"
+                    android:textColor="@color/zxinglegacy_result_minor_text"
                     android:textStyle="bold"
-                    android:paddingRight="@dimen/zxing_half_padding"/>
+                    android:paddingRight="@dimen/zxinglegacy_half_padding"/>
 
-          <TextView android:id="@+id/zxing_format_text_view"
+          <TextView android:id="@+id/format_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/zxing_result_minor_text"/>
+                    android:textColor="@color/zxinglegacy_result_minor_text"/>
 
         </LinearLayout>
 
@@ -84,15 +84,15 @@
 
           <TextView android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/zxing_msg_default_type"
-                    android:textColor="@color/zxing_result_minor_text"
+                    android:text="@string/zxinglegacy_msg_default_type"
+                    android:textColor="@color/zxinglegacy_result_minor_text"
                     android:textStyle="bold"
-                    android:paddingRight="@dimen/zxing_half_padding"/>
+                    android:paddingRight="@dimen/zxinglegacy_half_padding"/>
 
-          <TextView android:id="@+id/zxing_type_text_view"
+          <TextView android:id="@+id/zxinglegacy_type_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/zxing_result_minor_text"/>
+                    android:textColor="@color/zxinglegacy_result_minor_text"/>
 
         </LinearLayout>
 
@@ -103,15 +103,15 @@
 
           <TextView android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/zxing_msg_default_time"
-                    android:textColor="@color/zxing_result_minor_text"
+                    android:text="@string/zxinglegacy_msg_default_time"
+                    android:textColor="@color/zxinglegacy_result_minor_text"
                     android:textStyle="bold"
-                    android:paddingRight="@dimen/zxing_half_padding"/>
+                    android:paddingRight="@dimen/zxinglegacy_half_padding"/>
 
-          <TextView android:id="@+id/zxing_time_text_view"
+          <TextView android:id="@+id/zxinglegacy_time_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/zxing_result_minor_text"/>
+                    android:textColor="@color/zxinglegacy_result_minor_text"/>
 
         </LinearLayout>
 
@@ -120,18 +120,18 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content">
 
-          <TextView android:id="@+id/zxing_meta_text_view_label"
+          <TextView android:id="@+id/meta_text_view_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/zxing_msg_default_meta"
-                    android:textColor="@color/zxing_result_minor_text"
+                    android:text="@string/zxinglegacy_msg_default_meta"
+                    android:textColor="@color/zxinglegacy_result_minor_text"
                     android:textStyle="bold"
-                    android:paddingRight="@dimen/zxing_half_padding"/>
+                    android:paddingRight="@dimen/zxinglegacy_half_padding"/>
 
-          <TextView android:id="@+id/zxing_meta_text_view"
+          <TextView android:id="@+id/zxinglegacy_meta_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/zxing_result_minor_text"/>
+                    android:textColor="@color/zxinglegacy_result_minor_text"/>
 
         </LinearLayout>
 
@@ -146,24 +146,22 @@
           android:layout_height="wrap_content"
           android:orientation="vertical">
 
-          <TextView android:id="@+id/zxing_contents_text_view"
+          <TextView android:id="@+id/zxinglegacy_contents_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/zxing_result_text"
-                    android:textColorLink="@color/zxing_result_text"
+                    android:textColor="@color/zxinglegacy_result_text"
+                    android:textColorLink="@color/zxinglegacy_result_text"
                     android:textSize="22sp"
                     android:paddingLeft="12dip"
-                    android:autoLink="web"
-                    android:textIsSelectable="true"/>
+                    android:autoLink="web"/>
 
-          <TextView android:id="@+id/zxing_contents_supplement_text_view"
+          <TextView android:id="@+id/zxinglegacy_contents_supplement_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/zxing_result_text"
-                    android:textColorLink="@color/zxing_result_text"
+                    android:textColor="@color/zxinglegacy_result_text"
+                    android:textColorLink="@color/zxinglegacy_result_text"
                     android:paddingLeft="12dip"
-                    android:autoLink="web"
-                    android:textIsSelectable="true"/>
+                    android:autoLink="web"/>
 
         </LinearLayout>
 
@@ -171,22 +169,30 @@
 
     </LinearLayout>
 
-    <LinearLayout android:id="@+id/zxing_result_button_view"
+    <LinearLayout android:id="@+id/zxinglegacy_result_button_view"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
                   android:orientation="horizontal"
                   android:gravity="center">
 
-      <Button style="@style/zxing_ResultButton"
+      <Button android:layout_width="0dip"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
               android:visibility="gone"/>
 
-      <Button style="@style/zxing_ResultButton"
+      <Button android:layout_width="0dip"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
               android:visibility="gone"/>
 
-      <Button style="@style/zxing_ResultButton"
+      <Button android:layout_width="0dip"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
               android:visibility="gone"/>
 
-      <Button style="@style/zxing_ResultButton"
+      <Button android:layout_width="0dip"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
               android:visibility="gone"/>
 
     </LinearLayout>
@@ -199,23 +205,23 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-    <TextView android:id="@+id/zxing_status_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:background="@color/zxing_transparent"
-        android:text="@string/zxing_msg_default_status"
-        android:textColor="@color/zxing_status_text"/>
+    <TextView android:id="@+id/zxinglegacy_status_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@color/zxinglegacy_transparent"
+            android:text="@string/zxinglegacy_msg_default_status"
+            android:textColor="@color/zxinglegacy_status_text"/>
 
-    <Button android:id="@id/zxing_back_button"
+    <Button android:id="@id/zxinglegacy_back_button"
         android:layout_marginTop="10dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:height="60dp"
         android:textAlignment="center"
         android:layout_gravity="bottom|center_horizontal"
-        android:text="@string/zxing_button_cancel"/>
+        android:text="@string/zxinglegacy_button_cancel"/>
 
   </LinearLayout>
 
-</merge>
+</FrameLayout>

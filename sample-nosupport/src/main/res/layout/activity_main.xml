@@ -18,8 +18,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/custom_layout"
-        android:onClick="scanBarcodeCustomLayout"/>
+        android:text="@string/custom_options"
+        android:onClick="scanBarcodeCustomOptions"/>
 
 
     <Button

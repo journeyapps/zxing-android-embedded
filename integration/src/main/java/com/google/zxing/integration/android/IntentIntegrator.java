@@ -206,12 +206,22 @@ public class IntentIntegrator {
     }
 
     /**
-     * Change the layout used for scanning.
+     * Change the layout used for scanning in zxing-android.
      *
      * @param resourceId the layout resource id to use.
      */
     public final IntentIntegrator setCaptureLayout(int resourceId) {
         addExtra("ZXING_CAPTURE_LAYOUT_ID_KEY", resourceId);
+        return this;
+    }
+
+    /**
+     * Change the layout used for scanning in zxing-android-legacy.
+     *
+     * @param resourceId the layout resource id to use.
+     */
+    public final IntentIntegrator setLegacyCaptureLayout(int resourceId) {
+        addExtra("ZXINGLEGACY_CAPTURE_LAYOUT_ID_KEY", resourceId);
         return this;
     }
 
