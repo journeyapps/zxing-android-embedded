@@ -15,10 +15,7 @@
  limitations under the License.
  -->
 <resources>
-  <style name="zxing_CaptureTheme" parent="android:Theme.Holo">
-    <item name="android:windowFullscreen">true</item>
-    <item name="android:windowContentOverlay">@null</item>
-    <item name="android:windowActionBarOverlay">true</item>
-    <item name="android:windowActionModeOverlay">true</item>
+  <!-- We diverge from the core ZXing app here, by not displaying the ActionBar -->
+  <style name="zxing_CaptureTheme" parent="android:Theme.Holo.NoActionBar.Fullscreen">
   </style>
 </resources>
