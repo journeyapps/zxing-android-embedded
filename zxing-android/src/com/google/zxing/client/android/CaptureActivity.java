@@ -233,7 +233,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
       } else if (dataString != null &&
                  dataString.contains("http://www.google") &&
-                 dataString.contains("http://www.google")) {
+                 dataString.contains("/m/products/scan")) {
 
         // Scan only products and send the result to mobile Product Search.
         source = IntentSource.PRODUCT_SEARCH_LINK;

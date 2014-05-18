@@ -95,22 +95,22 @@ public final class EncodeActivity extends Activity {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    int i = item.getItemId();
-    if (i == R.id.zxing_menu_share) {
-      share();
-      return true;
-    } else if (i == R.id.zxing_menu_encode) {
-      Intent intent = getIntent();
-      if (intent == null) {
-        return false;
-      }
-      intent.putExtra(USE_VCARD_KEY, !qrCodeEncoder.isUseVCard());
-      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-      startActivity(intent);
-      finish();
-      return true;
+    int switchValue = item.getItemId();
+    if(switchValue == R.id.zxing_menu_share) {
+        share();
+        return true;
+    } else if(switchValue == R.id.zxing_menu_encode) {
+        Intent intent = getIntent();
+        if (intent == null) {
+          return false;
+        }
+        intent.putExtra(USE_VCARD_KEY, !qrCodeEncoder.isUseVCard());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+        return true;
     } else {
-      return false;
+        return false;
     }
   }
   
