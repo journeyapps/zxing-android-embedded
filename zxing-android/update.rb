@@ -1,48 +1,21 @@
 require 'fileutils'
 
-`rm -r src-orig/*`
+`rm -rf src-orig/* res-orig/*`
 `cp -r ../zxing-android-complete/android-core-src/* src-orig/`
 `cp -r ../zxing-android-complete/src/* src-orig/`
+`cp -r ../zxing-android-complete/res/* res-orig/`
 
-# Remove irrelevant files
-orig_prefix = 'src-orig/com/google/zxing/client/android/'
-%w(HttpHelper.java ScanFromWebPageManager.java book/*.java history/*.java result/*.java result/**/*.java share/*.java wifi/*.java clipboard/*.java).each do |glob|
-  Dir[orig_prefix + glob].each do |file|
-    FileUtils.rm file
+def remove_all prefix, globs
+  globs.each do |glob|
+    Dir[prefix + glob].each do |file|
+      if File.directory?(file)
+        FileUtils.rm_r file
+      else
+        FileUtils.rm file  
+      end
+    end
   end
 end
-
-# We have custom versions of each of these files
-FileUtils.rm_f 'zxing.patch'
-
-Dir['src/com/google/zxing/client/android/*.java'].each do |our_file|
-  orig_file = our_file.gsub(/src/, 'src-orig')
-  `git diff --no-index #{orig_file} #{our_file} >> zxing.patch`
-  FileUtils.rm orig_file
-end
-
-# Custom versions:
-#  CaptureActivity, HelpActivity
-# Potentiallly custom versions:
-#  DecodeThread
-
-# Removed files:
-#  HttpHelper, ScanFromWebPageManager, book/*, history/*, pref/BSPlusPreference
-#  result/*, share/*, wifi/*
-
-
-
-exit 0
-`mkdir -p assets/#{PREFIX}`
-`mkdir -p src`
-`mkdir -p res`
-`mkdir -p android-core-src`
-`cp ../../zxing/android/AndroidManifest.xml ./`
-`cp -r ../../zxing/android/assets/* ./assets/#{PREFIX}/`
-`cp -r ../../zxing/android/src/* ./src/`
-`cp -r ../../zxing/android/res/* ./res/`
-`cp -r ../../zxing/android-core/src/main/java/* ./android-core-src/`
-
 
 def process(files)
   files.each do |file|
@@ -52,86 +25,101 @@ def process(files)
   end
 end
 
-process Dir['res/**/strings.xml'] do |text|
-  text.gsub(/<string name="(?<name>.*?)">(?<value>.*?)<\/string>/, "<string name=\"#{PREFIX}_\\k<name>\">\\k<value></string>")
+# Remove unsused source files
+orig_prefix = 'src-orig/com/google/zxing/client/android/'
+remove_all orig_prefix, %w(HttpHelper.java ScanFromWebPageManager.java book history result share wifi clipboard)
+
+
+# We have custom versions of each of these files - remove the original ones and log the diff
+FileUtils.rm_f 'source.patch'
+Dir['src/com/google/zxing/client/android/*.java'].each do |our_file|
+  orig_file = our_file.gsub(/src/, 'src-orig')
+  `git diff --no-index #{orig_file} #{our_file} >> source.patch`
+  FileUtils.rm orig_file
 end
 
-process %w(res/values/arrays.xml) do |text|
-  text.gsub(/<string-array name="(?<name>.*?)">/, "<string-array name=\"#{PREFIX}_\\k<name>\">")
-end
 
-process %w(res/values/colors.xml) do |text|
-  text.gsub(/<color name="(?<name>.*?)">(?<value>.*?)<\/color>/, "<color name=\"#{PREFIX}_\\k<name>\">\\k<value></color>")
-end
+# Remove unsused resource files
+remove_all 'res-orig/', %w(drawable drawable-*)
+remove_all 'res-orig/layout/', %w(zxing_share.xml *_list_item.xml zxing_search_book_*.xml)
+remove_all 'res-orig/', %w(layout-land/zxing_share.xml menu/zxing_history.xml)
 
-process %w(res/values/dimens.xml) do |text|
-  text.gsub(/<dimen name="(?<name>.*?)">(?<value>.*?)<\/dimen>/, "<dimen name=\"#{PREFIX}_\\k<name>\">\\k<value></dimen>")
-end
 
-process %w(res/values/ids.xml) do |text|
-  text.gsub(/<item type="id" name="(?<name>.*?)"\/>/, "<item type=\"id\" name=\"#{PREFIX}_\\k<name>\"/>")
-end
+# Remove strings we don't use
 
-process %w(res/values/styles.xml res/values/themes.xml) do |text|
-  text.gsub(/<style name="/, "<style name=\"#{PREFIX}_")
-end
+remove_strings = <<-LINES
+zxing_history_.*?
+zxing_preferences_.*?
+zxing_result_.*?
+zxing_app_picker_name
+zxing_bookmark_picker_name
+zxing_button_add_calendar
+zxing_button_add_contact
+zxing_button_book_search
+zxing_button_custom_product_search
+zxing_button_dial
+zxing_button_email
+zxing_button_get_directions
+zxing_button_mms
+zxing_button_open_browser
+zxing_button_product_search
+zxing_button_search_book_contents
+zxing_button_share_app
+zxing_button_share_bookmark
+zxing_button_share_by_email
+zxing_button_share_by_sms
+zxing_button_share_clipboard
+zxing_button_share_contact
+zxing_button_show_map
+zxing_button_sms
+zxing_button_web_search
+zxing_button_wifi
+zxing_menu_history
+zxing_menu_settings
+zxing_msg_bulk_mode_scanned
+zxing_msg_default_mms_subject
+zxing_msg_error
+zxing_msg_google_books
+zxing_msg_google_product
+zxing_msg_intent_failed
+zxing_msg_invalid_value
+zxing_msg_redirect
+zxing_msg_sbc_book_not_searchable
+zxing_msg_sbc_failed
+zxing_msg_sbc_no_page_returned
+zxing_msg_sbc_page
+zxing_msg_sbc_results
+zxing_msg_sbc_searching_book
+zxing_msg_sbc_snippet_unavailable
+zxing_msg_share_explanation
+zxing_msg_share_text
+zxing_msg_sure
+zxing_sbc_name
+zxing_wifi_changing_network
+LINES
+remove_strings = remove_strings.split
 
-process %w(res/xml/preferences.xml) do |text|
-  text.gsub(/android:key="/, "android:key=\"#{PREFIX}_")
-end
-
-# @color, @drawable, @+id, @string, @layout, etc
-process Dir['res/**/*.xml'] + ['AndroidManifest.xml'] do |text|
-  text.gsub(/(@\+?\w+?)\//, "\\1/#{PREFIX}_")
-end
-
-process %w(AndroidManifest.xml) do |text|
-  text.gsub!(/android:minSdkVersion="\d+"/, 'android:minSdkVersion="7"')
-  text.gsub!(/android:versionName=".+?"\s*/, '')
-  text.gsub!(/android:versionCode=".+?"\s*/, '')
-  text.gsub!(/android:installLocation=".+?"\s*/, '')
-
-  # Remove <intent-filter>s
-  # text.gsub!(/<activity(.+?[^\/])>(.+?)<\/activity>/m, '<activity\1 />')
-  text.gsub!(/<intent-filter>(.+?)<\/intent-filter>/m, '')
-
+process Dir['res-orig/**/zxing_strings.xml'] do |text|
+  remove_strings.each do |rm|
+    text.gsub!(/\s+<string name="#{rm}">.*?<\/string>/, '')
+  end
+  
   text
 end
 
-# Rename resource files
-Dir['res/**/*.*'].each do |file|
-  unless file.include? "/#{PREFIX}_"
-    new_name = file.gsub(/([\w_]+\.[\w_]+)/, "#{PREFIX}_\\1")
-    FileUtils.rm new_name if File.exists? new_name
-    FileUtils.mv file, new_name
-  end
-end
-
-process Dir['**/*.java'] do |text|
-  # Replace resource ids
-  text.gsub!(/([^\.])R\.(string|layout|id|xml|menu|color|drawable|raw)\./, "\\1R.\\2.#{PREFIX}_")
-
-  # Very nasty hack to convert (some) switch statements into if statements
-  text.gsub!(/    switch \(.+?\) \{(.+?)\n    \}/m) do |body|
-    if body.include? 'case R.id.'
-      body.gsub!(/switch \((.+?)\) \{/, 'int switchValue = \1;')
-      body.gsub!(/(  break;\s+?)?  case (.+?)\:/, '} else if(switchValue == \2) {')
-      body.gsub!(/(  break;\s+?)?  default\:/, '} else {')
-      body.sub!(/^(\s+)\} else if/, '\1if')
-      body.gsub!(/\n\s+break;/, '')
-      body
-    else
-      body
-    end
-  end
-
-  # Replace asset references
-  text.gsub!('file:///android_asset/', "file:///android_asset/#{PREFIX}/")
-
+# Remove title and summary from preferences, since we don't use them,
+# and we don't have the string resources anymore.
+process %w(res-orig/xml/zxing_preferences.xml) do |text|
+  text.gsub! /\s+android:title=".+?"/, ''
+  text.gsub! /\s+android:summary=".+?"/, ''
+  text.gsub! /\s+android:entries=".+?"/, ''
   text
 end
 
-# Preference names
-process Dir['**/PreferencesActivity.java'] do |text|
-  text.gsub(' = "preferences_', ' = "#{PREFIX}_preferences_')
+# We have custom versions of each of these files - remove the original ones and log the diff
+FileUtils.rm_f 'res.patch'
+Dir['res/**/*.xml'].each do |our_file|
+  orig_file = our_file.gsub(/res/, 'res-orig')
+  `git diff --no-index #{orig_file} #{our_file} >> res.patch`
+  FileUtils.rm orig_file
 end

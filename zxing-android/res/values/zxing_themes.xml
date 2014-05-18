@@ -21,4 +21,4 @@
     <item name="android:windowActionBarOverlay">true</item>
     <item name="android:windowActionModeOverlay">true</item>
   </style>
- </resources>
+</resources>

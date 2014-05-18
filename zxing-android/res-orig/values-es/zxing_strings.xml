@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="zxing_app_name">Barcode Scanner</string>
+  <string name="zxing_button_cancel">Cancelar</string>
+  <string name="zxing_button_ok">OK</string>
+  <string name="zxing_contents_contact">Información de contacto</string>
+  <string name="zxing_contents_email">Dirección de correo electrónico</string>
+  <string name="zxing_contents_location">Coordenadas geográficas</string>
+  <string name="zxing_contents_phone">Número de teléfono</string>
+  <string name="zxing_contents_sms">Dirección SMS</string>
+  <string name="zxing_contents_text">Texto</string>
+  <string name="zxing_menu_encode_mecard">Usar MECARD</string>
+  <string name="zxing_menu_encode_vcard">Usar vCard</string>
+  <string name="zxing_menu_help">Ayuda</string>
+  <string name="zxing_menu_share">Compartir</string>
+  <string name="zxing_msg_camera_framework_bug">Lo sentimos, la cámara de Android ha encontrado un problema. Es posible que necesite reiniciar el dispositivo.</string>
+  <string name="zxing_msg_default_format">Formato</string>
+  <string name="zxing_msg_default_meta">Metadata</string>
+  <string name="zxing_msg_default_status">Coloque un código de barras en el interior del rectángulo del visor para escanear.</string>
+  <string name="zxing_msg_default_time">Tiempo</string>
+  <string name="zxing_msg_default_type">Tipo</string>
+  <string name="zxing_msg_encode_contents_failed">No se pudo codificar un código de barras a partir de los datos facilitados.</string>
+  <string name="zxing_msg_unmount_usb">Lo sentimos, la tarjeta SD no está accesible.</string>
+</resources>

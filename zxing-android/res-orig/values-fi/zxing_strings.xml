@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="zxing_app_name">Barcode Scanner</string>
+  <string name="zxing_button_cancel">Peruuta</string>
+  <string name="zxing_button_ok">OK</string>
+  <string name="zxing_contents_contact">Yhteystiedot</string>
+  <string name="zxing_contents_email">Sähköpostiosoite</string>
+  <string name="zxing_contents_location">Karttakoordinaatit</string>
+  <string name="zxing_contents_phone">Puhelinnumero</string>
+  <string name="zxing_contents_sms">Tekstiviestin osoite</string>
+  <string name="zxing_contents_text">Teksti</string>
+  <string name="zxing_menu_encode_mecard">Käytä MECARD:ia</string>
+  <string name="zxing_menu_encode_vcard">Käytä vCard:ia</string>
+  <string name="zxing_menu_help">Ohje</string>
+  <string name="zxing_menu_share">Jaa</string>
+  <string name="zxing_msg_camera_framework_bug">Valitettavasti Androidin kameran toimiinta häiriintyi. Joudut ehkä käynnistämään laitteen uudelleen.</string>
+  <string name="zxing_msg_default_format">Muoto</string>
+  <string name="zxing_msg_default_meta">Metatiedot</string>
+  <string name="zxing_msg_default_status">Aseta viivakoodi neliön sisälle skannataksesi sen.</string>
+  <string name="zxing_msg_default_time">Aika</string>
+  <string name="zxing_msg_default_type">Tyyppi</string>
+  <string name="zxing_msg_encode_contents_failed">Viivakoodia ei voitu muodostaa annetusta datasta.</string>
+  <string name="zxing_msg_unmount_usb">SD-kortti ei ole käytettävissä.</string>
+</resources>

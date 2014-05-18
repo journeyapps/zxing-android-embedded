@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="zxing_app_name">ماسح الرمز الشريطي</string>
+  <string name="zxing_button_cancel">إلغاء</string>
+  <string name="zxing_button_ok">موافق</string>
+  <string name="zxing_contents_contact">معلومات جهة اتصال</string>
+  <string name="zxing_contents_email">عنوان البريد</string>
+  <string name="zxing_contents_location">إحداثيات جغرافية</string>
+  <string name="zxing_contents_phone">رقم الهاتف</string>
+  <string name="zxing_contents_sms">عنوان SMS</string>
+  <string name="zxing_contents_text">نص عادي</string>
+  <string name="zxing_menu_encode_mecard">استخدام MECARD</string>
+  <string name="zxing_menu_encode_vcard">استخدام vCard</string>
+  <string name="zxing_menu_help">تعليمات</string>
+  <string name="zxing_menu_share">مشاركة</string>
+  <string name="zxing_msg_camera_framework_bug">عفوا، حدثت مشكلة في كاميرا جهاز Android. قد تحتاج إلى إعادة تشغيل الجهاز.</string>
+  <string name="zxing_msg_default_format">التنسيق</string>
+  <string name="zxing_msg_default_meta">البيانات الوصفية</string>
+  <string name="zxing_msg_default_status">قم بوضع الرمز الشريطي داخل حدود صورة الكاميرا ليتم مسحه.</string>
+  <string name="zxing_msg_default_time">الوقت</string>
+  <string name="zxing_msg_default_type">النوع</string>
+  <string name="zxing_msg_encode_contents_failed">تعذر ترميز رمز شريطي من البيانات المتوفرة.</string>
+  <string name="zxing_msg_unmount_usb">رجاء إيقاف التخزين على USB للمتابعة.</string>
+</resources>

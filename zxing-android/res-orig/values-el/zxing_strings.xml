@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="zxing_app_name">Barcode Scanner</string>
+  <string name="zxing_button_cancel">Ακύρωση</string>
+  <string name="zxing_button_ok">OK</string>
+  <string name="zxing_contents_contact">Πληροφορίες επαφής</string>
+  <string name="zxing_contents_email">Διεύθυνση email</string>
+  <string name="zxing_contents_location">Γεωγραφικές συντεταγμένες</string>
+  <string name="zxing_contents_phone">Τηλέφωνο</string>
+  <string name="zxing_contents_sms">Διεύθνση SMS</string>
+  <string name="zxing_contents_text">Απλό κείμενο</string>
+  <string name="zxing_menu_encode_mecard">Χρησιμοποιήστε MECARD</string>
+  <string name="zxing_menu_encode_vcard">Χρησιμοποιήστε vCard</string>
+  <string name="zxing_menu_help">Βοήθεια</string>
+  <string name="zxing_menu_share">Κοινή χρήση</string>
+  <string name="zxing_msg_camera_framework_bug">Συγνώμη, προέκυψε ένα πρόβλημα με την κάμερα. Ίσως χρειαστεί να επανεκιννήσετε τη συσκευή.</string>
+  <string name="zxing_msg_default_format">Διαμόρφωση</string>
+  <string name="zxing_msg_default_meta">Metadata</string>
+  <string name="zxing_msg_default_status">Τοποθετήστε ένα barcode μέσα στο πλαίσιο για να το σκανάρετε.</string>
+  <string name="zxing_msg_default_time">Ωρα</string>
+  <string name="zxing_msg_default_type">Τύπος</string>
+  <string name="zxing_msg_encode_contents_failed">Δεν γίνεται να παραχθεί barcode από αυτά τα δεδομένα.</string>
+  <string name="zxing_msg_unmount_usb">Συγνώμη, η κάρτα SD δεν είναι προσβάσιμη.</string>
+</resources>

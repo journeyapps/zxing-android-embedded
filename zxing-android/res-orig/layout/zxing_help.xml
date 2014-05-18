@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2012 ZXing authors
+ Copyright (C) 2008 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -14,10 +14,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-  <item android:id="@+id/zxing_menu_help"
-        android:title="@string/zxing_menu_help"
-        android:icon="@android:drawable/ic_menu_help"
-        android:showAsAction="withText"
-        android:orderInCategory="1"/>
-</menu>
+<WebView xmlns:android="http://schemas.android.com/apk/res/android"
+         android:id="@+id/zxing_help_contents"
+         android:layout_width="fill_parent"
+         android:layout_height="fill_parent"
+         android:layout_weight="1"/>

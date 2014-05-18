@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<resources>
-  <dimen name="zxing_standard_padding">8dip</dimen>
-  <dimen name="zxing_half_padding">4dip</dimen>
-</resources>

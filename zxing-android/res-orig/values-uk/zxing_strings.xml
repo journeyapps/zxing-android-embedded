@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="zxing_app_name">Сканер штрих-кодів</string>
+  <string name="zxing_button_cancel">Відміна</string>
+  <string name="zxing_button_ok">OK</string>
+  <string name="zxing_contents_contact">Контактна інформація</string>
+  <string name="zxing_contents_email">Адреса e-mail</string>
+  <string name="zxing_contents_location">Географічні координати</string>
+  <string name="zxing_contents_phone">Номер телефону</string>
+  <string name="zxing_contents_sms">Адреса для SMS</string>
+  <string name="zxing_contents_text">Текст</string>
+  <string name="zxing_menu_encode_mecard">Використовуйте MECARD</string>
+  <string name="zxing_menu_encode_vcard">Використовуйте vCard</string>
+  <string name="zxing_menu_help">Допомога</string>
+  <string name="zxing_menu_share">Поділитись</string>
+  <string name="zxing_msg_camera_framework_bug">Нажаль, виникла помилка камери. Можливо, вам знадобиться перезавантажити пристрій.</string>
+  <string name="zxing_msg_default_format">Формат</string>
+  <string name="zxing_msg_default_meta">Метадані</string>
+  <string name="zxing_msg_default_status">Щоб відсканувати штрих-код, помістіть його в прямокутник видошукача.</string>
+  <string name="zxing_msg_default_time">Час</string>
+  <string name="zxing_msg_default_type">Тип</string>
+  <string name="zxing_msg_encode_contents_failed">Неможливо створити штрих-код з наданих даних.</string>
+  <string name="zxing_msg_unmount_usb">Нажаль, SD-карта недоступна.</string>
+</resources>

@@ -30,7 +30,7 @@ android {
         main {
             manifest.srcFile 'AndroidManifest.xml'
             java.srcDirs = ['src-orig', 'src']
-            res.srcDirs = ['res']
+            res.srcDirs = ['res-orig', 'res']
             assets.srcDirs = ['assets']
         }
     }

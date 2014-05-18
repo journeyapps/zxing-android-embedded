@@ -1,0 +1,83 @@
+diff --git a/res-orig/menu/zxing_capture.xml b/res/menu/zxing_capture.xml
+index 25f58fa..5f5f358 100644
+--- a/res-orig/menu/zxing_capture.xml
++++ b/res/menu/zxing_capture.xml
+@@ -15,24 +15,9 @@
+  limitations under the License.
+  -->
+ <menu xmlns:android="http://schemas.android.com/apk/res/android">
+-  <item android:id="@+id/zxing_menu_share"
+-        android:title="@string/zxing_menu_share"
+-        android:icon="@android:drawable/ic_menu_share"
+-        android:orderInCategory="1"
+-        android:showAsAction="withText|ifRoom"/>
+-  <item android:id="@+id/zxing_menu_history"
+-        android:title="@string/zxing_menu_history"
+-        android:icon="@android:drawable/ic_menu_recent_history"
+-        android:orderInCategory="2"
+-        android:showAsAction="withText|ifRoom"/>
+-  <item android:id="@+id/zxing_menu_settings"
+-        android:title="@string/zxing_menu_settings"
+-        android:icon="@android:drawable/ic_menu_preferences"
+-        android:orderInCategory="3"
+-        android:showAsAction="withText"/>
+   <item android:id="@+id/zxing_menu_help"
+         android:title="@string/zxing_menu_help"
+         android:icon="@android:drawable/ic_menu_help"
+-        android:orderInCategory="4"
+-        android:showAsAction="withText"/>
+-</menu>
++        android:showAsAction="withText"
++        android:orderInCategory="1"/>
++</menu>
+\ No newline at end of file
+diff --git a/res-orig/values/zxing_themes.xml b/res/values/zxing_themes.xml
+index 18ac886..b647776 100644
+--- a/res-orig/values/zxing_themes.xml
++++ b/res/values/zxing_themes.xml
+@@ -21,4 +21,4 @@
+     <item name="android:windowActionBarOverlay">true</item>
+     <item name="android:windowActionModeOverlay">true</item>
+   </style>
+-</resources>
++</resources>
+\ No newline at end of file
+diff --git a/res-orig/values/zxing_ids.xml b/res/values/zxing_ids.xml
+index 1671f0b..afd30fd 100755
+--- a/res-orig/values/zxing_ids.xml
++++ b/res/values/zxing_ids.xml
+@@ -22,4 +22,5 @@
+   <item type="id" name="zxing_quit"/>
+   <item type="id" name="zxing_restart_preview"/>
+   <item type="id" name="zxing_return_scan_result"/>
++  <item type="id" name="zxing_back_button"/>
+ </resources>
+diff --git a/res-orig/values/zxing_arrays.xml b/res/values/zxing_arrays.xml
+index 672c19d..72ffad3 100644
+--- a/res-orig/values/zxing_arrays.xml
++++ b/res/values/zxing_arrays.xml
+@@ -15,7 +15,7 @@
+  limitations under the License.
+  -->
+ <resources>
+-  <string-array name="zxing_country_codes">
++  <string-array name="zxing_country_codes" translatable="false">
+     <item>-</item>
+     <item>AR</item>
+     <item>AU</item>
+@@ -49,14 +49,9 @@
+     <item>TW</item>
+     <item>US</item>
+   </string-array>
+-  <string-array name="zxing_preferences_front_light_values">
++  <string-array name="zxing_preferences_front_light_values" translatable="false">
+     <item>ON</item>
+     <item>AUTO</item>
+     <item>OFF</item>
+   </string-array>
+-  <string-array name="zxing_preferences_front_light_options">
+-    <item>@string/zxing_preferences_front_light_on</item>
+-    <item>@string/zxing_preferences_front_light_auto</item>
+-    <item>@string/zxing_preferences_front_light_off</item>
+-  </string-array>
+ </resources>

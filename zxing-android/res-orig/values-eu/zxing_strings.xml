@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="zxing_app_name">Barra-kode Eskanerra</string>
+  <string name="zxing_button_cancel">Utzi</string>
+  <string name="zxing_button_ok">Ados</string>
+  <string name="zxing_contents_contact">Kontaktuaren informazioa</string>
+  <string name="zxing_contents_email">E-posta helbidea</string>
+  <string name="zxing_contents_location">Koordenatu geografikoak</string>
+  <string name="zxing_contents_phone">Telefono zenbakia</string>
+  <string name="zxing_contents_sms">SMS helbidea</string>
+  <string name="zxing_contents_text">Testu laua</string>
+  <string name="zxing_menu_encode_mecard">Erabili MECARD</string>
+  <string name="zxing_menu_encode_vcard">Erabili vCard</string>
+  <string name="zxing_menu_help">Laguntza</string>
+  <string name="zxing_menu_share">Partekatu</string>
+  <string name="zxing_msg_camera_framework_bug">Barkatu, Android kamerak arazo bat izan du. Behar bada gailua berrabiarazi beharko duzu.</string>
+  <string name="zxing_msg_default_format">Formatua</string>
+  <string name="zxing_msg_default_meta">Metadatuak</string>
+  <string name="zxing_msg_default_status">Kokatu barra-kode bat laukizuzenaren barruan eskaneatzeko.</string>
+  <string name="zxing_msg_default_time">Denbora</string>
+  <string name="zxing_msg_default_type">Mota</string>
+  <string name="zxing_msg_encode_contents_failed">Ezin izan da barra-kode bat kodetu emandako datuetatik.</string>
+  <string name="zxing_msg_unmount_usb">Barkatu, SD txartela ez dago eskuragarri.</string>
+</resources>
