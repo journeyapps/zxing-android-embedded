@@ -27,16 +27,16 @@ repositories {
 
 dependencies {
     // Supports Android 4.0.3 and later (API level 15)
-    compile 'com.embarkmobile:zxing-android-minimal:2.0.0-SNAPSHOT@aar'
+    compile 'com.embarkmobile:zxing-android-minimal:2.0.0@aar'
 
     // Supports Android 2.1 and later (API level 7), but not optimal for later Android versions.
     // If you only plan on supporting Android 4.0.3 and up, you don't need to include this.
-    compile 'com.embarkmobile:zxing-android-legacy:2.0.0-SNAPSHOT@aar'
+    compile 'com.embarkmobile:zxing-android-legacy:2.0.0@aar'
 
     // Convenience library to launch the scanning and encoding Activities.
     // It automatically picks the best scanning library from the above two, depending on the
     // Android version and what is available.
-    compile 'com.embarkmobile:zxing-android-integration:2.0.0-SNAPSHOT@aar'
+    compile 'com.embarkmobile:zxing-android-integration:2.0.0@aar'
 
     // Version 3.0.x of zxing core contains some code that is not compatible on Android 2.2 and earlier.
     // This mostly affects encoding, but you should test if you plan to support these versions.
