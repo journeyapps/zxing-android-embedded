@@ -1,11 +1,5 @@
 language: android
 jdk: oraclejdk7
-android:
-  components:
-    - build-tools-19.1.0
-  licenses:
-    - android-sdk-license-bcbbd656
-    - '.*intel.+'
 
 script:
     - TERM=dumb ./gradlew build

@@ -1,4 +1,16 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'com.android.tools.build:gradle:0.12.0'
+    classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
+  }
+}
+
+
 subprojects {
     version = '2.0.0'
     group = 'com.embarkmobile'
+    apply plugin: 'android-sdk-manager'
 }
