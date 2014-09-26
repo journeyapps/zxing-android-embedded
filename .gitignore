@@ -7,4 +7,9 @@ maven-repository
 *.iml
 local.properties
 mvn-clone
+.DS_Store
+repos
+clean.sh
+setup.sh
+build.sh
 

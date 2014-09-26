@@ -21,8 +21,14 @@ dependencies {
 
 
 uploadArchives {
-    repositories.mavenDeployer {
+    repositories {
+        flatDir {
+            dirs '../repos/integration'
+        }
+    }
+
+    /*repositories.mavenDeployer {
         repository(url: "file:mvn-clone/maven-repository/")
         pom.artifactId = 'zxing-android-integration'
-    }
+    }*/
 }
