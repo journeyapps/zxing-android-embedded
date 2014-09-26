@@ -7,4 +7,6 @@ maven-repository
 *.iml
 local.properties
 mvn-clone
+.DS_Store
+repos
 
