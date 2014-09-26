@@ -10,3 +10,8 @@ mvn-clone
 .DS_Store
 repos
 
+# a few personal scripts I've been using
+clean.sh
+setup.sh
+build.sh
+

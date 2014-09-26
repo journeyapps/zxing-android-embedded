@@ -71,8 +71,6 @@ public final class CaptureActivityHandler extends Handler {
 
         // Start ourselves capturing previews and decoding.
         this.cameraManager = cameraManager;
-        cameraManager.startPreview();
-        restartPreviewAndDecode();
     }
 
     @Override
@@ -152,7 +150,12 @@ public final class CaptureActivityHandler extends Handler {
         removeMessages(R.id.zxing_decode_failed);
     }
 
-    private void restartPreviewAndDecode() {
+    public void startPreview() {
+        cameraManager.startPreview();
+        restartPreviewAndDecode();
+    }
+
+    protected void restartPreviewAndDecode() {
         if (state == State.SUCCESS) {
             state = State.PREVIEW;
             cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.zxing_decode);
