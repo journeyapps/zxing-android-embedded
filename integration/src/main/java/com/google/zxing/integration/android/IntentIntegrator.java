@@ -103,6 +103,8 @@ public class IntentIntegrator {
                     "ITF", "RSS_14", "RSS_EXPANDED");
     public static final Collection<String> QR_CODE_TYPES = Collections.singleton("QR_CODE");
     public static final Collection<String> DATA_MATRIX_TYPES = Collections.singleton("DATA_MATRIX");
+    public static final String LAYOUT_PORTRAIT = "PORTRAIT";
+    public static final String LAYOUT_LANDSCAPE = "LANDSCAPE";
 
     public static final Collection<String> ALL_CODE_TYPES = null;
 
@@ -244,6 +246,58 @@ public class IntentIntegrator {
      */
     public final IntentIntegrator setResultDisplayDuration(long ms) {
         addExtra("RESULT_DISPLAY_DURATION_MS", ms);
+        return this;
+    }
+
+    /**
+     * Set the standard beep/vibrate on successful barcode scan either on or off. On by default
+     *
+     * @param b true for on, false for off
+     */
+    public final IntentIntegrator setBeepOn(boolean b) {
+        addExtra("BEEP_ON", b);
+        return this;
+    }
+
+    /**
+     * Set the red line across the preview box to either on or off. On by default.
+     *
+     * @param b true for on, false for off
+     */
+    public final IntentIntegrator setScannerLineOn(boolean b) {
+        addExtra("SCANNER_LINE", b);
+        return this;
+    }
+
+    /**
+     * Set the dark tinted frame to either on or off. On by default.
+     *
+     * @param b true for on, false for off
+     */
+    public final IntentIntegrator setFrameOn(boolean b) {
+        addExtra("FRAME_ON", b);
+        return this;
+    }
+
+    /**
+     * Set the desired orientation of the layout. Default is landscape. Unrecognized orientations
+     * will default to landscape as well.
+     *
+     * @param orientation desired orientation of the layout. Please use the constants provided
+     */
+    public final IntentIntegrator setOrientation(String orientation) {
+        addExtra("ORIENTATION", orientation);
+        return this;
+    }
+
+    /**
+     * Set the opaque overlay of the QR Code when successfully scanned to either on or off.
+     * On by default.
+     *
+     * @param b true for on, false for off
+     */
+    public final IntentIntegrator setSuccessfulScanOverlayOn(boolean b) {
+        addExtra("OVERLAY_ON", b);
         return this;
     }
 
