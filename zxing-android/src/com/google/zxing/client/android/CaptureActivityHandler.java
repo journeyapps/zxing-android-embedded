@@ -71,8 +71,6 @@ public final class CaptureActivityHandler extends Handler {
 
     // Start ourselves capturing previews and decoding.
     this.cameraManager = cameraManager;
-    cameraManager.startPreview();
-    restartPreviewAndDecode();
   }
 
   @Override
@@ -112,7 +110,7 @@ public final class CaptureActivityHandler extends Handler {
       intent.setData(Uri.parse(url));
 
       ResolveInfo resolveInfo =
-              activity.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+          activity.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
       String browserPackageName = null;
       if (resolveInfo != null && resolveInfo.activityInfo != null) {
         browserPackageName = resolveInfo.activityInfo.packageName;
@@ -152,7 +150,12 @@ public final class CaptureActivityHandler extends Handler {
     removeMessages(R.id.zxing_decode_failed);
   }
 
-  private void restartPreviewAndDecode() {
+  public void startPreview() {
+    cameraManager.startPreview();
+    restartPreviewAndDecode();
+  }
+
+  protected void restartPreviewAndDecode() {
     if (state == State.SUCCESS) {
       state = State.PREVIEW;
       cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.zxing_decode);

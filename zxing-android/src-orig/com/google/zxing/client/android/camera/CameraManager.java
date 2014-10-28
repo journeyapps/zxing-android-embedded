@@ -17,6 +17,7 @@
 package com.google.zxing.client.android.camera;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
@@ -24,9 +25,13 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import com.google.zxing.PlanarYUVLuminanceSource;
+import com.google.zxing.client.android.ScannerOptions;
 import com.google.zxing.client.android.camera.open.OpenCameraInterface;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This object wraps the Camera service object and expects to be the only one talking to it. The
@@ -36,6 +41,7 @@ import java.io.IOException;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class CameraManager {
+  //todo check into pulling some methods out into their own classes? this class is bulky
 
   private static final String TAG = CameraManager.class.getSimpleName();
 
@@ -55,18 +61,34 @@ public final class CameraManager {
   private int requestedCameraId = -1;
   private int requestedFramingRectWidth;
   private int requestedFramingRectHeight;
+  private ScannerOptions scannerOptions;
+  private Point mPreviewFrameSize;
+  private int mCurrentOrientation;
+
+  private static final Set<Integer> ORIENTATION_SUPPORT_LIST;
+  static {
+    Set<Integer> tempSet = new HashSet<>();
+    tempSet.add(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    tempSet.add(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+    ORIENTATION_SUPPORT_LIST = Collections.unmodifiableSet(tempSet);
+  }
+
   /**
    * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
    * clear the handler so it will only receive one message.
    */
   private final PreviewCallback previewCallback;
 
-  public CameraManager(Context context) {
+  public CameraManager(Context context, ScannerOptions options) {
     this.context = context;
     this.configManager = new CameraConfigurationManager(context);
     previewCallback = new PreviewCallback(configManager);
+
+    //keep any custom ui options
+    scannerOptions = options;
   }
-  
+
   /**
    * Opens the camera driver and initializes the hardware parameters.
    *
@@ -76,13 +98,13 @@ public final class CameraManager {
   public synchronized void openDriver(SurfaceHolder holder) throws IOException {
     Camera theCamera = camera;
     if (theCamera == null) {
-	  
+
       if (requestedCameraId >= 0) {
         theCamera = OpenCameraInterface.open(requestedCameraId);
       } else {
         theCamera = OpenCameraInterface.open();
       }
-      
+
       if (theCamera == null) {
         throw new IOException();
       }
@@ -142,12 +164,26 @@ public final class CameraManager {
     }
   }
 
+  public synchronized void startPreview(SurfaceHolder holder) {
+    try {
+      if (camera != null && !isPreviewRunning()) {
+        camera.setPreviewDisplay(holder);
+        startPreview();
+      }
+    } catch(IOException e) {
+      Log.e(TAG, e.getMessage());
+      e.printStackTrace();
+    }
+  }
+
   /**
    * Asks the camera hardware to begin drawing preview frames to the screen.
    */
   public synchronized void startPreview() {
+    Log.d(TAG, "starting camera preview");
+
     Camera theCamera = camera;
-    if (theCamera != null && !previewing) {
+    if (theCamera != null && !isPreviewRunning()) {
       theCamera.startPreview();
       previewing = true;
       autoFocusManager = new AutoFocusManager(context, camera);
@@ -158,14 +194,58 @@ public final class CameraManager {
    * Tells the camera to stop drawing preview frames.
    */
   public synchronized void stopPreview() {
+    Log.d(TAG, "stopping camera preview");
     if (autoFocusManager != null) {
       autoFocusManager.stop();
       autoFocusManager = null;
     }
-    if (camera != null && previewing) {
+    if (camera != null && isPreviewRunning()) {
       camera.stopPreview();
       previewCallback.setHandler(null, 0);
       previewing = false;
+    }
+  }
+
+  /**
+   * Informs whether the camera is currently in preview mode or not
+   */
+  public synchronized boolean isPreviewRunning() {
+    return previewing;
+  }
+
+  /**
+   * Get the camera parameters
+   *
+   * @return the current camera parameters or null if no camera found
+   */
+  public synchronized Camera.Parameters getCameraParameters() {
+    if(camera != null) {
+      return camera.getParameters();
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Set the camera parameters if possible
+   *
+   * @param params the new camera parameters to set
+   */
+  public synchronized void setCameraParameters(Camera.Parameters params) {
+    if(camera != null && !isPreviewRunning()) {
+      camera.setParameters(params);
+    } else {
+      Log.w(TAG, "tried to set parameters when the camera was unavailable");
+    }
+  }
+
+  /**
+   * Rotate the camera orientation to whatever angle you desire
+   * @param orientation the orientation in degrees ot rotate the camera display
+   */
+  public synchronized  void setCameraOrientation(int orientation) {
+    if(camera != null) {
+      camera.setDisplayOrientation(orientation);
     }
   }
 
@@ -216,23 +296,23 @@ public final class CameraManager {
       if (camera == null) {
         return null;
       }
-      Point screenResolution = configManager.getScreenResolution();
-      if (screenResolution == null) {
+      Camera.Size previewResolution = getPreviewSize();
+      if (previewResolution == null) {
         // Called early, before init even finished
         return null;
       }
 
-      int width = findDesiredDimensionInRange(screenResolution.x, MIN_FRAME_WIDTH, MAX_FRAME_WIDTH);
-      int height = findDesiredDimensionInRange(screenResolution.y, MIN_FRAME_HEIGHT, MAX_FRAME_HEIGHT);
+      int width = findDesiredDimensionInRange(previewResolution.width, MIN_FRAME_WIDTH, MAX_FRAME_WIDTH);
+      int height = findDesiredDimensionInRange(previewResolution.height, MIN_FRAME_HEIGHT, MAX_FRAME_HEIGHT);
 
-      int leftOffset = (screenResolution.x - width) / 2;
-      int topOffset = (screenResolution.y - height) / 2;
+      int leftOffset = (previewResolution.width - width) / 2;
+      int topOffset = (previewResolution.height - height) / 2;
       framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
       Log.d(TAG, "Calculated framing rect: " + framingRect);
     }
     return framingRect;
   }
-  
+
   private static int findDesiredDimensionInRange(int resolution, int hardMin, int hardMax) {
     int dim = 5 * resolution / 8; // Target 5/8 of each dimension
     if (dim < hardMin) {
@@ -258,21 +338,26 @@ public final class CameraManager {
       }
       Rect rect = new Rect(framingRect);
       Point cameraResolution = configManager.getCameraResolution();
-      Point screenResolution = configManager.getScreenResolution();
-      if (cameraResolution == null || screenResolution == null) {
+      Camera.Size previewResolution = getPreviewSize();
+      if (cameraResolution == null || previewResolution == null) {
         // Called early, before init even finished
         return null;
+      } else if(mPreviewFrameSize != null) {
+        cameraResolution = mPreviewFrameSize;
       }
-      rect.left = rect.left * cameraResolution.x / screenResolution.x;
-      rect.right = rect.right * cameraResolution.x / screenResolution.x;
-      rect.top = rect.top * cameraResolution.y / screenResolution.y;
-      rect.bottom = rect.bottom * cameraResolution.y / screenResolution.y;
+
+      rect.left = rect.left * cameraResolution.x / previewResolution.width;
+      rect.right = rect.right * cameraResolution.x / previewResolution.width;
+      rect.top = rect.top * cameraResolution.y / previewResolution.height;
+      rect.bottom = rect.bottom * cameraResolution.y / previewResolution.height;
       framingRectInPreview = rect;
+
+      Log.d(TAG, "Calculated framing rect in preview: " + framingRectInPreview);
     }
     return framingRectInPreview;
   }
 
-  
+
   /**
    * Allows third party apps to specify the camera ID, rather than determine
    * it automatically based on available cameras and their orientation.
@@ -286,7 +371,7 @@ public final class CameraManager {
       requestedCameraId = cameraId;
     }
   }
-  
+
   /**
    * Allows third party apps to specify the scanning rectangle dimensions, rather than determine
    * them automatically based on screen resolution.
@@ -296,21 +381,44 @@ public final class CameraManager {
    */
   public synchronized void setManualFramingRect(int width, int height) {
     if (initialized) {
-      Point screenResolution = configManager.getScreenResolution();
-      if (width > screenResolution.x) {
-        width = screenResolution.x;
+      Camera.Size screenSize = getPreviewSize();
+
+      //check if the frame box is different than the preview size
+      if(mPreviewFrameSize != null) {
+        screenSize.width = mPreviewFrameSize.x;
+        screenSize.height = mPreviewFrameSize.y;
       }
-      if (height > screenResolution.y) {
-        height = screenResolution.y;
+
+      if (width > screenSize.width) {
+        width = screenSize.width;
       }
-      int leftOffset = (screenResolution.x - width) / 2;
-      int topOffset = (screenResolution.y - height) / 2;
+      if (height > screenSize.height) {
+        height = screenSize.height;
+      }
+
+      int leftOffset = (screenSize.width - width) / 2;
+      int topOffset = (screenSize.height - height) / 2;
       framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
       Log.d(TAG, "Calculated manual framing rect: " + framingRect);
       framingRectInPreview = null;
     } else {
       requestedFramingRectWidth = width;
       requestedFramingRectHeight = height;
+    }
+  }
+
+  /**
+   * Sets the size of the preview frame for use in building the framing rectangle. DOES NOT
+   * ACTUALLY CHANGE THE SIZE OF THE PREVIEW FRAME, JUST RECORDS IT FOR INTERNAL USE.
+   *
+   * @param width how wide the preview frame is
+   * @param height how tall the preview frame is
+   */
+  public synchronized void setPreviewFrameSize(int width, int height) {
+    if(width > MIN_FRAME_WIDTH && height > MIN_FRAME_HEIGHT) {
+      mPreviewFrameSize = new Point(width, height);
+    } else {
+      throw new IllegalArgumentException("Provided preview frame size was too small");
     }
   }
 
@@ -324,13 +432,65 @@ public final class CameraManager {
    * @return A PlanarYUVLuminanceSource instance.
    */
   public PlanarYUVLuminanceSource buildLuminanceSource(byte[] data, int width, int height) {
-    Rect rect = getFramingRectInPreview();
+    Rect rect = getFramingRect();
     if (rect == null) {
       return null;
     }
     // Go ahead and assume it's YUV rather than die.
     return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
-                                        rect.width(), rect.height(), false);
+        rect.width(), rect.height(), false);
+  }
+
+  public Camera.Size getPreviewSize() {
+    Camera.Parameters params = getCameraParameters();
+    if(params != null) {
+      return params.getPreviewSize();
+    }
+
+    return null;
+  }
+
+  public boolean isScannerLineEnabled() {
+    return scannerOptions.isScannerLineEnabled();
+  }
+
+  public boolean isFrameEnabled() {
+    return scannerOptions.isFrameEnabled();
+  }
+
+  public boolean isOverlayEnabled() {
+    return scannerOptions.isOverlayEnabled();
+  }
+
+  public boolean isPotentialIndicatorsEnabled() {
+    return scannerOptions.isPotentialIndicatorsEnabled();
+  }
+
+  public boolean isResultIndicatorsEnabled() {
+    return scannerOptions.isResultIndicatorsEnabled();
+  }
+
+  /**
+   * Returns the current orientation of the layout as a value of ActivityInfo constants
+   *
+   * @return an int corresponding to a constant from ActivityInfo
+   */
+  public int getCurrentOrientation() {
+    return mCurrentOrientation;
+  }
+
+  public void setCurrentOrientation(int orientation) {
+    if(!ORIENTATION_SUPPORT_LIST.contains(orientation)) {
+      throw new IllegalArgumentException("Unsupported orientation value given");
+    }
+
+    Log.d(TAG, "setting current orientation to " + orientation);
+
+    mCurrentOrientation = orientation;
+  }
+
+  public int getOverlayOpacity() {
+    return scannerOptions.getOverlayOpacity();
   }
 
 }

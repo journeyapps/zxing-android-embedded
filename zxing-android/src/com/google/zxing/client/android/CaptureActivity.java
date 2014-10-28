@@ -17,9 +17,7 @@
 package com.google.zxing.client.android;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -34,9 +32,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -44,13 +39,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.camera.CameraManager;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Map;
@@ -63,8 +56,7 @@ import java.util.Map;
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Sean Owen
  */
-public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
-
+public final class CaptureActivity extends Activity {
   private static final String TAG = CaptureActivity.class.getSimpleName();
 
   private static final long DEFAULT_INTENT_RESULT_DURATION_MS = 1500L;
@@ -74,36 +66,35 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   private static final Collection<ResultMetadataType> DISPLAYABLE_METADATA_TYPES =
       EnumSet.of(ResultMetadataType.ISSUE_NUMBER,
-                 ResultMetadataType.SUGGESTED_PRICE,
-                 ResultMetadataType.ERROR_CORRECTION_LEVEL,
-                 ResultMetadataType.POSSIBLE_COUNTRY);
-  public static final java.lang.String ZXING_CAPTURE_LAYOUT_ID_KEY = "ZXING_CAPTURE_LAYOUT_ID_KEY";
+          ResultMetadataType.SUGGESTED_PRICE,
+          ResultMetadataType.ERROR_CORRECTION_LEVEL,
+          ResultMetadataType.POSSIBLE_COUNTRY);
 
   private CameraManager cameraManager;
-  private CaptureActivityHandler handler;
+  private CaptureActivityHandler activityHandler;
   private Result savedResultToShow;
   private ViewfinderView viewfinderView;
   private TextView statusView;
   private View resultView;
   private Result lastResult;
-  private boolean hasSurface;
   private IntentSource source;
   private String sourceUrl;
-  private Collection<BarcodeFormat> decodeFormats;
-  private Map<DecodeHintType,?> decodeHints;
-  private String characterSet;
   private InactivityTimer inactivityTimer;
   private BeepManager beepManager;
   private AmbientLightManager ambientLightManager;
-
-  private Button cancelButton;
+  private ScannerOptions options;
+  private PreviewHandler previewHandler;
 
   ViewfinderView getViewfinderView() {
     return viewfinderView;
   }
 
-  public Handler getHandler() {
-    return handler;
+  public Handler getActivityHandler() {
+    return activityHandler;
+  }
+
+  protected void setActivityHandler(CaptureActivityHandler handler) {
+    this.activityHandler = handler;
   }
 
   CameraManager getCameraManager() {
@@ -117,33 +108,40 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     Window window = getWindow();
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-    // If the resource id with a layout was provided, set up this leyout
-    Bundle extras = getIntent().getExtras();
+    // If the resource id with a layout was provided, set up this layout
+    Bundle intentOptions = getIntent().getExtras();
 
-    int zxingCaptureLayoutResourceId = R.layout.zxing_capture;
-    if (extras != null) {
-        zxingCaptureLayoutResourceId = extras.getInt(ZXING_CAPTURE_LAYOUT_ID_KEY, R.layout.zxing_capture);
+    if (intentOptions != null) {
+      options = ScannerOptions.scannerOptionsFromBundle(intentOptions);
+    } else {
+      //get the default options if none were found
+      options = new ScannerOptions();
     }
-    setContentView (zxingCaptureLayoutResourceId);
 
-    hasSurface = false;
+    if(options.isBeepOn()) {
+      beepManager = new BeepManager(this);
+    }
+
+    setOrientation(options.getOrientation());
+
+    setContentView (options.getCaptureLayoutId());
+
     inactivityTimer = new InactivityTimer(this);
-    beepManager = new BeepManager(this);
     ambientLightManager = new AmbientLightManager(this);
 
     PreferenceManager.setDefaultValues(this, R.xml.zxing_preferences, false);
 
-    cancelButton = (Button) findViewById(R.id.zxing_back_button);
+    Button cancelButton = (Button) findViewById(R.id.zxing_back_button);
 
     // Since the layout can be dynamically set by the Intent, cancelButton may not be present
     if (cancelButton != null) {
       cancelButton.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View view) {
-                  setResult(RESULT_CANCELED);
-                  finish();
-              }
-          });
+        @Override
+        public void onClick(View view) {
+          setResult(RESULT_CANCELED);
+          finish();
+        }
+      });
     }
 
   }
@@ -156,7 +154,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     // want to open the camera driver and measure the screen size if we're going to show the help on
     // first launch. That led to bugs where the scanning rectangle was the wrong size and partially
     // off screen.
-    cameraManager = new CameraManager(getApplication());
+    cameraManager = new CameraManager(getApplication(), options);
+
+    previewHandler = new PreviewHandler(this, cameraManager);
 
     viewfinderView = (ViewfinderView) findViewById(R.id.zxing_viewfinder_view);
     viewfinderView.setCameraManager(cameraManager);
@@ -164,138 +164,42 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     resultView = findViewById(R.id.zxing_result_view);
     statusView = (TextView) findViewById(R.id.zxing_status_view);
 
-    handler = null;
+    activityHandler = null;
     lastResult = null;
 
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-    if (prefs.getBoolean(PreferencesActivity.KEY_DISABLE_AUTO_ORIENTATION, true)) {
-      setRequestedOrientation(getCurrentOrientation());
-    } else {
-      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-    }
+    setCameraOrientation(cameraManager, options.getOrientation());
 
     resetStatusView();
 
-    SurfaceView surfaceView = (SurfaceView) findViewById(R.id.zxing_preview_view);
-    SurfaceHolder surfaceHolder = surfaceView.getHolder();
-    if (hasSurface) {
-      // The activity was paused but not stopped, so the surface still exists. Therefore
-      // surfaceCreated() won't be called, so init the camera here.
-      initCamera(surfaceHolder);
-    } else {
-      // Install the callback and wait for surfaceCreated() to init the camera.
-      surfaceHolder.addCallback(this);
+    previewHandler.setPreviewCallbacks();
+
+    if(beepManager != null) {
+      beepManager.updatePrefs();
     }
 
-    beepManager.updatePrefs();
     ambientLightManager.start(cameraManager);
-
     inactivityTimer.onResume();
 
     Intent intent = getIntent();
 
     source = IntentSource.NONE;
-    decodeFormats = null;
-    characterSet = null;
 
-    if (intent != null) {
-
-      String action = intent.getAction();
-      String dataString = intent.getDataString();
-
-      if (Intents.Scan.ACTION.equals(action)) {
-
-        // Scan the formats the intent requested, and return the result to the calling activity.
-        source = IntentSource.NATIVE_APP_INTENT;
-        decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
-        decodeHints = DecodeHintManager.parseDecodeHints(intent);
-
-        if (intent.hasExtra(Intents.Scan.WIDTH) && intent.hasExtra(Intents.Scan.HEIGHT)) {
-          int width = intent.getIntExtra(Intents.Scan.WIDTH, 0);
-          int height = intent.getIntExtra(Intents.Scan.HEIGHT, 0);
-          if (width > 0 && height > 0) {
-            cameraManager.setManualFramingRect(width, height);
-          }
-        }
-
-        if (intent.hasExtra(Intents.Scan.CAMERA_ID)) {
-          int cameraId = intent.getIntExtra(Intents.Scan.CAMERA_ID, -1);
-          if (cameraId >= 0) {
-            cameraManager.setManualCameraId(cameraId);
-          }
-        }
-
-        String customPromptMessage = intent.getStringExtra(Intents.Scan.PROMPT_MESSAGE);
-        if (customPromptMessage != null) {
-          statusView.setText(customPromptMessage);
-        }
-
-      } else if (dataString != null &&
-                 dataString.contains("http://www.google") &&
-                 dataString.contains("/m/products/scan")) {
-
-        // Scan only products and send the result to mobile Product Search.
-        source = IntentSource.PRODUCT_SEARCH_LINK;
-        sourceUrl = dataString;
-        decodeFormats = DecodeFormatManager.PRODUCT_FORMATS;
-
-      } else if (isZXingURL(dataString)) {
-
-        // Scan formats requested in query string (all formats if none specified).
-        // If a return URL is specified, send the results there. Otherwise, handle it ourselves.
-        source = IntentSource.ZXING_LINK;
-        sourceUrl = dataString;
-        Uri inputUri = Uri.parse(dataString);
-        decodeFormats = DecodeFormatManager.parseDecodeFormats(inputUri);
-        // Allow a sub-set of the hints to be specified by the caller.
-        decodeHints = DecodeHintManager.parseDecodeHints(inputUri);
-
-      }
-
-      characterSet = intent.getStringExtra(Intents.Scan.CHARACTER_SET);
-
-    }
-  }
-
-  private int getCurrentOrientation() {
-    int rotation = getWindowManager().getDefaultDisplay().getRotation();
-    switch (rotation) {
-      case Surface.ROTATION_0:
-      case Surface.ROTATION_90:
-        return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-      default:
-        return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-    }
-  }
-
-  private static boolean isZXingURL(String dataString) {
-    if (dataString == null) {
-      return false;
-    }
-    for (String url : ZXING_URLS) {
-      if (dataString.startsWith(url)) {
-        return true;
-      }
-    }
-    return false;
+    parseIntentType(intent);
   }
 
   @Override
   protected void onPause() {
-    if (handler != null) {
-      handler.quitSynchronously();
-      handler = null;
+    if (activityHandler != null) {
+      activityHandler.quitSynchronously();
+      activityHandler = null;
     }
     inactivityTimer.onPause();
     ambientLightManager.stop();
-    beepManager.close();
+    if(beepManager != null) beepManager.close();
     cameraManager.closeDriver();
-    if (!hasSurface) {
-      SurfaceView surfaceView = (SurfaceView) findViewById(R.id.zxing_preview_view);
-      SurfaceHolder surfaceHolder = surfaceView.getHolder();
-      surfaceHolder.removeCallback(this);
-    }
+
+    previewHandler.removeCallbacks();
+
     super.onPause();
   }
 
@@ -355,41 +259,16 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     return true;
   }
 
-  private void decodeOrStoreSavedBitmap(Bitmap bitmap, Result result) {
-    // Bitmap isn't used yet -- will be used soon
-    if (handler == null) {
-      savedResultToShow = result;
-    } else {
-      if (result != null) {
-        savedResultToShow = result;
+  private static boolean isZXingURL(String dataString) {
+    if (dataString == null) {
+      return false;
+    }
+    for (String url : ZXING_URLS) {
+      if (dataString.startsWith(url)) {
+        return true;
       }
-      if (savedResultToShow != null) {
-        Message message = Message.obtain(handler, R.id.zxing_decode_succeeded, savedResultToShow);
-        handler.sendMessage(message);
-      }
-      savedResultToShow = null;
     }
-  }
-
-  @Override
-  public void surfaceCreated(SurfaceHolder holder) {
-    if (holder == null) {
-      Log.e(TAG, "*** WARNING *** surfaceCreated() gave us a null surface!");
-    }
-    if (!hasSurface) {
-      hasSurface = true;
-      initCamera(holder);
-    }
-  }
-
-  @Override
-  public void surfaceDestroyed(SurfaceHolder holder) {
-    hasSurface = false;
-  }
-
-  @Override
-  public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
+    return false;
   }
 
   /**
@@ -405,11 +284,30 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     boolean fromLiveScan = barcode != null;
     if (fromLiveScan) {
       // Then not from history, so beep/vibrate and we have an image to draw on
-      beepManager.playBeepSoundAndVibrate();
-      drawResultPoints(barcode, scaleFactor, rawResult);
+      if(beepManager != null) beepManager.playBeepSoundAndVibrate();
+
+      if(cameraManager.isResultIndicatorsEnabled()) {
+        drawResultPoints(barcode, scaleFactor, rawResult);
+      }
     }
 
     handleDecodeExternally(rawResult, barcode);
+  }
+
+  protected void decodeOrStoreSavedBitmap(Bitmap bitmap, Result result) {
+    // Bitmap isn't used yet -- will be used soon
+    if (activityHandler == null) {
+      savedResultToShow = result;
+    } else {
+      if (result != null) {
+        savedResultToShow = result;
+      }
+      if (savedResultToShow != null) {
+        Message message = Message.obtain(activityHandler, R.id.zxing_decode_succeeded, savedResultToShow);
+        activityHandler.sendMessage(message);
+      }
+      savedResultToShow = null;
+    }
   }
 
   /**
@@ -421,37 +319,40 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    */
   private void drawResultPoints(Bitmap barcode, float scaleFactor, Result rawResult) {
     ResultPoint[] points = rawResult.getResultPoints();
+
     if (points != null && points.length > 0) {
       Canvas canvas = new Canvas(barcode);
       Paint paint = new Paint();
       paint.setColor(getResources().getColor(R.color.zxing_result_points));
+
+      //don't need to do anything different for portrait mode, that's handled later
       if (points.length == 2) {
+        //if only 2 points then assume it's a normal barcode
         paint.setStrokeWidth(4.0f);
         drawLine(canvas, paint, points[0], points[1], scaleFactor);
       } else if (points.length == 4 &&
-                 (rawResult.getBarcodeFormat() == BarcodeFormat.UPC_A ||
-                  rawResult.getBarcodeFormat() == BarcodeFormat.EAN_13)) {
+          (rawResult.getBarcodeFormat() == BarcodeFormat.UPC_A ||
+              rawResult.getBarcodeFormat() == BarcodeFormat.EAN_13)) {
         // Hacky special case -- draw two lines, for the barcode and metadata
         drawLine(canvas, paint, points[0], points[1], scaleFactor);
         drawLine(canvas, paint, points[2], points[3], scaleFactor);
       } else {
         paint.setStrokeWidth(10.0f);
         for (ResultPoint point : points) {
-          if (point != null) {
-            canvas.drawPoint(scaleFactor * point.getX(), scaleFactor * point.getY(), paint);
-          }
+          canvas.drawPoint(scaleFactor * point.getX(), scaleFactor * point.getY(), paint);
         }
       }
     }
   }
 
-  private static void drawLine(Canvas canvas, Paint paint, ResultPoint a, ResultPoint b, float scaleFactor) {
+  private void drawLine(Canvas canvas, Paint paint, ResultPoint a, ResultPoint b,
+                        float scaleFactor) {
     if (a != null && b != null) {
-      canvas.drawLine(scaleFactor * a.getX(), 
-                      scaleFactor * a.getY(), 
-                      scaleFactor * b.getX(), 
-                      scaleFactor * b.getY(), 
-                      paint);
+      canvas.drawLine(scaleFactor * a.getX(),
+          scaleFactor * a.getY(),
+          scaleFactor * b.getX(),
+          scaleFactor * b.getY(),
+          paint);
     }
   }
 
@@ -467,11 +368,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       resultDurationMS = DEFAULT_INTENT_RESULT_DURATION_MS;
     } else {
       resultDurationMS = getIntent().getLongExtra(Intents.Scan.RESULT_DISPLAY_DURATION_MS,
-                                                  DEFAULT_INTENT_RESULT_DURATION_MS);
+          DEFAULT_INTENT_RESULT_DURATION_MS);
     }
 
     if (source == IntentSource.NATIVE_APP_INTENT) {
-      
+
       // Hand back whatever action they requested - this can be changed to Intents.Scan.ACTION when
       // the deprecated intent is retired.
       Intent intent = new Intent(getIntent().getAction());
@@ -486,7 +387,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       if (metadata != null) {
         if (metadata.containsKey(ResultMetadataType.UPC_EAN_EXTENSION)) {
           intent.putExtra(Intents.Scan.RESULT_UPC_EAN_EXTENSION,
-                          metadata.get(ResultMetadataType.UPC_EAN_EXTENSION).toString());
+              metadata.get(ResultMetadataType.UPC_EAN_EXTENSION).toString());
         }
         Number orientation = (Number) metadata.get(ResultMetadataType.ORIENTATION);
         if (orientation != null) {
@@ -507,72 +408,130 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         }
       }
       sendReplyMessage(R.id.zxing_return_scan_result, intent, resultDurationMS);
-      
+
     }
   }
-  
+
   private void sendReplyMessage(int id, Object arg, long delayMS) {
-    if (handler != null) {
-      Message message = Message.obtain(handler, id, arg);
+    if (activityHandler != null) {
+      Message message = Message.obtain(activityHandler, id, arg);
       if (delayMS > 0L) {
-        handler.sendMessageDelayed(message, delayMS);
+        activityHandler.sendMessageDelayed(message, delayMS);
       } else {
-        handler.sendMessage(message);
+        activityHandler.sendMessage(message);
       }
     }
-  }
-
-  private void initCamera(SurfaceHolder surfaceHolder) {
-    if (surfaceHolder == null) {
-      throw new IllegalStateException("No SurfaceHolder provided");
-    }
-    if (cameraManager.isOpen()) {
-      Log.w(TAG, "initCamera() while already open -- late SurfaceView callback?");
-      return;
-    }
-    try {
-      cameraManager.openDriver(surfaceHolder);
-      // Creating the handler starts the preview, which can also throw a RuntimeException.
-      if (handler == null) {
-        handler = new CaptureActivityHandler(this, decodeFormats, decodeHints, characterSet, cameraManager);
-      }
-      decodeOrStoreSavedBitmap(null, null);
-    } catch (IOException ioe) {
-      Log.w(TAG, ioe);
-      displayFrameworkBugMessageAndExit();
-    } catch (RuntimeException e) {
-      // Barcode Scanner has seen crashes in the wild of this variety:
-      // java.?lang.?RuntimeException: Fail to connect to camera service
-      Log.w(TAG, "Unexpected error initializing camera", e);
-      displayFrameworkBugMessageAndExit();
-    }
-  }
-
-  private void displayFrameworkBugMessageAndExit() {
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setTitle(getString(R.string.zxing_app_name));
-    builder.setMessage(getString(R.string.zxing_msg_camera_framework_bug));
-    builder.setPositiveButton(R.string.zxing_button_ok, new FinishListener(this));
-    builder.setOnCancelListener(new FinishListener(this));
-    builder.show();
   }
 
   public void restartPreviewAfterDelay(long delayMS) {
-    if (handler != null) {
-      handler.sendEmptyMessageDelayed(R.id.zxing_restart_preview, delayMS);
+    if (activityHandler != null) {
+      activityHandler.sendEmptyMessageDelayed(R.id.zxing_restart_preview, delayMS);
     }
     resetStatusView();
   }
 
   private void resetStatusView() {
     resultView.setVisibility(View.GONE);
-    statusView.setText(R.string.zxing_msg_default_status);
-    statusView.setVisibility(View.VISIBLE);
+
+    if(statusView != null) {
+      statusView.setText(R.string.zxing_msg_default_status);
+      statusView.setVisibility(View.VISIBLE);
+    }
+
     viewfinderView.setVisibility(View.VISIBLE);
     lastResult = null;
   }
 
   public void drawViewfinder() {
     viewfinderView.drawViewfinder();
+  }
+
+  private void setOrientation(String orientation) {
+    if(orientation.equalsIgnoreCase(ScannerOptions.ORIENTATION_LANDSCAPE)) {
+      Log.i(TAG, "Setting layout orientation to landscape");
+
+      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+    } else if(orientation.equalsIgnoreCase(ScannerOptions.ORIENTATION_PORTRAIT)) {
+      Log.i(TAG, "Setting layout orientation to portrait");
+
+      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+    } else {
+      //if we didn't recognize it then default to landscape
+      Log.i(TAG, "Setting layout orientation to default");
+      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+    }
+  }
+
+  private void setCameraOrientation(CameraManager camera, String orientation) {
+    if(orientation.equalsIgnoreCase(ScannerOptions.ORIENTATION_LANDSCAPE)) {
+      Log.i(TAG, "Setting camera orientation to landscape");
+
+      camera.setCurrentOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    } else if(orientation.equalsIgnoreCase(ScannerOptions.ORIENTATION_PORTRAIT)) {
+      Log.i(TAG, "Setting camera orientation to portrait");
+
+      camera.setCurrentOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    } else {
+      //if we didn't recognize it then default to landscape
+      Log.i(TAG, "Setting camera orientation to default");
+
+      camera.setCurrentOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
+  }
+
+  private void parseIntentType(Intent intent) {
+    if (intent != null) {
+      String action = intent.getAction();
+      String dataString = intent.getDataString();
+
+      if (Intents.Scan.ACTION.equals(action)) {
+
+        // Scan the formats the intent requested, and return the result to the calling activity.
+        source = IntentSource.NATIVE_APP_INTENT;
+        previewHandler.setDecodeFormats(DecodeFormatManager.parseDecodeFormats(intent));
+        previewHandler.setDecodeHints(DecodeHintManager.parseDecodeHints(intent));
+
+        if (intent.hasExtra(Intents.Scan.WIDTH) && intent.hasExtra(Intents.Scan.HEIGHT)) {
+          int width = intent.getIntExtra(Intents.Scan.WIDTH, 0); //TODO pull these into ScannerOptions
+          int height = intent.getIntExtra(Intents.Scan.HEIGHT, 0);
+          if (width > 0 && height > 0) {
+            cameraManager.setManualFramingRect(width, height);
+          }
+        }
+
+        if (intent.hasExtra(Intents.Scan.CAMERA_ID)) {
+          int cameraId = intent.getIntExtra(Intents.Scan.CAMERA_ID, -1); //TODO pull this into ScannerOptions
+          if (cameraId >= 0) {
+            cameraManager.setManualCameraId(cameraId);
+          }
+        }
+
+        String customPromptMessage = intent.getStringExtra(Intents.Scan.PROMPT_MESSAGE); //TODO pull this into ScannerOptions
+        if (customPromptMessage != null) {
+          statusView.setText(customPromptMessage);
+        }
+
+      } else if (dataString != null &&
+          dataString.contains("http://www.google") &&
+          dataString.contains("/m/products/scan")) {
+
+        // Scan only products and send the result to mobile Product Search.
+        source = IntentSource.PRODUCT_SEARCH_LINK;
+        sourceUrl = dataString;
+        previewHandler.setDecodeFormats(DecodeFormatManager.PRODUCT_FORMATS);
+
+      } else if (isZXingURL(dataString)) {
+        // Scan formats requested in query string (all formats if none specified).
+        // If a return URL is specified, send the results there. Otherwise, handle it ourselves.
+        source = IntentSource.ZXING_LINK;
+        sourceUrl = dataString;
+        Uri inputUri = Uri.parse(dataString);
+
+        previewHandler.setDecodeFormats(DecodeFormatManager.parseDecodeFormats(inputUri));
+        previewHandler.setDecodeHints(DecodeHintManager.parseDecodeHints(inputUri));
+      }
+
+      previewHandler.setCharacterSet(intent.getStringExtra(Intents.Scan.CHARACTER_SET));
+    }
   }
 }

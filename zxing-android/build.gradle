@@ -42,6 +42,13 @@ android {
 
 
 uploadArchives {
+
+    repositories {
+        flatDir {
+            dirs '../repos/android'
+        }
+    }
+
     repositories.mavenDeployer {
         repository(url: "file:mvn-clone/maven-repository/")
         pom.artifactId = 'zxing-android-minimal'

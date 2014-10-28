@@ -104,6 +104,32 @@ public class IntentIntegrator {
     public static final Collection<String> QR_CODE_TYPES = Collections.singleton("QR_CODE");
     public static final Collection<String> DATA_MATRIX_TYPES = Collections.singleton("DATA_MATRIX");
 
+    /*
+     * bundle keys
+     *
+     * Modify these with extreme care! These same variables are NOT used in the ScannerOptions
+     * class in the android library so you must match them exactly here and there.
+     */
+    private static final String CAPTURE_LAYOUT_ID_KEY = "CAPTURE_LAYOUT_ID";
+    private static final String LEGACY_CAPTURE_LAYOUT_ID_KEY = "ZXINGLEGACY_CAPTURE_LAYOUT_ID_KEY";
+    private static final String BEEP_ON_KEY = "BEEP_ON";
+    private static final String ORIENTATION_KEY = "ORIENTATION";
+    private static final String SCANNER_LINE_KEY = "SCANNER_LINE";
+    private static final String FRAME_ENABLED_KEY = "FRAME_ON";
+    private static final String OVERLAY_ENABLED_KEY = "OVERLAY_ON";
+    private static final String POTENTIAL_INDICATORS_KEY = "POTENTIAL_INDICATORS_ON";
+    private static final String RESULT_INDICATORS_KEY = "RESULT_INDICATORS_ON";
+    private static final String OVERLAY_OPACITY_KEY = "OVERLAY_OPACITY";
+    private static final String PROMPT_MESSAGE_KEY = "PROMPT_MESSAGE";
+    private static final String RESULT_DISPLAY_DURATION_KEY = "RESULT_DISPLAY_DURATION_MS";
+    private static final String SCAN_WIDTH_KEY = "SCAN_WIDTH";
+    private static final String SCAN_HEIGHT_KEY = "SCAN_HEIGHT";
+    private static final String CAMERA_ID_KEY = "SCAN_CAMERA_ID";
+    private static final String SCAN_FORMATS_KEY = "SCAN_FORMATS";
+
+    public static final String LAYOUT_PORTRAIT = "PORTRAIT";
+    public static final String LAYOUT_LANDSCAPE = "LANDSCAPE";
+
     public static final Collection<String> ALL_CODE_TYPES = null;
 
     private final Activity activity;
@@ -211,7 +237,7 @@ public class IntentIntegrator {
      * @param resourceId the layout resource id to use.
      */
     public final IntentIntegrator setCaptureLayout(int resourceId) {
-        addExtra("ZXING_CAPTURE_LAYOUT_ID_KEY", resourceId);
+        addExtra(CAPTURE_LAYOUT_ID_KEY, resourceId);
         return this;
     }
 
@@ -221,7 +247,7 @@ public class IntentIntegrator {
      * @param resourceId the layout resource id to use.
      */
     public final IntentIntegrator setLegacyCaptureLayout(int resourceId) {
-        addExtra("ZXINGLEGACY_CAPTURE_LAYOUT_ID_KEY", resourceId);
+        addExtra(LEGACY_CAPTURE_LAYOUT_ID_KEY, resourceId);
         return this;
     }
 
@@ -232,7 +258,7 @@ public class IntentIntegrator {
      */
     public final IntentIntegrator setPrompt(String prompt) {
         if (prompt != null) {
-            addExtra("PROMPT_MESSAGE", prompt);
+            addExtra(PROMPT_MESSAGE_KEY, prompt);
         }
         return this;
     }
@@ -243,7 +269,92 @@ public class IntentIntegrator {
      * @param ms time to display the result in ms
      */
     public final IntentIntegrator setResultDisplayDuration(long ms) {
-        addExtra("RESULT_DISPLAY_DURATION_MS", ms);
+        addExtra(RESULT_DISPLAY_DURATION_KEY, ms);
+        return this;
+    }
+
+    /**
+     * Set the standard beep/vibrate on successful barcode scan either on or off. On by default
+     *
+     * @param b true for on, false for off
+     */
+    public final IntentIntegrator setBeepOn(boolean b) {
+        addExtra(BEEP_ON_KEY, b);
+        return this;
+    }
+
+    /**
+     * Set the red line across the preview box to either on or off. On by default.
+     *
+     * @param b true for on, false for off
+     */
+    public final IntentIntegrator setScannerLineOn(boolean b) {
+        addExtra(SCANNER_LINE_KEY, b);
+        return this;
+    }
+
+    /**
+     * Set the dark tinted frame to either on or off. On by default.
+     *
+     * @param b true for on, false for off
+     */
+    public final IntentIntegrator setFrameOn(boolean b) {
+        addExtra(FRAME_ENABLED_KEY, b);
+        return this;
+    }
+
+    /**
+     * Set the desired orientation of the layout. Default is landscape. Unrecognized orientations
+     * will default to landscape as well.
+     *
+     * @param orientation desired orientation of the layout. Please use the constants provided
+     */
+    public final IntentIntegrator setOrientation(String orientation) {
+        addExtra(ORIENTATION_KEY, orientation);
+        return this;
+    }
+
+    /**
+     * Set the opaque overlay of the QR Code when successfully scanned to either on or off.
+     * On by default.
+     *
+     * @param b true for on, false for off
+     */
+    public final IntentIntegrator setSuccessfulScanOverlayOn(boolean b) {
+        addExtra(OVERLAY_ENABLED_KEY, b);
+        return this;
+    }
+
+    /**
+     * Set the opacity level of any enabled overlays (successful scan image, QR code potential
+     * points, etc.)
+     *
+     * @param opacity alpha level to set the overlays to
+     */
+    public final IntentIntegrator setOverlayOpacity(int opacity) {
+        addExtra(OVERLAY_OPACITY_KEY, opacity);
+        return this;
+    }
+
+    /**
+     * Set the display to put indicators over potential barcodes in the preview. E.g. small dots
+     * on the potential anchor points of a QRCode.
+     *
+     * @param b true for on, false for off
+     */
+    public final IntentIntegrator setPotentialScanIndicatorsOn(boolean b) {
+        addExtra(POTENTIAL_INDICATORS_KEY, b);
+        return this;
+    }
+
+    /**
+     * Set the display to put indicators over result barcodes in the preview. E.g. small dots
+     * on the anchor points of a successfully scanned QRCode.
+     *
+     * @param b true for on, false for off
+     */
+    public final IntentIntegrator setResultScanIndicatorsOn(boolean b) {
+        addExtra(RESULT_INDICATORS_KEY, b);
         return this;
     }
 
@@ -254,8 +365,8 @@ public class IntentIntegrator {
      * @param desiredHeight the desired height in pixels
      */
     public final IntentIntegrator setScanningRectangle(int desiredWidth, int desiredHeight) {
-        addExtra("SCAN_WIDTH", desiredWidth);
-        addExtra("SCAN_HEIGHT", desiredHeight);
+        addExtra(SCAN_WIDTH_KEY, desiredWidth);
+        addExtra(SCAN_HEIGHT_KEY, desiredHeight);
         return this;
     }
 
@@ -327,7 +438,7 @@ public class IntentIntegrator {
      */
     public IntentIntegrator setCameraId(int cameraId) {
         if (cameraId >= 0) {
-            addExtra("SCAN_CAMERA_ID", cameraId);
+            addExtra(CAMERA_ID_KEY, cameraId);
         }
         return this;
     }
@@ -357,7 +468,7 @@ public class IntentIntegrator {
      */
     public Intent createScanIntent() {
         Intent intentScan = new Intent(activity, getCaptureActivity());
-        intentScan.setAction("com.google.zxing.client.android.SCAN");
+        intentScan.setAction("com.google.zxing.client.android.SCAN"); //TODO is this secure? Might be vulnerable to attack
 
         // check which types of codes to scan for
         if (desiredBarcodeFormats != null) {
@@ -369,7 +480,7 @@ public class IntentIntegrator {
                 }
                 joinedByComma.append(format);
             }
-            intentScan.putExtra("SCAN_FORMATS", joinedByComma.toString());
+            intentScan.putExtra(SCAN_FORMATS_KEY, joinedByComma.toString());
         }
 
         intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
