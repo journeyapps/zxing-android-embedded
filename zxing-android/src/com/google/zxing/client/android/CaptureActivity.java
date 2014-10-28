@@ -318,55 +318,41 @@ public final class CaptureActivity extends Activity {
      * @param rawResult The decoded results which contains the points to draw.
      */
     private void drawResultPoints(Bitmap barcode, float scaleFactor, Result rawResult) {
-        //TODO modify for portrait mode
         ResultPoint[] points = rawResult.getResultPoints();
+
         if (points != null && points.length > 0) {
             Canvas canvas = new Canvas(barcode);
             Paint paint = new Paint();
             paint.setColor(getResources().getColor(R.color.zxing_result_points));
+
+            //don't need to do anything different for portrait mode, that's handled later
             if (points.length == 2) {
+                //if only 2 points then assume it's a normal barcode
                 paint.setStrokeWidth(4.0f);
-                drawLine(canvas, paint, points[0], points[1], scaleFactor,
-                        cameraManager.getCurrentOrientation());
+                drawLine(canvas, paint, points[0], points[1], scaleFactor);
             } else if (points.length == 4 &&
                     (rawResult.getBarcodeFormat() == BarcodeFormat.UPC_A ||
                             rawResult.getBarcodeFormat() == BarcodeFormat.EAN_13)) {
                 // Hacky special case -- draw two lines, for the barcode and metadata
-                drawLine(canvas, paint, points[0], points[1], scaleFactor,
-                        cameraManager.getCurrentOrientation());
-                drawLine(canvas, paint, points[2], points[3], scaleFactor,
-                        cameraManager.getCurrentOrientation());
+                drawLine(canvas, paint, points[0], points[1], scaleFactor);
+                drawLine(canvas, paint, points[2], points[3], scaleFactor);
             } else {
                 paint.setStrokeWidth(10.0f);
                 for (ResultPoint point : points) {
-                    if (point != null) {
-                        if(cameraManager.getCurrentOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-                            canvas.drawPoint(scaleFactor * point.getY(), scaleFactor * point.getX(), paint);
-                        } else {
-                            canvas.drawPoint(scaleFactor * point.getX(), scaleFactor * point.getY(), paint);
-                        }
-                    }
+                    canvas.drawPoint(scaleFactor * point.getX(), scaleFactor * point.getY(), paint);
                 }
             }
         }
     }
 
-    private static void drawLine(Canvas canvas, Paint paint, ResultPoint a, ResultPoint b,
-                                 float scaleFactor, int orientation) {
+    private void drawLine(Canvas canvas, Paint paint, ResultPoint a, ResultPoint b,
+                                 float scaleFactor) {
         if (a != null && b != null) {
-            if(orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-                canvas.drawLine(scaleFactor * a.getY(),
-                        scaleFactor * a.getX(),
-                        scaleFactor * b.getY(),
-                        scaleFactor * b.getX(),
-                        paint);
-            } else {
-                canvas.drawLine(scaleFactor * a.getX(),
-                        scaleFactor * a.getY(),
-                        scaleFactor * b.getX(),
-                        scaleFactor * b.getY(),
-                        paint);
-            }
+            canvas.drawLine(scaleFactor * a.getX(),
+                    scaleFactor * a.getY(),
+                    scaleFactor * b.getX(),
+                    scaleFactor * b.getY(),
+                    paint);
         }
     }
 
