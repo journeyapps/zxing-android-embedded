@@ -86,7 +86,7 @@ public class QRScannerView extends ViewGroup {
             }
 
             // Center the child SurfaceView within the parent.
-            //TODO double check this to prevent scaling?
+            //TODO doesn't actually center and prevent scaling like I want. Need to fix this.
             if (width * previewHeight > height * previewWidth) {
                 final int scaledChildWidth = previewWidth * height / previewHeight;
                 child.layout((width - scaledChildWidth) / 2, 0,

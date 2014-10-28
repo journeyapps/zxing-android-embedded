@@ -120,6 +120,12 @@ public class IntentIntegrator {
     private static final String POTENTIAL_INDICATORS_KEY = "POTENTIAL_INDICATORS_ON";
     private static final String RESULT_INDICATORS_KEY = "RESULT_INDICATORS_ON";
     private static final String OVERLAY_OPACITY_KEY = "OVERLAY_OPACITY";
+    private static final String PROMPT_MESSAGE_KEY = "PROMPT_MESSAGE";
+    private static final String RESULT_DISPLAY_DURATION_KEY = "RESULT_DISPLAY_DURATION_MS";
+    private static final String SCAN_WIDTH_KEY = "SCAN_WIDTH";
+    private static final String SCAN_HEIGHT_KEY = "SCAN_HEIGHT";
+    private static final String CAMERA_ID_KEY = "SCAN_CAMERA_ID";
+    private static final String SCAN_FORMATS_KEY = "SCAN_FORMATS";
 
     public static final String LAYOUT_PORTRAIT = "PORTRAIT";
     public static final String LAYOUT_LANDSCAPE = "LANDSCAPE";
@@ -252,7 +258,7 @@ public class IntentIntegrator {
      */
     public final IntentIntegrator setPrompt(String prompt) {
         if (prompt != null) {
-            addExtra("PROMPT_MESSAGE", prompt); //TODO change to constant
+            addExtra(PROMPT_MESSAGE_KEY, prompt);
         }
         return this;
     }
@@ -263,7 +269,7 @@ public class IntentIntegrator {
      * @param ms time to display the result in ms
      */
     public final IntentIntegrator setResultDisplayDuration(long ms) {
-        addExtra("RESULT_DISPLAY_DURATION_MS", ms); //TODO change to constant
+        addExtra(RESULT_DISPLAY_DURATION_KEY, ms);
         return this;
     }
 
@@ -359,8 +365,8 @@ public class IntentIntegrator {
      * @param desiredHeight the desired height in pixels
      */
     public final IntentIntegrator setScanningRectangle(int desiredWidth, int desiredHeight) {
-        addExtra("SCAN_WIDTH", desiredWidth); //TODO change to constant
-        addExtra("SCAN_HEIGHT", desiredHeight); //TODO change to constant
+        addExtra(SCAN_WIDTH_KEY, desiredWidth);
+        addExtra(SCAN_HEIGHT_KEY, desiredHeight);
         return this;
     }
 
@@ -432,7 +438,7 @@ public class IntentIntegrator {
      */
     public IntentIntegrator setCameraId(int cameraId) {
         if (cameraId >= 0) {
-            addExtra("SCAN_CAMERA_ID", cameraId); //todo change to constant
+            addExtra(CAMERA_ID_KEY, cameraId);
         }
         return this;
     }
@@ -462,7 +468,7 @@ public class IntentIntegrator {
      */
     public Intent createScanIntent() {
         Intent intentScan = new Intent(activity, getCaptureActivity());
-        intentScan.setAction("com.google.zxing.client.android.SCAN");
+        intentScan.setAction("com.google.zxing.client.android.SCAN"); //TODO is this secure? Might be vulnerable to attack
 
         // check which types of codes to scan for
         if (desiredBarcodeFormats != null) {
@@ -474,7 +480,7 @@ public class IntentIntegrator {
                 }
                 joinedByComma.append(format);
             }
-            intentScan.putExtra("SCAN_FORMATS", joinedByComma.toString());
+            intentScan.putExtra(SCAN_FORMATS_KEY, joinedByComma.toString());
         }
 
         intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

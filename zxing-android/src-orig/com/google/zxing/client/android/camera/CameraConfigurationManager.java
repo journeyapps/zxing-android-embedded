@@ -51,7 +51,7 @@ final class CameraConfigurationManager {
     WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     Display display = manager.getDefaultDisplay();
     Point theScreenResolution = new Point();
-    display.getSize(theScreenResolution);
+    display.getSize(theScreenResolution); //TODO why is our min version so low?
     screenResolution = theScreenResolution;
     Log.i(TAG, "Screen resolution: " + screenResolution);
     cameraResolution = CameraConfigurationUtils.findBestPreviewSizeValue(parameters, screenResolution);
