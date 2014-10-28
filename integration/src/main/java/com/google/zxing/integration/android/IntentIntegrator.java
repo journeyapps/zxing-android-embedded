@@ -320,11 +320,12 @@ public class IntentIntegrator {
     }
 
     /**
-     * Set the opacity level of the scanned code overlay assuming it is enabled.
+     * Set the opacity level of any enabled overlays (successful scan image, QR code potential
+     * points, etc.)
      *
-     * @param opacity alpha level to set the overlay image as
+     * @param opacity alpha level to set the overlays to
      */
-    public final IntentIntegrator setSuccessfulScanOverlayOpacity(int opacity) {
+    public final IntentIntegrator setOverlayOpacity(int opacity) {
         addExtra(OVERLAY_OPACITY_KEY, opacity);
         return this;
     }

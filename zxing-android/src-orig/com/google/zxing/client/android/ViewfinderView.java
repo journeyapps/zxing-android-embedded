@@ -197,21 +197,13 @@ public final class ViewfinderView extends View {
         }
     }
 
-    private void drawPotentialIndicators(Rect frame, Rect previewFrame, Canvas canvas) {
+    private void drawPotentialIndicators(Rect previewSize, Rect displaySize, Canvas canvas) {
         /*
          * Draw dots on result points
          */
-        //TODO do these scales work right?
-        float scaleX = frame.width() / (float) previewFrame.width();
-        float scaleY = frame.height() / (float) previewFrame.height();
-
-        //TODO need to modify for portrait mode
-        boolean isPortrait = cameraManager.getCurrentOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-
         List<ResultPoint> currentPossible = possibleResultPoints;
         List<ResultPoint> currentLast = lastPossibleResultPoints;
-        int frameLeft = previewFrame.left;
-        int frameTop = previewFrame.top;
+
         if (currentPossible.isEmpty()) {
             lastPossibleResultPoints = null;
         } else {
@@ -219,17 +211,11 @@ public final class ViewfinderView extends View {
             lastPossibleResultPoints = currentPossible;
             paint.setAlpha(cameraManager.getOverlayOpacity());
             paint.setColor(resultPointColor);
+
             synchronized (currentPossible) {
                 for (ResultPoint point : currentPossible) {
-                    if(isPortrait) {
-                        canvas.drawCircle(frameLeft + (int) (point.getY() * scaleY),
-                                frameTop + (int) (point.getX() * scaleX),
-                                POINT_SIZE, paint);
-                    } else {
-                        canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
-                                frameTop + (int) (point.getY() * scaleY),
-                                POINT_SIZE, paint);
-                    }
+                    drawPotentialPoint(canvas, paint, POINT_SIZE, point, previewSize, displaySize,
+                            cameraManager.getCurrentOrientation());
                 }
             }
         }
@@ -239,17 +225,41 @@ public final class ViewfinderView extends View {
             synchronized (currentLast) {
                 float radius = POINT_SIZE / 2.0f;
                 for (ResultPoint point : currentLast) {
-                    if(isPortrait) {
-                        canvas.drawCircle(frameLeft + (int) (point.getY() * scaleY),
-                                frameTop + (int) (point.getX() * scaleX),
-                                radius, paint);
-                    } else {
-                        canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
-                                frameTop + (int) (point.getY() * scaleY),
-                                radius, paint);
-                    }
+                    drawPotentialPoint(canvas, paint, radius, point, previewSize, displaySize,
+                            cameraManager.getCurrentOrientation());
                 }
             }
+        }
+    }
+
+    private void drawPotentialPoint(Canvas canvas, Paint paint, float pointRadius, ResultPoint point,
+                                    Rect previewSize, Rect displaySize, int orientation) {
+        boolean isPortrait = orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+
+        int frameLeft = displaySize.left;
+        int frameTop = displaySize.top;
+        float scaleX;
+        float scaleY;
+
+        //get the proper scaling depending on the preview image orientation
+        //TODO not sure of the portrait scales
+        if(isPortrait) {
+            scaleX = (float) displaySize.height() / previewSize.width();
+            scaleY = (float) displaySize.width() / previewSize.height();
+        } else {
+            scaleX = previewSize.width() / (float) displaySize.width();
+            scaleY = previewSize.height() / (float) displaySize.height();
+        }
+
+        if(isPortrait) {
+            //TODO I think this is right but it's really hard to test
+            canvas.drawCircle(frameLeft + (int) (point.getY() * scaleX),
+                    frameTop + (int) ((previewSize.width() - point.getX()) * scaleY),
+                    pointRadius, paint);
+        } else {
+            canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
+                    frameTop + (int) (point.getY() * scaleY),
+                    pointRadius, paint);
         }
     }
 
