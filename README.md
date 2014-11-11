@@ -109,8 +109,8 @@ See [IntentIntegrator](integration/src/main/java/com/google/zxing/integration/an
 You can provide a custom layout for the capture activity. Note that you'll need to provide two
 different layouts if you are using both zxing-android-minimal and zxing-android-legacy.
 
-See [sample/src/main/res/layout/custom_capture_layout.xml](custom_capture_layout.xml) and
-[sample/src/main/res/layout/custom_capture_layout.xml](custom_legacy_capture_layout.xml) for
+See [custom_capture_layout.xml](sample/src/main/res/layout/custom_capture_layout.xml) and
+[custom_legacy_capture_layout.xml](sample/src/main/res/layout/custom_legacy_capture_layout.xml) for
 examples.
 
 ```java
