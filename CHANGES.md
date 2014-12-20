@@ -1,3 +1,7 @@
+### 2.0.1
+
+* Changed group name, artifact name, GitHub organization and Maven repository.
+
 ### 2.0.0
 
 There are now three libraries:
