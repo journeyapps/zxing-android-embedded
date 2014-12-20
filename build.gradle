@@ -53,15 +53,17 @@ subprojects {
                 }
             }
 
-            bintray {
-                user = bintray_user
-                key = bintray_key
-                publications = ['maven']
-                publish = true
-                pkg {
-                    userOrg = 'journeyapps'
-                    repo = 'maven'
-                    name = 'zxing-android-embedded'
+            if(project.hasProperty('bintray_user') && project.hasProperty('bintray_key')) {
+                bintray {
+                    user = bintray_user
+                    key = bintray_key
+                    publications = ['maven']
+                    publish = true
+                    pkg {
+                        userOrg = 'journeyapps'
+                        repo = 'maven'
+                        name = 'zxing-android-embedded'
+                    }
                 }
             }
         }
