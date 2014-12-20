@@ -3,14 +3,14 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:0.14.1'
+    classpath 'com.android.tools.build:gradle:1.0.0'
     classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
   }
 }
 
 
 subprojects {
-    version = '2.0.0'
-    group = 'com.embarkmobile'
+    version = '2.0.1'
+    group = 'com.journeyapps'
     apply plugin: 'android-sdk-manager'
 }
