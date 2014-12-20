@@ -1,16 +1,69 @@
 buildscript {
   repositories {
-    mavenCentral()
+    jcenter()
   }
   dependencies {
     classpath 'com.android.tools.build:gradle:1.0.0'
     classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
+    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
   }
 }
 
+// Projects to be published to bintray
+def PUBLISH_PROJECTS = ['zxing-android', 'zxing-android-legacy', 'integration']
 
 subprojects {
     version = '2.0.1'
     group = 'com.journeyapps'
     apply plugin: 'android-sdk-manager'
+
+    if (PUBLISH_PROJECTS.contains(project.name)) {
+        apply plugin: 'maven-publish'
+        apply plugin: 'com.jfrog.bintray'
+
+        project.ext.artifactId = project.name // Default to subproject name
+
+        afterEvaluate {
+            publishing {
+                publications {
+                    // We need this check to cover Android Studio gradle sync
+                    if(project.tasks.findByPath('bundleRelease') != null) {
+                        maven(MavenPublication) {
+                            artifact bundleRelease
+                            artifactId project.artifactId
+
+                            pom.withXml {
+                                // HACK to add dependencies to POM.
+                                // When maven-publish can do this automatically for Android projects,
+                                // remove this section.
+                                def deps = asNode().appendNode('dependencies')
+
+                                project.configurations.compile.allDependencies.each { dep ->
+                                    def node = deps.appendNode('dependency')
+                                    node.appendNode('groupId', dep.group)
+                                    node.appendNode('artifactId', dep.name)
+                                    node.appendNode('version', dep.version)
+                                    node.appendNode('scope', 'compile')
+                                }
+
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            bintray {
+                user = bintray_user
+                key = bintray_key
+                publications = ['maven']
+                publish = true
+                pkg {
+                    userOrg = 'journeyapps'
+                    repo = 'maven'
+                    name = 'zxing-android-embedded'
+                }
+            }
+        }
+    }
 }

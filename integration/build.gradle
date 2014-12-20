@@ -1,9 +1,11 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven'
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
+
+ext.artifactId = 'zxing-android-integration'
+
 
 android {
     compileSdkVersion 21
@@ -18,12 +20,4 @@ android {
 dependencies {
     // Optional dependency.
     provided 'com.android.support:support-v4:21.0.0'
-}
-
-
-uploadArchives {
-    repositories.mavenDeployer {
-        repository(url: "file:mvn-clone/maven-repository/")
-        pom.artifactId = 'zxing-android-integration'
-    }
 }
