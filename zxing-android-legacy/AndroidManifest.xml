@@ -42,7 +42,6 @@
 
   <application>
       <activity android:clearTaskOnLaunch="true" android:configChanges="orientation|keyboardHidden" android:name=".CaptureActivity" android:screenOrientation="landscape" android:stateNotNeeded="true" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:windowSoftInputMode="stateAlwaysHidden"/>
-      <activity android:name=".HelpActivity" android:screenOrientation="user"/>
       <activity android:name=".encode.EncodeActivity" android:screenOrientation="user"/>
   </application>
 
