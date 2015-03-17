@@ -16,7 +16,6 @@
  -->
 <resources>
   <color name="zxinglegacy_contents_text">#ff000000</color>
-  <color name="zxinglegacy_encode_view">#ffffffff</color>
   <color name="zxinglegacy_possible_result_points">#c0ffbd21</color> <!-- Android standard ICS color -->
   <color name="zxinglegacy_result_minor_text">#ffc0c0c0</color>
   <color name="zxinglegacy_result_points">#c099cc00</color> <!-- Android standard ICS color -->
