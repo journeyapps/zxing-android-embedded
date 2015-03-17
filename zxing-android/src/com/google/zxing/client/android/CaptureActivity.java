@@ -334,27 +334,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     return super.onKeyDown(keyCode, event);
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    MenuInflater menuInflater = getMenuInflater();
-    menuInflater.inflate(R.menu.zxing_capture, menu);
-    return super.onCreateOptionsMenu(menu);
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    Intent intent = new Intent(Intent.ACTION_VIEW);
-    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-    int itemId = item.getItemId();
-    if(itemId == R.id.zxing_menu_help) {
-      intent.setClassName(this, HelpActivity.class.getName());
-      startActivity(intent);
-    } else {
-      return super.onOptionsItemSelected(item);
-    }
-    return true;
-  }
-
   private void decodeOrStoreSavedBitmap(Bitmap bitmap, Result result) {
     // Bitmap isn't used yet -- will be used soon
     if (handler == null) {
