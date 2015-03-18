@@ -35,10 +35,6 @@ public class MainActivity extends ActionBarActivity {
         integrator.initiateScan();
     }
 
-    public void encodeBarcode(View view) {
-        new IntentIntegrator(this).shareText("Test Barcode");
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
