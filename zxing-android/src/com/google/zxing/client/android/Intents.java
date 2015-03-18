@@ -80,7 +80,7 @@ public final class Intents {
      * Example: "EAN_13,EAN_8,QR_CODE". This overrides {@link #MODE}.
      */
     public static final String FORMATS = "SCAN_FORMATS";
-	
+
     /**
      * Optional parameter to specify the id of the camera from which to recognize barcodes.
      * Overrides the default camera that would otherwise would have been selected.
@@ -119,7 +119,7 @@ public final class Intents {
      * of the app which requested the scan via
      * {@link android.app.Activity#startActivityForResult(android.content.Intent, int)}
      * The barcodes contents can be retrieved with
-     * {@link android.content.Intent#getStringExtra(String)}. 
+     * {@link android.content.Intent#getStringExtra(String)}.
      * If the user presses Back, the result code will be {@link android.app.Activity#RESULT_CANCELED}.
      */
     public static final String RESULT = "SCAN_RESULT";
