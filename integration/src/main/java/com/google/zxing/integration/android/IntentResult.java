@@ -17,7 +17,7 @@
 package com.google.zxing.integration.android;
 
 /**
- * <p>Encapsulates the result of a barcode scan invoked through {@link IntentIntegratorLegacy}.</p>
+ * <p>Encapsulates the result of a barcode scan invoked through {@link IntentIntegrator}.</p>
  *
  * @author Sean Owen
  */

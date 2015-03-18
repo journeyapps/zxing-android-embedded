@@ -128,14 +128,6 @@ public class IntentIntegrator {
         }
     }
 
-    protected Class<?> getEncodeActivity() {
-        try {
-            return Class.forName(getScannerPackage() + ".encode.EncodeActivity");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Could not find EncodeActivity. Make sure one of the zxing-android libraries are loaded.", e);
-        }
-    }
-
     private static String getScannerPackage() {
         if(HAVE_STANDARD_SCANNER && Build.VERSION.SDK_INT >= 15) {
             return STANDARD_PACKAGE_NAME;
@@ -453,37 +445,6 @@ public class IntentIntegrator {
             return new IntentResult();
         }
         return null;
-    }
-
-
-    /**
-     * Defaults to type "TEXT_TYPE".
-     *
-     * @param text the text string to encode as a barcode
-     * @see #shareText(CharSequence, CharSequence)
-     */
-    public final void shareText(CharSequence text) {
-        shareText(text, "TEXT_TYPE");
-    }
-
-    /**
-     * Shares the given text by encoding it as a barcode, such that another user can
-     * scan the text off the screen of the device.
-     *
-     * @param text the text string to encode as a barcode
-     * @param type type of data to encode. See {@code com.google.zxing.client.android.Contents.Type} constants.
-     */
-    public final void shareText(CharSequence text, CharSequence type) {
-        Intent intent = new Intent(activity, getEncodeActivity());
-        intent.setAction("com.google.zxing.client.android.ENCODE");
-
-        intent.putExtra("ENCODE_TYPE", type);
-        intent.putExtra("ENCODE_DATA", text);
-
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        attachMoreExtras(intent);
-        startActivity(intent);
     }
 
     private static List<String> list(String... values) {
