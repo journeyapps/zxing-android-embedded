@@ -1,5 +1,5 @@
 diff --git a/src-orig/com/google/zxing/client/android/CaptureActivity.java b/src/com/google/zxing/client/android/CaptureActivity.java
-index 9eb04e2..73b6c37 100755
+index 9eb04e2..c24ad9e 100755
 --- a/src-orig/com/google/zxing/client/android/CaptureActivity.java
 +++ b/src/com/google/zxing/client/android/CaptureActivity.java
 @@ -16,29 +16,12 @@
@@ -32,15 +32,16 @@ index 9eb04e2..73b6c37 100755
  import android.graphics.Canvas;
  import android.graphics.Paint;
  import android.net.Uri;
-@@ -47,7 +30,6 @@ import android.os.Handler;
+@@ -47,26 +30,25 @@ import android.os.Handler;
  import android.os.Message;
  import android.preference.PreferenceManager;
  import android.util.Log;
 -import android.util.TypedValue;
  import android.view.KeyEvent;
- import android.view.Menu;
- import android.view.MenuInflater;
-@@ -56,17 +38,20 @@ import android.view.Surface;
+-import android.view.Menu;
+-import android.view.MenuInflater;
+-import android.view.MenuItem;
+ import android.view.Surface;
  import android.view.SurfaceHolder;
  import android.view.SurfaceView;
  import android.view.View;
@@ -66,7 +67,7 @@ index 9eb04e2..73b6c37 100755
  import java.util.EnumSet;
  import java.util.Map;
  
-@@ -87,13 +72,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -87,13 +69,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
  
    private static final String[] ZXING_URLS = { "http://zxing.appspot.com/scan", "zxing://scan/" };
  
@@ -81,7 +82,7 @@ index 9eb04e2..73b6c37 100755
  
    private CameraManager cameraManager;
    private CaptureActivityHandler handler;
-@@ -103,18 +87,17 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -103,18 +84,17 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    private View resultView;
    private Result lastResult;
    private boolean hasSurface;
@@ -102,7 +103,7 @@ index 9eb04e2..73b6c37 100755
    ViewfinderView getViewfinderView() {
      return viewfinderView;
    }
-@@ -133,16 +116,36 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -133,16 +113,36 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
  
      Window window = getWindow();
      window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -142,7 +143,7 @@ index 9eb04e2..73b6c37 100755
    }
  
    @Override
-@@ -192,9 +195,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -192,9 +192,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
  
      Intent intent = getIntent();
  
@@ -152,7 +153,7 @@ index 9eb04e2..73b6c37 100755
      source = IntentSource.NONE;
      decodeFormats = null;
      characterSet = null;
-@@ -218,14 +218,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -218,14 +215,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
              cameraManager.setManualFramingRect(width, height);
            }
          }
@@ -169,7 +170,7 @@ index 9eb04e2..73b6c37 100755
          String customPromptMessage = intent.getStringExtra(Intents.Scan.PROMPT_MESSAGE);
          if (customPromptMessage != null) {
            statusView.setText(customPromptMessage);
-@@ -247,7 +247,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -247,7 +244,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
          source = IntentSource.ZXING_LINK;
          sourceUrl = dataString;
          Uri inputUri = Uri.parse(dataString);
@@ -177,7 +178,7 @@ index 9eb04e2..73b6c37 100755
          decodeFormats = DecodeFormatManager.parseDecodeFormats(inputUri);
          // Allow a sub-set of the hints to be specified by the caller.
          decodeHints = DecodeHintManager.parseDecodeHints(inputUri);
-@@ -269,7 +268,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -269,7 +265,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
          return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
      }
    }
@@ -186,7 +187,7 @@ index 9eb04e2..73b6c37 100755
    private static boolean isZXingURL(String dataString) {
      if (dataString == null) {
        return false;
-@@ -335,49 +334,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -335,49 +331,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
      return super.onKeyDown(keyCode, event);
    }
  
@@ -236,7 +237,7 @@ index 9eb04e2..73b6c37 100755
    private void decodeOrStoreSavedBitmap(Bitmap bitmap, Result result) {
      // Bitmap isn't used yet -- will be used soon
      if (handler == null) {
-@@ -419,47 +375,20 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -419,47 +372,20 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     * A valid barcode has been found, so give an indication of success and show the results.
     *
     * @param rawResult The contents of the barcode.
@@ -285,7 +286,7 @@ index 9eb04e2..73b6c37 100755
    }
  
    /**
-@@ -505,99 +434,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -505,99 +431,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
      }
    }
  
@@ -386,7 +387,7 @@ index 9eb04e2..73b6c37 100755
  
      if (barcode != null) {
        viewfinderView.drawResultBitmap(barcode);
-@@ -611,19 +449,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -611,19 +446,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                                                    DEFAULT_INTENT_RESULT_DURATION_MS);
      }
  
@@ -406,7 +407,7 @@ index 9eb04e2..73b6c37 100755
      if (source == IntentSource.NATIVE_APP_INTENT) {
        
        // Hand back whatever action they requested - this can be changed to Intents.Scan.ACTION when
-@@ -662,21 +487,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -662,21 +484,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
        }
        sendReplyMessage(R.id.zxing_return_scan_result, intent, resultDurationMS);
        
