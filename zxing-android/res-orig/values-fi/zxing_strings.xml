@@ -24,16 +24,11 @@
   <string name="zxing_contents_phone">Puhelinnumero</string>
   <string name="zxing_contents_sms">Tekstiviestin osoite</string>
   <string name="zxing_contents_text">Teksti</string>
-  <string name="zxing_menu_encode_mecard">Käytä MECARD:ia</string>
-  <string name="zxing_menu_encode_vcard">Käytä vCard:ia</string>
-  <string name="zxing_menu_help">Ohje</string>
-  <string name="zxing_menu_share">Jaa</string>
   <string name="zxing_msg_camera_framework_bug">Valitettavasti Androidin kameran toimiinta häiriintyi. Joudut ehkä käynnistämään laitteen uudelleen.</string>
   <string name="zxing_msg_default_format">Muoto</string>
   <string name="zxing_msg_default_meta">Metatiedot</string>
   <string name="zxing_msg_default_status">Aseta viivakoodi neliön sisälle skannataksesi sen.</string>
   <string name="zxing_msg_default_time">Aika</string>
   <string name="zxing_msg_default_type">Tyyppi</string>
-  <string name="zxing_msg_encode_contents_failed">Viivakoodia ei voitu muodostaa annetusta datasta.</string>
   <string name="zxing_msg_unmount_usb">SD-kortti ei ole käytettävissä.</string>
 </resources>

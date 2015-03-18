@@ -24,16 +24,11 @@
   <string name="zxing_contents_phone">Phone number</string>
   <string name="zxing_contents_sms">SMS address</string>
   <string name="zxing_contents_text">Plain text</string>
-  <string name="zxing_menu_encode_mecard">Use MECARD</string>
-  <string name="zxing_menu_encode_vcard">Use vCard</string>
-  <string name="zxing_menu_help">Help</string>
-  <string name="zxing_menu_share">Share</string>
   <string name="zxing_msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the device.</string>
   <string name="zxing_msg_default_format">Format</string>
   <string name="zxing_msg_default_meta">Metadata</string>
   <string name="zxing_msg_default_status">Place a barcode inside the viewfinder rectangle to scan it.</string>
   <string name="zxing_msg_default_time">Time</string>
   <string name="zxing_msg_default_type">Type</string>
-  <string name="zxing_msg_encode_contents_failed">Could not encode a barcode from the data provided.</string>
   <string name="zxing_msg_unmount_usb">Sorry, the SD card is not accessible.</string>
 </resources>

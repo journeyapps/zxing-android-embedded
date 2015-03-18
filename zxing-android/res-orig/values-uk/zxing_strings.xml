@@ -24,16 +24,11 @@
   <string name="zxing_contents_phone">Номер телефону</string>
   <string name="zxing_contents_sms">Адреса для SMS</string>
   <string name="zxing_contents_text">Текст</string>
-  <string name="zxing_menu_encode_mecard">Використовуйте MECARD</string>
-  <string name="zxing_menu_encode_vcard">Використовуйте vCard</string>
-  <string name="zxing_menu_help">Допомога</string>
-  <string name="zxing_menu_share">Поділитись</string>
   <string name="zxing_msg_camera_framework_bug">Нажаль, виникла помилка камери. Можливо, вам знадобиться перезавантажити пристрій.</string>
   <string name="zxing_msg_default_format">Формат</string>
   <string name="zxing_msg_default_meta">Метадані</string>
   <string name="zxing_msg_default_status">Щоб відсканувати штрих-код, помістіть його в прямокутник видошукача.</string>
   <string name="zxing_msg_default_time">Час</string>
   <string name="zxing_msg_default_type">Тип</string>
-  <string name="zxing_msg_encode_contents_failed">Неможливо створити штрих-код з наданих даних.</string>
   <string name="zxing_msg_unmount_usb">Нажаль, SD-карта недоступна.</string>
 </resources>

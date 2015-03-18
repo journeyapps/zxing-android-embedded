@@ -24,16 +24,11 @@
   <string name="zxing_contents_phone">رقم الهاتف</string>
   <string name="zxing_contents_sms">عنوان SMS</string>
   <string name="zxing_contents_text">نص عادي</string>
-  <string name="zxing_menu_encode_mecard">استخدام MECARD</string>
-  <string name="zxing_menu_encode_vcard">استخدام vCard</string>
-  <string name="zxing_menu_help">تعليمات</string>
-  <string name="zxing_menu_share">مشاركة</string>
   <string name="zxing_msg_camera_framework_bug">عفوا، حدثت مشكلة في كاميرا جهاز Android. قد تحتاج إلى إعادة تشغيل الجهاز.</string>
   <string name="zxing_msg_default_format">التنسيق</string>
   <string name="zxing_msg_default_meta">البيانات الوصفية</string>
   <string name="zxing_msg_default_status">قم بوضع الرمز الشريطي داخل حدود صورة الكاميرا ليتم مسحه.</string>
   <string name="zxing_msg_default_time">الوقت</string>
   <string name="zxing_msg_default_type">النوع</string>
-  <string name="zxing_msg_encode_contents_failed">تعذر ترميز رمز شريطي من البيانات المتوفرة.</string>
   <string name="zxing_msg_unmount_usb">رجاء إيقاف التخزين على USB للمتابعة.</string>
 </resources>

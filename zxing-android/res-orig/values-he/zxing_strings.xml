@@ -24,16 +24,11 @@
   <string name="zxing_contents_phone">מספר טלפון</string>
   <string name="zxing_contents_sms">כתובת SMS</string>
   <string name="zxing_contents_text">טקסט רגיל</string>
-  <string name="zxing_menu_encode_mecard">השתמש MECARD</string>
-  <string name="zxing_menu_encode_vcard">השתמש vCard</string>
-  <string name="zxing_menu_help">עזרה</string>
-  <string name="zxing_menu_share">שתף</string>
   <string name="zxing_msg_camera_framework_bug">סליחה, מצלמת האנדרואיד נתקלה בבעיה. ייתכן שיהיה עליך להפעיל מחדש את המכשיר.</string>
   <string name="zxing_msg_default_format">פורמט</string>
   <string name="zxing_msg_default_meta">מטה-נתונים</string>
   <string name="zxing_msg_default_status">הצב ברקוד בתוך המלבן כדי לסרוק אותו.</string>
   <string name="zxing_msg_default_time">זמן</string>
   <string name="zxing_msg_default_type">סוג</string>
-  <string name="zxing_msg_encode_contents_failed">לא היתה אפשרות לקודד ברקוד מהנתונים שסופקו.</string>
   <string name="zxing_msg_unmount_usb">סליחה, כרטיס הזכרון אינו נגיש.</string>
 </resources>

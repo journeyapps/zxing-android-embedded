@@ -24,16 +24,11 @@
   <string name="zxing_contents_phone">Nomor telepon</string>
   <string name="zxing_contents_sms">Alamat SMS</string>
   <string name="zxing_contents_text">Teks biasa</string>
-  <string name="zxing_menu_encode_mecard">Gunakan MECARD</string>
-  <string name="zxing_menu_encode_vcard">Gunakan vCard</string>
-  <string name="zxing_menu_help">Bantuan</string>
-  <string name="zxing_menu_share">Bagikan</string>
   <string name="zxing_msg_camera_framework_bug">Maaf, kamera pada Android mengalami masalah. Anda mungkin perlu me-restart perangkat.</string>
   <string name="zxing_msg_default_format">Bentuk</string>
   <string name="zxing_msg_default_meta">Metadata</string>
   <string name="zxing_msg_default_status">Letakkan barcode di dalam kotak jendela untuk memindai.</string>
   <string name="zxing_msg_default_time">Waktu</string>
   <string name="zxing_msg_default_type">Tipe</string>
-  <string name="zxing_msg_encode_contents_failed">Tidak dapat meng-encode barcode dari data yang diberikan.</string>
   <string name="zxing_msg_unmount_usb">Maaf, SD card tidak dapat diakses.</string>
 </resources>

@@ -24,16 +24,11 @@
   <string name="zxing_contents_phone">電話番号</string>
   <string name="zxing_contents_sms">SMSアドレス</string>
   <string name="zxing_contents_text">テキストデータ</string>
-  <string name="zxing_menu_encode_mecard">MECARDを使用</string>
-  <string name="zxing_menu_encode_vcard">vCardを使用</string>
-  <string name="zxing_menu_help">ヘルプ</string>
-  <string name="zxing_menu_share">共有</string>
   <string name="zxing_msg_camera_framework_bug">Androidのカメラに問題が発生しました。デバイスを再起動する必要があります。</string>
   <string name="zxing_msg_default_format">フォーマット</string>
   <string name="zxing_msg_default_meta">メタデータ</string>
   <string name="zxing_msg_default_status">QRコードを画面の読み取り範囲内に写すとスキャンします。</string>
   <string name="zxing_msg_default_time">時間</string>
   <string name="zxing_msg_default_type">タイプ</string>
-  <string name="zxing_msg_encode_contents_failed">このデータからQRコードを作成できませんでした</string>
   <string name="zxing_msg_unmount_usb">SDカードにアクセスできません</string>
 </resources>
