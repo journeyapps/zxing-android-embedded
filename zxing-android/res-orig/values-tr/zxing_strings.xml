@@ -24,16 +24,11 @@
   <string name="zxing_contents_phone">Telefon numarası</string>
   <string name="zxing_contents_sms">SMS adresi</string>
   <string name="zxing_contents_text">Düz metin</string>
-  <string name="zxing_menu_encode_mecard">MECARD kullanın</string>
-  <string name="zxing_menu_encode_vcard">VCard kullanın</string>
-  <string name="zxing_menu_help">Yardım</string>
-  <string name="zxing_menu_share">Paylaş</string>
   <string name="zxing_msg_camera_framework_bug">Üzgünüz, Android kamera bir sorunla karşılaştı. Cihazı yeniden başlatmanız gerekebilir.</string>
   <string name="zxing_msg_default_format">Biçim</string>
   <string name="zxing_msg_default_meta">Metadata</string>
   <string name="zxing_msg_default_status">Barkodu taramak için vizördeki dikdörtgenin içerisine yerleştirin.</string>
   <string name="zxing_msg_default_time">Süre</string>
   <string name="zxing_msg_default_type">Tür</string>
-  <string name="zxing_msg_encode_contents_failed">Sağlanan verilerden bir barkod kodlanamadı.</string>
   <string name="zxing_msg_unmount_usb">Lütfen USB depolamayı devre dışı bırakın.</string>
 </resources>
