@@ -59,6 +59,11 @@ process %w(AndroidManifest.xml) do |text|
   text.gsub!(/android:versionName=".+?"\s*/, '')
   text.gsub!(/android:versionCode=".+?"\s*/, '')
   text.gsub!(/android:installLocation=".+?"\s*/, '')
+  
+  # Leave permissions up to the app, not the lib
+  text.gsub!(/<uses-permission.+?\/>/, '')
+  # Same for supports-screens
+  text.gsub!(/<supports-screens.+?\/>/m, '')
 
   # Remove <intent-filter>s
   # text.gsub!(/<activity(.+?[^\/])>(.+?)<\/activity>/m, '<activity\1 />')
