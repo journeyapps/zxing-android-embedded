@@ -19,13 +19,13 @@
   <string name="zxing_button_cancel">Batal</string>
   <string name="zxing_button_ok">OK</string>
   <string name="zxing_contents_contact">Informasi kontak</string>
-  <string name="zxing_contents_email">Alamat surel</string>
+  <string name="zxing_contents_email">Alamat email</string>
   <string name="zxing_contents_location">Koordinat geografis</string>
   <string name="zxing_contents_phone">Nomor telepon</string>
   <string name="zxing_contents_sms">Alamat SMS</string>
   <string name="zxing_contents_text">Teks biasa</string>
-  <string name="zxing_msg_camera_framework_bug">Maaf, kamera pada Android mengalami masalah. Anda mungkin perlu me-restart perangkat.</string>
-  <string name="zxing_msg_default_format">Bentuk</string>
+  <string name="zxing_msg_camera_framework_bug">Maaf, kamera mengalami masalah. Anda mungkin perlu me-restart perangkat.</string>
+  <string name="zxing_msg_default_format">Format</string>
   <string name="zxing_msg_default_meta">Metadata</string>
   <string name="zxing_msg_default_status">Letakkan barcode di dalam kotak jendela untuk memindai.</string>
   <string name="zxing_msg_default_time">Waktu</string>
