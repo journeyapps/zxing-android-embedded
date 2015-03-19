@@ -108,5 +108,5 @@ end
 
 # Preference names
 process Dir['**/PreferencesActivity.java'] do |text|
-  text.gsub(' = "preferences_', ' = "#{PREFIX}_preferences_')
+  text.gsub(' = "preferences_', " = \"#{PREFIX}_preferences_")
 end

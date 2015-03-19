@@ -27,33 +27,33 @@ import android.os.Bundle;
  */
 public final class PreferencesActivity extends Activity {
 
-  public static final String KEY_DECODE_1D_PRODUCT = "#{PREFIX}_preferences_decode_1D_product";
-  public static final String KEY_DECODE_1D_INDUSTRIAL = "#{PREFIX}_preferences_decode_1D_industrial";
-  public static final String KEY_DECODE_QR = "#{PREFIX}_preferences_decode_QR";
-  public static final String KEY_DECODE_DATA_MATRIX = "#{PREFIX}_preferences_decode_Data_Matrix";
-  public static final String KEY_DECODE_AZTEC = "#{PREFIX}_preferences_decode_Aztec";
-  public static final String KEY_DECODE_PDF417 = "#{PREFIX}_preferences_decode_PDF417";
+  public static final String KEY_DECODE_1D_PRODUCT = "zxing_preferences_decode_1D_product";
+  public static final String KEY_DECODE_1D_INDUSTRIAL = "zxing_preferences_decode_1D_industrial";
+  public static final String KEY_DECODE_QR = "zxing_preferences_decode_QR";
+  public static final String KEY_DECODE_DATA_MATRIX = "zxing_preferences_decode_Data_Matrix";
+  public static final String KEY_DECODE_AZTEC = "zxing_preferences_decode_Aztec";
+  public static final String KEY_DECODE_PDF417 = "zxing_preferences_decode_PDF417";
 
-  public static final String KEY_CUSTOM_PRODUCT_SEARCH = "#{PREFIX}_preferences_custom_product_search";
+  public static final String KEY_CUSTOM_PRODUCT_SEARCH = "zxing_preferences_custom_product_search";
 
-  public static final String KEY_PLAY_BEEP = "#{PREFIX}_preferences_play_beep";
-  public static final String KEY_VIBRATE = "#{PREFIX}_preferences_vibrate";
-  public static final String KEY_COPY_TO_CLIPBOARD = "#{PREFIX}_preferences_copy_to_clipboard";
-  public static final String KEY_FRONT_LIGHT_MODE = "#{PREFIX}_preferences_front_light_mode";
-  public static final String KEY_BULK_MODE = "#{PREFIX}_preferences_bulk_mode";
-  public static final String KEY_REMEMBER_DUPLICATES = "#{PREFIX}_preferences_remember_duplicates";
-  public static final String KEY_ENABLE_HISTORY = "#{PREFIX}_preferences_history";
-  public static final String KEY_SUPPLEMENTAL = "#{PREFIX}_preferences_supplemental";
-  public static final String KEY_AUTO_FOCUS = "#{PREFIX}_preferences_auto_focus";
-  public static final String KEY_INVERT_SCAN = "#{PREFIX}_preferences_invert_scan";  
-  public static final String KEY_SEARCH_COUNTRY = "#{PREFIX}_preferences_search_country";
-  public static final String KEY_DISABLE_AUTO_ORIENTATION = "#{PREFIX}_preferences_orientation";
+  public static final String KEY_PLAY_BEEP = "zxing_preferences_play_beep";
+  public static final String KEY_VIBRATE = "zxing_preferences_vibrate";
+  public static final String KEY_COPY_TO_CLIPBOARD = "zxing_preferences_copy_to_clipboard";
+  public static final String KEY_FRONT_LIGHT_MODE = "zxing_preferences_front_light_mode";
+  public static final String KEY_BULK_MODE = "zxing_preferences_bulk_mode";
+  public static final String KEY_REMEMBER_DUPLICATES = "zxing_preferences_remember_duplicates";
+  public static final String KEY_ENABLE_HISTORY = "zxing_preferences_history";
+  public static final String KEY_SUPPLEMENTAL = "zxing_preferences_supplemental";
+  public static final String KEY_AUTO_FOCUS = "zxing_preferences_auto_focus";
+  public static final String KEY_INVERT_SCAN = "zxing_preferences_invert_scan";  
+  public static final String KEY_SEARCH_COUNTRY = "zxing_preferences_search_country";
+  public static final String KEY_DISABLE_AUTO_ORIENTATION = "zxing_preferences_orientation";
 
-  public static final String KEY_DISABLE_CONTINUOUS_FOCUS = "#{PREFIX}_preferences_disable_continuous_focus";
-  public static final String KEY_DISABLE_EXPOSURE = "#{PREFIX}_preferences_disable_exposure";
-  public static final String KEY_DISABLE_METERING = "#{PREFIX}_preferences_disable_metering";
-  public static final String KEY_DISABLE_BARCODE_SCENE_MODE = "#{PREFIX}_preferences_disable_barcode_scene_mode";
-  public static final String KEY_AUTO_OPEN_WEB = "#{PREFIX}_preferences_auto_open_web";
+  public static final String KEY_DISABLE_CONTINUOUS_FOCUS = "zxing_preferences_disable_continuous_focus";
+  public static final String KEY_DISABLE_EXPOSURE = "zxing_preferences_disable_exposure";
+  public static final String KEY_DISABLE_METERING = "zxing_preferences_disable_metering";
+  public static final String KEY_DISABLE_BARCODE_SCENE_MODE = "zxing_preferences_disable_barcode_scene_mode";
+  public static final String KEY_AUTO_OPEN_WEB = "zxing_preferences_auto_open_web";
 
   @Override
   protected void onCreate(Bundle icicle) {
