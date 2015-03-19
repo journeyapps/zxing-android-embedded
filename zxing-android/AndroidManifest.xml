@@ -48,12 +48,6 @@
                 android:stateNotNeeded="true"
                 android:theme="@style/zxing_CaptureTheme"
                 android:windowSoftInputMode="stateAlwaysHidden"/>
-      <activity android:name="com.google.zxing.client.android.HelpActivity"
-                android:label="@string/zxing_menu_help"
-                android:screenOrientation="user"
-                android:stateNotNeeded="true"/>
-      <activity android:name="com.google.zxing.client.android.encode.EncodeActivity"
-                android:screenOrientation="user"/>
   </application>
 
 </manifest>

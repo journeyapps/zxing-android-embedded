@@ -24,16 +24,11 @@
   <string name="zxing_contents_phone">Телефон</string>
   <string name="zxing_contents_sms">SMS адрес</string>
   <string name="zxing_contents_text">Чист текст</string>
-  <string name="zxing_menu_encode_mecard">Използвай MECARD формат</string>
-  <string name="zxing_menu_encode_vcard">Използвай vCard формат</string>
-  <string name="zxing_menu_help">Помощ</string>
-  <string name="zxing_menu_share">Сподели</string>
   <string name="zxing_msg_camera_framework_bug">Съжаляваме, срещнахме проблем с камерата. Може да се наложи да рестартирате устройството си.</string>
   <string name="zxing_msg_default_format">Формат</string>
   <string name="zxing_msg_default_meta">Допълнение</string>
   <string name="zxing_msg_default_status">Сложете баркода вътре в правоъгълника за да го сканирате.</string>
   <string name="zxing_msg_default_time">Време</string>
   <string name="zxing_msg_default_type">Тип</string>
-  <string name="zxing_msg_encode_contents_failed">Неуспешно кодиране на подадените данни.</string>
   <string name="zxing_msg_unmount_usb">Съжаляваме, но SD картата не е достъпна.</string>
 </resources>

@@ -24,16 +24,11 @@
   <string name="zxing_contents_phone">Telefonska številka</string>
   <string name="zxing_contents_sms">SMS naslov</string>
   <string name="zxing_contents_text">Tekst</string>
-  <string name="zxing_menu_encode_mecard">Uporaba MECARD</string>
-  <string name="zxing_menu_encode_vcard">Uporaba vCard</string>
-  <string name="zxing_menu_help">Pomoč</string>
-  <string name="zxing_menu_share">Deli</string>
   <string name="zxing_msg_camera_framework_bug">Oprostite, Android kamera je naletela na težave. Mogoče boste morali ponovno zagnati napravo.</string>
   <string name="zxing_msg_default_format">Format</string>
   <string name="zxing_msg_default_meta">Metapodatki</string>
   <string name="zxing_msg_default_status">Za branje postavite črtno kodo znotraj iskala.</string>
   <string name="zxing_msg_default_time">Čas</string>
   <string name="zxing_msg_default_type">Tip</string>
-  <string name="zxing_msg_encode_contents_failed">Ni bilo mogoče narediti črtne kode iz podanih podatkov</string>
   <string name="zxing_msg_unmount_usb">Oprostite, do SD kartice ni možno dostopati</string>
 </resources>

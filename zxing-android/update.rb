@@ -11,7 +11,7 @@ def remove_all prefix, globs
       if File.directory?(file)
         FileUtils.rm_r file
       else
-        FileUtils.rm file  
+        FileUtils.rm file
       end
     end
   end
@@ -27,7 +27,7 @@ end
 
 # Remove unsused source files
 orig_prefix = 'src-orig/com/google/zxing/client/android/'
-remove_all orig_prefix, %w(HttpHelper.java ScanFromWebPageManager.java book history result share wifi clipboard)
+remove_all orig_prefix, %w(HttpHelper.java HelpActivity.java ScanFromWebPageManager.java Contents.java book history result share wifi clipboard encode)
 
 
 # We have custom versions of each of these files - remove the original ones and log the diff
@@ -41,8 +41,8 @@ end
 
 # Remove unsused resource files
 remove_all 'res-orig/', %w(drawable drawable-*)
-remove_all 'res-orig/layout/', %w(zxing_share.xml *_list_item.xml zxing_search_book_*.xml)
-remove_all 'res-orig/', %w(layout-land/zxing_share.xml menu/zxing_history.xml)
+remove_all 'res-orig/layout/', %w(zxing_encode.xml zxing_help.xml zxing_share.xml *_list_item.xml zxing_search_book_*.xml)
+remove_all 'res-orig/', %w(layout-land menu)
 
 
 # Remove strings we don't use
@@ -76,6 +76,10 @@ zxing_button_web_search
 zxing_button_wifi
 zxing_menu_history
 zxing_menu_settings
+zxing_menu_encode_mecard
+zxing_menu_encode_vcard
+zxing_menu_help
+zxing_menu_share
 zxing_msg_bulk_mode_scanned
 zxing_msg_default_mms_subject
 zxing_msg_error
@@ -94,6 +98,7 @@ zxing_msg_sbc_snippet_unavailable
 zxing_msg_share_explanation
 zxing_msg_share_text
 zxing_msg_sure
+zxing_msg_encode_contents_failed
 zxing_sbc_name
 zxing_wifi_changing_network
 LINES
@@ -103,7 +108,13 @@ process Dir['res-orig/**/zxing_strings.xml'] do |text|
   remove_strings.each do |rm|
     text.gsub!(/\s+<string name="#{rm}">.*?<\/string>/, '')
   end
-  
+
+  text
+end
+
+# Remove unused color value
+process %w(res-orig/values/zxing_colors.xml) do |text|
+  text.gsub!(/\s+<color name="zxing_encode_view">.*?<\/color>/, '')
   text
 end
 
