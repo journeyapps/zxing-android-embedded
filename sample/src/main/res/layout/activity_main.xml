@@ -21,6 +21,12 @@
         android:text="@string/custom_layout"
         android:onClick="scanBarcodeCustomLayout"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/front_camera"
+        android:onClick="scanBarcodeFrontCamera"/>
+
 
     <fragment
         android:layout_width="match_parent"

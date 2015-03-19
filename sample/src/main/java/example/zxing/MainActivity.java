@@ -1,6 +1,7 @@
 package example.zxing;
 
 import android.content.Intent;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -32,6 +33,12 @@ public class MainActivity extends ActionBarActivity {
         integrator.setLegacyCaptureLayout(R.layout.custom_legacy_capture_layout);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
         integrator.autoWide();
+        integrator.initiateScan();
+    }
+
+    public void scanBarcodeFrontCamera(View view) {
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setCameraId(Camera.CameraInfo.CAMERA_FACING_FRONT);
         integrator.initiateScan();
     }
 
