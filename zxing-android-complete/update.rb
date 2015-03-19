@@ -11,6 +11,7 @@ PREFIX = 'zxing'
 `cp -r ../../zxing/android/src/* ./src/`
 `cp -r ../../zxing/android/res/* ./res/`
 `cp -r ../../zxing/android-core/src/main/java/* ./android-core-src/`
+`git --git-dir="../../zxing/.git" describe HEAD > zxing-version`
 
 
 def process(files)
