@@ -106,6 +106,10 @@ public final class Intents {
      */
     public static final String WIDE = "SCAN_WIDE";
 
+
+    public static final String ORIENTATION = "SCAN_ORIENTATION";
+
+
     /**
      * Desired duration in milliseconds for which to pause after a successful scan before
      * returning to the calling intent. Specified as a long, not an integer!
