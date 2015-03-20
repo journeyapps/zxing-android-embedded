@@ -19,16 +19,16 @@
   <string name="zxing_button_cancel">Annuler</string>
   <string name="zxing_button_ok">OK</string>
   <string name="zxing_contents_contact">Informations de contact</string>
-  <string name="zxing_contents_email">Adresse email</string>
+  <string name="zxing_contents_email">Adresse courriel</string>
   <string name="zxing_contents_location">Coordonnées géographiques</string>
   <string name="zxing_contents_phone">Numéro de téléphone</string>
   <string name="zxing_contents_sms">Adresse SMS</string>
-  <string name="zxing_contents_text">Texte</string>
+  <string name="zxing_contents_text">Texte en clair</string>
   <string name="zxing_msg_camera_framework_bug">Désolé, la caméra Android a rencontré un problème. Un redémarrage de l\'appareil est peut-être nécessaire.</string>
   <string name="zxing_msg_default_format">Format</string>
   <string name="zxing_msg_default_meta">Métadonnées</string>
-  <string name="zxing_msg_default_status">Placer un code-barres à l\'intérieur du rectangle pour le scanner.</string>
-  <string name="zxing_msg_default_time">Temps</string>
+  <string name="zxing_msg_default_status">Encadrez un code-barres avec le viseur pour le balayer.</string>
+  <string name="zxing_msg_default_time">Heure</string>
   <string name="zxing_msg_default_type">Type</string>
   <string name="zxing_msg_unmount_usb">Désolé, la carte SD n\'est pas accessible.</string>
 </resources>

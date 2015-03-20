@@ -17,11 +17,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.google.zxing.client.android">
 
   <uses-permission android:name="android.permission.CAMERA"/>
-  <uses-permission android:name="android.permission.VIBRATE"/>
-  <uses-permission android:name="android.permission.FLASHLIGHT"/>
 
   <!-- In reality, the min supported version is 15 -->
-  <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="19"/>
+  <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="21"/>
 
   <!-- Don't require camera, as this requires a rear camera. This allows it to work on the Nexus 7 -->
   <uses-feature android:name="android.hardware.camera" android:required="false"/>
@@ -33,13 +31,6 @@
   <uses-feature android:name="android.hardware.screen.landscape" android:required="false" />
   <uses-feature android:name="android.hardware.wifi" android:required="false"/>
   <!-- TODO make this not required again after android.hardware.camera.any is available -->
-
-  <!-- Donut-specific flags which allow us to run on any dpi screens. -->
-  <supports-screens android:xlargeScreens="true"
-                    android:largeScreens="true"
-                    android:normalScreens="true"
-                    android:smallScreens="true"
-                    android:anyDensity="true"/>
 
   <application>
       <activity android:name="com.google.zxing.client.android.CaptureActivity"

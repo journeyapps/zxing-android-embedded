@@ -112,6 +112,8 @@
   <string name="zxing_preferences_front_light_summary">Migliora la scansione con poca luminosità su alcuni telefoni, ma può provocare abbagliamento. Non funziona su tutti i telefoni.</string>
   <string name="zxing_preferences_front_light_title">Usa luce frontale</string>
   <string name="zxing_preferences_general_title">Impostazioni generali</string>
+  <string name="zxing_preferences_history_summary">Mantieni le tue scansioni nella Cronologia</string>
+  <string name="zxing_preferences_history_title">Aggiungi alla Cronologia</string>
   <string name="zxing_preferences_invert_scan_summary">Scansione dei codici a barre bianche su sfondo nero. Non disponibile su alcuni dispositivi.</string>
   <string name="zxing_preferences_invert_scan_title">Invertire la scansione</string>
   <string name="zxing_preferences_name">Impostazioni</string>

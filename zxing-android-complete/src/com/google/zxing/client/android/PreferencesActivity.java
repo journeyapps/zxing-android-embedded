@@ -42,6 +42,7 @@ public final class PreferencesActivity extends Activity {
   public static final String KEY_FRONT_LIGHT_MODE = "zxing_preferences_front_light_mode";
   public static final String KEY_BULK_MODE = "zxing_preferences_bulk_mode";
   public static final String KEY_REMEMBER_DUPLICATES = "zxing_preferences_remember_duplicates";
+  public static final String KEY_ENABLE_HISTORY = "zxing_preferences_history";
   public static final String KEY_SUPPLEMENTAL = "zxing_preferences_supplemental";
   public static final String KEY_AUTO_FOCUS = "zxing_preferences_auto_focus";
   public static final String KEY_INVERT_SCAN = "zxing_preferences_invert_scan";  

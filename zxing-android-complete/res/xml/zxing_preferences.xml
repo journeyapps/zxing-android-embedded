@@ -64,6 +64,11 @@
         android:title="@string/zxing_preferences_remember_duplicates_title"
         android:summary="@string/zxing_preferences_remember_duplicates_summary"/>
     <CheckBoxPreference
+        android:key="zxing_preferences_history"
+        android:defaultValue="true"
+        android:title="@string/zxing_preferences_history_title"
+        android:summary="@string/zxing_preferences_history_summary"/>
+    <CheckBoxPreference
         android:key="zxing_preferences_supplemental"
         android:defaultValue="true"
         android:title="@string/zxing_preferences_supplemental_title"
