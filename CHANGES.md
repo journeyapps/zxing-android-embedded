@@ -1,3 +1,10 @@
+### 2.1.0
+
+* Update to ZXing 3.2.0.
+* Removed HelpActivity and EncodeActivity. If there is a need for EncodeActivity, it can be split
+  off as a separate lib. Thanks to @rehan-vanzyl.
+* Remove some permissions and `<supports-screens>` section from the AndroidManifest.xml.
+
 ### 2.0.1
 
 * Changed group name, artifact name, GitHub organization and Maven repository.
