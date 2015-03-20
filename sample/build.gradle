@@ -1,16 +1,12 @@
 apply plugin: 'com.android.application'
 
-repositories {
-    jcenter()
-}
-
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.1"
+    compileSdkVersion project.androidTargetSdk
+    buildToolsVersion project.androidBuildTools
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 21
+        targetSdkVersion project.androidTargetSdk
         versionCode 1
         versionName "1.0"
     }
@@ -26,5 +22,5 @@ dependencies {
     compile(project(':zxing-android')) { transitive = true }
     compile(project(':zxing-android-legacy')) { transitive = true }
     compile(project(':integration'))
-    compile 'com.android.support:appcompat-v7:21.0.0'
+    compile 'com.android.support:appcompat-v7:21.0.3'
 }

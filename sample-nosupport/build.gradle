@@ -1,16 +1,13 @@
 apply plugin: 'com.android.application'
 
-repositories {
-    jcenter()
-}
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.1"
+    compileSdkVersion project.androidTargetSdk
+    buildToolsVersion project.androidBuildTools
 
     defaultConfig {
         minSdkVersion 11
-        targetSdkVersion 21
+        targetSdkVersion project.androidTargetSdk
         versionCode 1
         versionName "1.0"
     }

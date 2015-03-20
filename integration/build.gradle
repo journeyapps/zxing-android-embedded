@@ -1,23 +1,18 @@
 apply plugin: 'com.android.library'
 
-repositories {
-    jcenter()
-}
-
 ext.artifactId = 'zxing-android-integration'
 
-
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.1"
+    compileSdkVersion project.androidTargetSdk
+    buildToolsVersion project.androidBuildTools
 
     defaultConfig {
         minSdkVersion 8
-        targetSdkVersion 21
+        targetSdkVersion project.androidTargetSdk
     }
 }
 
 dependencies {
     // Optional dependency.
-    provided 'com.android.support:support-v4:21.0.0'
+    provided 'com.android.support:support-v4:21.0.3'
 }
