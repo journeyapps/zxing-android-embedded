@@ -257,12 +257,15 @@ public class IntentIntegrator {
      * May work better for 1D barcodes.
      */
     public void setWide() {
+        addExtra("SCAN_WIDE", true);
+
+        // For zxing-android-legacy, which doesn't support SCAN_WIDE
         WindowManager window = activity.getWindowManager();
         Display display = window.getDefaultDisplay();
         int displayWidth = display.getWidth();
         int displayHeight = display.getHeight();
         if (displayHeight > displayWidth) {
-            // This is portrait dimensions, but the barcode scanner is always in landscape mode.
+            // This is portrait dimensions, but the legacy barcode scanner is always in landscape mode.
             int temp = displayWidth;
             //noinspection SuspiciousNameCombination
             displayWidth = displayHeight;

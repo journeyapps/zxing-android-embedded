@@ -102,6 +102,11 @@ public final class Intents {
     public static final String HEIGHT = "SCAN_HEIGHT";
 
     /**
+     * Boolen parameter to indicate that a wide scanning rectangle should be used.
+     */
+    public static final String WIDE = "SCAN_WIDE";
+
+    /**
      * Desired duration in milliseconds for which to pause after a successful scan before
      * returning to the calling intent. Specified as a long, not an integer!
      * For example: 1000L, not 1000.

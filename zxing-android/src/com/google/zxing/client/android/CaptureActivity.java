@@ -24,12 +24,14 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -208,7 +210,16 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
         decodeHints = DecodeHintManager.parseDecodeHints(intent);
 
-        if (intent.hasExtra(Intents.Scan.WIDTH) && intent.hasExtra(Intents.Scan.HEIGHT)) {
+        if (intent.getBooleanExtra(Intents.Scan.WIDE, false)) {
+          WindowManager window = getWindowManager();
+          Display display = window.getDefaultDisplay();
+          Point displaySize = new Point();
+          display.getSize(displaySize);
+
+          int desiredWidth = displaySize.x * 9 / 10;  // 90% width
+          int desiredHeight = Math.min(displaySize.y * 3 / 4, 400);    // 75% height, limit to 400px
+          cameraManager.setManualFramingRect(desiredWidth, desiredHeight);
+        } else if (intent.hasExtra(Intents.Scan.WIDTH) && intent.hasExtra(Intents.Scan.HEIGHT)) {
           int width = intent.getIntExtra(Intents.Scan.WIDTH, 0);
           int height = intent.getIntExtra(Intents.Scan.HEIGHT, 0);
           if (width > 0 && height > 0) {
