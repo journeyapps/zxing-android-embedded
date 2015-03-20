@@ -112,6 +112,8 @@
   <string name="zxing_preferences_front_light_summary">Îmbunătățește scanarea în lumină redusă, dar poate cauza strălucire excesivă. Nu funcționează la toate aparatele.</string>
   <string name="zxing_preferences_front_light_title">Folosește lumina frontală</string>
   <string name="zxing_preferences_general_title">Configurări generale</string>
+  <string name="zxing_preferences_history_summary">Păstrați scanate în istorie</string>
+  <string name="zxing_preferences_history_title">Adauga la Istorie</string>
   <string name="zxing_preferences_invert_scan_summary">Scanează coduri de bară albe pe fundal negru. Indisponibil pe unele aparate.</string>
   <string name="zxing_preferences_invert_scan_title">Scanare în negativ</string>
   <string name="zxing_preferences_name">Configurări</string>

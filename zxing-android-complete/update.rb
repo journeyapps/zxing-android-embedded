@@ -11,6 +11,7 @@ PREFIX = 'zxing'
 `cp -r ../../zxing/android/src/* ./src/`
 `cp -r ../../zxing/android/res/* ./res/`
 `cp -r ../../zxing/android-core/src/main/java/* ./android-core-src/`
+`git --git-dir="../../zxing/.git" describe HEAD > zxing-version`
 
 
 def process(files)
@@ -59,6 +60,11 @@ process %w(AndroidManifest.xml) do |text|
   text.gsub!(/android:versionName=".+?"\s*/, '')
   text.gsub!(/android:versionCode=".+?"\s*/, '')
   text.gsub!(/android:installLocation=".+?"\s*/, '')
+  
+  # Leave permissions up to the app, not the lib
+  text.gsub!(/<uses-permission.+?\/>/, '')
+  # Same for supports-screens
+  text.gsub!(/<supports-screens.+?\/>/m, '')
 
   # Remove <intent-filter>s
   # text.gsub!(/<activity(.+?[^\/])>(.+?)<\/activity>/m, '<activity\1 />')
@@ -102,5 +108,5 @@ end
 
 # Preference names
 process Dir['**/PreferencesActivity.java'] do |text|
-  text.gsub(' = "preferences_', ' = "#{PREFIX}_preferences_')
+  text.gsub(' = "preferences_', " = \"#{PREFIX}_preferences_")
 end

@@ -18,17 +18,17 @@
           package="com.google.zxing.client.android"
           >
 
-  <uses-permission android:name="android.permission.CAMERA"/>
-  <uses-permission android:name="android.permission.INTERNET"/>
-  <uses-permission android:name="android.permission.VIBRATE"/>
-  <uses-permission android:name="android.permission.FLASHLIGHT"/>
-  <uses-permission android:name="android.permission.READ_CONTACTS"/>
-  <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS"/>
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-  <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
-  <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="19"/>
+  <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="21"/>
 
   <!-- Don't require camera, as this requires a rear camera. This allows it to work on the Nexus 7 -->
   <uses-feature android:name="android.hardware.camera" android:required="false"/>
@@ -43,11 +43,7 @@
   <uses-feature android:name="android.hardware.touchscreen"/>
   <!-- TODO make this not required again after android.hardware.camera.any is available -->
 
-  <supports-screens android:xlargeScreens="true"
-                    android:largeScreens="true"
-                    android:normalScreens="true"
-                    android:smallScreens="true"
-                    android:anyDensity="true"/>
+  
 
   <application android:icon="@drawable/zxing_launcher_icon"
                android:logo="@drawable/zxing_launcher_icon"

@@ -52,6 +52,9 @@
         android:key="zxing_preferences_remember_duplicates"
         android:defaultValue="false"/>
     <CheckBoxPreference
+        android:key="zxing_preferences_history"
+        android:defaultValue="true"/>
+    <CheckBoxPreference
         android:key="zxing_preferences_supplemental"
         android:defaultValue="true"/>
   </PreferenceCategory>
