@@ -17,8 +17,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.google.zxing.client.androidlegacy">
 
   <uses-permission android:name="android.permission.CAMERA"/>
-  <uses-permission android:name="android.permission.VIBRATE"/>
-  <uses-permission android:name="android.permission.FLASHLIGHT"/>
 
   <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="10"/>
 
@@ -32,13 +30,6 @@
   <uses-feature android:name="android.hardware.screen.landscape" android:required="false" />
   <uses-feature android:name="android.hardware.wifi" android:required="false"/>
   <!-- TODO make this not required again after android.hardware.camera.any is available -->
-
-  <!-- Donut-specific flags which allow us to run on any dpi screens. -->
-  <supports-screens android:xlargeScreens="true"
-                    android:largeScreens="true"
-                    android:normalScreens="true"
-                    android:smallScreens="true"
-                    android:anyDensity="true"/>
 
   <application>
       <activity android:clearTaskOnLaunch="true" android:configChanges="orientation|keyboardHidden" android:name=".CaptureActivity" android:screenOrientation="landscape" android:stateNotNeeded="true" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:windowSoftInputMode="stateAlwaysHidden"/>
