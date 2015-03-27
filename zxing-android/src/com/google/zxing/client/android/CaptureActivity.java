@@ -84,6 +84,7 @@ public final class CaptureActivity extends ActionBarActivity implements SurfaceH
     public static final java.lang.String ZXING_CAPTURE_LAYOUT_TOOLBAR_ID = "ZXING_CAPTURE_LAYOUT_TOOLBAR_ID";
     public static final java.lang.String ZXING_CAPTURE_LAYOUT_THEME_ID = "ZXING_CAPTURE_LAYOUT_THEME_ID";
     public static final java.lang.String ZXING_CAPTURE_LAYOUT_MENU_ID = "ZXING_CAPTURE_LAYOUT_MENU_ID";
+    public static final String ZXING_CAPTURE_LAYOUT_TITLE = "ZXING_CAPTURE_LAYOUT_TITLE";
 
     public static final String RESULT_CODE_ITEM_MENU_ID = "ITEM_MENU_ID";
 
@@ -104,6 +105,7 @@ public final class CaptureActivity extends ActionBarActivity implements SurfaceH
     private BeepManager beepManager;
     private AmbientLightManager ambientLightManager;
     int zxingCaptureLayoutToolbarId, zxingCaptureLayoutThemeId, zxingCaptureLayoutMenuId,zxingCaptureLayoutResourceId;
+    String zxingCaptureLayoutTitle;
 
 
     private Button cancelButton;
@@ -146,6 +148,9 @@ public final class CaptureActivity extends ActionBarActivity implements SurfaceH
             }
             if(extras.containsKey(ZXING_CAPTURE_LAYOUT_MENU_ID)){
                 zxingCaptureLayoutMenuId = extras.getInt(ZXING_CAPTURE_LAYOUT_MENU_ID, -1);
+            }
+            if(extras.containsKey(ZXING_CAPTURE_LAYOUT_TITLE)){
+                zxingCaptureLayoutTitle = extras.getString(ZXING_CAPTURE_LAYOUT_TITLE,"Scan");
             }
         }
 
@@ -362,10 +367,8 @@ public final class CaptureActivity extends ActionBarActivity implements SurfaceH
     private void initializeToolbar(int zxingCaptureLayoutToolbarId) {
         Toolbar toolbar = (Toolbar) findViewById(zxingCaptureLayoutToolbarId);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Scan");
+        getSupportActionBar().setTitle(zxingCaptureLayoutTitle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Log.d("TOOLBAR", "SETTING UP");
-        //toolbar.setNavigationIcon(getResources().getDrawable(Constants.HOME_ICON));
     }
 
     @Override

@@ -239,6 +239,16 @@ public class IntentIntegrator {
     }
 
     /**
+     * Set scanning activity title.
+     *
+     * @param title the title for the activity.
+     */
+    public final IntentIntegrator setTitle(String title){
+        addExtra("ZXING_CAPTURE_LAYOUT_TITLE",title);
+        return this;
+    }
+
+    /**
      * Change the layout used for scanning in zxing-android-legacy.
      *
      * @param resourceId the layout resource id to use.
