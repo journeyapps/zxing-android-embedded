@@ -120,6 +120,7 @@ public class IntentIntegrator {
     private static final String STANDARD_PACKAGE_NAME = "com.google.zxing.client.android";
     private static final String LEGACY_PACKAGE_NAME = "com.google.zxing.client.androidlegacy";
 
+
     protected Class<?> getCaptureActivity() {
         try {
             return Class.forName(getScannerPackage() + ".CaptureActivity");
@@ -204,6 +205,36 @@ public class IntentIntegrator {
      */
     public final IntentIntegrator setCaptureLayout(int resourceId) {
         addExtra("ZXING_CAPTURE_LAYOUT_ID_KEY", resourceId);
+        return this;
+    }
+
+    /**
+     * Add toolbar to the layout used for scanning in zxing-android.
+     *
+     * @param resourceId the toolbar resource id to use.
+     */
+    public final IntentIntegrator setToolbar(int resourceId){
+        addExtra("ZXING_CAPTURE_LAYOUT_TOOLBAR_ID",resourceId);
+        return this;
+    }
+
+    /**
+     * Set scanning activity theme programatically.
+     *
+     * @param themeId the toolbar resource id to use.
+     */
+    public final IntentIntegrator setTheme(int themeId){
+        addExtra("ZXING_CAPTURE_LAYOUT_THEME_ID",themeId);
+        return this;
+    }
+
+    /**
+     * Set scanning activity menu programatically.
+     *
+     * @param menuId the menu resource id to use.
+     */
+    public final IntentIntegrator setToolbarMenu(int menuId){
+        addExtra("ZXING_CAPTURE_LAYOUT_MENU_ID",menuId);
         return this;
     }
 

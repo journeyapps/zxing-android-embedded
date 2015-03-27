@@ -16,6 +16,17 @@
  -->
 <resources>
   <!-- We diverge from the core ZXing app here, by not displaying the ActionBar -->
-  <style name="zxing_CaptureTheme" parent="android:Theme.Holo.NoActionBar.Fullscreen">
+  <style name="zxing_CaptureTheme" parent="Theme.AppCompat.Light.NoActionBar">
+      <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+      <item name="android:statusBarColor">#ffb341</item>
+      <item name="windowActionBar">false</item>
+
+      <item name="colorPrimary">#ffb341</item>
+
+      <item name="colorPrimaryDark">#ffb341</item>
+
+      <item name="colorAccent">#ffb341</item>
+
+
   </style>
 </resources>

@@ -23,7 +23,6 @@ subprojects {
 
         project.ext.artifactId = project.name // Default to subproject name
 
-
         afterEvaluate {
 
             task sourceJar(type: Jar) {
