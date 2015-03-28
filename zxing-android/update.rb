@@ -39,7 +39,7 @@ Dir['src/com/google/zxing/client/android/**/*.java'].each do |our_file|
 end
 
 
-remove_all orig_prefix, %w(HttpHelper.java HelpActivity.java ScanFromWebPageManager.java Contents.java book history result share wifi clipboard encode)
+remove_all orig_prefix, %w(HttpHelper.java HelpActivity.java ScanFromWebPageManager.java Contents.java IntentSource.java LocaleManager.java PreferencesFragment.java book history result share wifi clipboard encode)
 
 
 
