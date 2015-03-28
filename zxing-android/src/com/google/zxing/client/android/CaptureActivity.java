@@ -168,12 +168,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-    if (prefs.getBoolean(PreferencesActivity.KEY_DISABLE_AUTO_ORIENTATION, true)) {
-      setRequestedOrientation(getCurrentOrientation());
-    } else {
-      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-    }
-
     resetStatusView();
 
     SurfaceView surfaceView = (SurfaceView) findViewById(R.id.zxing_preview_view);
@@ -209,6 +203,15 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         source = IntentSource.NATIVE_APP_INTENT;
         decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
         decodeHints = DecodeHintManager.parseDecodeHints(intent);
+
+
+        int orientation = intent.getIntExtra(Intents.Scan.ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        if(orientation == ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
+          // Lock to landscape or reverse landscape
+          setRequestedOrientation(getCurrentOrientation());
+        } else {
+          setRequestedOrientation(orientation);
+        }
 
         if (intent.getBooleanExtra(Intents.Scan.WIDE, false)) {
           WindowManager window = getWindowManager();

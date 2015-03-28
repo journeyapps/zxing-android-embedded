@@ -23,6 +23,7 @@ import android.hardware.Camera;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
+import android.view.Surface;
 import android.view.WindowManager;
 
 import com.google.zxing.client.android.PreferencesActivity;
@@ -77,10 +78,10 @@ final class CameraConfigurationManager {
     initializeTorch(parameters, prefs, safeMode);
 
     CameraConfigurationUtils.setFocus(
-        parameters,
-        prefs.getBoolean(PreferencesActivity.KEY_AUTO_FOCUS, true),
-        prefs.getBoolean(PreferencesActivity.KEY_DISABLE_CONTINUOUS_FOCUS, true),
-        safeMode);
+            parameters,
+            prefs.getBoolean(PreferencesActivity.KEY_AUTO_FOCUS, true),
+            prefs.getBoolean(PreferencesActivity.KEY_DISABLE_CONTINUOUS_FOCUS, true),
+            safeMode);
 
     if (!safeMode) {
       if (prefs.getBoolean(PreferencesActivity.KEY_INVERT_SCAN, false)) {
@@ -105,6 +106,7 @@ final class CameraConfigurationManager {
 
     camera.setParameters(parameters);
 
+
     Camera.Parameters afterParameters = camera.getParameters();
     Camera.Size afterSize = afterParameters.getPreviewSize();
     if (afterSize!= null && (cameraResolution.x != afterSize.width || cameraResolution.y != afterSize.height)) {
@@ -113,6 +115,30 @@ final class CameraConfigurationManager {
       cameraResolution.x = afterSize.width;
       cameraResolution.y = afterSize.height;
     }
+  }
+
+  public void setCameraDisplayOrientation(int cameraId, android.hardware.Camera camera) {
+    android.hardware.Camera.CameraInfo info =
+            new android.hardware.Camera.CameraInfo();
+    android.hardware.Camera.getCameraInfo(cameraId, info);
+    int rotation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay()
+            .getRotation();
+    int degrees = 0;
+    switch (rotation) {
+      case Surface.ROTATION_0: degrees = 0; break;
+      case Surface.ROTATION_90: degrees = 90; break;
+      case Surface.ROTATION_180: degrees = 180; break;
+      case Surface.ROTATION_270: degrees = 270; break;
+    }
+
+    int result;
+    if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+      result = (info.orientation + degrees) % 360;
+      result = (360 - result) % 360;  // compensate the mirror
+    } else {  // back-facing
+      result = (info.orientation - degrees + 360) % 360;
+    }
+    camera.setDisplayOrientation(result);
   }
 
   Point getCameraResolution() {

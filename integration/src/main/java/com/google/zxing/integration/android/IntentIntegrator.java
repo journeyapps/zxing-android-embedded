@@ -20,6 +20,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Display;
@@ -249,6 +250,15 @@ public class IntentIntegrator {
         addExtra("SCAN_WIDTH", desiredWidth);
         addExtra("SCAN_HEIGHT", desiredHeight);
         return this;
+    }
+
+    /**
+     * Set the activity orientation.
+     *
+     * @param orientation one of the ActivityInfo.SCREEN_ORIENTATION_* constants
+     */
+    public void setOrientation(int orientation) {
+        addExtra("SCAN_ORIENTATION", orientation);
     }
 
     /**

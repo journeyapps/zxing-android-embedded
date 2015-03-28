@@ -97,7 +97,9 @@ public final class CameraManager {
 
     Camera.Parameters parameters = theCamera.getParameters();
     String parametersFlattened = parameters == null ? null : parameters.flatten(); // Save these, temporarily
+
     try {
+      configManager.setCameraDisplayOrientation(OpenCameraInterface.getCameraId(requestedCameraId), theCamera);
       configManager.setDesiredCameraParameters(theCamera, false);
     } catch (RuntimeException re) {
       // Driver failed
@@ -116,6 +118,8 @@ public final class CameraManager {
         }
       }
     }
+
+
 
   }
 
