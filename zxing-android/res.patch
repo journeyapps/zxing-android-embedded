@@ -1,3 +1,181 @@
+diff --git a/res-orig/layout/zxing_capture.xml b/res/layout/zxing_capture.xml
+index a41b156..582e7f6 100755
+--- a/res-orig/layout/zxing_capture.xml
++++ b/res/layout/zxing_capture.xml
+@@ -26,173 +26,6 @@
+       android:layout_width="fill_parent"
+       android:layout_height="fill_parent"/>
+ 
+-  <LinearLayout android:id="@+id/zxing_result_view"
+-                android:orientation="vertical"
+-                android:layout_width="fill_parent"
+-                android:layout_height="fill_parent"
+-                android:background="@color/zxing_result_view"
+-                android:visibility="gone"
+-                android:baselineAligned="false">
+-
+-    <LinearLayout
+-        android:orientation="horizontal"
+-        android:layout_width="fill_parent"
+-        android:layout_height="wrap_content"
+-        android:layout_weight="1"
+-        android:gravity="center"
+-        android:padding="@dimen/zxing_standard_padding">
+-
+-      <LinearLayout
+-          android:orientation="vertical"
+-          android:layout_width="wrap_content"
+-          android:layout_height="fill_parent"
+-          android:gravity="right|center_vertical">
+-
+-        <ImageView android:id="@+id/zxing_barcode_image_view"
+-                   android:layout_width="160dip"
+-                   android:layout_height="wrap_content"
+-                   android:maxWidth="160dip"
+-                   android:maxHeight="160dip"
+-                   android:layout_marginBottom="@dimen/zxing_half_padding"
+-                   android:adjustViewBounds="true"
+-                   android:scaleType="centerInside"
+-                   tools:ignore="ContentDescription"/>
+-
+-        <LinearLayout
+-          android:orientation="horizontal"
+-          android:layout_width="wrap_content"
+-          android:layout_height="wrap_content">
+-
+-          <TextView android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content"
+-                    android:text="@string/zxing_msg_default_format"
+-                    android:textColor="@color/zxing_result_minor_text"
+-                    android:textStyle="bold"
+-                    android:paddingRight="@dimen/zxing_half_padding"/>
+-
+-          <TextView android:id="@+id/zxing_format_text_view"
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content"
+-                    android:textColor="@color/zxing_result_minor_text"/>
+-
+-        </LinearLayout>
+-
+-        <LinearLayout
+-          android:orientation="horizontal"
+-          android:layout_width="wrap_content"
+-          android:layout_height="wrap_content">
+-
+-          <TextView android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content"
+-                    android:text="@string/zxing_msg_default_type"
+-                    android:textColor="@color/zxing_result_minor_text"
+-                    android:textStyle="bold"
+-                    android:paddingRight="@dimen/zxing_half_padding"/>
+-
+-          <TextView android:id="@+id/zxing_type_text_view"
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content"
+-                    android:textColor="@color/zxing_result_minor_text"/>
+-
+-        </LinearLayout>
+-
+-        <LinearLayout
+-          android:orientation="horizontal"
+-          android:layout_width="wrap_content"
+-          android:layout_height="wrap_content">
+-
+-          <TextView android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content"
+-                    android:text="@string/zxing_msg_default_time"
+-                    android:textColor="@color/zxing_result_minor_text"
+-                    android:textStyle="bold"
+-                    android:paddingRight="@dimen/zxing_half_padding"/>
+-
+-          <TextView android:id="@+id/zxing_time_text_view"
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content"
+-                    android:textColor="@color/zxing_result_minor_text"/>
+-
+-        </LinearLayout>
+-
+-        <LinearLayout
+-          android:orientation="horizontal"
+-          android:layout_width="wrap_content"
+-          android:layout_height="wrap_content">
+-
+-          <TextView android:id="@+id/zxing_meta_text_view_label"
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content"
+-                    android:text="@string/zxing_msg_default_meta"
+-                    android:textColor="@color/zxing_result_minor_text"
+-                    android:textStyle="bold"
+-                    android:paddingRight="@dimen/zxing_half_padding"/>
+-
+-          <TextView android:id="@+id/zxing_meta_text_view"
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content"
+-                    android:textColor="@color/zxing_result_minor_text"/>
+-
+-        </LinearLayout>
+-
+-      </LinearLayout>
+-
+-      <ScrollView
+-          android:layout_width="wrap_content"
+-          android:layout_height="wrap_content">
+-
+-        <LinearLayout
+-          android:layout_width="wrap_content"
+-          android:layout_height="wrap_content"
+-          android:orientation="vertical">
+-
+-          <TextView android:id="@+id/zxing_contents_text_view"
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content"
+-                    android:textColor="@color/zxing_result_text"
+-                    android:textColorLink="@color/zxing_result_text"
+-                    android:textSize="22sp"
+-                    android:paddingLeft="12dip"
+-                    android:autoLink="web"
+-                    android:textIsSelectable="true"/>
+-
+-          <TextView android:id="@+id/zxing_contents_supplement_text_view"
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content"
+-                    android:textColor="@color/zxing_result_text"
+-                    android:textColorLink="@color/zxing_result_text"
+-                    android:paddingLeft="12dip"
+-                    android:autoLink="web"
+-                    android:textIsSelectable="true"/>
+-
+-        </LinearLayout>
+-
+-      </ScrollView>
+-
+-    </LinearLayout>
+-
+-    <LinearLayout android:id="@+id/zxing_result_button_view"
+-                  android:layout_width="fill_parent"
+-                  android:layout_height="wrap_content"
+-                  android:orientation="horizontal"
+-                  android:gravity="center">
+-
+-      <Button style="@style/zxing_ResultButton"
+-              android:visibility="gone"/>
+-
+-      <Button style="@style/zxing_ResultButton"
+-              android:visibility="gone"/>
+-
+-      <Button style="@style/zxing_ResultButton"
+-              android:visibility="gone"/>
+-
+-      <Button style="@style/zxing_ResultButton"
+-              android:visibility="gone"/>
+-
+-    </LinearLayout>
+-
+-  </LinearLayout>
+-
+   <TextView android:id="@+id/zxing_status_view"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
 diff --git a/res-orig/values/zxing_themes.xml b/res/values/zxing_themes.xml
 index 18ac886..f219cf0 100644
 --- a/res-orig/values/zxing_themes.xml
