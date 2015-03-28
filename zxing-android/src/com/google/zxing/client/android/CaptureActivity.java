@@ -16,16 +16,17 @@
 
 package com.google.zxing.client.android;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -51,7 +52,6 @@ import com.google.zxing.client.android.camera.CameraManager;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.Map;
 
 /**
@@ -62,40 +62,31 @@ import java.util.Map;
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Sean Owen
  */
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
 public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
 
   private static final String TAG = CaptureActivity.class.getSimpleName();
 
   private static final long DEFAULT_INTENT_RESULT_DURATION_MS = 1500L;
-  private static final long BULK_MODE_SCAN_DELAY_MS = 1000L;
 
   private static final String[] ZXING_URLS = { "http://zxing.appspot.com/scan", "zxing://scan/" };
 
-  private static final Collection<ResultMetadataType> DISPLAYABLE_METADATA_TYPES =
-      EnumSet.of(ResultMetadataType.ISSUE_NUMBER,
-                 ResultMetadataType.SUGGESTED_PRICE,
-                 ResultMetadataType.ERROR_CORRECTION_LEVEL,
-                 ResultMetadataType.POSSIBLE_COUNTRY);
   public static final java.lang.String ZXING_CAPTURE_LAYOUT_ID_KEY = "ZXING_CAPTURE_LAYOUT_ID_KEY";
 
   private CameraManager cameraManager;
   private CaptureActivityHandler handler;
-  private Result savedResultToShow;
   private ViewfinderView viewfinderView;
   private TextView statusView;
   private View resultView;
   private Result lastResult;
   private boolean hasSurface;
   private IntentSource source;
-  private String sourceUrl;
   private Collection<BarcodeFormat> decodeFormats;
   private Map<DecodeHintType,?> decodeHints;
   private String characterSet;
   private InactivityTimer inactivityTimer;
   private BeepManager beepManager;
   private AmbientLightManager ambientLightManager;
-
-  private Button cancelButton;
 
   ViewfinderView getViewfinderView() {
     return viewfinderView;
@@ -132,17 +123,17 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     PreferenceManager.setDefaultValues(this, R.xml.zxing_preferences, false);
 
-    cancelButton = (Button) findViewById(R.id.zxing_back_button);
+    Button cancelButton = (Button) findViewById(R.id.zxing_back_button);
 
     // Since the layout can be dynamically set by the Intent, cancelButton may not be present
     if (cancelButton != null) {
       cancelButton.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View view) {
-                  setResult(RESULT_CANCELED);
-                  finish();
-              }
-          });
+        @Override
+        public void onClick(View view) {
+          setResult(RESULT_CANCELED);
+          finish();
+        }
+      });
     }
 
   }
@@ -165,8 +156,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     handler = null;
     lastResult = null;
-
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
     resetStatusView();
 
@@ -208,8 +197,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         int orientation = intent.getIntExtra(Intents.Scan.ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         if(orientation == ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
           // Lock to landscape or reverse landscape
+          //noinspection ResourceType
           setRequestedOrientation(getCurrentOrientation());
         } else {
+          //noinspection ResourceType
           setRequestedOrientation(orientation);
         }
 
@@ -248,7 +239,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
         // Scan only products and send the result to mobile Product Search.
         source = IntentSource.PRODUCT_SEARCH_LINK;
-        sourceUrl = dataString;
         decodeFormats = DecodeFormatManager.PRODUCT_FORMATS;
 
       } else if (isZXingURL(dataString)) {
@@ -256,7 +246,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         // Scan formats requested in query string (all formats if none specified).
         // If a return URL is specified, send the results there. Otherwise, handle it ourselves.
         source = IntentSource.ZXING_LINK;
-        sourceUrl = dataString;
         Uri inputUri = Uri.parse(dataString);
         decodeFormats = DecodeFormatManager.parseDecodeFormats(inputUri);
         // Allow a sub-set of the hints to be specified by the caller.
@@ -343,22 +332,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         return true;
     }
     return super.onKeyDown(keyCode, event);
-  }
-
-  private void decodeOrStoreSavedBitmap(Bitmap bitmap, Result result) {
-    // Bitmap isn't used yet -- will be used soon
-    if (handler == null) {
-      savedResultToShow = result;
-    } else {
-      if (result != null) {
-        savedResultToShow = result;
-      }
-      if (savedResultToShow != null) {
-        Message message = Message.obtain(handler, R.id.zxing_decode_succeeded, savedResultToShow);
-        handler.sendMessage(message);
-      }
-      savedResultToShow = null;
-    }
   }
 
   @Override
@@ -526,7 +499,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       if (handler == null) {
         handler = new CaptureActivityHandler(this, decodeFormats, decodeHints, characterSet, cameraManager);
       }
-      decodeOrStoreSavedBitmap(null, null);
     } catch (IOException ioe) {
       Log.w(TAG, ioe);
       displayFrameworkBugMessageAndExit();
