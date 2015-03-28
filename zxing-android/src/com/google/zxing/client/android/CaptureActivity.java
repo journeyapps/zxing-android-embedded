@@ -25,7 +25,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -68,8 +67,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private static final String TAG = CaptureActivity.class.getSimpleName();
 
   private static final long DEFAULT_INTENT_RESULT_DURATION_MS = 0L;
-
-  private static final String[] ZXING_URLS = { "http://zxing.appspot.com/scan", "zxing://scan/" };
 
   public static final java.lang.String ZXING_CAPTURE_LAYOUT_ID_KEY = "ZXING_CAPTURE_LAYOUT_ID_KEY";
 
@@ -182,7 +179,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     if (intent != null) {
 
       String action = intent.getAction();
-      String dataString = intent.getDataString();
 
       if (Intents.Scan.ACTION.equals(action)) {
 
@@ -231,24 +227,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           statusView.setText(customPromptMessage);
         }
 
-      } else if (dataString != null &&
-                 dataString.contains("http://www.google") &&
-                 dataString.contains("/m/products/scan")) {
-
-        // Scan only products and send the result to mobile Product Search.
-        source = IntentSource.PRODUCT_SEARCH_LINK;
-        decodeFormats = DecodeFormatManager.PRODUCT_FORMATS;
-
-      } else if (isZXingURL(dataString)) {
-
-        // Scan formats requested in query string (all formats if none specified).
-        // If a return URL is specified, send the results there. Otherwise, handle it ourselves.
-        source = IntentSource.ZXING_LINK;
-        Uri inputUri = Uri.parse(dataString);
-        decodeFormats = DecodeFormatManager.parseDecodeFormats(inputUri);
-        // Allow a sub-set of the hints to be specified by the caller.
-        decodeHints = DecodeHintManager.parseDecodeHints(inputUri);
-
       }
 
       characterSet = intent.getStringExtra(Intents.Scan.CHARACTER_SET);
@@ -265,18 +243,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       default:
         return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
     }
-  }
-
-  private static boolean isZXingURL(String dataString) {
-    if (dataString == null) {
-      return false;
-    }
-    for (String url : ZXING_URLS) {
-      if (dataString.startsWith(url)) {
-        return true;
-      }
-    }
-    return false;
   }
 
   @Override
