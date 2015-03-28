@@ -74,9 +74,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private CaptureActivityHandler handler;
   private ViewfinderView viewfinderView;
   private TextView statusView;
-  private Result lastResult;
   private boolean hasSurface;
-  private IntentSource source;
   private Collection<BarcodeFormat> decodeFormats;
   private Map<DecodeHintType,?> decodeHints;
   private String characterSet;
@@ -103,7 +101,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     Window window = getWindow();
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-    // If the resource id with a layout was provided, set up this leyout
+    // If the resource id with a layout was provided, set up this layout
     Bundle extras = getIntent().getExtras();
 
     int zxingCaptureLayoutResourceId = R.layout.zxing_capture;
@@ -150,7 +148,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     statusView = (TextView) findViewById(R.id.zxing_status_view);
 
     handler = null;
-    lastResult = null;
 
     resetStatusView();
 
@@ -172,7 +169,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     Intent intent = getIntent();
 
-    source = IntentSource.NONE;
     decodeFormats = null;
     characterSet = null;
 
@@ -183,7 +179,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       if (Intents.Scan.ACTION.equals(action)) {
 
         // Scan the formats the intent requested, and return the result to the calling activity.
-        source = IntentSource.NATIVE_APP_INTENT;
         decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
         decodeHints = DecodeHintManager.parseDecodeHints(intent);
 
@@ -273,16 +268,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     switch (keyCode) {
       case KeyEvent.KEYCODE_BACK:
-        if (source == IntentSource.NATIVE_APP_INTENT) {
-          setResult(RESULT_CANCELED);
-          finish();
-          return true;
-        }
-        if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK) && lastResult != null) {
-          restartPreviewAfterDelay(0L);
-          return true;
-        }
-        break;
+        setResult(RESULT_CANCELED);
+        finish();
+        return true;
       case KeyEvent.KEYCODE_FOCUS:
       case KeyEvent.KEYCODE_CAMERA:
         // Handle these events so they don't launch the Camera app
@@ -327,7 +315,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    */
   public void handleDecode(Result rawResult, Bitmap barcode, float scaleFactor) {
     inactivityTimer.onActivity();
-    lastResult = rawResult;
 
     boolean fromLiveScan = barcode != null;
     if (fromLiveScan) {
@@ -389,53 +376,44 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       viewfinderView.drawResultBitmap(barcode);
     }
 
-    long resultDurationMS;
-    if (getIntent() == null) {
-      resultDurationMS = DEFAULT_INTENT_RESULT_DURATION_MS;
-    } else {
-      resultDurationMS = getIntent().getLongExtra(Intents.Scan.RESULT_DISPLAY_DURATION_MS,
+    long resultDurationMS = getIntent().getLongExtra(Intents.Scan.RESULT_DISPLAY_DURATION_MS,
                                                   DEFAULT_INTENT_RESULT_DURATION_MS);
-    }
 
-    if (source == IntentSource.NATIVE_APP_INTENT) {
-      
-      // Hand back whatever action they requested - this can be changed to Intents.Scan.ACTION when
-      // the deprecated intent is retired.
-      Intent intent = new Intent(getIntent().getAction());
-      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-      intent.putExtra(Intents.Scan.RESULT, rawResult.toString());
-      intent.putExtra(Intents.Scan.RESULT_FORMAT, rawResult.getBarcodeFormat().toString());
-      byte[] rawBytes = rawResult.getRawBytes();
-      if (rawBytes != null && rawBytes.length > 0) {
-        intent.putExtra(Intents.Scan.RESULT_BYTES, rawBytes);
-      }
-      Map<ResultMetadataType,?> metadata = rawResult.getResultMetadata();
-      if (metadata != null) {
-        if (metadata.containsKey(ResultMetadataType.UPC_EAN_EXTENSION)) {
-          intent.putExtra(Intents.Scan.RESULT_UPC_EAN_EXTENSION,
-                          metadata.get(ResultMetadataType.UPC_EAN_EXTENSION).toString());
-        }
-        Number orientation = (Number) metadata.get(ResultMetadataType.ORIENTATION);
-        if (orientation != null) {
-          intent.putExtra(Intents.Scan.RESULT_ORIENTATION, orientation.intValue());
-        }
-        String ecLevel = (String) metadata.get(ResultMetadataType.ERROR_CORRECTION_LEVEL);
-        if (ecLevel != null) {
-          intent.putExtra(Intents.Scan.RESULT_ERROR_CORRECTION_LEVEL, ecLevel);
-        }
-        @SuppressWarnings("unchecked")
-        Iterable<byte[]> byteSegments = (Iterable<byte[]>) metadata.get(ResultMetadataType.BYTE_SEGMENTS);
-        if (byteSegments != null) {
-          int i = 0;
-          for (byte[] byteSegment : byteSegments) {
-            intent.putExtra(Intents.Scan.RESULT_BYTE_SEGMENTS_PREFIX + i, byteSegment);
-            i++;
-          }
-        }
-      }
-      sendReplyMessage(R.id.zxing_return_scan_result, intent, resultDurationMS);
-      
+    // Hand back whatever action they requested - this can be changed to Intents.Scan.ACTION when
+    // the deprecated intent is retired.
+    Intent intent = new Intent(getIntent().getAction());
+    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+    intent.putExtra(Intents.Scan.RESULT, rawResult.toString());
+    intent.putExtra(Intents.Scan.RESULT_FORMAT, rawResult.getBarcodeFormat().toString());
+    byte[] rawBytes = rawResult.getRawBytes();
+    if (rawBytes != null && rawBytes.length > 0) {
+      intent.putExtra(Intents.Scan.RESULT_BYTES, rawBytes);
     }
+    Map<ResultMetadataType,?> metadata = rawResult.getResultMetadata();
+    if (metadata != null) {
+      if (metadata.containsKey(ResultMetadataType.UPC_EAN_EXTENSION)) {
+        intent.putExtra(Intents.Scan.RESULT_UPC_EAN_EXTENSION,
+                        metadata.get(ResultMetadataType.UPC_EAN_EXTENSION).toString());
+      }
+      Number orientation = (Number) metadata.get(ResultMetadataType.ORIENTATION);
+      if (orientation != null) {
+        intent.putExtra(Intents.Scan.RESULT_ORIENTATION, orientation.intValue());
+      }
+      String ecLevel = (String) metadata.get(ResultMetadataType.ERROR_CORRECTION_LEVEL);
+      if (ecLevel != null) {
+        intent.putExtra(Intents.Scan.RESULT_ERROR_CORRECTION_LEVEL, ecLevel);
+      }
+      @SuppressWarnings("unchecked")
+      Iterable<byte[]> byteSegments = (Iterable<byte[]>) metadata.get(ResultMetadataType.BYTE_SEGMENTS);
+      if (byteSegments != null) {
+        int i = 0;
+        for (byte[] byteSegment : byteSegments) {
+          intent.putExtra(Intents.Scan.RESULT_BYTE_SEGMENTS_PREFIX + i, byteSegment);
+          i++;
+        }
+      }
+    }
+    sendReplyMessage(R.id.zxing_return_scan_result, intent, resultDurationMS);
   }
   
   private void sendReplyMessage(int id, Object arg, long delayMS) {
@@ -483,18 +461,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     builder.show();
   }
 
-  public void restartPreviewAfterDelay(long delayMS) {
-    if (handler != null) {
-      handler.sendEmptyMessageDelayed(R.id.zxing_restart_preview, delayMS);
-    }
-    resetStatusView();
-  }
-
   private void resetStatusView() {
     statusView.setText(R.string.zxing_msg_default_status);
     statusView.setVisibility(View.VISIBLE);
     viewfinderView.setVisibility(View.VISIBLE);
-    lastResult = null;
   }
 
   public void drawViewfinder() {
