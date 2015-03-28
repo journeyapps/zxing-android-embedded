@@ -75,8 +75,6 @@ import java.util.Map;
  *
  * <h2>Sharing text via barcode</h2>
  *
- * <p>To share text, encoded as a QR Code on-screen, similarly, see {@link #shareText(CharSequence)}.</p>
- *
  * <p>Some code, particularly download integration, was contributed from the Anobiit application.</p>
  *
  * <h2>Enabling experimental barcode formats</h2>
@@ -92,6 +90,7 @@ import java.util.Map;
  * @author Brad Drehmer
  * @author gcstang
  */
+@SuppressWarnings("unused")
 public class IntentIntegrator {
 
     public static final int REQUEST_CODE = 0x0000c0de; // Only use bottom 16 bits
@@ -255,6 +254,9 @@ public class IntentIntegrator {
     /**
      * Set the activity orientation.
      *
+     * Warning: This is experimental, and not tested on many devices yet. Please report any issues
+     * on https://github.com/journeyapps/zxing-android-embedded/issues
+     *
      * @param orientation one of the ActivityInfo.SCREEN_ORIENTATION_* constants
      */
     public void setOrientation(int orientation) {
@@ -272,7 +274,9 @@ public class IntentIntegrator {
         // For zxing-android-legacy, which doesn't support SCAN_WIDE
         WindowManager window = activity.getWindowManager();
         Display display = window.getDefaultDisplay();
+        @SuppressWarnings("deprecation")
         int displayWidth = display.getWidth();
+        @SuppressWarnings("deprecation")
         int displayHeight = display.getHeight();
         if (displayHeight > displayWidth) {
             // This is portrait dimensions, but the legacy barcode scanner is always in landscape mode.
