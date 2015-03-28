@@ -41,8 +41,7 @@ end
 
 # Remove unsused resource files
 remove_all 'res-orig/', %w(drawable drawable-*)
-remove_all 'res-orig/layout/', %w(zxing_encode.xml zxing_help.xml zxing_share.xml *_list_item.xml zxing_search_book_*.xml)
-remove_all 'res-orig/', %w(layout-land menu)
+remove_all 'res-orig/', %w(layout layout-ldpi layout-land menu)
 
 
 # Remove strings we don't use

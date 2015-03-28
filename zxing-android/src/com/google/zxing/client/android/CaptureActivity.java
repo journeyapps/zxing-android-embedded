@@ -77,7 +77,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private CaptureActivityHandler handler;
   private ViewfinderView viewfinderView;
   private TextView statusView;
-  private View resultView;
   private Result lastResult;
   private boolean hasSurface;
   private IntentSource source;
@@ -151,7 +150,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     viewfinderView = (ViewfinderView) findViewById(R.id.zxing_viewfinder_view);
     viewfinderView.setCameraManager(cameraManager);
 
-    resultView = findViewById(R.id.zxing_result_view);
     statusView = (TextView) findViewById(R.id.zxing_status_view);
 
     handler = null;
@@ -527,7 +525,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
 
   private void resetStatusView() {
-    resultView.setVisibility(View.GONE);
     statusView.setText(R.string.zxing_msg_default_status);
     statusView.setVisibility(View.VISIBLE);
     viewfinderView.setVisibility(View.VISIBLE);
