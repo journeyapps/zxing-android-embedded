@@ -1,3 +1,7 @@
+### 2.2.0
+
+* Experimental setOrientation() option.
+
 ### 2.1.0
 
 * Update to ZXing 3.2.0.
