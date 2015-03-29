@@ -9,7 +9,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.Toast;
 
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Result;
@@ -20,6 +19,12 @@ import com.google.zxing.client.android.R;
  *
  */
 public class BarcodeSurface extends SurfaceView {
+  public static enum DecodeMode {
+    NONE,
+    SINGLE,
+    CONTINUOUS
+  };
+
   private static final String TAG = BarcodeSurface.class.getSimpleName();
 
   private CameraThread.CameraInstance cameraInstance;
@@ -30,6 +35,9 @@ public class BarcodeSurface extends SurfaceView {
   private Handler resultHandler;
 
   private Decoder decoder;
+
+  private DecodeMode decodeMode = DecodeMode.NONE;
+  private BarcodeCallback callback = null;
 
   private final SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
 
@@ -70,10 +78,13 @@ public class BarcodeSurface extends SurfaceView {
     initialize();
   }
 
-  public Decoder getDecoder() {
-    return decoder;
-  }
-
+  /**
+   * Call from UI thread only.
+   *
+   * The decoder's decode method will only be called from a dedicated DecoderThread.
+   *
+   * @param decoder the decoder used to decode barcodes.
+   */
   public void setDecoder(Decoder decoder) {
     this.decoder = decoder;
     if(this.decoderThread != null) {
@@ -81,8 +92,25 @@ public class BarcodeSurface extends SurfaceView {
     }
   }
 
-  private String lastText = null;
+  public Decoder getDecoder() {
+    return decoder;
+  }
 
+  public void decodeSingle(BarcodeCallback callback) {
+    this.decodeMode = DecodeMode.SINGLE;
+    this.callback = callback;
+  }
+
+  public void decodeContinuous(BarcodeCallback callback) {
+    this.decodeMode = DecodeMode.CONTINUOUS;
+    this.callback = callback;
+  }
+
+  public void stopDecoding() {
+    this.decodeMode = DecodeMode.NONE;
+    this.callback = null;
+    // TODO: stop the actual decoding process
+  }
 
   private final Handler.Callback resultCallback = new Handler.Callback() {
     @Override
@@ -90,10 +118,12 @@ public class BarcodeSurface extends SurfaceView {
       if(message.what == R.id.zxing_decode_succeeded) {
         Result result = (Result) message.obj;
 
-        if(result != null && result.getText() != null) {
-          if(!result.getText().equals(lastText)) {
-            Toast.makeText(getContext(), "Scanned: " + result.getText(), Toast.LENGTH_SHORT).show();
-            lastText = result.getText();
+        if(result != null) {
+          if(callback != null && decodeMode != DecodeMode.NONE) {
+            callback.barcodeResult(result);
+            if(decodeMode == DecodeMode.SINGLE) {
+              stopDecoding();
+            }
           }
         }
         Log.d(TAG, "Decode succeeded");
@@ -112,7 +142,12 @@ public class BarcodeSurface extends SurfaceView {
     decoder = new Decoder(new MultiFormatReader());
   }
 
+  /**
+   * Call from UI thread only.
+   */
   public void resume() {
+    Util.validateMainThread();
+
     SurfaceHolder surfaceHolder = getHolder();
     if (hasSurface) {
       // The activity was paused but not stopped, so the surface still exists. Therefore
@@ -125,7 +160,12 @@ public class BarcodeSurface extends SurfaceView {
   }
 
 
-  protected void pause() {
+  /**
+   * Call from UI thread only.
+   */
+  public void pause() {
+    Util.validateMainThread();
+
     if(decoderThread != null) {
       decoderThread.stop();
       decoderThread = null;
@@ -154,10 +194,6 @@ public class BarcodeSurface extends SurfaceView {
 
     decoderThread = new DecoderThread(cameraInstance, decoder, resultHandler);
     decoderThread.start();
-  }
-
-  public void destroy() {
-
   }
 
   private void displayFrameworkBugMessageAndExit() {

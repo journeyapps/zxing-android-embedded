@@ -3,6 +3,7 @@ package com.journeyapps.barcodescanner;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
@@ -37,6 +38,8 @@ public class DecoderThread {
   };
 
   public DecoderThread(CameraThread.CameraInstance cameraInstance, Decoder decoder, Handler resultHandler) {
+    Util.validateMainThread();
+
     this.cameraInstance = cameraInstance;
     this.decoder = decoder;
     this.resultHandler = resultHandler;
@@ -50,14 +53,29 @@ public class DecoderThread {
     this.decoder = decoder;
   }
 
+  /**
+   * Start decoding.
+   *
+   * This must be called from the UI thread.
+   */
   public void start() {
+    Util.validateMainThread();
+
     thread = new HandlerThread(TAG);
     thread.start();
     handler = new Handler(thread.getLooper(), callback);
     requestNextPreview();
   }
 
+
+  /**
+   * Stop decoding.
+   *
+   * This must be called from the UI thread.
+   */
   public void stop() {
+    Util.validateMainThread();
+
     thread.quit();
   }
 

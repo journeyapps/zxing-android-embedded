@@ -3,6 +3,7 @@ package com.journeyapps.barcodescanner;
 import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
@@ -81,6 +82,8 @@ public class CameraThread {
     }
 
     public void open() {
+      Util.validateMainThread();
+
       synchronized (LOCK) {
         openCount += 1;
         enqueue(opener);
@@ -88,6 +91,8 @@ public class CameraThread {
     }
 
     public void close() {
+      Util.validateMainThread();
+
       synchronized (LOCK) {
         enqueue(closer);
       }
@@ -123,6 +128,7 @@ public class CameraThread {
   }
 
   public CameraInstance open(Context context, final SurfaceHolder holder) {
+    Util.validateMainThread();
     return new CameraInstance(context, holder);
   }
 
