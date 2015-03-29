@@ -1,5 +1,6 @@
 package com.journeyapps.barcodescanner;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -8,6 +9,7 @@ import android.os.Message;
 import android.util.Log;
 
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.Reader;
@@ -26,6 +28,7 @@ public class DecoderThread {
   private Handler handler;
   private Decoder decoder;
   private Handler resultHandler;
+  private Rect cropRect;
 
   private final Handler.Callback callback = new Handler.Callback() {
     @Override
@@ -51,6 +54,14 @@ public class DecoderThread {
 
   public void setDecoder(Decoder decoder) {
     this.decoder = decoder;
+  }
+
+  public Rect getCropRect() {
+    return cropRect;
+  }
+
+  public void setCropRect(Rect cropRect) {
+    this.cropRect = cropRect;
   }
 
   /**
@@ -83,11 +94,23 @@ public class DecoderThread {
     cameraInstance.requestPreview(handler, R.id.zxing_decode);
   }
 
+  protected LuminanceSource createSource(byte[] data, int width, int height) {
+    if(this.cropRect == null) {
+      return null;
+    } else if(cameraInstance.getCameraManager().isRotated()) {
+      //noinspection SuspiciousNameCombination
+
+      return new PlanarYUVLuminanceSource(data, width, height, cropRect.top, cropRect.left, cropRect.height(), cropRect.width(), false);
+    } else {
+      return new PlanarYUVLuminanceSource(data, width, height, cropRect.left, cropRect.top, cropRect.width(), cropRect.height(), false);
+    }
+  }
 
   private void decode(byte[] data, int width, int height) {
     long start = System.currentTimeMillis();
     Result rawResult = null;
-    PlanarYUVLuminanceSource source = cameraInstance.getCameraManager().buildLuminanceSource(data, width, height);
+    LuminanceSource source = createSource(data, width, height);
+
     if (source != null) {
       rawResult = decoder.decode(source);
     }

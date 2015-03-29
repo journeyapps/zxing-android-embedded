@@ -31,6 +31,9 @@ public class CaptureActivity2 extends Activity {
     setContentView(R.layout.zxing_capture2);
     surface = (BarcodeView) findViewById(R.id.zxing_barcode_surface);
     surface.decodeContinuous(callback);
+
+    ViewfinderView viewFinder = (ViewfinderView)findViewById(R.id.zxing_viewfinder_view);
+    viewFinder.setBarcodeView(surface);
   }
 
   @Override

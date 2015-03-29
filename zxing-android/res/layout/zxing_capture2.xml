@@ -4,18 +4,29 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <com.journeyapps.barcodescanner.BarcodeView
-        android:id="@+id/zxing_barcode_surface"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"/>
+        android:layout_weight="2">
+
+        <com.journeyapps.barcodescanner.BarcodeView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/zxing_barcode_surface"/>
+
+        <com.journeyapps.barcodescanner.ViewfinderView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/zxing_viewfinder_view"/>
+    </FrameLayout>
+
 
 
     <TextView
         android:id="@+id/zxing_barcode_status"
         android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
+        android:layout_height="30dip"
+        android:layout_weight="0"
         android:text="Scanning..."
         />
 

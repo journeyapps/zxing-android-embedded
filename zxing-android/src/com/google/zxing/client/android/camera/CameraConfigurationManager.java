@@ -160,6 +160,10 @@ final class CameraConfigurationManager {
     }
   }
 
+  public boolean isRotated() {
+    return rotated;
+  }
+
   Point getScreenResolution() {
     return screenResolution;
   }

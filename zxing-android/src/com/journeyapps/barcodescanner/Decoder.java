@@ -1,6 +1,7 @@
 package com.journeyapps.barcodescanner;
 
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.Reader;
@@ -37,7 +38,7 @@ public class Decoder {
    * @param source the image source
    * @return a Result or null
    */
-  public Result decode(PlanarYUVLuminanceSource source) {
+  public Result decode(LuminanceSource source) {
     return decode(toBitmap(source));
   }
 
@@ -49,7 +50,7 @@ public class Decoder {
    * @param source the image source
    * @return a BinaryBitmap
    */
-  protected BinaryBitmap toBitmap(PlanarYUVLuminanceSource source) {
+  protected BinaryBitmap toBitmap(LuminanceSource source) {
     return new BinaryBitmap(new HybridBinarizer(source));
   }
 

@@ -33,7 +33,7 @@ public class MainActivity extends ActionBarActivity {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setCaptureLayout(R.layout.custom_capture_layout);
         integrator.setLegacyCaptureLayout(R.layout.custom_legacy_capture_layout);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
+//        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
         integrator.autoWide();
         integrator.setOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         integrator.initiateScan();

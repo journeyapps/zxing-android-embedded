@@ -1,9 +1,11 @@
 package com.journeyapps.barcodescanner;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -18,10 +20,17 @@ import com.google.zxing.Result;
 import com.google.zxing.client.android.FinishListener;
 import com.google.zxing.client.android.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  */
 public class BarcodeView extends ViewGroup {
+  public static interface StateListener {
+    public void previewReady();
+  }
+
   public static enum DecodeMode {
     NONE,
     SINGLE,
@@ -43,6 +52,8 @@ public class BarcodeView extends ViewGroup {
   private BarcodeCallback callback = null;
 
   private SurfaceView surfaceView;
+
+  private List<StateListener> stateListeners = new ArrayList<>();
 
   private final SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
 
@@ -97,6 +108,18 @@ public class BarcodeView extends ViewGroup {
     }
   }
 
+  public void addStateListener(StateListener listener) {
+    stateListeners.add(listener);
+  }
+
+  private void firePreviewReady() {
+    for (StateListener listener : stateListeners) {
+      listener.previewReady();
+    }
+
+    decoderThread.setCropRect(previewFramingRect);
+  }
+
   public Decoder getDecoder() {
     return decoder;
   }
@@ -131,12 +154,10 @@ public class BarcodeView extends ViewGroup {
             }
           }
         }
-        Log.d(TAG, "Decode succeeded");
       } else if(message.what == R.id.zxing_decode_failed) {
         // Failed. Next preview is automatically tried.
       } else if(message.what == R.id.zxing_prewiew_ready) {
-        Log.d(TAG, "Preview Ready");
-        requestLayout();
+        previewSized(getPreviewSize());
       }
       return false;
     }
@@ -161,38 +182,91 @@ public class BarcodeView extends ViewGroup {
     }
   }
 
-  private boolean layoutWithPreview = false;
-
   private boolean center = false;
 
-  @Override
-  protected void onLayout(boolean changed, int l, int t, int r, int b) {
-    if ((changed || !layoutWithPreview) && getChildCount() > 0) {
-      final View child = surfaceView;
-      final int width = r - l;
-      final int height = b - t;
+  private Rect containerRect;
+  private Point previewSize;
+  private Rect surfaceRect;
 
-      int previewWidth = width;
-      int previewHeight = height;
-      Point previewSize = getPreviewSize();
-      if (previewSize != null) {
-        previewWidth = previewSize.x;
-        previewHeight = previewSize.y;
-        layoutWithPreview = true;
-      }
+  private Rect framingRect = null;
+  private Rect previewFramingRect = null;
 
-      // Center the child SurfaceView within the parent.
-      if (center ^ (width * previewHeight < height * previewWidth)) {
-        final int scaledChildWidth = previewWidth * height / previewHeight;
-        child.layout((width - scaledChildWidth) / 2, 0,
-                (width + scaledChildWidth) / 2, height);
-      } else {
-        final int scaledChildHeight = previewHeight * width / previewWidth;
-        child.layout(0, (height - scaledChildHeight) / 2,
-                width, (height + scaledChildHeight) / 2);
-      }
+  private void calculateFrames() {
+    if(containerRect == null || previewSize == null) {
+      previewFramingRect = null;
+      framingRect = null;
+      surfaceRect = null;
+      return;
     }
 
+    int previewWidth = previewSize.x;
+    int previewHeight = previewSize.y;
+
+    int width = containerRect.width();
+    int height = containerRect.height();
+
+
+    if (center ^ (width * previewHeight < height * previewWidth)) {
+      final int scaledChildWidth = previewWidth * height / previewHeight;
+      surfaceRect = new Rect((width - scaledChildWidth) / 2, 0, (width + scaledChildWidth) / 2, height);
+    } else {
+      final int scaledChildHeight = previewHeight * width / previewWidth;
+      surfaceRect = new Rect(0, (height - scaledChildHeight) / 2,
+              width, (height + scaledChildHeight) / 2);
+    }
+
+    Rect container = new Rect(0, 0, width, height);
+    framingRect = calculateFramingRect(container, surfaceRect);
+    Rect frameInPreview = new Rect(framingRect);
+    frameInPreview.offset(-surfaceRect.left, -surfaceRect.top);
+
+    previewFramingRect = new Rect(frameInPreview.left * previewWidth / surfaceRect.width(),
+            frameInPreview.top * previewHeight / surfaceRect.height(),
+            frameInPreview.right * previewWidth / surfaceRect.width(),
+            frameInPreview.bottom * previewHeight / surfaceRect.height());
+
+    if(previewFramingRect.width() <= 0 || previewFramingRect.height() <= 0) {
+      previewFramingRect = null;
+      framingRect = null;
+    } else {
+      firePreviewReady();
+    }
+  }
+
+  private void containerSized(Rect container) {
+    this.containerRect = container;
+    calculateFrames();
+  }
+
+  private void previewSized(Point size) {
+    this.previewSize = size;
+    calculateFrames();
+    requestLayout();
+  }
+
+
+
+  @SuppressLint("DrawAllocation")
+  @Override
+  protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    if(changed) {
+      containerSized(new Rect(0, 0, r - l, b - t));
+    }
+
+    if(surfaceRect == null) {
+      // HACK
+      surfaceView.layout(0, 0, 1, 1);
+    } else {
+      surfaceView.layout(surfaceRect.left, surfaceRect.top, surfaceRect.right, surfaceRect.bottom);
+    }
+  }
+
+  public Rect getFramingRect() {
+    return framingRect;
+  }
+
+  public Rect getPreviewFramingRect() {
+    return previewFramingRect;
   }
 
   /**
@@ -248,6 +322,27 @@ public class BarcodeView extends ViewGroup {
 
     decoderThread = new DecoderThread(cameraInstance, decoder, resultHandler);
     decoderThread.start();
+  }
+
+  /**
+   * Calculate framing rectangle, relative to the preview frame.
+   *
+   * @param container this container, with left = top = 0
+   * @param surface the SurfaceView, relative to this container
+   * @return the framing rect, relative to this container
+   */
+  protected Rect calculateFramingRect(Rect container, Rect surface) {
+    Rect intersection = new Rect(container);
+    intersection.intersect(surface);
+
+    // margin as 10% of the smaller of width, height
+    int margin = Math.min(intersection.width() / 10, intersection.height() / 10);
+    intersection.inset(margin, margin);
+    if(intersection.height() > intersection.width()) {
+      // We don't want a frame that is taller than wide.
+      intersection.inset(0, (intersection.height() - intersection.width()) / 2);
+    }
+    return intersection;
   }
 
   private void displayFrameworkBugMessageAndExit() {

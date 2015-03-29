@@ -275,6 +275,10 @@ public final class CameraManager {
     return configManager.getPreviewSize();
   }
 
+  public boolean isRotated() {
+    return configManager.isRotated();
+  }
+
   
   /**
    * Allows third party apps to specify the camera ID, rather than determine
