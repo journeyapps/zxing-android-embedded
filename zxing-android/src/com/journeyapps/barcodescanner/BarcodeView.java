@@ -3,12 +3,15 @@ package com.journeyapps.barcodescanner;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Result;
@@ -18,14 +21,14 @@ import com.google.zxing.client.android.R;
 /**
  *
  */
-public class BarcodeSurface extends SurfaceView {
+public class BarcodeView extends ViewGroup {
   public static enum DecodeMode {
     NONE,
     SINGLE,
     CONTINUOUS
   };
 
-  private static final String TAG = BarcodeSurface.class.getSimpleName();
+  private static final String TAG = BarcodeView.class.getSimpleName();
 
   private CameraThread.CameraInstance cameraInstance;
   private boolean hasSurface;
@@ -38,6 +41,8 @@ public class BarcodeSurface extends SurfaceView {
 
   private DecodeMode decodeMode = DecodeMode.NONE;
   private BarcodeCallback callback = null;
+
+  private SurfaceView surfaceView;
 
   private final SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
 
@@ -63,17 +68,17 @@ public class BarcodeSurface extends SurfaceView {
     }
   };
 
-  public BarcodeSurface(Context context) {
+  public BarcodeView(Context context) {
     super(context);
     initialize();
   }
 
-  public BarcodeSurface(Context context, AttributeSet attrs) {
+  public BarcodeView(Context context, AttributeSet attrs) {
     super(context, attrs);
     initialize();
   }
 
-  public BarcodeSurface(Context context, AttributeSet attrs, int defStyleAttr) {
+  public BarcodeView(Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
     initialize();
   }
@@ -129,6 +134,9 @@ public class BarcodeSurface extends SurfaceView {
         Log.d(TAG, "Decode succeeded");
       } else if(message.what == R.id.zxing_decode_failed) {
         // Failed. Next preview is automatically tried.
+      } else if(message.what == R.id.zxing_prewiew_ready) {
+        Log.d(TAG, "Preview Ready");
+        requestLayout();
       }
       return false;
     }
@@ -140,6 +148,51 @@ public class BarcodeSurface extends SurfaceView {
     resultHandler = new Handler(resultCallback);
 
     decoder = new Decoder(new MultiFormatReader());
+
+    surfaceView = new SurfaceView(getContext());
+    addView(surfaceView);
+  }
+
+  private Point getPreviewSize() {
+    if(cameraInstance == null) {
+      return null;
+    } else {
+      return cameraInstance.getCameraManager().getPreviewSize();
+    }
+  }
+
+  private boolean layoutWithPreview = false;
+
+  private boolean center = false;
+
+  @Override
+  protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    if ((changed || !layoutWithPreview) && getChildCount() > 0) {
+      final View child = surfaceView;
+      final int width = r - l;
+      final int height = b - t;
+
+      int previewWidth = width;
+      int previewHeight = height;
+      Point previewSize = getPreviewSize();
+      if (previewSize != null) {
+        previewWidth = previewSize.x;
+        previewHeight = previewSize.y;
+        layoutWithPreview = true;
+      }
+
+      // Center the child SurfaceView within the parent.
+      if (center ^ (width * previewHeight < height * previewWidth)) {
+        final int scaledChildWidth = previewWidth * height / previewHeight;
+        child.layout((width - scaledChildWidth) / 2, 0,
+                (width + scaledChildWidth) / 2, height);
+      } else {
+        final int scaledChildHeight = previewHeight * width / previewWidth;
+        child.layout(0, (height - scaledChildHeight) / 2,
+                width, (height + scaledChildHeight) / 2);
+      }
+    }
+
   }
 
   /**
@@ -148,7 +201,7 @@ public class BarcodeSurface extends SurfaceView {
   public void resume() {
     Util.validateMainThread();
 
-    SurfaceHolder surfaceHolder = getHolder();
+    SurfaceHolder surfaceHolder = surfaceView.getHolder();
     if (hasSurface) {
       // The activity was paused but not stopped, so the surface still exists. Therefore
       // surfaceCreated() won't be called, so init the camera here.
@@ -175,7 +228,7 @@ public class BarcodeSurface extends SurfaceView {
       cameraInstance = null;
     }
     if (!hasSurface) {
-      SurfaceHolder surfaceHolder = getHolder();
+      SurfaceHolder surfaceHolder = surfaceView.getHolder();
       surfaceHolder.removeCallback(surfaceCallback);
     }
   }
@@ -191,6 +244,7 @@ public class BarcodeSurface extends SurfaceView {
     }
 
     cameraInstance = CameraThread.getInstance().open(getContext(), surfaceHolder);
+    cameraInstance.setReadyHandler(resultHandler);
 
     decoderThread = new DecoderThread(cameraInstance, decoder, resultHandler);
     decoderThread.start();

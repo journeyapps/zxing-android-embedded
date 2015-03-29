@@ -39,6 +39,7 @@ final class CameraConfigurationManager {
   private final Context context;
   private Point screenResolution;
   private Point cameraResolution;
+  private boolean rotated = false;
 
   CameraConfigurationManager(Context context) {
     this.context = context;
@@ -139,10 +140,24 @@ final class CameraConfigurationManager {
       result = (info.orientation - degrees + 360) % 360;
     }
     camera.setDisplayOrientation(result);
+
+    rotated = degrees % 180 == 0;
   }
 
   Point getCameraResolution() {
     return cameraResolution;
+  }
+
+  Point getPreviewSize() {
+    if(cameraResolution == null) {
+      return null;
+    }
+    if(rotated) {
+      //noinspection SuspiciousNameCombination
+      return new Point(cameraResolution.y, cameraResolution.x);
+    } else {
+      return cameraResolution;
+    }
   }
 
   Point getScreenResolution() {

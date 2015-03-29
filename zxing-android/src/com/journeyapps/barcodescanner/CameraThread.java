@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+import com.google.zxing.client.android.R;
 import com.google.zxing.client.android.camera.CameraManager;
 
 /**
@@ -36,6 +37,7 @@ public class CameraThread {
   public class CameraInstance {
     private SurfaceHolder surfaceHolder;
     private CameraManager cameraManager;
+    private Handler readyHandler;
 
     public CameraInstance(Context context, final SurfaceHolder surfaceHolder) {
       this.surfaceHolder = surfaceHolder;
@@ -51,6 +53,10 @@ public class CameraThread {
           Log.d(TAG, "Opening camera");
           cameraManager.openDriver(surfaceHolder);
           cameraManager.startPreview();
+
+          if(readyHandler != null) {
+            readyHandler.obtainMessage(R.id.zxing_prewiew_ready).sendToTarget();
+          }
         } catch (Exception e) {
           Log.e(TAG, "Failed to open camera", e);
         }
@@ -76,6 +82,10 @@ public class CameraThread {
         }
       }
     };
+
+    public void setReadyHandler(Handler readyHandler) {
+      this.readyHandler = readyHandler;
+    }
 
     public CameraManager getCameraManager() {
       return cameraManager;
