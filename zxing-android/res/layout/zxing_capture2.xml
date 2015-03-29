@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <com.google.zxing.client.android.BarcodeSurface
+    <com.journeyapps.barcodescanner.BarcodeSurface
         android:id="@+id/zxing_barcode_surface"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

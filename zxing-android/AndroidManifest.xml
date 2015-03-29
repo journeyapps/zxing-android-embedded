@@ -39,7 +39,7 @@
                 android:stateNotNeeded="true"
                 android:theme="@style/zxing_CaptureTheme"
                 android:windowSoftInputMode="stateAlwaysHidden"/>
-      <activity android:name="com.google.zxing.client.android.CaptureActivity2"
+      <activity android:name="com.journeyapps.barcodescanner.CaptureActivity2"
                 android:screenOrientation="sensor"
                 android:theme="@style/zxing_CaptureTheme"
                 android:windowSoftInputMode="stateAlwaysHidden"/>

@@ -1,7 +1,9 @@
-package com.google.zxing.client.android;
+package com.journeyapps.barcodescanner;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+import com.google.zxing.client.android.R;
 
 /**
  *

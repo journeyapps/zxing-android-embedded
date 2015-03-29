@@ -1,4 +1,4 @@
-package com.google.zxing.client.android;
+package com.journeyapps.barcodescanner;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,9 +12,9 @@ import android.view.SurfaceView;
 import android.widget.Toast;
 
 import com.google.zxing.MultiFormatReader;
-import com.google.zxing.Reader;
 import com.google.zxing.Result;
-import com.google.zxing.client.android.camera.CameraThread;
+import com.google.zxing.client.android.FinishListener;
+import com.google.zxing.client.android.R;
 
 /**
  *
@@ -25,11 +25,11 @@ public class BarcodeSurface extends SurfaceView {
   private CameraThread.CameraInstance cameraInstance;
   private boolean hasSurface;
   private Activity activity;
-  private Decoder decoder;
+  private DecoderThread decoderThread;
 
   private Handler resultHandler;
 
-  private Reader barcodeReader;
+  private Decoder decoder;
 
   private final SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
 
@@ -70,19 +70,14 @@ public class BarcodeSurface extends SurfaceView {
     initialize();
   }
 
-  public BarcodeSurface(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-    super(context, attrs, defStyleAttr, defStyleRes);
-    initialize();
+  public Decoder getDecoder() {
+    return decoder;
   }
 
-  public Reader getBarcodeReader() {
-    return barcodeReader;
-  }
-
-  public void setBarcodeReader(Reader barcodeReader) {
-    this.barcodeReader = barcodeReader;
-    if(this.decoder != null) {
-      this.decoder.setReader(barcodeReader);
+  public void setDecoder(Decoder decoder) {
+    this.decoder = decoder;
+    if(this.decoderThread != null) {
+      this.decoderThread.setDecoder(decoder);
     }
   }
 
@@ -114,9 +109,7 @@ public class BarcodeSurface extends SurfaceView {
 
     resultHandler = new Handler(resultCallback);
 
-    if(barcodeReader == null) {
-      barcodeReader = new MultiFormatReader();
-    }
+    decoder = new Decoder(new MultiFormatReader());
   }
 
   public void resume() {
@@ -133,9 +126,9 @@ public class BarcodeSurface extends SurfaceView {
 
 
   protected void pause() {
-    if(decoder != null) {
-      decoder.stop();
-      decoder = null;
+    if(decoderThread != null) {
+      decoderThread.stop();
+      decoderThread = null;
     }
     if(cameraInstance != null) {
       cameraInstance.close();
@@ -152,15 +145,15 @@ public class BarcodeSurface extends SurfaceView {
       throw new IllegalStateException("No SurfaceHolder provided");
     }
 
-    if(cameraInstance != null || decoder != null) {
+    if(cameraInstance != null || decoderThread != null) {
       Log.w(TAG, "initCamera called twice");
       return;
     }
 
     cameraInstance = CameraThread.getInstance().open(getContext(), surfaceHolder);
 
-    decoder = new Decoder(cameraInstance, barcodeReader, resultHandler);
-    decoder.start();
+    decoderThread = new DecoderThread(cameraInstance, decoder, resultHandler);
+    decoderThread.start();
   }
 
   public void destroy() {

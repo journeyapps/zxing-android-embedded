@@ -1,10 +1,12 @@
-package com.google.zxing.client.android.camera;
+package com.journeyapps.barcodescanner;
 
 import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
 import android.view.SurfaceHolder;
+
+import com.google.zxing.client.android.camera.CameraManager;
 
 /**
  *

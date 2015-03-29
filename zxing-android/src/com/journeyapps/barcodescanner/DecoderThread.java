@@ -1,4 +1,4 @@
-package com.google.zxing.client.android;
+package com.journeyapps.barcodescanner;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,19 +11,19 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.Reader;
 import com.google.zxing.Result;
-import com.google.zxing.client.android.camera.CameraThread;
+import com.google.zxing.client.android.R;
 import com.google.zxing.common.HybridBinarizer;
 
 /**
  *
  */
-public class Decoder {
-  private static final String TAG = Decoder.class.getSimpleName();
+public class DecoderThread {
+  private static final String TAG = DecoderThread.class.getSimpleName();
 
   private CameraThread.CameraInstance cameraInstance;
   private HandlerThread thread;
   private Handler handler;
-  private Reader reader;
+  private Decoder decoder;
   private Handler resultHandler;
 
   private final Handler.Callback callback = new Handler.Callback() {
@@ -36,18 +36,18 @@ public class Decoder {
     }
   };
 
-  public Decoder(CameraThread.CameraInstance cameraInstance, Reader reader, Handler resultHandler) {
+  public DecoderThread(CameraThread.CameraInstance cameraInstance, Decoder decoder, Handler resultHandler) {
     this.cameraInstance = cameraInstance;
-    this.reader = reader;
+    this.decoder = decoder;
     this.resultHandler = resultHandler;
   }
 
-  public Reader getReader() {
-    return reader;
+  public Decoder getDecoder() {
+    return decoder;
   }
 
-  public void setReader(Reader reader) {
-    this.reader = reader;
+  public void setDecoder(Decoder decoder) {
+    this.decoder = decoder;
   }
 
   public void start() {
@@ -65,28 +65,13 @@ public class Decoder {
     cameraInstance.requestPreview(handler, R.id.zxing_decode);
   }
 
-  private Result decode(BinaryBitmap bitmap) {
-    try {
-      if(reader instanceof MultiFormatReader) {
-        return ((MultiFormatReader)reader).decodeWithState(bitmap);
-      } else {
-        return reader.decode(bitmap);
-      }
-    } catch (Exception e) {
-      // Decode error, try again next frame
-      return null;
-    } finally {
-      reader.reset();
-    }
-  }
 
   private void decode(byte[] data, int width, int height) {
     long start = System.currentTimeMillis();
     Result rawResult = null;
     PlanarYUVLuminanceSource source = cameraInstance.getCameraManager().buildLuminanceSource(data, width, height);
     if (source != null) {
-      BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-      rawResult = decode(bitmap);
+      rawResult = decoder.decode(source);
     }
 
     if (rawResult != null) {
