@@ -40,9 +40,7 @@
                 android:theme="@style/zxing_CaptureTheme"
                 android:windowSoftInputMode="stateAlwaysHidden"/>
       <activity android:name="com.google.zxing.client.android.CaptureActivity2"
-                android:clearTaskOnLaunch="true"
                 android:screenOrientation="sensor"
-                android:stateNotNeeded="true"
                 android:theme="@style/zxing_CaptureTheme"
                 android:windowSoftInputMode="stateAlwaysHidden"/>
   </application>

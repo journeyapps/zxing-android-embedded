@@ -27,7 +27,7 @@ import java.util.Map;
 public class BarcodeSurface extends SurfaceView {
   private static final String TAG = BarcodeSurface.class.getSimpleName();
 
-  private CameraThread cameraThread;
+  private CameraThread.CameraInstance cameraInstance;
   private boolean hasSurface;
   private Collection<BarcodeFormat> decodeFormats;
   private Map<DecodeHintType,?> decodeHints;
@@ -80,8 +80,6 @@ public class BarcodeSurface extends SurfaceView {
 
   private void initialize() {
     activity = (Activity) getContext();
-
-    cameraThread = CameraThread.getInstance(getContext());
   }
 
   public void resume() {
@@ -102,7 +100,7 @@ public class BarcodeSurface extends SurfaceView {
 //      handler.quitSynchronously();
 //      handler = null;
 //    }
-    cameraThread.closeAsync();
+    cameraInstance.close();
     if (!hasSurface) {
       SurfaceHolder surfaceHolder = getHolder();
       surfaceHolder.removeCallback(surfaceCallback);
@@ -114,10 +112,12 @@ public class BarcodeSurface extends SurfaceView {
       throw new IllegalStateException("No SurfaceHolder provided");
     }
 
-    cameraThread.openAsync(surfaceHolder);
+    cameraInstance = CameraThread.getInstance().open(getContext(), surfaceHolder);
+    cameraInstance.open();
   }
 
   public void destroy() {
+
 //    cameraThread.destroyAsync();
   }
 

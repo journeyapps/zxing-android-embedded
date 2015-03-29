@@ -15,48 +15,46 @@ import java.io.IOException;
 public class CameraThread {
   private static CameraThread instance;
 
-  public static CameraThread getInstance(Context context) {
+  public static CameraThread getInstance() {
     if(instance == null) {
-      instance = new CameraThread(context.getApplicationContext());
+      instance = new CameraThread();
     }
     return instance;
   }
 
   private static final String TAG = CameraThread.class.getSimpleName();
 
-  private Context context;
-  private CameraManager cameraManager;
-
   private Handler handler;
   private HandlerThread thread;
 
-  private CameraThread(Context context) {
-    this.context = context;
-    this.cameraManager = new CameraManager(context);
+  private int openCount = 0;
 
-    this.thread = new HandlerThread("CameraThread");
-    this.thread.start();
-    this.handler = new Handler(thread.getLooper());
+  private final Object LOCK = new Object();
 
-  }
 
-  public void openAsync(final SurfaceHolder holder) {
-    handler.post(new Runnable() {
+  public class CameraInstance {
+    private SurfaceHolder surfaceHolder;
+    private CameraManager cameraManager;
+
+    public CameraInstance(Context context, final SurfaceHolder surfaceHolder) {
+      this.surfaceHolder = surfaceHolder;
+      this.cameraManager = new CameraManager(context);
+    }
+
+    private Runnable opener = new Runnable() {
       @Override
       public void run() {
         try {
           Log.d(TAG, "Opening camera");
-          cameraManager.openDriver(holder);
+          cameraManager.openDriver(surfaceHolder);
           cameraManager.startPreview();
         } catch (Exception e) {
           Log.e(TAG, "Failed to open camera", e);
         }
       }
-    });
-  }
+    };
 
-  public void closeAsync() {
-    handler.post(new Runnable() {
+    private Runnable closer = new Runnable() {
       @Override
       public void run() {
         try {
@@ -66,20 +64,58 @@ public class CameraThread {
         } catch (Exception e) {
           Log.e(TAG, "Failed to close camera", e);
         }
-      }
-    });
-  }
 
-  public void destroyAsync() {
-    handler.post(new Runnable() {
-      @Override
-      public void run() {
-        try {
-          thread.quit();
-        } catch (Exception e) {
-          Log.e(TAG, "Failed to quit thread", e);
+        synchronized (LOCK) {
+          openCount -= 1;
+          if(openCount == 0) {
+            quit();
+          }
         }
       }
-    });
+    };
+
+    public void open() {
+      synchronized (LOCK) {
+        openCount += 1;
+        enqueue(opener);
+      }
+    }
+
+    public void close() {
+      synchronized (LOCK) {
+        enqueue(closer);
+      }
+    }
+  }
+
+
+
+  private CameraThread() {
+  }
+
+  private void enqueue(Runnable runnable) {
+    synchronized (LOCK) {
+      if (this.handler == null) {
+        Log.d(TAG, "Opening thread");
+        this.thread = new HandlerThread("CameraThread");
+        this.thread.start();
+        this.handler = new Handler(thread.getLooper());
+      }
+      this.handler.post(runnable);
+    }
+  }
+
+  public CameraInstance open(Context context, final SurfaceHolder holder) {
+    return new CameraInstance(context, holder);
+  }
+
+
+  private void quit() {
+    Log.d(TAG, "Closing thread");
+    synchronized (LOCK) {
+      this.thread.quit();
+      this.thread = null;
+      this.handler = null;
+    }
   }
 }
