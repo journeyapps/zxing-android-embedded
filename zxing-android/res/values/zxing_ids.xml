@@ -18,9 +18,7 @@
   <item type="id" name="zxing_decode"/>
   <item type="id" name="zxing_decode_failed"/>
   <item type="id" name="zxing_decode_succeeded"/>
-  <item type="id" name="zxing_launch_product_query"/>
   <item type="id" name="zxing_quit"/>
-  <item type="id" name="zxing_restart_preview"/>
   <item type="id" name="zxing_return_scan_result"/>
   <item type="id" name="zxing_back_button"/>
 </resources>
