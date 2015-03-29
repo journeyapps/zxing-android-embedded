@@ -3,16 +3,15 @@ package com.google.zxing.client.android.camera;
 import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
 import android.util.Log;
 import android.view.SurfaceHolder;
-
-import java.io.IOException;
 
 /**
  *
  */
 public class CameraThread {
+  private static final String TAG = CameraThread.class.getSimpleName();
+
   private static CameraThread instance;
 
   public static CameraThread getInstance() {
@@ -22,7 +21,6 @@ public class CameraThread {
     return instance;
   }
 
-  private static final String TAG = CameraThread.class.getSimpleName();
 
   private Handler handler;
   private HandlerThread thread;
@@ -39,6 +37,8 @@ public class CameraThread {
     public CameraInstance(Context context, final SurfaceHolder surfaceHolder) {
       this.surfaceHolder = surfaceHolder;
       this.cameraManager = new CameraManager(context);
+
+      open();
     }
 
     private Runnable opener = new Runnable() {
@@ -74,6 +74,10 @@ public class CameraThread {
       }
     };
 
+    public CameraManager getCameraManager() {
+      return cameraManager;
+    }
+
     public void open() {
       synchronized (LOCK) {
         openCount += 1;
@@ -84,6 +88,17 @@ public class CameraThread {
     public void close() {
       synchronized (LOCK) {
         enqueue(closer);
+      }
+    }
+
+    public void requestPreview(final Handler handler, final int message) {
+      synchronized (LOCK) {
+        enqueue(new Runnable() {
+          @Override
+          public void run() {
+            cameraManager.requestPreviewFrame(handler, message);
+          }
+        });
       }
     }
   }

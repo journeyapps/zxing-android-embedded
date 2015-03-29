@@ -3,23 +3,18 @@ package com.google.zxing.client.android;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.Camera;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.client.android.camera.CameraManager;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.Reader;
+import com.google.zxing.Result;
 import com.google.zxing.client.android.camera.CameraThread;
-
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Map;
 
 /**
  *
@@ -29,10 +24,12 @@ public class BarcodeSurface extends SurfaceView {
 
   private CameraThread.CameraInstance cameraInstance;
   private boolean hasSurface;
-  private Collection<BarcodeFormat> decodeFormats;
-  private Map<DecodeHintType,?> decodeHints;
-  private String characterSet;
   private Activity activity;
+  private Decoder decoder;
+
+  private Handler resultHandler;
+
+  private Reader barcodeReader;
 
   private final SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
 
@@ -78,8 +75,48 @@ public class BarcodeSurface extends SurfaceView {
     initialize();
   }
 
+  public Reader getBarcodeReader() {
+    return barcodeReader;
+  }
+
+  public void setBarcodeReader(Reader barcodeReader) {
+    this.barcodeReader = barcodeReader;
+    if(this.decoder != null) {
+      this.decoder.setReader(barcodeReader);
+    }
+  }
+
+  private String lastText = null;
+
+
+  private final Handler.Callback resultCallback = new Handler.Callback() {
+    @Override
+    public boolean handleMessage(Message message) {
+      if(message.what == R.id.zxing_decode_succeeded) {
+        Result result = (Result) message.obj;
+
+        if(result != null && result.getText() != null) {
+          if(!result.getText().equals(lastText)) {
+            Toast.makeText(getContext(), "Scanned: " + result.getText(), Toast.LENGTH_SHORT).show();
+            lastText = result.getText();
+          }
+        }
+        Log.d(TAG, "Decode succeeded");
+      } else if(message.what == R.id.zxing_decode_failed) {
+        // Failed. Next preview is automatically tried.
+      }
+      return false;
+    }
+  };
+
   private void initialize() {
     activity = (Activity) getContext();
+
+    resultHandler = new Handler(resultCallback);
+
+    if(barcodeReader == null) {
+      barcodeReader = new MultiFormatReader();
+    }
   }
 
   public void resume() {
@@ -96,11 +133,14 @@ public class BarcodeSurface extends SurfaceView {
 
 
   protected void pause() {
-//    if (handler != null) {
-//      handler.quitSynchronously();
-//      handler = null;
-//    }
-    cameraInstance.close();
+    if(decoder != null) {
+      decoder.stop();
+      decoder = null;
+    }
+    if(cameraInstance != null) {
+      cameraInstance.close();
+      cameraInstance = null;
+    }
     if (!hasSurface) {
       SurfaceHolder surfaceHolder = getHolder();
       surfaceHolder.removeCallback(surfaceCallback);
@@ -112,13 +152,19 @@ public class BarcodeSurface extends SurfaceView {
       throw new IllegalStateException("No SurfaceHolder provided");
     }
 
+    if(cameraInstance != null || decoder != null) {
+      Log.w(TAG, "initCamera called twice");
+      return;
+    }
+
     cameraInstance = CameraThread.getInstance().open(getContext(), surfaceHolder);
-    cameraInstance.open();
+
+    decoder = new Decoder(cameraInstance, barcodeReader, resultHandler);
+    decoder.start();
   }
 
   public void destroy() {
 
-//    cameraThread.destroyAsync();
   }
 
   private void displayFrameworkBugMessageAndExit() {
