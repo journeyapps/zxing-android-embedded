@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.zxing.client.android.CaptureActivity2;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -42,6 +43,11 @@ public class MainActivity extends ActionBarActivity {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setCameraId(Camera.CameraInfo.CAMERA_FACING_FRONT);
         integrator.initiateScan();
+    }
+
+    public void scan2(View view) {
+        Intent intent = new Intent(this, CaptureActivity2.class);
+        startActivity(intent);
     }
 
     @Override
