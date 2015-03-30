@@ -94,15 +94,16 @@ public class DecoderThread {
     cameraInstance.requestPreview(handler, R.id.zxing_decode);
   }
 
-  protected LuminanceSource createSource(byte[] data, int width, int height) {
+  protected LuminanceSource createSource(byte[] data, int dataWidth, int dataHeight) {
     if(this.cropRect == null) {
       return null;
     } else if(cameraInstance.getCameraManager().isRotated()) {
-      //noinspection SuspiciousNameCombination
+      byte[] rotated = rotate(data, dataWidth, dataHeight);
 
-      return new PlanarYUVLuminanceSource(data, width, height, cropRect.top, cropRect.left, cropRect.height(), cropRect.width(), false);
+      //noinspection SuspiciousNameCombination
+      return new PlanarYUVLuminanceSource(rotated, dataHeight, dataWidth, cropRect.left, cropRect.top, cropRect.width(), cropRect.height(), false);
     } else {
-      return new PlanarYUVLuminanceSource(data, width, height, cropRect.left, cropRect.top, cropRect.width(), cropRect.height(), false);
+      return new PlanarYUVLuminanceSource(data, dataWidth, dataHeight, cropRect.left, cropRect.top, cropRect.width(), cropRect.height(), false);
     }
   }
 
@@ -134,5 +135,27 @@ public class DecoderThread {
     requestNextPreview();
   }
 
+  /**
+   * Rotate an image by 90 degrees CCW.
+   *
+   * @param data the image data, in with the first width * height bytes being the luminance data.
+   * @param imageWidth the width of the image
+   * @param imageHeight the height of the image
+   * @return the rotated bytes
+   */
+  public static byte[] rotate(byte[] data, int imageWidth, int imageHeight) {
+    // Adapted from http://stackoverflow.com/a/15775173
+    // data may contain more than just y (u and v), but we are only interested in the y section.
+    //
+    byte[] yuv = new byte[imageWidth * imageHeight];
+    int i = 0;
+    for (int x = 0; x < imageWidth; x++) {
+      for (int y = imageHeight - 1; y >= 0; y--) {
+        yuv[i] = data[y * imageWidth + x];
+        i++;
+      }
+    }
+    return yuv;
+  }
 
 }
