@@ -14,8 +14,11 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.Reader;
 import com.google.zxing.Result;
+import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.R;
 import com.google.zxing.common.HybridBinarizer;
+
+import java.util.List;
 
 /**
  *
@@ -131,6 +134,11 @@ public class DecoderThread {
         Message message = Message.obtain(resultHandler, R.id.zxing_decode_failed);
         message.sendToTarget();
       }
+    }
+    if(resultHandler != null) {
+      List<ResultPoint> resultPoints = decoder.getPossibleResultPoints();
+      Message message = Message.obtain(resultHandler, R.id.zxing_possible_result_points, resultPoints);
+      message.sendToTarget();
     }
     requestNextPreview();
   }

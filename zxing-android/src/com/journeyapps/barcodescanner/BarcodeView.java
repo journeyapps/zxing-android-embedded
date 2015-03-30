@@ -15,13 +15,17 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Result;
+import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.FinishListener;
 import com.google.zxing.client.android.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -124,11 +128,26 @@ public class BarcodeView extends ViewGroup {
     return decoder;
   }
 
+  /**
+   * Decode a single barcode, then stop decoding.
+   *
+   * The callback will only be called on the UI thread.
+   *
+   * @param callback called with the barcode result, as well as possible ResultPoints
+   */
   public void decodeSingle(BarcodeCallback callback) {
     this.decodeMode = DecodeMode.SINGLE;
     this.callback = callback;
   }
 
+
+  /**
+   * Continuously decode barcodes. The same barcode may be returned multiple times per second.
+   *
+   * The callback will only be called on the UI thread.
+   *
+   * @param callback called with the barcode result, as well as possible ResultPoints
+   */
   public void decodeContinuous(BarcodeCallback callback) {
     this.decodeMode = DecodeMode.CONTINUOUS;
     this.callback = callback;
@@ -156,6 +175,11 @@ public class BarcodeView extends ViewGroup {
         }
       } else if(message.what == R.id.zxing_decode_failed) {
         // Failed. Next preview is automatically tried.
+      } else if(message.what == R.id.zxing_possible_result_points) {
+        List<ResultPoint> resultPoints = (List<ResultPoint>) message.obj;
+        if(callback != null && decodeMode != DecodeMode.NONE) {
+          callback.possibleResultPoints(resultPoints);
+        }
       } else if(message.what == R.id.zxing_prewiew_ready) {
         previewSized(getPreviewSize());
       }
@@ -163,12 +187,21 @@ public class BarcodeView extends ViewGroup {
     }
   };
 
+  protected Decoder createDefaultDecoder() {
+    MultiFormatReader defaultReader = new MultiFormatReader();
+    Map<DecodeHintType, Object> hints = new HashMap<>();
+    Decoder decoder = new Decoder(defaultReader);
+    hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, decoder);
+    defaultReader.setHints(hints);
+    return decoder;
+  }
+
   private void initialize() {
     activity = (Activity) getContext();
 
     resultHandler = new Handler(resultCallback);
 
-    decoder = new Decoder(new MultiFormatReader());
+    decoder = createDefaultDecoder();
 
     surfaceView = new SurfaceView(getContext());
     addView(surfaceView);
