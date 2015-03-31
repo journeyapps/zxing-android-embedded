@@ -12,7 +12,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.zxing.DecodeHintType;
@@ -21,6 +20,7 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.FinishListener;
 import com.google.zxing.client.android.R;
+import com.journeyapps.barcodescanner.camera.CameraThread;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,14 +1,13 @@
-package com.journeyapps.barcodescanner;
+package com.journeyapps.barcodescanner.camera;
 
 import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
 import com.google.zxing.client.android.R;
-import com.google.zxing.client.android.camera.CameraManager;
+import com.journeyapps.barcodescanner.Util;
 
 /**
  *
@@ -51,7 +50,9 @@ public class CameraThread {
       public void run() {
         try {
           Log.d(TAG, "Opening camera");
-          cameraManager.openDriver(surfaceHolder);
+          cameraManager.open();
+          cameraManager.configure();
+          cameraManager.setPreviewDisplay(surfaceHolder);
           cameraManager.startPreview();
 
           if(readyHandler != null) {
@@ -69,7 +70,7 @@ public class CameraThread {
         try {
           Log.d(TAG, "Closing camera");
           cameraManager.stopPreview();
-          cameraManager.closeDriver();
+          cameraManager.close();
         } catch (Exception e) {
           Log.e(TAG, "Failed to close camera", e);
         }

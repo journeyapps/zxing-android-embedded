@@ -4,19 +4,15 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
-import com.google.zxing.BinaryBitmap;
 import com.google.zxing.LuminanceSource;
-import com.google.zxing.MultiFormatReader;
 import com.google.zxing.PlanarYUVLuminanceSource;
-import com.google.zxing.Reader;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.R;
-import com.google.zxing.common.HybridBinarizer;
+import com.journeyapps.barcodescanner.camera.CameraThread;
 
 import java.util.List;
 
