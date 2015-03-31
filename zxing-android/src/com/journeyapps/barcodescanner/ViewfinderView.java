@@ -24,12 +24,10 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.R;
-import com.google.zxing.client.android.camera.CameraManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,24 +132,20 @@ public final class ViewfinderView extends View {
         lastPossibleResultPoints = currentPossible;
         paint.setAlpha(CURRENT_POINT_OPACITY);
         paint.setColor(resultPointColor);
-        synchronized (currentPossible) {
-          for (ResultPoint point : currentPossible) {
-            canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
-                              frameTop + (int) (point.getY() * scaleY),
-                              POINT_SIZE, paint);
-          }
+        for (ResultPoint point : currentPossible) {
+          canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
+                            frameTop + (int) (point.getY() * scaleY),
+                            POINT_SIZE, paint);
         }
       }
       if (currentLast != null) {
         paint.setAlpha(CURRENT_POINT_OPACITY / 2);
         paint.setColor(resultPointColor);
-        synchronized (currentLast) {
-          float radius = POINT_SIZE / 2.0f;
-          for (ResultPoint point : currentLast) {
-            canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
-                              frameTop + (int) (point.getY() * scaleY),
-                              radius, paint);
-          }
+        float radius = POINT_SIZE / 2.0f;
+        for (ResultPoint point : currentLast) {
+          canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
+                            frameTop + (int) (point.getY() * scaleY),
+                            radius, paint);
         }
       }
 
@@ -184,15 +178,18 @@ public final class ViewfinderView extends View {
     invalidate();
   }
 
+  /**
+   * Only call from the UI thread.
+   *
+   * @param point a point to draw
+   */
   public void addPossibleResultPoint(ResultPoint point) {
     List<ResultPoint> points = possibleResultPoints;
-    synchronized (points) {
-      points.add(point);
-      int size = points.size();
-      if (size > MAX_RESULT_POINTS) {
-        // trim it
-        points.subList(0, size - MAX_RESULT_POINTS / 2).clear();
-      }
+    points.add(point);
+    int size = points.size();
+    if (size > MAX_RESULT_POINTS) {
+      // trim it
+      points.subList(0, size - MAX_RESULT_POINTS / 2).clear();
     }
   }
 
