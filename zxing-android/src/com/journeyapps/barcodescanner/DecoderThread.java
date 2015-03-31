@@ -12,7 +12,7 @@ import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.R;
-import com.journeyapps.barcodescanner.camera.CameraThread;
+import com.journeyapps.barcodescanner.camera.CameraInstance;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import java.util.List;
 public class DecoderThread {
   private static final String TAG = DecoderThread.class.getSimpleName();
 
-  private CameraThread.CameraInstance cameraInstance;
+  private CameraInstance cameraInstance;
   private HandlerThread thread;
   private Handler handler;
   private Decoder decoder;
@@ -39,7 +39,7 @@ public class DecoderThread {
     }
   };
 
-  public DecoderThread(CameraThread.CameraInstance cameraInstance, Decoder decoder, Handler resultHandler) {
+  public DecoderThread(CameraInstance cameraInstance, Decoder decoder, Handler resultHandler) {
     Util.validateMainThread();
 
     this.cameraInstance = cameraInstance;
@@ -90,13 +90,15 @@ public class DecoderThread {
   }
 
   private void requestNextPreview() {
-    cameraInstance.requestPreview(handler, R.id.zxing_decode);
+    if(cameraInstance.isOpen()) {
+      cameraInstance.requestPreview(handler, R.id.zxing_decode);
+    }
   }
 
   protected LuminanceSource createSource(byte[] data, int dataWidth, int dataHeight) {
     if(this.cropRect == null) {
       return null;
-    } else if(cameraInstance.getCameraManager().getDisplayConfiguration().isRotated()) {
+    } else if(cameraInstance.isPreviewRotated()) {
       byte[] rotated = rotate(data, dataWidth, dataHeight);
 
       //noinspection SuspiciousNameCombination
