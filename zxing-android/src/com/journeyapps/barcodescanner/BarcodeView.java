@@ -30,6 +30,15 @@ import java.util.Map;
 
 /**
  *
+ * Startup sequence:
+ *
+ * 1. open camera.
+ * 2. layout surface container, to get size
+ * 3. set display config, according to surface container size
+ * 4. configure()
+ * 5. wait for preview size to be ready
+ * 6. set surface size according to preview size
+ * 7. set surface and start preview
  */
 public class BarcodeView extends ViewGroup {
   public static interface StateListener {
@@ -69,7 +78,7 @@ public class BarcodeView extends ViewGroup {
       }
       if (!hasSurface) {
         hasSurface = true;
-        initCamera(holder);
+        startCameraPreview(holder);
       }
     }
 
@@ -118,11 +127,11 @@ public class BarcodeView extends ViewGroup {
   }
 
   private void firePreviewReady() {
+    decoderThread.setCropRect(previewFramingRect);
+
     for (StateListener listener : stateListeners) {
       listener.previewReady();
     }
-
-    decoderThread.setCropRect(previewFramingRect);
   }
 
   public Decoder getDecoder() {
@@ -181,8 +190,8 @@ public class BarcodeView extends ViewGroup {
         if(callback != null && decodeMode != DecodeMode.NONE) {
           callback.possibleResultPoints(resultPoints);
         }
-      } else if(message.what == R.id.zxing_prewiew_ready) {
-        previewSized(getPreviewSize());
+      } else if(message.what == R.id.zxing_prewiew_size_ready) {
+        previewSized((Point)message.obj);
       }
       return false;
     }
@@ -204,16 +213,13 @@ public class BarcodeView extends ViewGroup {
 
     decoder = createDefaultDecoder();
 
-    surfaceView = new SurfaceView(getContext());
-    addView(surfaceView);
+    initCamera();
   }
 
-  private Point getPreviewSize() {
-    if(cameraInstance == null) {
-      return null;
-    } else {
-      return cameraInstance.getPreviewSize();
-    }
+  private void setupSurfaceView() {
+    surfaceView = new SurfaceView(getContext());
+    surfaceView.getHolder().addCallback(surfaceCallback);
+    addView(surfaceView);
   }
 
   private boolean center = false;
@@ -230,7 +236,7 @@ public class BarcodeView extends ViewGroup {
       previewFramingRect = null;
       framingRect = null;
       surfaceRect = null;
-      return;
+      throw new IllegalStateException("containerRect or previewSize is not set yet");
     }
 
     int previewWidth = previewSize.x;
@@ -262,6 +268,7 @@ public class BarcodeView extends ViewGroup {
     if(previewFramingRect.width() <= 0 || previewFramingRect.height() <= 0) {
       previewFramingRect = null;
       framingRect = null;
+      Log.w(TAG, "Preview frame is too small");
     } else {
       firePreviewReady();
     }
@@ -269,13 +276,16 @@ public class BarcodeView extends ViewGroup {
 
   private void containerSized(Rect container) {
     this.containerRect = container;
-    calculateFrames();
+    if(cameraInstance.getDisplayConfiguration() == null) {
+      cameraInstance.setDisplayConfiguration(new DisplayConfiguration(getDisplayRotation(), new Point(container.width(), container.height())));
+      cameraInstance.configureCamera();
+    }
   }
 
   private void previewSized(Point size) {
     this.previewSize = size;
     calculateFrames();
-    requestLayout();
+    setupSurfaceView();
   }
 
 
@@ -287,11 +297,13 @@ public class BarcodeView extends ViewGroup {
       containerSized(new Rect(0, 0, r - l, b - t));
     }
 
-    if(surfaceRect == null) {
-      // HACK
-      surfaceView.layout(0, 0, 1, 1);
-    } else {
-      surfaceView.layout(surfaceRect.left, surfaceRect.top, surfaceRect.right, surfaceRect.bottom);
+    if(surfaceView != null) {
+      if (surfaceRect == null) {
+        // HACK
+        surfaceView.layout(0, 0, 1, 1);
+      } else {
+        surfaceView.layout(surfaceRect.left, surfaceRect.top, surfaceRect.right, surfaceRect.bottom);
+      }
     }
   }
 
@@ -309,14 +321,14 @@ public class BarcodeView extends ViewGroup {
   public void resume() {
     Util.validateMainThread();
 
-    SurfaceHolder surfaceHolder = surfaceView.getHolder();
+//    SurfaceHolder surfaceHolder = surfaceView.getHolder();
     if (hasSurface) {
       // The activity was paused but not stopped, so the surface still exists. Therefore
       // surfaceCreated() won't be called, so init the camera here.
-      initCamera(surfaceHolder);
+      // TODO: initCamera(surfaceHolder);
     } else {
       // Install the callback and wait for surfaceCreated() to init the camera.
-      surfaceHolder.addCallback(surfaceCallback);
+//      surfaceHolder.addCallback(surfaceCallback);
     }
   }
 
@@ -341,24 +353,28 @@ public class BarcodeView extends ViewGroup {
     }
   }
 
-  private void initCamera(SurfaceHolder surfaceHolder) {
-    if (surfaceHolder == null) {
-      throw new IllegalStateException("No SurfaceHolder provided");
-    }
+  private int getDisplayRotation() {
+    return activity.getWindowManager().getDefaultDisplay().getRotation();
+  }
 
+  private void initCamera() {
     if(cameraInstance != null || decoderThread != null) {
       Log.w(TAG, "initCamera called twice");
       return;
     }
 
-    cameraInstance = new CameraInstance(getContext(), surfaceHolder);
+    cameraInstance = new CameraInstance(getContext());
 
-    cameraInstance.setDisplayConfiguration(new DisplayConfiguration(activity.getWindowManager().getDefaultDisplay().getRotation()));
     cameraInstance.setReadyHandler(resultHandler);
     cameraInstance.open();
 
     decoderThread = new DecoderThread(cameraInstance, decoder, resultHandler);
     decoderThread.start();
+  }
+
+  private void startCameraPreview(SurfaceHolder holder) {
+    cameraInstance.setSurfaceHolder(holder);
+    cameraInstance.startPreview();
   }
 
   /**

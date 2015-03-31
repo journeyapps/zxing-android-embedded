@@ -22,5 +22,5 @@
   <item type="id" name="zxing_quit"/>
   <item type="id" name="zxing_return_scan_result"/>
   <item type="id" name="zxing_back_button"/>
-  <item type="id" name="zxing_prewiew_ready"/>
+  <item type="id" name="zxing_prewiew_size_ready"/>
 </resources>

@@ -22,11 +22,10 @@ public class CameraInstance {
   private DisplayConfiguration displayConfiguration;
   private boolean open = false;
 
-  public CameraInstance(Context context, final SurfaceHolder surfaceHolder) {
+  public CameraInstance(Context context) {
     Util.validateMainThread();
 
     this.cameraThread = CameraThread.getInstance();
-    this.surfaceHolder = surfaceHolder;
     this.cameraManager = new CameraManager(context);
   }
 
@@ -35,42 +34,16 @@ public class CameraInstance {
     cameraManager.setDisplayConfiguration(configuration);
   }
 
-  private Runnable opener = new Runnable() {
-    @Override
-    public void run() {
-      try {
-        Log.d(TAG, "Opening camera");
-        cameraManager.open();
-        cameraManager.configure();
-        cameraManager.setPreviewDisplay(surfaceHolder);
-        cameraManager.startPreview();
-
-        if (readyHandler != null) {
-          readyHandler.obtainMessage(R.id.zxing_prewiew_ready).sendToTarget();
-        }
-      } catch (Exception e) {
-        Log.e(TAG, "Failed to open camera", e);
-      }
-    }
-  };
-
-  private Runnable closer = new Runnable() {
-    @Override
-    public void run() {
-      try {
-        Log.d(TAG, "Closing camera");
-        cameraManager.stopPreview();
-        cameraManager.close();
-      } catch (Exception e) {
-        Log.e(TAG, "Failed to close camera", e);
-      }
-
-      cameraThread.decrementInstances();
-    }
-  };
+  public DisplayConfiguration getDisplayConfiguration() {
+    return displayConfiguration;
+  }
 
   public void setReadyHandler(Handler readyHandler) {
     this.readyHandler = readyHandler;
+  }
+
+  public void setSurfaceHolder(SurfaceHolder surfaceHolder) {
+    this.surfaceHolder = surfaceHolder;
   }
 
   /**
@@ -78,7 +51,7 @@ public class CameraInstance {
    *
    * @return preview size
    */
-  public Point getPreviewSize() {
+  private Point getPreviewSize() {
     return cameraManager.getPreviewSize();
   }
 
@@ -96,6 +69,20 @@ public class CameraInstance {
     open = true;
 
     cameraThread.incrementAndEnqueue(opener);
+  }
+
+  public void configureCamera() {
+    Util.validateMainThread();
+    validateOpen();
+
+    cameraThread.enqueue(configure);
+  }
+
+  public void startPreview() {
+    Util.validateMainThread();
+    validateOpen();
+
+    cameraThread.enqueue(previewStarter);
   }
 
   public void close() {
@@ -128,4 +115,60 @@ public class CameraInstance {
       throw new IllegalStateException("CameraInstance is not open");
     }
   }
+
+
+  private Runnable opener = new Runnable() {
+    @Override
+    public void run() {
+      try {
+        Log.d(TAG, "Opening camera");
+        cameraManager.open();
+      } catch (Exception e) {
+        Log.e(TAG, "Failed to open camera", e);
+      }
+    }
+  };
+
+  private Runnable configure = new Runnable() {
+    @Override
+    public void run() {
+      try {
+        Log.d(TAG, "Configuring camera");
+        cameraManager.configure();
+        if (readyHandler != null) {
+          readyHandler.obtainMessage(R.id.zxing_prewiew_size_ready, getPreviewSize()).sendToTarget();
+        }
+      } catch (Exception e) {
+        Log.e(TAG, "Failed to configure camera", e);
+      }
+    }
+  };
+
+  private Runnable previewStarter = new Runnable() {
+    @Override
+    public void run() {
+      try {
+        Log.d(TAG, "Starting preview");
+        cameraManager.setPreviewDisplay(surfaceHolder);
+        cameraManager.startPreview();
+      } catch (Exception e) {
+        Log.e(TAG, "Failed to start preview", e);
+      }
+    }
+  };
+
+  private Runnable closer = new Runnable() {
+    @Override
+    public void run() {
+      try {
+        Log.d(TAG, "Closing camera");
+        cameraManager.stopPreview();
+        cameraManager.close();
+      } catch (Exception e) {
+        Log.e(TAG, "Failed to close camera", e);
+      }
+
+      cameraThread.decrementInstances();
+    }
+  };
 }

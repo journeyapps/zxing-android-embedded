@@ -30,11 +30,16 @@ import com.google.zxing.client.android.camera.open.OpenCameraInterface;
 import java.io.IOException;
 
 /**
- * This object wraps the Camera service object and expects to be the only one talking to it. The
- * implementation encapsulates the steps needed to take preview-sized images, which are used for
- * both preview and decoding.
  *
- * @author dswitkin@google.com (Daniel Switkin)
+ * Call order:
+ *
+ * 1. setCameraSettings()
+ * 2. open(), set desired preview size (any order)
+ * 3. configure(), setPreviewDisplay(holder) (any order)
+ * 4. startPreview()
+ * 5. requestPreviewFrame (repeat)
+ * 6. stopPreview()
+ * 7. close()
  */
 public final class CameraManager {
 
@@ -68,16 +73,11 @@ public final class CameraManager {
   public CameraManager(Context context) {
     this.context = context;
     previewCallback = new PreviewCallback();
-
-    // 1. Configure settings
-    // 2. open(), set desired preview size (any order)
-    // 3. configure(), setPreviewDisplay(holder) (any order)
-    // 4. startPreview()
-    // 5. requestPreviewFrame (repeat)
-    // 6. stopPreview()
-    // 7. close()
   }
 
+  /**
+   * Must be called from camera thread.
+   */
   public void open() {
     camera = OpenCameraInterface.open(settings.getRequestedCameraId());
     if(camera == null) {
@@ -89,16 +89,28 @@ public final class CameraManager {
     Camera.getCameraInfo(cameraId, cameraInfo);
   }
 
+  /**
+   * Configure the camera parameters, including preview size.
+   *
+   * The camera must be opened before calling this.
+   *
+   * Must be called from camera thread.
+   */
   public void configure() {
     setParameters();
   }
 
+  /**
+   * Must be called from camera thread.
+   */
   public void setPreviewDisplay(SurfaceHolder holder) throws IOException {
     camera.setPreviewDisplay(holder);
   }
 
   /**
    * Asks the camera hardware to begin drawing preview frames to the screen.
+   *
+   * Must be called from camera thread.
    */
   public void startPreview() {
     Camera theCamera = camera;
@@ -111,6 +123,8 @@ public final class CameraManager {
 
   /**
    * Tells the camera to stop drawing preview frames.
+   *
+   * Must be called from camera thread.
    */
   public void stopPreview() {
     if (autoFocusManager != null) {
@@ -127,6 +141,8 @@ public final class CameraManager {
 
   /**
    * Closes the camera driver if still in use.
+   *
+   * Must be called from camera thread.
    */
   public void close() {
     if (camera != null) {
@@ -291,11 +307,11 @@ public final class CameraManager {
     }
   }
 
-  public CameraSettings getSettings() {
+  public CameraSettings getCameraSettings() {
     return settings;
   }
 
-  public void setSettings(CameraSettings settings) {
+  public void setCameraSettings(CameraSettings settings) {
     this.settings = settings;
   }
 
