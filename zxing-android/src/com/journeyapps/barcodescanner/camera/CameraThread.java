@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
+import android.view.Display;
 import android.view.SurfaceHolder;
 
 import com.google.zxing.client.android.R;
@@ -41,8 +42,10 @@ public class CameraThread {
     public CameraInstance(Context context, final SurfaceHolder surfaceHolder) {
       this.surfaceHolder = surfaceHolder;
       this.cameraManager = new CameraManager(context);
+    }
 
-      open();
+    public void setDisplayConfiguration(DisplayConfiguration configuration) {
+      cameraManager.setDisplayConfiguration(configuration);
     }
 
     private Runnable opener = new Runnable() {
@@ -138,7 +141,7 @@ public class CameraThread {
     }
   }
 
-  public CameraInstance open(Context context, final SurfaceHolder holder) {
+  public CameraInstance create(Context context, final SurfaceHolder holder) {
     Util.validateMainThread();
     return new CameraInstance(context, holder);
   }

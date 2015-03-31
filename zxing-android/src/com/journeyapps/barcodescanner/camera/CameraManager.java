@@ -23,7 +23,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
-import android.view.WindowManager;
 
 import com.google.zxing.client.android.camera.CameraConfigurationUtils;
 import com.google.zxing.client.android.camera.open.OpenCameraInterface;
@@ -52,17 +51,9 @@ public final class CameraManager {
   private String defaultParameters;
 
   // User parameters
-  private int requestedCameraId = OpenCameraInterface.NO_REQUESTED_CAMERA;
-  private boolean invertScan = false;
-  private boolean disableBarcodeSceneMode = true;
-  private boolean disableMetering = true;
-  private boolean autoFocus = true;
-  private boolean disableContinuousFocus = true;
+  private CameraSettings settings = new CameraSettings();
 
-
-  private boolean rotated;
-  private Point desiredLandscapeSize;
-  private Point desiredRotatedSize;
+  private DisplayConfiguration displayConfiguration;
 
   // Actual chosen preview size
   private Point requestedPreviewSize;
@@ -78,21 +69,22 @@ public final class CameraManager {
     this.context = context;
     previewCallback = new PreviewCallback();
 
-    // 1. open(), set desired preview size and other parameters (any order)
-    // 2. configure(), setPreviewDisplay(holder) (any order)
-    // 3. startPreview()
-    // 4. requestPreviewFrame (repeat)
-    // 5. stopPreview()
-    // 6. close()
+    // 1. Configure settings
+    // 2. open(), set desired preview size (any order)
+    // 3. configure(), setPreviewDisplay(holder) (any order)
+    // 4. startPreview()
+    // 5. requestPreviewFrame (repeat)
+    // 6. stopPreview()
+    // 7. close()
   }
 
   public void open() {
-    camera = OpenCameraInterface.open(requestedCameraId);
+    camera = OpenCameraInterface.open(settings.getRequestedCameraId());
     if(camera == null) {
       throw new RuntimeException("Failed to open camera");
     }
 
-    int cameraId = OpenCameraInterface.getCameraId(requestedCameraId);
+    int cameraId = OpenCameraInterface.getCameraId(settings.getRequestedCameraId());
     cameraInfo = new Camera.CameraInfo();
     Camera.getCameraInfo(cameraId, cameraInfo);
   }
@@ -170,20 +162,20 @@ public final class CameraManager {
     }
 
 
-    CameraConfigurationUtils.setFocus(parameters,autoFocus, disableContinuousFocus, safeMode);
+    CameraConfigurationUtils.setFocus(parameters, settings.isAutoFocus(), settings.isDisableContinuousFocus(), safeMode);
 
     if (!safeMode) {
       CameraConfigurationUtils.setTorch(parameters, false);
 
-      if (invertScan) {
+      if (settings.isInvertScan()) {
         CameraConfigurationUtils.setInvertColor(parameters);
       }
 
-      if (!disableBarcodeSceneMode) {
+      if (!settings.isDisableBarcodeSceneMode()) {
         CameraConfigurationUtils.setBarcodeSceneMode(parameters);
       }
 
-      if (!disableMetering) {
+      if (!settings.isDisableMetering()) {
         CameraConfigurationUtils.setVideoStabilization(parameters);
         CameraConfigurationUtils.setFocusArea(parameters);
         CameraConfigurationUtils.setMetering(parameters);
@@ -191,17 +183,10 @@ public final class CameraManager {
 
     }
 
-    if(desiredRotatedSize != null) {
-      if(rotated) {
-        //noinspection SuspiciousNameCombination
-        desiredLandscapeSize = new Point(desiredRotatedSize.y, desiredRotatedSize.x);
-      } else {
-        desiredLandscapeSize = desiredRotatedSize;
-      }
-    }
+    Point desiredSize = displayConfiguration.getDesiredLandscapePreviewSize();
 
-    if(desiredLandscapeSize != null) {
-      requestedPreviewSize = CameraConfigurationUtils.findBestPreviewSizeValue(parameters, desiredLandscapeSize);
+    if(desiredSize != null) {
+      requestedPreviewSize = CameraConfigurationUtils.findBestPreviewSizeValue(parameters, desiredSize);
       parameters.setPreviewSize(requestedPreviewSize.x, requestedPreviewSize.y);
     }
 
@@ -213,8 +198,7 @@ public final class CameraManager {
 
 
   private void setCameraDisplayOrientation() {
-    int rotation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay()
-            .getRotation();
+    int rotation = displayConfiguration.getRotation();
     int degrees = 0;
     switch (rotation) {
       case Surface.ROTATION_0: degrees = 0; break;
@@ -231,8 +215,6 @@ public final class CameraManager {
       result = (cameraInfo.orientation - degrees + 360) % 360;
     }
     camera.setDisplayOrientation(result);
-
-    rotated = degrees % 180 == 0;
   }
 
 
@@ -260,6 +242,7 @@ public final class CameraManager {
     } else {
       previewSize = new Point(realPreviewSize.width, realPreviewSize.height);
     }
+    previewCallback.setResolution(previewSize);
   }
 
 
@@ -267,12 +250,29 @@ public final class CameraManager {
     return camera != null;
   }
 
-  public boolean isRotated() {
-    return rotated;
+  /**
+   * Actual preview size in landscpae orientation. null if not determined yet.
+   *
+   * @return preview size
+   */
+  public Point getLandscapePreviewSize() {
+    return previewSize;
   }
 
+  /**
+   * Actual preview size in current rotation. null if not determined yet.
+   *
+   * @return preview size
+   */
   public Point getPreviewSize() {
-    return previewSize;
+    if(previewSize == null) {
+      return null;
+    } else if(displayConfiguration.isRotated()) {
+      //noinspection SuspiciousNameCombination
+      return new Point(previewSize.y, previewSize.x);
+    } else {
+      return previewSize;
+    }
   }
 
   /**
@@ -291,44 +291,19 @@ public final class CameraManager {
     }
   }
 
-
-  /**
-   * Allows third party apps to specify the camera ID, rather than determine
-   * it automatically based on available cameras and their orientation.
-   *
-   * @param cameraId camera ID of the camera to use. A negative value means "no preference".
-   */
-  public void setManualCameraId(int cameraId) {
-    requestedCameraId = cameraId;
+  public CameraSettings getSettings() {
+    return settings;
   }
 
-  public void setInvertScan(boolean invertScan) {
-    this.invertScan = invertScan;
+  public void setSettings(CameraSettings settings) {
+    this.settings = settings;
   }
 
-  public void setDisableBarcodeSceneMode(boolean disableBarcodeSceneMode) {
-    this.disableBarcodeSceneMode = disableBarcodeSceneMode;
+  public DisplayConfiguration getDisplayConfiguration() {
+    return displayConfiguration;
   }
 
-  public void setDisableMetering(boolean disableMetering) {
-    this.disableMetering = disableMetering;
-  }
-
-  public void setAutoFocus(boolean autoFocus) {
-    this.autoFocus = autoFocus;
-  }
-
-  public void setDisableContinuousFocus(boolean disableContinuousFocus) {
-    this.disableContinuousFocus = disableContinuousFocus;
-  }
-
-  public void setDesiredLandscapePreviewSize(Point size) {
-    desiredRotatedSize = null;
-    desiredLandscapeSize = size;
-  }
-
-  public void setDesiredPreviewSize(Point size) {
-    desiredRotatedSize = size;
-    desiredLandscapeSize = null;
+  public void setDisplayConfiguration(DisplayConfiguration displayConfiguration) {
+    this.displayConfiguration = displayConfiguration;
   }
 }

@@ -96,7 +96,7 @@ public class DecoderThread {
   protected LuminanceSource createSource(byte[] data, int dataWidth, int dataHeight) {
     if(this.cropRect == null) {
       return null;
-    } else if(cameraInstance.getCameraManager().isRotated()) {
+    } else if(cameraInstance.getCameraManager().getDisplayConfiguration().isRotated()) {
       byte[] rotated = rotate(data, dataWidth, dataHeight);
 
       //noinspection SuspiciousNameCombination

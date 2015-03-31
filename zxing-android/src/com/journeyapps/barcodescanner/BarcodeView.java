@@ -21,6 +21,7 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.FinishListener;
 import com.google.zxing.client.android.R;
 import com.journeyapps.barcodescanner.camera.CameraThread;
+import com.journeyapps.barcodescanner.camera.DisplayConfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -350,8 +351,11 @@ public class BarcodeView extends ViewGroup {
       return;
     }
 
-    cameraInstance = CameraThread.getInstance().open(getContext(), surfaceHolder);
+    cameraInstance = CameraThread.getInstance().create(getContext(), surfaceHolder);
+
+    cameraInstance.setDisplayConfiguration(new DisplayConfiguration(activity.getWindowManager().getDefaultDisplay().getRotation()));
     cameraInstance.setReadyHandler(resultHandler);
+    cameraInstance.open();
 
     decoderThread = new DecoderThread(cameraInstance, decoder, resultHandler);
     decoderThread.start();
