@@ -77,13 +77,7 @@ public class BarcodeView extends ViewGroup {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-      if (holder == null) {
-        Log.e(TAG, "*** WARNING *** surfaceCreated() gave us a null surface!");
-      }
-      if (!hasSurface) {
-        hasSurface = true;
-        startPreviewIfReady();
-      }
+
     }
 
     @Override
@@ -93,7 +87,17 @@ public class BarcodeView extends ViewGroup {
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
+      if (holder == null) {
+        Log.e(TAG, "*** WARNING *** surfaceChanged() gave us a null surface!");
+        return;
+      }
+      if(!hasSurface && surfaceRect != null) {
+        if(surfaceRect.width() == width && surfaceRect.height() == height) {
+          // We're only ready if the surface has the correct size
+          hasSurface = true;
+          startPreviewIfReady();
+        }
+      }
     }
   };
 
@@ -355,7 +359,7 @@ public class BarcodeView extends ViewGroup {
     if (hasSurface) {
       // The activity was paused but not stopped, so the surface still exists. Therefore
       // surfaceCreated() won't be called, so init the camera here.
-      surfaceCallback.surfaceCreated(surfaceView.getHolder());
+      startPreviewIfReady();
     } else {
       // Install the callback and wait for surfaceCreated() to init the camera.
       surfaceView.getHolder().addCallback(surfaceCallback);
