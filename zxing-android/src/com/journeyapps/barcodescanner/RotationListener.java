@@ -7,6 +7,10 @@ import android.view.WindowManager;
 
 /**
  * Hack to detect when screen rotation is reversed, since that does not cause a configuration change.
+ *
+ * If it is changed through something other than the sensor (e.g. programmatically), this may not work.
+ *
+ * See http://stackoverflow.com/q/9909037
  */
 public abstract class RotationListener extends OrientationEventListener {
   private int lastRotation;

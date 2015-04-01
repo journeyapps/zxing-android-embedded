@@ -53,6 +53,20 @@ public class BarcodeView extends ViewGroup {
     CONTINUOUS
   };
 
+  public static enum PreviewScaleMode {
+    /**
+     * Center the preview inside the BarcodeView. It may contain black bars above and below, or
+     * left and right.
+     */
+    CENTER,
+
+    /**
+     * Drop the preview inside the BarcodeView (default). It will fill all available space, but sections may
+     * be cut off.
+     */
+    CROP
+  };
+
   private static final String TAG = BarcodeView.class.getSimpleName();
 
   private CameraInstance cameraInstance;
@@ -69,9 +83,20 @@ public class BarcodeView extends ViewGroup {
 
   private SurfaceView surfaceView;
 
+  private boolean previewActive = false;
+
   private RotationListener rotationListener;
 
   private List<StateListener> stateListeners = new ArrayList<>();
+
+  private PreviewScaleMode previewScaleMode = PreviewScaleMode.CROP;
+
+  private Rect containerRect;
+  private Point previewSize;
+  private Rect surfaceRect;
+
+  private Rect framingRect = null;
+  private Rect previewFramingRect = null;
 
   private final SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
 
@@ -152,18 +177,28 @@ public class BarcodeView extends ViewGroup {
   }
 
   /**
-   * Call from UI thread only.
+   * Set the Decoder to use. Use this for more advanced customization of the decoding process,
+   * when Decoder#setReader() is not enough.
    *
    * The decoder's decode method will only be called from a dedicated DecoderThread.
+   *
+   * Call this from UI thread only.
    *
    * @param decoder the decoder used to decode barcodes.
    */
   public void setDecoder(Decoder decoder) {
+    Util.validateMainThread();
+
     this.decoder = decoder;
     if(this.decoderThread != null) {
       this.decoderThread.setDecoder(decoder);
     }
   }
+
+  public Decoder getDecoder() {
+    return decoder;
+  }
+
 
   public void addStateListener(StateListener listener) {
     stateListeners.add(listener);
@@ -174,9 +209,17 @@ public class BarcodeView extends ViewGroup {
       listener.previewReady();
     }
   }
+  public PreviewScaleMode getPreviewScaleMode() {
+    return previewScaleMode;
+  }
 
-  public Decoder getDecoder() {
-    return decoder;
+  /**
+   * Set the scale mode of the preview, when the aspect ratio is different from the BarcodeView.
+   *
+   * @param previewScaleMode PreviewScaleMode.CROP or PreviewScaleMode.CENTER
+   */
+  public void setPreviewScaleMode(PreviewScaleMode previewScaleMode) {
+    this.previewScaleMode = previewScaleMode;
   }
 
   /**
@@ -189,6 +232,7 @@ public class BarcodeView extends ViewGroup {
   public void decodeSingle(BarcodeCallback callback) {
     this.decodeMode = DecodeMode.SINGLE;
     this.callback = callback;
+    startDecoderThread();
   }
 
 
@@ -202,8 +246,12 @@ public class BarcodeView extends ViewGroup {
   public void decodeContinuous(BarcodeCallback callback) {
     this.decodeMode = DecodeMode.CONTINUOUS;
     this.callback = callback;
+    startDecoderThread();
   }
 
+  /**
+   * Stop decoding, but do not stop the preview.
+   */
   public void stopDecoding() {
     this.decodeMode = DecodeMode.NONE;
     this.callback = null;
@@ -247,14 +295,6 @@ public class BarcodeView extends ViewGroup {
     return decoder;
   }
 
-  private boolean center = false;
-
-  private Rect containerRect;
-  private Point previewSize;
-  private Rect surfaceRect;
-
-  private Rect framingRect = null;
-  private Rect previewFramingRect = null;
 
   private void calculateFrames() {
     if(containerRect == null || previewSize == null) {
@@ -270,7 +310,8 @@ public class BarcodeView extends ViewGroup {
     int width = containerRect.width();
     int height = containerRect.height();
 
-
+    // Either crop or center the SurfaceView.
+    boolean center = (previewScaleMode == PreviewScaleMode.CENTER);
     if (center ^ (width * previewHeight < height * previewWidth)) {
       final int scaledChildWidth = previewWidth * height / previewHeight;
       surfaceRect = new Rect((width - scaledChildWidth) / 2, 0, (width + scaledChildWidth) / 2, height);
@@ -347,6 +388,9 @@ public class BarcodeView extends ViewGroup {
   }
 
   /**
+   * Start the camera preview and decoding. Typically this should be called from the Activity's
+   * onResume() method.
+   *
    * Call from UI thread only.
    */
   public void resume() {
@@ -372,6 +416,9 @@ public class BarcodeView extends ViewGroup {
 
 
   /**
+   * Pause scanning and the camera preview. Typically this should be called from the Activity's
+   * onPause() method.
+   *
    * Call from UI thread only.
    */
   public void pause() {
@@ -383,6 +430,7 @@ public class BarcodeView extends ViewGroup {
     if(cameraInstance != null) {
       cameraInstance.close();
       cameraInstance = null;
+      previewActive = false;
     }
     if (!hasSurface) {
       SurfaceHolder surfaceHolder = surfaceView.getHolder();
@@ -419,14 +467,24 @@ public class BarcodeView extends ViewGroup {
   }
 
   private void startCameraPreview(SurfaceHolder holder) {
-    cameraInstance.setSurfaceHolder(holder);
-    cameraInstance.startPreview();
+    if(!previewActive) {
+      Log.i(TAG, "Starting preview");
+      cameraInstance.setSurfaceHolder(holder);
+      cameraInstance.startPreview();
+      previewActive = true;
+    }
 
+    startDecoderThread();
+  }
+
+  private void startDecoderThread() {
     stopDecoderThread(); // To be safe
 
-    decoderThread = new DecoderThread(cameraInstance, decoder, resultHandler);
-    decoderThread.setCropRect(previewFramingRect);
-    decoderThread.start();
+    if(decodeMode != DecodeMode.NONE && previewActive) {
+      decoderThread = new DecoderThread(cameraInstance, decoder, resultHandler);
+      decoderThread.setCropRect(previewFramingRect);
+      decoderThread.start();
+    }
   }
 
   /**
