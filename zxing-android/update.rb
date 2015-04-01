@@ -27,22 +27,20 @@ end
 
 # Remove unsused source files
 orig_prefix = 'src-orig/com/google/zxing/client/android/'
-remove_all orig_prefix, %w(HttpHelper.java HelpActivity.java ScanFromWebPageManager.java Contents.java book history result share wifi clipboard encode)
-
 
 # We have custom versions of each of these files - remove the original ones and log the diff
 FileUtils.rm_f 'source.patch'
-Dir['src/com/google/zxing/client/android/*.java'].each do |our_file|
+Dir['src/com/google/zxing/client/android/**/*.java'].each do |our_file|
   orig_file = our_file.gsub(/src/, 'src-orig')
-  `git diff --no-index #{orig_file} #{our_file} >> source.patch`
-  FileUtils.rm orig_file
+  if File.exists? orig_file
+    `git diff --no-index #{orig_file} #{our_file} >> source.patch`
+    FileUtils.rm orig_file
+  end
 end
 
 
-# Remove unsused resource files
-remove_all 'res-orig/', %w(drawable drawable-*)
-remove_all 'res-orig/layout/', %w(zxing_encode.xml zxing_help.xml zxing_share.xml *_list_item.xml zxing_search_book_*.xml)
-remove_all 'res-orig/', %w(layout-land menu)
+remove_all orig_prefix, %w(HttpHelper.java HelpActivity.java ScanFromWebPageManager.java Contents.java IntentSource.java LocaleManager.java PreferencesFragment.java book history result share wifi clipboard encode)
+
 
 
 # Remove strings we don't use
@@ -131,6 +129,13 @@ end
 FileUtils.rm_f 'res.patch'
 Dir['res/**/*.xml'].each do |our_file|
   orig_file = our_file.gsub(/res/, 'res-orig')
-  `git diff --no-index #{orig_file} #{our_file} >> res.patch`
-  FileUtils.rm orig_file
+  if File.exists? orig_file
+    `git diff --no-index #{orig_file} #{our_file} >> res.patch`
+    FileUtils.rm orig_file
+  end
 end
+
+
+# Remove unused resource files
+remove_all 'res-orig/', %w(drawable drawable-*)
+remove_all 'res-orig/', %w(layout layout-ldpi layout-land menu)

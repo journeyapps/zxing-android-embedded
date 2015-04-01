@@ -77,10 +77,7 @@ public final class CaptureActivityHandler extends Handler {
 
   @Override
   public void handleMessage(Message message) {
-    if (message.what == R.id.zxing_restart_preview) {
-      restartPreviewAndDecode();
-
-    } else if (message.what == R.id.zxing_decode_succeeded) {
+    if (message.what == R.id.zxing_decode_succeeded) {
       state = State.SUCCESS;
       Bundle bundle = message.getData();
       Bitmap barcode = null;
@@ -103,35 +100,6 @@ public final class CaptureActivityHandler extends Handler {
     } else if (message.what == R.id.zxing_return_scan_result) {
       activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
       activity.finish();
-
-    } else if (message.what == R.id.zxing_launch_product_query) {
-      String url = (String) message.obj;
-
-      Intent intent = new Intent(Intent.ACTION_VIEW);
-      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-      intent.setData(Uri.parse(url));
-
-      ResolveInfo resolveInfo =
-              activity.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-      String browserPackageName = null;
-      if (resolveInfo != null && resolveInfo.activityInfo != null) {
-        browserPackageName = resolveInfo.activityInfo.packageName;
-        Log.d(TAG, "Using browser in package " + browserPackageName);
-      }
-
-      // Needed for default Android browser / Chrome only apparently
-      if ("com.android.browser".equals(browserPackageName) || "com.android.chrome".equals(browserPackageName)) {
-        intent.setPackage(browserPackageName);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(Browser.EXTRA_APPLICATION_ID, browserPackageName);
-      }
-
-      try {
-        activity.startActivity(intent);
-      } catch (ActivityNotFoundException ignored) {
-        Log.w(TAG, "Can't find anything to handle VIEW of URI " + url);
-      }
-
     }
   }
 
