@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Handler;
@@ -95,17 +97,33 @@ public class BarcodeView extends ViewGroup {
 
   public BarcodeView(Context context) {
     super(context);
-    initialize();
+    initialize(context, null, 0, 0);
   }
 
   public BarcodeView(Context context, AttributeSet attrs) {
     super(context, attrs);
-    initialize();
+    initialize(context, attrs, 0, 0);
   }
 
   public BarcodeView(Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
-    initialize();
+    initialize(context, attrs, defStyleAttr, 0);
+  }
+
+
+  private void initialize(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    if(getBackground() == null) {
+      // Default to SurfaceView colour, so that there are less changes.
+      setBackgroundColor(Color.BLACK);
+    }
+
+    activity = (Activity) context;
+
+    resultHandler = new Handler(resultCallback);
+
+    decoder = createDefaultDecoder();
+
+    initCamera();
   }
 
   /**
@@ -206,16 +224,6 @@ public class BarcodeView extends ViewGroup {
     return decoder;
   }
 
-  private void initialize() {
-    activity = (Activity) getContext();
-
-    resultHandler = new Handler(resultCallback);
-
-    decoder = createDefaultDecoder();
-
-    initCamera();
-  }
-
   private void setupSurfaceView() {
     surfaceView = new SurfaceView(getContext());
     surfaceView.getHolder().addCallback(surfaceCallback);
@@ -299,8 +307,7 @@ public class BarcodeView extends ViewGroup {
 
     if(surfaceView != null) {
       if (surfaceRect == null) {
-        // HACK
-        surfaceView.layout(0, 0, 1, 1);
+        throw new IllegalStateException("surfaceRect is not ready");
       } else {
         surfaceView.layout(surfaceRect.left, surfaceRect.top, surfaceRect.right, surfaceRect.bottom);
       }
