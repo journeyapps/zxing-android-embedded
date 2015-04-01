@@ -61,6 +61,14 @@ public class CaptureActivity2 extends Activity {
     surface.pause();
   }
 
+  public void pause(View view) {
+    surface.pause();
+  }
+
+  public void resume(View view) {
+    surface.resume();
+  }
+
   public void triggerScan(View view) {
     surface.decodeSingle(callback);
   }
