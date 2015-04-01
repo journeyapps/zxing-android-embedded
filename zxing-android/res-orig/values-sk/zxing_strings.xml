@@ -19,7 +19,7 @@
   <string name="zxing_button_cancel">Zrušiť</string>
   <string name="zxing_button_ok">OK</string>
   <string name="zxing_contents_contact">Informácie o kontakte</string>
-  <string name="zxing_contents_email">E-mailová adresa</string>
+  <string name="zxing_contents_email">Emailová adresa</string>
   <string name="zxing_contents_location">Geografické súradnice</string>
   <string name="zxing_contents_phone">Telefónne číslo</string>
   <string name="zxing_contents_sms">SMS adresa</string>
@@ -27,8 +27,8 @@
   <string name="zxing_msg_camera_framework_bug">Ospravedlňujeme sa, fotoaparát narazil na problém. Možno bude potrebné reštartovať zariadenie.</string>
   <string name="zxing_msg_default_format">Formát</string>
   <string name="zxing_msg_default_meta">Metadáta</string>
-  <string name="zxing_msg_default_status">Umiestnite čiarový kód do vnútra obdĺžnika hľadáčiku pre skenovanie.</string>
+  <string name="zxing_msg_default_status">Umiestnite čiarový kód do vnútra obdĺžnika hľadáčiku pre skenovanie</string>
   <string name="zxing_msg_default_time">Čas</string>
   <string name="zxing_msg_default_type">Typ</string>
-  <string name="zxing_msg_unmount_usb">Ospravedlňujeme sa, SD karta nie je prístupná.</string>
+  <string name="zxing_msg_unmount_usb">Ospravedlňujeme sa, SD karta nie je prístupná</string>
 </resources>

@@ -196,12 +196,16 @@ index 18ac886..f219cf0 100644
 +</resources>
 \ No newline at end of file
 diff --git a/res-orig/values/zxing_ids.xml b/res/values/zxing_ids.xml
-index 1671f0b..afd30fd 100755
+index 1671f0b..c01a270 100755
 --- a/res-orig/values/zxing_ids.xml
 +++ b/res/values/zxing_ids.xml
-@@ -22,4 +22,5 @@
+@@ -18,8 +18,7 @@
+   <item type="id" name="zxing_decode"/>
+   <item type="id" name="zxing_decode_failed"/>
+   <item type="id" name="zxing_decode_succeeded"/>
+-  <item type="id" name="zxing_launch_product_query"/>
    <item type="id" name="zxing_quit"/>
-   <item type="id" name="zxing_restart_preview"/>
+-  <item type="id" name="zxing_restart_preview"/>
    <item type="id" name="zxing_return_scan_result"/>
 +  <item type="id" name="zxing_back_button"/>
  </resources>
