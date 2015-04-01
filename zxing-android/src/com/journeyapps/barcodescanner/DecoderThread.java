@@ -196,10 +196,10 @@ public class DecoderThread {
     int n = imageWidth * imageHeight;
     byte[] yuv = new byte[n];
 
-    int j = n;
-    for(int i = 0; i < n; i++) {
-      j -= 1;
-      yuv[j] = data[i];
+    int i = n - 1;
+    for(int j = 0; j < n; j++) {
+      yuv[i] = data[j];
+      i--;
     }
     return yuv;
   }
@@ -213,9 +213,16 @@ public class DecoderThread {
    * @return the rotated bytes
    */
   public static byte[] rotateCCW(byte[] data, int imageWidth, int imageHeight) {
-    // TODO: optimize
-    byte[] temp = rotate180(data, imageWidth, imageHeight);
-    return rotateCW(temp, imageWidth, imageHeight);
+    int n = imageWidth * imageHeight;
+    byte[] yuv = new byte[n];
+    int i = n - 1;
+    for (int x = 0; x < imageWidth; x++) {
+      for (int y = imageHeight - 1; y >= 0; y--) {
+        yuv[i] = data[y * imageWidth + x];
+        i--;
+      }
+    }
+    return yuv;
   }
 
 }

@@ -54,7 +54,7 @@ public class CameraInstance {
   private Point getPreviewSize() {
     return cameraManager.getPreviewSize();
   }
-  
+
   public void open() {
     Util.validateMainThread();
 
