@@ -141,8 +141,33 @@ final class CameraConfigurationManager {
     camera.setDisplayOrientation(result);
   }
 
+  public boolean isDisplayRotated() {
+    int rotation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay()
+            .getRotation();
+    switch (rotation) {
+      case Surface.ROTATION_0:
+      case Surface.ROTATION_180:
+        return true;
+      case Surface.ROTATION_90:
+      case Surface.ROTATION_270:
+        return false;
+    }
+    return false;
+  }
+
   Point getCameraResolution() {
     return cameraResolution;
+  }
+
+  Point getRotatedCameraResolution() {
+    if(cameraResolution == null) {
+      return null;
+    } else if(isDisplayRotated()) {
+      //noinspection SuspiciousNameCombination
+      return new Point(cameraResolution.y, cameraResolution.x);
+    } else {
+      return cameraResolution;
+    }
   }
 
   Point getScreenResolution() {
