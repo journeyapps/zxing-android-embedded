@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
+import android.view.Display;
+import android.view.Surface;
 
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.PlanarYUVLuminanceSource;
@@ -13,6 +15,7 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.R;
 import com.journeyapps.barcodescanner.camera.CameraInstance;
+import com.journeyapps.barcodescanner.camera.DisplayConfiguration;
 
 import java.util.List;
 
@@ -98,13 +101,15 @@ public class DecoderThread {
   protected LuminanceSource createSource(byte[] data, int dataWidth, int dataHeight) {
     if(this.cropRect == null) {
       return null;
-    } else if(cameraInstance.isPreviewRotated()) {
-      byte[] rotated = rotate(data, dataWidth, dataHeight);
-
-      //noinspection SuspiciousNameCombination
-      return new PlanarYUVLuminanceSource(rotated, dataHeight, dataWidth, cropRect.left, cropRect.top, cropRect.width(), cropRect.height(), false);
     } else {
-      return new PlanarYUVLuminanceSource(data, dataWidth, dataHeight, cropRect.left, cropRect.top, cropRect.width(), cropRect.height(), false);
+      DisplayConfiguration config = cameraInstance.getDisplayConfiguration();
+      byte[] rotated = rotateCameraPreview(config.getRotation(), data, dataWidth, dataHeight);
+      if (config.isRotated()) {
+        //noinspection SuspiciousNameCombination
+        return new PlanarYUVLuminanceSource(rotated, dataHeight, dataWidth, cropRect.left, cropRect.top, cropRect.width(), cropRect.height(), false);
+      } else {
+        return new PlanarYUVLuminanceSource(rotated, dataWidth, dataHeight, cropRect.left, cropRect.top, cropRect.width(), cropRect.height(), false);
+      }
     }
   }
 
@@ -141,15 +146,30 @@ public class DecoderThread {
     requestNextPreview();
   }
 
+  public static byte[] rotateCameraPreview(int displayRotation, byte[] data, int imageWidth, int imageHeight) {
+    switch (displayRotation) {
+      case Surface.ROTATION_90:
+        return data;
+      case Surface.ROTATION_0:
+        return rotateCW(data, imageWidth, imageHeight);
+      case Surface.ROTATION_270:
+        return rotate180(data, imageWidth, imageHeight);
+      case Surface.ROTATION_180:
+        return rotateCCW(data, imageWidth, imageHeight);
+      default:
+        return data;
+    }
+  }
+
   /**
-   * Rotate an image by 90 degrees CCW.
+   * Rotate an image by 90 degrees CW.
    *
    * @param data the image data, in with the first width * height bytes being the luminance data.
    * @param imageWidth the width of the image
    * @param imageHeight the height of the image
    * @return the rotated bytes
    */
-  public static byte[] rotate(byte[] data, int imageWidth, int imageHeight) {
+  public static byte[] rotateCW(byte[] data, int imageWidth, int imageHeight) {
     // Adapted from http://stackoverflow.com/a/15775173
     // data may contain more than just y (u and v), but we are only interested in the y section.
     //
@@ -162,6 +182,40 @@ public class DecoderThread {
       }
     }
     return yuv;
+  }
+
+  /**
+   * Rotate an image by 180 degrees.
+   *
+   * @param data the image data, in with the first width * height bytes being the luminance data.
+   * @param imageWidth the width of the image
+   * @param imageHeight the height of the image
+   * @return the rotated bytes
+   */
+  public static byte[] rotate180(byte[] data, int imageWidth, int imageHeight) {
+    int n = imageWidth * imageHeight;
+    byte[] yuv = new byte[n];
+
+    int j = n;
+    for(int i = 0; i < n; i++) {
+      j -= 1;
+      yuv[j] = data[i];
+    }
+    return yuv;
+  }
+
+  /**
+   * Rotate an image by 90 degrees CCW.
+   *
+   * @param data the image data, in with the first width * height bytes being the luminance data.
+   * @param imageWidth the width of the image
+   * @param imageHeight the height of the image
+   * @return the rotated bytes
+   */
+  public static byte[] rotateCCW(byte[] data, int imageWidth, int imageHeight) {
+    // TODO: optimize
+    byte[] temp = rotate180(data, imageWidth, imageHeight);
+    return rotateCW(temp, imageWidth, imageHeight);
   }
 
 }

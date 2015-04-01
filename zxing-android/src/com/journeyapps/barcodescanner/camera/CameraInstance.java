@@ -54,15 +54,7 @@ public class CameraInstance {
   private Point getPreviewSize() {
     return cameraManager.getPreviewSize();
   }
-
-
-  /**
-   * @return true if the preview image is rotated
-   */
-  public boolean isPreviewRotated() {
-    return displayConfiguration.isRotated();
-  }
-
+  
   public void open() {
     Util.validateMainThread();
 
