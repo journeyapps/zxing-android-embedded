@@ -1,8 +1,8 @@
 diff --git a/src-orig/com/google/zxing/client/android/CaptureActivityHandler.java b/src/com/google/zxing/client/android/CaptureActivityHandler.java
-index 9ec3ecf..3aa269f 100755
+index 9ec3ecf..e30f43a 100755
 --- a/src-orig/com/google/zxing/client/android/CaptureActivityHandler.java
 +++ b/src/com/google/zxing/client/android/CaptureActivityHandler.java
-@@ -77,58 +77,61 @@ public final class CaptureActivityHandler extends Handler {
+@@ -77,58 +77,29 @@ public final class CaptureActivityHandler extends Handler {
  
    @Override
    public void handleMessage(Message message) {
@@ -44,10 +44,7 @@ index 9ec3ecf..3aa269f 100755
 -        if (resolveInfo != null && resolveInfo.activityInfo != null) {
 -          browserPackageName = resolveInfo.activityInfo.packageName;
 -          Log.d(TAG, "Using browser in package " + browserPackageName);
-+    if (message.what == R.id.zxing_restart_preview) {
-+      restartPreviewAndDecode();
-+
-+    } else if (message.what == R.id.zxing_decode_succeeded) {
++    if (message.what == R.id.zxing_decode_succeeded) {
 +      state = State.SUCCESS;
 +      Bundle bundle = message.getData();
 +      Bitmap barcode = null;
@@ -72,44 +69,15 @@ index 9ec3ecf..3aa269f 100755
 +    } else if (message.what == R.id.zxing_decode_failed) {// We're decoding as fast as possible, so when one decode fails, start another.
 +      state = State.PREVIEW;
 +      cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.zxing_decode);
-+
-+    } else if (message.what == R.id.zxing_return_scan_result) {
-+      activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
-+      activity.finish();
-+
-+    } else if (message.what == R.id.zxing_launch_product_query) {
-+      String url = (String) message.obj;
-+
-+      Intent intent = new Intent(Intent.ACTION_VIEW);
-+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-+      intent.setData(Uri.parse(url));
-+
-+      ResolveInfo resolveInfo =
-+              activity.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-+      String browserPackageName = null;
-+      if (resolveInfo != null && resolveInfo.activityInfo != null) {
-+        browserPackageName = resolveInfo.activityInfo.packageName;
-+        Log.d(TAG, "Using browser in package " + browserPackageName);
-+      }
-+
-+      // Needed for default Android browser / Chrome only apparently
-+      if ("com.android.browser".equals(browserPackageName) || "com.android.chrome".equals(browserPackageName)) {
-+        intent.setPackage(browserPackageName);
-+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-+        intent.putExtra(Browser.EXTRA_APPLICATION_ID, browserPackageName);
-+      }
-+
-+      try {
-+        activity.startActivity(intent);
-+      } catch (ActivityNotFoundException ignored) {
-+        Log.w(TAG, "Can't find anything to handle VIEW of URI " + url);
-+      }
  
 -        try {
 -          activity.startActivity(intent);
 -        } catch (ActivityNotFoundException ignored) {
 -          Log.w(TAG, "Can't find anything to handle VIEW of URI " + url);
 -        }
++    } else if (message.what == R.id.zxing_return_scan_result) {
++      activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
++      activity.finish();
      }
    }
  
@@ -342,7 +310,7 @@ index c0caa2b..fd89508 100755
  
    public synchronized boolean isOpen() {
 diff --git a/src-orig/com/google/zxing/client/android/CaptureActivity.java b/src/com/google/zxing/client/android/CaptureActivity.java
-index 84592e9..283c4ae 100755
+index 35ec55b..283c4ae 100755
 --- a/src-orig/com/google/zxing/client/android/CaptureActivity.java
 +++ b/src/com/google/zxing/client/android/CaptureActivity.java
 @@ -16,58 +16,41 @@
@@ -506,7 +474,7 @@ index 84592e9..283c4ae 100755
  
      // CameraManager must be initialized here, not in onCreate(). This is necessary because we don't
      // want to open the camera driver and measure the screen size if we're going to show the help on
-@@ -160,19 +145,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -160,23 +145,23 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
      viewfinderView = (ViewfinderView) findViewById(R.id.zxing_viewfinder_view);
      viewfinderView.setCameraManager(cameraManager);
  
@@ -515,18 +483,31 @@ index 84592e9..283c4ae 100755
  
      handler = null;
 -    lastResult = null;
--
+ 
 -    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
--
++    resetStatusView();
+ 
 -    if (prefs.getBoolean(PreferencesActivity.KEY_DISABLE_AUTO_ORIENTATION, true)) {
 -      setRequestedOrientation(getCurrentOrientation());
--    } else {
++    SurfaceView surfaceView = (SurfaceView) findViewById(R.id.zxing_preview_view);
++    SurfaceHolder surfaceHolder = surfaceView.getHolder();
++    if (hasSurface) {
++      // The activity was paused but not stopped, so the surface still exists. Therefore
++      // surfaceCreated() won't be called, so init the camera here.
++      initCamera(surfaceHolder);
+     } else {
 -      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
--    }
++      // Install the callback and wait for surfaceCreated() to init the camera.
++      surfaceHolder.addCallback(this);
+     }
  
-     resetStatusView();
+-    resetStatusView();
+-
+-
+     beepManager.updatePrefs();
+     ambientLightManager.start(cameraManager);
  
-@@ -194,28 +169,40 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -184,28 +169,40 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
  
      Intent intent = getIntent();
  
@@ -576,7 +557,7 @@ index 84592e9..283c4ae 100755
            int width = intent.getIntExtra(Intents.Scan.WIDTH, 0);
            int height = intent.getIntExtra(Intents.Scan.HEIGHT, 0);
            if (width > 0 && height > 0) {
-@@ -229,33 +216,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -219,49 +216,17 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
              cameraManager.setManualCameraId(cameraId);
            }
          }
@@ -611,7 +592,23 @@ index 84592e9..283c4ae 100755
        }
  
        characterSet = intent.getStringExtra(Intents.Scan.CHARACTER_SET);
-@@ -273,18 +239,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+ 
+     }
+-
+-    SurfaceView surfaceView = (SurfaceView) findViewById(R.id.zxing_preview_view);
+-    SurfaceHolder surfaceHolder = surfaceView.getHolder();
+-    if (hasSurface) {
+-      // The activity was paused but not stopped, so the surface still exists. Therefore
+-      // surfaceCreated() won't be called, so init the camera here.
+-      initCamera(surfaceHolder);
+-    } else {
+-      // Install the callback and wait for surfaceCreated() to init the camera.
+-      surfaceHolder.addCallback(this);
+-    }
+   }
+ 
+   private int getCurrentOrientation() {
+@@ -274,18 +239,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
          return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
      }
    }
@@ -630,7 +627,7 @@ index 84592e9..283c4ae 100755
  
    @Override
    protected void onPause() {
-@@ -296,7 +250,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -297,7 +250,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
      ambientLightManager.stop();
      beepManager.close();
      cameraManager.closeDriver();
@@ -638,7 +635,7 @@ index 84592e9..283c4ae 100755
      if (!hasSurface) {
        SurfaceView surfaceView = (SurfaceView) findViewById(R.id.zxing_preview_view);
        SurfaceHolder surfaceHolder = surfaceView.getHolder();
-@@ -315,16 +268,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -316,16 +268,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    public boolean onKeyDown(int keyCode, KeyEvent event) {
      switch (keyCode) {
        case KeyEvent.KEYCODE_BACK:
@@ -658,7 +655,7 @@ index 84592e9..283c4ae 100755
        case KeyEvent.KEYCODE_FOCUS:
        case KeyEvent.KEYCODE_CAMERA:
          // Handle these events so they don't launch the Camera app
-@@ -341,65 +287,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -342,65 +287,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    }
  
    @Override
@@ -724,7 +721,7 @@ index 84592e9..283c4ae 100755
    public void surfaceCreated(SurfaceHolder holder) {
      if (holder == null) {
        Log.e(TAG, "*** WARNING *** surfaceCreated() gave us a null surface!");
-@@ -424,47 +311,19 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -425,47 +311,19 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     * A valid barcode has been found, so give an indication of success and show the results.
     *
     * @param rawResult The contents of the barcode.
@@ -773,7 +770,7 @@ index 84592e9..283c4ae 100755
    }
  
    /**
-@@ -510,180 +369,51 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -511,180 +369,51 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
      }
    }
  
@@ -884,7 +881,7 @@ index 84592e9..283c4ae 100755
 +    long resultDurationMS = getIntent().getLongExtra(Intents.Scan.RESULT_DISPLAY_DURATION_MS,
                                                    DEFAULT_INTENT_RESULT_DURATION_MS);
 -    }
--
+ 
 -    if (resultDurationMS > 0) {
 -      String rawResultString = String.valueOf(rawResult);
 -      if (rawResultString.length() > 32) {
@@ -892,7 +889,7 @@ index 84592e9..283c4ae 100755
 -      }
 -      statusView.setText(getString(resultHandler.getDisplayTitle()) + " : " + rawResultString);
 -    }
- 
+-
 -    if (copyToClipboard && !resultHandler.areContentsSecure()) {
 -      CharSequence text = resultHandler.getDisplayContents();
 -      ClipboardInterface.setText(text, this);
@@ -950,10 +947,6 @@ index 84592e9..283c4ae 100755
 +      Number orientation = (Number) metadata.get(ResultMetadataType.ORIENTATION);
 +      if (orientation != null) {
 +        intent.putExtra(Intents.Scan.RESULT_ORIENTATION, orientation.intValue());
-+      }
-+      String ecLevel = (String) metadata.get(ResultMetadataType.ERROR_CORRECTION_LEVEL);
-+      if (ecLevel != null) {
-+        intent.putExtra(Intents.Scan.RESULT_ERROR_CORRECTION_LEVEL, ecLevel);
        }
 -      sendReplyMessage(R.id.zxing_return_scan_result, intent, resultDurationMS);
 -      
@@ -971,6 +964,10 @@ index 84592e9..283c4ae 100755
 -        String replyURL = scanFromWebPageManager.buildReplyURL(rawResult, resultHandler);
 -        scanFromWebPageManager = null;
 -        sendReplyMessage(R.id.zxing_launch_product_query, replyURL, resultDurationMS);
++      String ecLevel = (String) metadata.get(ResultMetadataType.ERROR_CORRECTION_LEVEL);
++      if (ecLevel != null) {
++        intent.putExtra(Intents.Scan.RESULT_ERROR_CORRECTION_LEVEL, ecLevel);
++      }
 +      @SuppressWarnings("unchecked")
 +      Iterable<byte[]> byteSegments = (Iterable<byte[]>) metadata.get(ResultMetadataType.BYTE_SEGMENTS);
 +      if (byteSegments != null) {
@@ -986,7 +983,7 @@ index 84592e9..283c4ae 100755
    }
    
    private void sendReplyMessage(int id, Object arg, long delayMS) {
-@@ -711,7 +441,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -712,7 +441,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
        if (handler == null) {
          handler = new CaptureActivityHandler(this, decodeFormats, decodeHints, characterSet, cameraManager);
        }
@@ -994,7 +991,7 @@ index 84592e9..283c4ae 100755
      } catch (IOException ioe) {
        Log.w(TAG, ioe);
        displayFrameworkBugMessageAndExit();
-@@ -732,19 +461,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
+@@ -733,19 +461,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
      builder.show();
    }
  
