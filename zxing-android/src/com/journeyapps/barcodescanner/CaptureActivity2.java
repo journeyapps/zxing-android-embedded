@@ -1,7 +1,10 @@
 package com.journeyapps.barcodescanner;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,8 +18,10 @@ import java.util.List;
  *
  */
 public class CaptureActivity2 extends Activity {
+  private static final String TAG = CaptureActivity2.class.getSimpleName();
   private BarcodeView surface;
   private ViewfinderView viewFinder;
+  private RotationListener rotationListener;
 
   private BarcodeCallback callback = new BarcodeCallback() {
     @Override
@@ -45,6 +50,26 @@ public class CaptureActivity2 extends Activity {
 
     viewFinder = (ViewfinderView)findViewById(R.id.zxing_viewfinder_view);
     viewFinder.setBarcodeView(surface);
+
+    rotationListener = new RotationListener(this) {
+      @Override
+      public void onRotationChanged(int rotation) {
+        orientationChanged();
+      }
+    };
+  }
+
+  @Override
+  public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+
+    Log.d(TAG, "Configuration changed");
+
+  }
+
+  private void orientationChanged() {
+    surface.pause();
+    surface.resume();
   }
 
   @Override
@@ -52,6 +77,7 @@ public class CaptureActivity2 extends Activity {
     super.onResume();
 
     surface.resume();
+    rotationListener.enable();
   }
 
   @Override
@@ -59,6 +85,7 @@ public class CaptureActivity2 extends Activity {
     super.onPause();
 
     surface.pause();
+    rotationListener.disable();
   }
 
   public void pause(View view) {
@@ -72,4 +99,6 @@ public class CaptureActivity2 extends Activity {
   public void triggerScan(View view) {
     surface.decodeSingle(callback);
   }
+
+
 }
