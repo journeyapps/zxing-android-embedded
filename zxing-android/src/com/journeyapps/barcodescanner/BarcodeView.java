@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -154,8 +153,6 @@ public class BarcodeView extends ViewGroup {
   }
 
   private void firePreviewReady() {
-    decoderThread.setCropRect(previewFramingRect);
-
     for (StateListener listener : stateListeners) {
       listener.previewReady();
     }
@@ -193,7 +190,7 @@ public class BarcodeView extends ViewGroup {
   public void stopDecoding() {
     this.decodeMode = DecodeMode.NONE;
     this.callback = null;
-    // TODO: stop the actual decoding process
+    stopDecoderThread();
   }
 
   private final Handler.Callback resultCallback = new Handler.Callback() {
@@ -360,10 +357,8 @@ public class BarcodeView extends ViewGroup {
   public void pause() {
     Util.validateMainThread();
 
-    if(decoderThread != null) {
-      decoderThread.stop();
-      decoderThread = null;
-    }
+    stopDecoderThread();
+
     if(cameraInstance != null) {
       cameraInstance.close();
       cameraInstance = null;
@@ -392,14 +387,24 @@ public class BarcodeView extends ViewGroup {
 
     cameraInstance.setReadyHandler(resultHandler);
     cameraInstance.open();
+  }
 
-    decoderThread = new DecoderThread(cameraInstance, decoder, resultHandler);
-    decoderThread.start();
+  private void stopDecoderThread() {
+    if(decoderThread != null) {
+      decoderThread.stop();
+      decoderThread = null;
+    }
   }
 
   private void startCameraPreview(SurfaceHolder holder) {
     cameraInstance.setSurfaceHolder(holder);
     cameraInstance.startPreview();
+
+    stopDecoderThread(); // To be safe
+
+    decoderThread = new DecoderThread(cameraInstance, decoder, resultHandler);
+    decoderThread.setCropRect(previewFramingRect);
+    decoderThread.start();
   }
 
   /**
