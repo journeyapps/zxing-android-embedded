@@ -21,7 +21,6 @@ public class CaptureActivity2 extends Activity {
   private static final String TAG = CaptureActivity2.class.getSimpleName();
   private BarcodeView surface;
   private ViewfinderView viewFinder;
-  private RotationListener rotationListener;
 
   private BarcodeCallback callback = new BarcodeCallback() {
     @Override
@@ -50,13 +49,6 @@ public class CaptureActivity2 extends Activity {
 
     viewFinder = (ViewfinderView)findViewById(R.id.zxing_viewfinder_view);
     viewFinder.setBarcodeView(surface);
-
-    rotationListener = new RotationListener(this) {
-      @Override
-      public void onRotationChanged(int rotation) {
-        orientationChanged();
-      }
-    };
   }
 
   @Override
@@ -77,7 +69,6 @@ public class CaptureActivity2 extends Activity {
     super.onResume();
 
     surface.resume();
-    rotationListener.enable();
   }
 
   @Override
@@ -85,7 +76,6 @@ public class CaptureActivity2 extends Activity {
     super.onPause();
 
     surface.pause();
-    rotationListener.disable();
   }
 
   public void pause(View view) {

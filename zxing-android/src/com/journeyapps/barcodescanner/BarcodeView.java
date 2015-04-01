@@ -69,6 +69,8 @@ public class BarcodeView extends ViewGroup {
 
   private SurfaceView surfaceView;
 
+  private RotationListener rotationListener;
+
   private List<StateListener> stateListeners = new ArrayList<>();
 
   private final SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
@@ -124,8 +126,19 @@ public class BarcodeView extends ViewGroup {
     decoder = createDefaultDecoder();
 
     setupSurfaceView();
+
+    rotationListener = new RotationListener(context) {
+      @Override
+      public void onRotationChanged(int rotation) {
+        rotationChanged();
+      }
+    };
   }
 
+  private void rotationChanged() {
+    pause();
+    resume();
+  }
 
 
   private void setupSurfaceView() {
@@ -333,8 +346,10 @@ public class BarcodeView extends ViewGroup {
    * Call from UI thread only.
    */
   public void resume() {
+    // This must be safe to call multiple times
     Util.validateMainThread();
 
+    // initCamera() does nothing if called twice, but does log a warning
     initCamera();
 
     if (hasSurface) {
@@ -348,6 +363,7 @@ public class BarcodeView extends ViewGroup {
 
     // To trigger surfaceSized again
     requestLayout();
+    rotationListener.enable();
   }
 
 
@@ -355,6 +371,7 @@ public class BarcodeView extends ViewGroup {
    * Call from UI thread only.
    */
   public void pause() {
+    // This must be safe to call multiple times.
     Util.validateMainThread();
 
     stopDecoderThread();
@@ -371,6 +388,7 @@ public class BarcodeView extends ViewGroup {
     this.containerRect = null;
     this.previewSize = null;
     this.previewFramingRect = null;
+    rotationListener.disable();
   }
 
   private int getDisplayRotation() {
