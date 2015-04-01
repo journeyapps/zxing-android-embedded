@@ -287,17 +287,21 @@ public class BarcodeView extends ViewGroup {
 
   private void containerSized(Rect container) {
     this.containerRect = container;
-    if(cameraInstance.getDisplayConfiguration() == null) {
-      cameraInstance.setDisplayConfiguration(new DisplayConfiguration(getDisplayRotation(), new Point(container.width(), container.height())));
-      cameraInstance.configureCamera();
+    if(cameraInstance != null) {
+      if (cameraInstance.getDisplayConfiguration() == null) {
+        cameraInstance.setDisplayConfiguration(new DisplayConfiguration(getDisplayRotation(), new Point(container.width(), container.height())));
+        cameraInstance.configureCamera();
+      }
     }
   }
 
   private void previewSized(Point size) {
     this.previewSize = size;
-    calculateFrames();
-    requestLayout();
-    startPreviewIfReady();
+    if(containerRect != null) {
+      calculateFrames();
+      requestLayout();
+      startPreviewIfReady();
+    }
   }
 
   private void startPreviewIfReady() {
@@ -368,6 +372,10 @@ public class BarcodeView extends ViewGroup {
       SurfaceHolder surfaceHolder = surfaceView.getHolder();
       surfaceHolder.removeCallback(surfaceCallback);
     }
+
+    this.containerRect = null;
+    this.previewSize = null;
+    this.previewFramingRect = null;
   }
 
   private int getDisplayRotation() {
