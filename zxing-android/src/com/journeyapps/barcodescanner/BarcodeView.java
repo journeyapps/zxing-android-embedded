@@ -34,9 +34,10 @@ import java.util.Map;
  *
  * Startup sequence:
  *
- * 1. open camera.
- * 2. layout surface container, to get size
- * 3. set display config, according to surface container size
+ * 1. Create SurfaceView.
+ * 2. open camera.
+ * 2. layout this container, to get size
+ * 3. set display config, according to the container size
  * 4. configure()
  * 5. wait for preview size to be ready
  * 6. set surface size according to preview size
@@ -80,7 +81,7 @@ public class BarcodeView extends ViewGroup {
       }
       if (!hasSurface) {
         hasSurface = true;
-        startCameraPreview(holder);
+        startPreviewIfReady();
       }
     }
 
@@ -123,7 +124,15 @@ public class BarcodeView extends ViewGroup {
 
     decoder = createDefaultDecoder();
 
-    initCamera();
+    setupSurfaceView();
+  }
+
+
+
+  private void setupSurfaceView() {
+    surfaceView = new SurfaceView(getContext());
+    surfaceView.getHolder().addCallback(surfaceCallback);
+    addView(surfaceView);
   }
 
   /**
@@ -224,12 +233,6 @@ public class BarcodeView extends ViewGroup {
     return decoder;
   }
 
-  private void setupSurfaceView() {
-    surfaceView = new SurfaceView(getContext());
-    surfaceView.getHolder().addCallback(surfaceCallback);
-    addView(surfaceView);
-  }
-
   private boolean center = false;
 
   private Rect containerRect;
@@ -293,24 +296,27 @@ public class BarcodeView extends ViewGroup {
   private void previewSized(Point size) {
     this.previewSize = size;
     calculateFrames();
-    setupSurfaceView();
+    requestLayout();
+    startPreviewIfReady();
   }
 
-
+  private void startPreviewIfReady() {
+    if(hasSurface && previewSize != null) {
+      startCameraPreview(surfaceView.getHolder());
+    }
+  }
 
   @SuppressLint("DrawAllocation")
   @Override
   protected void onLayout(boolean changed, int l, int t, int r, int b) {
-    if(changed) {
-      containerSized(new Rect(0, 0, r - l, b - t));
-    }
+    containerSized(new Rect(0, 0, r - l, b - t));
 
-    if(surfaceView != null) {
-      if (surfaceRect == null) {
-        throw new IllegalStateException("surfaceRect is not ready");
-      } else {
-        surfaceView.layout(surfaceRect.left, surfaceRect.top, surfaceRect.right, surfaceRect.bottom);
-      }
+    if (surfaceRect == null) {
+      // Match the container, to reduce the risk of issues. The preview should never be drawn
+      // while the surface has this size.
+      surfaceView.layout(0, 0, getWidth(), getHeight());
+    } else {
+      surfaceView.layout(surfaceRect.left, surfaceRect.top, surfaceRect.right, surfaceRect.bottom);
     }
   }
 
@@ -328,15 +334,19 @@ public class BarcodeView extends ViewGroup {
   public void resume() {
     Util.validateMainThread();
 
-//    SurfaceHolder surfaceHolder = surfaceView.getHolder();
+    initCamera();
+
     if (hasSurface) {
       // The activity was paused but not stopped, so the surface still exists. Therefore
       // surfaceCreated() won't be called, so init the camera here.
-      // TODO: initCamera(surfaceHolder);
+      surfaceCallback.surfaceCreated(surfaceView.getHolder());
     } else {
       // Install the callback and wait for surfaceCreated() to init the camera.
-//      surfaceHolder.addCallback(surfaceCallback);
+      surfaceView.getHolder().addCallback(surfaceCallback);
     }
+
+    // To trigger surfaceSized again
+    requestLayout();
   }
 
 
