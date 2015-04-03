@@ -56,7 +56,7 @@ public final class ViewfinderView extends View {
   private int scannerAlpha;
   private List<ResultPoint> possibleResultPoints;
   private List<ResultPoint> lastPossibleResultPoints;
-  private BarcodeView barcodeView;
+  private CameraPreview cameraPreview;
 
   // This constructor is used when the class is built from an XML resource.
   public ViewfinderView(Context context, AttributeSet attrs) {
@@ -74,9 +74,9 @@ public final class ViewfinderView extends View {
     lastPossibleResultPoints = null;
   }
 
-  public void setBarcodeView(BarcodeView view) {
-    this.barcodeView = view;
-    view.addStateListener(new BarcodeView.StateListener() {
+  public void setCameraPreview(CameraPreview view) {
+    this.cameraPreview = view;
+    view.addStateListener(new CameraPreview.StateListener() {
       @Override
       public void previewReady() {
         invalidate();
@@ -88,12 +88,12 @@ public final class ViewfinderView extends View {
   @SuppressLint("DrawAllocation")
   @Override
   public void onDraw(Canvas canvas) {
-    if (barcodeView == null || barcodeView.getPreviewFramingRect() == null || barcodeView.getFramingRect() == null) {
+    if (cameraPreview == null || cameraPreview.getPreviewFramingRect() == null || cameraPreview.getFramingRect() == null) {
       return;
     }
 
-    Rect frame = barcodeView.getFramingRect();
-    Rect previewFrame = barcodeView.getPreviewFramingRect();
+    Rect frame = cameraPreview.getFramingRect();
+    Rect previewFrame = cameraPreview.getPreviewFramingRect();
 
     int width = canvas.getWidth();
     int height = canvas.getHeight();
@@ -171,17 +171,17 @@ public final class ViewfinderView extends View {
   /**
    * Draw a bitmap with the result points highlighted instead of the live scanning display.
    *
-   * @param barcode An image of the decoded barcode.
+   * @param result An image of the result.
    */
-  public void drawResultBitmap(Bitmap barcode) {
-    resultBitmap = barcode;
+  public void drawResultBitmap(Bitmap result) {
+    resultBitmap = result;
     invalidate();
   }
 
   /**
    * Only call from the UI thread.
    *
-   * @param point a point to draw
+   * @param point a point to draw, relative to the preview frame
    */
   public void addPossibleResultPoint(ResultPoint point) {
     List<ResultPoint> points = possibleResultPoints;

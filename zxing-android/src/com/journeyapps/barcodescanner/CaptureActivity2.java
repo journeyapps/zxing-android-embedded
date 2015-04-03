@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.TextView;
 
@@ -48,7 +47,7 @@ public class CaptureActivity2 extends Activity {
     surface.decodeContinuous(callback);
 
     viewFinder = (ViewfinderView)findViewById(R.id.zxing_viewfinder_view);
-    viewFinder.setBarcodeView(surface);
+    viewFinder.setCameraPreview(surface);
   }
 
   @Override
@@ -89,6 +88,5 @@ public class CaptureActivity2 extends Activity {
   public void triggerScan(View view) {
     surface.decodeSingle(callback);
   }
-
 
 }
