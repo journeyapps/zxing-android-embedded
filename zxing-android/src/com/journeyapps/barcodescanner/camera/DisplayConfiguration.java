@@ -80,6 +80,8 @@ public class DisplayConfiguration {
    * @return the best preview size, never null
    */
   public Size getBestPreviewSize(List<Size> sizes) {
+    // Sample of supported preview sizes:
+    // http://www.kirill.org/ar/ar.php
     final Size landscape = getDesiredLandscapePreviewSize();
 
     if(landscape == null) {
