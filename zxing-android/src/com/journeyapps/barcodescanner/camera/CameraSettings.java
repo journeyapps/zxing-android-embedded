@@ -7,11 +7,12 @@ import com.google.zxing.client.android.camera.open.OpenCameraInterface;
  */
 public class CameraSettings {
   private int requestedCameraId = OpenCameraInterface.NO_REQUESTED_CAMERA;
-  private boolean invertScan = false;
-  private boolean disableBarcodeSceneMode = true;
-  private boolean disableMetering = true;
-  private boolean autoFocus = true;
-  private boolean disableContinuousFocus = true;
+  private boolean scanInverted = false;
+  private boolean barcodeSceneModeEnabled = false;
+  private boolean meteringEnabled = false;
+  private boolean autoFocusEnabled = true;
+  private boolean continuousFocusEnabled = false;
+  private boolean exposureEnabled = false;
 
   public int getRequestedCameraId() {
     return requestedCameraId;
@@ -28,43 +29,85 @@ public class CameraSettings {
     this.requestedCameraId = requestedCameraId;
   }
 
-  public boolean isInvertScan() {
-    return invertScan;
+  /**
+   * Default to false.
+   *
+   * Inverted means dark & light colors are inverted.
+   *
+   * @return true if scan is inverted
+   */
+  public boolean isScanInverted() {
+    return scanInverted;
   }
 
-  public void setInvertScan(boolean invertScan) {
-    this.invertScan = invertScan;
+  public void setScanInverted(boolean scanInverted) {
+    this.scanInverted = scanInverted;
   }
 
-  public boolean isDisableBarcodeSceneMode() {
-    return disableBarcodeSceneMode;
+  /**
+   * Default to false.
+   *
+   * @return true if barcode scene mode is enabled
+   */
+  public boolean isBarcodeSceneModeEnabled() {
+    return barcodeSceneModeEnabled;
   }
 
-  public void setDisableBarcodeSceneMode(boolean disableBarcodeSceneMode) {
-    this.disableBarcodeSceneMode = disableBarcodeSceneMode;
+  public void setBarcodeSceneModeEnabled(boolean barcodeSceneModeEnabled) {
+    this.barcodeSceneModeEnabled = barcodeSceneModeEnabled;
   }
 
-  public boolean isDisableMetering() {
-    return disableMetering;
+  /**
+   * Default to false.
+   *
+   * @return true if exposure is enabled.
+   */
+  public boolean isExposureEnabled() {
+    return exposureEnabled;
   }
 
-  public void setDisableMetering(boolean disableMetering) {
-    this.disableMetering = disableMetering;
+  public void setExposureEnabled(boolean exposureEnabled) {
+    this.exposureEnabled = exposureEnabled;
   }
 
-  public boolean isAutoFocus() {
-    return autoFocus;
+  /**
+   * Default to false.
+   *
+   * If enabled, metering is performed to determine focus area.
+   *
+   * @return true if metering is enabled
+   */
+  public boolean isMeteringEnabled() {
+    return meteringEnabled;
   }
 
-  public void setAutoFocus(boolean autoFocus) {
-    this.autoFocus = autoFocus;
+  public void setMeteringEnabled(boolean meteringEnabled) {
+    this.meteringEnabled = meteringEnabled;
   }
 
-  public boolean isDisableContinuousFocus() {
-    return disableContinuousFocus;
+  /**
+   * Default to true.
+   *
+   * @return true if auto-focus is enabled
+   */
+  public boolean isAutoFocusEnabled() {
+    return autoFocusEnabled;
   }
 
-  public void setDisableContinuousFocus(boolean disableContinuousFocus) {
-    this.disableContinuousFocus = disableContinuousFocus;
+  public void setAutoFocusEnabled(boolean autoFocusEnabled) {
+    this.autoFocusEnabled = autoFocusEnabled;
+  }
+
+  /**
+   * Default to false.
+   *
+   * @return true if continuous focus is enabled
+   */
+  public boolean isContinuousFocusEnabled() {
+    return continuousFocusEnabled;
+  }
+
+  public void setContinuousFocusEnabled(boolean continuousFocusEnabled) {
+    this.continuousFocusEnabled = continuousFocusEnabled;
   }
 }

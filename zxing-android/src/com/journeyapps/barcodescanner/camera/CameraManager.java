@@ -178,20 +178,20 @@ public final class CameraManager {
     }
 
 
-    CameraConfigurationUtils.setFocus(parameters, settings.isAutoFocus(), settings.isDisableContinuousFocus(), safeMode);
+    CameraConfigurationUtils.setFocus(parameters, settings.isAutoFocusEnabled(), !settings.isContinuousFocusEnabled(), safeMode);
 
     if (!safeMode) {
       CameraConfigurationUtils.setTorch(parameters, false);
 
-      if (settings.isInvertScan()) {
+      if (settings.isScanInverted()) {
         CameraConfigurationUtils.setInvertColor(parameters);
       }
 
-      if (!settings.isDisableBarcodeSceneMode()) {
+      if (settings.isBarcodeSceneModeEnabled()) {
         CameraConfigurationUtils.setBarcodeSceneMode(parameters);
       }
 
-      if (!settings.isDisableMetering()) {
+      if (settings.isMeteringEnabled()) {
         CameraConfigurationUtils.setVideoStabilization(parameters);
         CameraConfigurationUtils.setFocusArea(parameters);
         CameraConfigurationUtils.setMetering(parameters);
@@ -267,7 +267,7 @@ public final class CameraManager {
   }
 
   /**
-   * Actual preview size in landscpae orientation. null if not determined yet.
+   * Actual preview size in landscape orientation. null if not determined yet.
    *
    * @return preview size
    */
@@ -321,5 +321,39 @@ public final class CameraManager {
 
   public void setDisplayConfiguration(DisplayConfiguration displayConfiguration) {
     this.displayConfiguration = displayConfiguration;
+  }
+
+  public void setTorch(boolean on) {
+    if(camera != null) {
+      boolean isOn = isTorchOn();
+      if(on != isOn) {
+        if (autoFocusManager != null) {
+          autoFocusManager.stop();
+        }
+
+        Camera.Parameters parameters = camera.getParameters();
+        CameraConfigurationUtils.setTorch(parameters, on);
+        if (settings.isExposureEnabled()) {
+          CameraConfigurationUtils.setBestExposure(parameters, on);
+        }
+        camera.setParameters(parameters);
+
+        if (autoFocusManager != null) {
+          autoFocusManager.start();
+        }
+      }
+    }
+  }
+
+  public boolean isTorchOn() {
+    Camera.Parameters parameters = camera.getParameters();
+    if (parameters != null) {
+      String flashMode = parameters.getFlashMode();
+      return flashMode != null &&
+              (Camera.Parameters.FLASH_MODE_ON.equals(flashMode) ||
+                      Camera.Parameters.FLASH_MODE_TORCH.equals(flashMode));
+    } else {
+      return false;
+    }
   }
 }

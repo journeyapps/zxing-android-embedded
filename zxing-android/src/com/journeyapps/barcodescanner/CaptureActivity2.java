@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,7 +19,7 @@ import java.util.List;
  */
 public class CaptureActivity2 extends Activity {
   private static final String TAG = CaptureActivity2.class.getSimpleName();
-  private BarcodeView surface;
+  private BarcodeView barcodeView;
   private ViewfinderView viewFinder;
 
   private BarcodeCallback callback = new BarcodeCallback() {
@@ -43,11 +44,11 @@ public class CaptureActivity2 extends Activity {
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.zxing_capture2);
-    surface = (BarcodeView) findViewById(R.id.zxing_barcode_surface);
-    surface.decodeContinuous(callback);
+    barcodeView = (BarcodeView) findViewById(R.id.zxing_barcode_surface);
+    barcodeView.decodeContinuous(callback);
 
     viewFinder = (ViewfinderView)findViewById(R.id.zxing_viewfinder_view);
-    viewFinder.setCameraPreview(surface);
+    viewFinder.setCameraPreview(barcodeView);
   }
 
   @Override
@@ -59,34 +60,56 @@ public class CaptureActivity2 extends Activity {
   }
 
   private void orientationChanged() {
-    surface.pause();
-    surface.resume();
+    barcodeView.pause();
+    barcodeView.resume();
   }
 
   @Override
   protected void onResume() {
     super.onResume();
 
-    surface.resume();
+    barcodeView.resume();
   }
 
   @Override
   protected void onPause() {
     super.onPause();
 
-    surface.pause();
+    barcodeView.pause();
   }
 
   public void pause(View view) {
-    surface.pause();
+    barcodeView.pause();
   }
 
   public void resume(View view) {
-    surface.resume();
+    barcodeView.resume();
   }
 
   public void triggerScan(View view) {
-    surface.decodeSingle(callback);
+    barcodeView.decodeSingle(callback);
   }
 
+
+  @Override
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    switch (keyCode) {
+      case KeyEvent.KEYCODE_BACK:
+        setResult(RESULT_CANCELED);
+        finish();
+        return true;
+      case KeyEvent.KEYCODE_FOCUS:
+      case KeyEvent.KEYCODE_CAMERA:
+        // Handle these events so they don't launch the Camera app
+        return true;
+      // Use volume up/down to turn on light
+      case KeyEvent.KEYCODE_VOLUME_DOWN:
+        barcodeView.setTorch(false);
+        return true;
+      case KeyEvent.KEYCODE_VOLUME_UP:
+        barcodeView.setTorch(true);
+        return true;
+    }
+    return super.onKeyDown(keyCode, event);
+  }
 }

@@ -1,7 +1,6 @@
 package com.journeyapps.barcodescanner;
 
 import android.content.Context;
-import android.graphics.Point;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;

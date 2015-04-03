@@ -241,6 +241,17 @@ public class CameraPreview extends ViewGroup {
     }
   }
 
+  /**
+   * Call this on the main thread, while the preview is running.
+   *
+   * @param on true to turn on the torch
+   */
+  public void setTorch(boolean on) {
+      if(cameraInstance != null) {
+        cameraInstance.setTorch(on);
+      }
+  }
+
   private void containerSized(Rect container) {
     this.containerRect = container;
     if(cameraInstance != null) {

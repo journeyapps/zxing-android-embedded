@@ -77,6 +77,19 @@ public class CameraInstance {
     cameraThread.enqueue(previewStarter);
   }
 
+  public void setTorch(final boolean on) {
+    Util.validateMainThread();
+
+    if(open) {
+      cameraThread.enqueue(new Runnable() {
+        @Override
+        public void run() {
+          cameraManager.setTorch(on);
+        }
+      });
+    }
+  }
+
   public void close() {
     Util.validateMainThread();
 
