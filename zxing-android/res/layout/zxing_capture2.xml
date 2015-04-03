@@ -7,7 +7,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2">
+        android:layout_weight="2"
+        android:layout_margin="0dp">
 
         <com.journeyapps.barcodescanner.BarcodeView
             android:layout_width="match_parent"

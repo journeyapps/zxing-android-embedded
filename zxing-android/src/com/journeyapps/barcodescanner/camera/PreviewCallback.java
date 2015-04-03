@@ -22,6 +22,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.journeyapps.barcodescanner.Size;
+
 final class PreviewCallback implements Camera.PreviewCallback {
 
   private static final String TAG = PreviewCallback.class.getSimpleName();
@@ -29,12 +31,12 @@ final class PreviewCallback implements Camera.PreviewCallback {
   private Handler previewHandler;
   private int previewMessage;
 
-  private Point resolution;
+  private Size resolution;
 
   public PreviewCallback() {
   }
 
-  public void setResolution(Point resolution) {
+  public void setResolution(Size resolution) {
     this.resolution = resolution;
   }
 
@@ -45,11 +47,11 @@ final class PreviewCallback implements Camera.PreviewCallback {
 
   @Override
   public void onPreviewFrame(byte[] data, Camera camera) {
-    Point cameraResolution = resolution;
+    Size cameraResolution = resolution;
     Handler thePreviewHandler = previewHandler;
     if (cameraResolution != null && thePreviewHandler != null) {
-      Message message = thePreviewHandler.obtainMessage(previewMessage, cameraResolution.x,
-          cameraResolution.y, data);
+      Message message = thePreviewHandler.obtainMessage(previewMessage, cameraResolution.width,
+          cameraResolution.height, data);
       message.sendToTarget();
       previewHandler = null;
     } else {

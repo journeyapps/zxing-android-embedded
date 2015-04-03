@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 
 import com.google.zxing.client.android.R;
+import com.journeyapps.barcodescanner.Size;
 import com.journeyapps.barcodescanner.Util;
 
 /**
@@ -51,7 +52,7 @@ public class CameraInstance {
    *
    * @return preview size
    */
-  private Point getPreviewSize() {
+  private Size getPreviewSize() {
     return cameraManager.getPreviewSize();
   }
 

@@ -80,8 +80,10 @@ public class CameraPreview extends ViewGroup {
 
   private PreviewScaleMode previewScaleMode = PreviewScaleMode.CROP;
 
-  private Rect containerRect;
-  private Point previewSize;
+  private DisplayConfiguration displayConfiguration;
+
+  private Size containerSize;
+  private Size previewSize;
   private Rect surfaceRect;
 
   private Rect framingRect = null;
@@ -119,7 +121,7 @@ public class CameraPreview extends ViewGroup {
     @Override
     public boolean handleMessage(Message message) {
       if(message.what == R.id.zxing_prewiew_size_ready) {
-        previewSized((Point)message.obj);
+        previewSized((Size)message.obj);
         return true;
       }
       return false;
@@ -198,29 +200,20 @@ public class CameraPreview extends ViewGroup {
 
 
   private void calculateFrames() {
-    if(containerRect == null || previewSize == null) {
+    if(containerSize == null || previewSize == null || displayConfiguration == null) {
       previewFramingRect = null;
       framingRect = null;
       surfaceRect = null;
-      throw new IllegalStateException("containerRect or previewSize is not set yet");
+      throw new IllegalStateException("containerSize or previewSize is not set yet");
     }
 
-    int previewWidth = previewSize.x;
-    int previewHeight = previewSize.y;
+    int previewWidth = previewSize.width;
+    int previewHeight = previewSize.height;
 
-    int width = containerRect.width();
-    int height = containerRect.height();
+    int width = containerSize.width;
+    int height = containerSize.height;
 
-    // Either crop or center the SurfaceView.
-    boolean center = (previewScaleMode == PreviewScaleMode.CENTER);
-    if (center ^ (width * previewHeight < height * previewWidth)) {
-      final int scaledChildWidth = previewWidth * height / previewHeight;
-      surfaceRect = new Rect((width - scaledChildWidth) / 2, 0, (width + scaledChildWidth) / 2, height);
-    } else {
-      final int scaledChildHeight = previewHeight * width / previewWidth;
-      surfaceRect = new Rect(0, (height - scaledChildHeight) / 2,
-              width, (height + scaledChildHeight) / 2);
-    }
+    surfaceRect = displayConfiguration.scalePreview(previewSize);
 
     Rect container = new Rect(0, 0, width, height);
     framingRect = calculateFramingRect(container, surfaceRect);
@@ -252,19 +245,20 @@ public class CameraPreview extends ViewGroup {
       }
   }
 
-  private void containerSized(Rect container) {
-    this.containerRect = container;
+  private void containerSized(Size containerSize) {
+    this.containerSize = containerSize;
     if(cameraInstance != null) {
       if (cameraInstance.getDisplayConfiguration() == null) {
-        cameraInstance.setDisplayConfiguration(new DisplayConfiguration(getDisplayRotation(), new Point(container.width(), container.height())));
+        displayConfiguration = new DisplayConfiguration(getDisplayRotation(), containerSize);
+        cameraInstance.setDisplayConfiguration(displayConfiguration);
         cameraInstance.configureCamera();
       }
     }
   }
 
-  private void previewSized(Point size) {
+  private void previewSized(Size size) {
     this.previewSize = size;
-    if(containerRect != null) {
+    if(containerSize != null) {
       calculateFrames();
       requestLayout();
       startPreviewIfReady();
@@ -280,7 +274,7 @@ public class CameraPreview extends ViewGroup {
   @SuppressLint("DrawAllocation")
   @Override
   protected void onLayout(boolean changed, int l, int t, int r, int b) {
-    containerSized(new Rect(0, 0, r - l, b - t));
+    containerSized(new Size(r - l, b - t));
 
     if (surfaceRect == null) {
       // Match the container, to reduce the risk of issues. The preview should never be drawn
@@ -363,7 +357,7 @@ public class CameraPreview extends ViewGroup {
       surfaceHolder.removeCallback(surfaceCallback);
     }
 
-    this.containerRect = null;
+    this.containerSize = null;
     this.previewSize = null;
     this.previewFramingRect = null;
     rotationListener.disable();

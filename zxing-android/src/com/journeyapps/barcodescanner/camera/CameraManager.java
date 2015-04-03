@@ -26,8 +26,12 @@ import android.view.SurfaceHolder;
 
 import com.google.zxing.client.android.camera.CameraConfigurationUtils;
 import com.google.zxing.client.android.camera.open.OpenCameraInterface;
+import com.journeyapps.barcodescanner.Size;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -61,8 +65,8 @@ public final class CameraManager {
   private DisplayConfiguration displayConfiguration;
 
   // Actual chosen preview size
-  private Point requestedPreviewSize;
-  private Point previewSize;
+  private Size requestedPreviewSize;
+  private Size previewSize;
 
   /**
    * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
@@ -199,11 +203,13 @@ public final class CameraManager {
 
     }
 
-    Point desiredSize = displayConfiguration.getDesiredLandscapePreviewSize();
+    List<Size> previewSizes = getPreviewSizes(parameters);
+    if(previewSizes.size() == 0) {
+      requestedPreviewSize = null;
+    } else {
+      requestedPreviewSize = displayConfiguration.getBestPreviewSize(previewSizes);
 
-    if(desiredSize != null) {
-      requestedPreviewSize = CameraConfigurationUtils.findBestPreviewSizeValue(parameters, desiredSize);
-      parameters.setPreviewSize(requestedPreviewSize.x, requestedPreviewSize.y);
+      parameters.setPreviewSize(requestedPreviewSize.width, requestedPreviewSize.height);
     }
 
     Log.i(TAG, "Final camera parameters: " + parameters.flatten());
@@ -211,9 +217,27 @@ public final class CameraManager {
     camera.setParameters(parameters);
   }
 
+  private static List<Size> getPreviewSizes(Camera.Parameters parameters) {
+    List<Camera.Size> rawSupportedSizes = parameters.getSupportedPreviewSizes();
+    List<Size> previewSizes = new ArrayList<>();
+    if(rawSupportedSizes == null) {
+      Camera.Size defaultSize = parameters.getPreviewSize();
+      if(defaultSize != null) {
+        // Work around potential platform bugs
+        previewSizes.add(new Size(defaultSize.width, defaultSize.height));
+      }
+      return previewSizes;
+    }
+    for (Camera.Size size : rawSupportedSizes) {
+      previewSizes.add(new Size(size.width, size.height));
+    }
+    return previewSizes;
+  }
+
 
 
   private void setCameraDisplayOrientation() {
+    // http://developer.android.com/reference/android/hardware/Camera.html#setDisplayOrientation(int)
     int rotation = displayConfiguration.getRotation();
     int degrees = 0;
     switch (rotation) {
@@ -256,7 +280,7 @@ public final class CameraManager {
     if(realPreviewSize == null) {
       previewSize = requestedPreviewSize;
     } else {
-      previewSize = new Point(realPreviewSize.width, realPreviewSize.height);
+      previewSize = new Size(realPreviewSize.width, realPreviewSize.height);
     }
     previewCallback.setResolution(previewSize);
   }
@@ -271,7 +295,7 @@ public final class CameraManager {
    *
    * @return preview size
    */
-  public Point getLandscapePreviewSize() {
+  public Size getLandscapePreviewSize() {
     return previewSize;
   }
 
@@ -280,12 +304,11 @@ public final class CameraManager {
    *
    * @return preview size
    */
-  public Point getPreviewSize() {
+  public Size getPreviewSize() {
     if(previewSize == null) {
       return null;
     } else if(displayConfiguration.isRotated()) {
-      //noinspection SuspiciousNameCombination
-      return new Point(previewSize.y, previewSize.x);
+      return previewSize.rotate();
     } else {
       return previewSize;
     }
