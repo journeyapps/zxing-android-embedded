@@ -21,4 +21,5 @@
   <item type="id" name="zxing_possible_result_points"/>
   <item type="id" name="zxing_back_button"/>
   <item type="id" name="zxing_prewiew_size_ready"/>
+  <item type="id" name="zxing_camera_error"/>
 </resources>

@@ -1,8 +1,6 @@
 require 'fileutils'
 
 `rm -rf src-orig/* res-orig/*`
-`cp -r ../zxing-android-complete/android-core-src/* src-orig/`
-`cp -r ../zxing-android-complete/src/* src-orig/`
 `cp -r ../zxing-android-complete/res/* res-orig/`
 
 def remove_all prefix, globs
@@ -24,23 +22,6 @@ def process(files)
     File.open(file, 'w') { |file| file.puts processed }
   end
 end
-
-# Remove unsused source files
-orig_prefix = 'src-orig/com/google/zxing/client/android/'
-
-# We have custom versions of each of these files - remove the original ones and log the diff
-FileUtils.rm_f 'source.patch'
-Dir['src/com/google/zxing/client/android/**/*.java'].each do |our_file|
-  orig_file = our_file.gsub(/src/, 'src-orig')
-  if File.exists? orig_file
-    `git diff --no-index #{orig_file} #{our_file} >> source.patch`
-    FileUtils.rm orig_file
-  end
-end
-
-
-remove_all orig_prefix, %w(HttpHelper.java HelpActivity.java ScanFromWebPageManager.java Contents.java IntentSource.java LocaleManager.java PreferencesFragment.java book history result share wifi clipboard encode)
-
 
 
 # Remove strings we don't use
