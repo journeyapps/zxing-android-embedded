@@ -65,7 +65,6 @@ public class CameraPreview extends ViewGroup {
   private static final String TAG = CameraPreview.class.getSimpleName();
 
   private CameraInstance cameraInstance;
-  private boolean hasSurface;
   private Activity activity;
 
   private Handler stateHandler;
@@ -78,15 +77,24 @@ public class CameraPreview extends ViewGroup {
 
   private List<StateListener> stateListeners = new ArrayList<>();
 
-  private PreviewScaleMode previewScaleMode = PreviewScaleMode.CROP;
-
   private DisplayConfiguration displayConfiguration;
 
+  // Size of this container, non-null after layout is performed
   private Size containerSize;
+
+  // Size of the preview resolution
   private Size previewSize;
+
+  // Rect placing the preview surface
   private Rect surfaceRect;
 
+  // Size of the current surface. non-null if the surface is ready
+  private Size currentSurfaceSize;
+
+  // Framing rectangle relative to this view
   private Rect framingRect = null;
+
+  // Framing rectangle relative to the preview resolution
   private Rect previewFramingRect = null;
 
   private final SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
@@ -98,7 +106,7 @@ public class CameraPreview extends ViewGroup {
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-      hasSurface = false;
+      currentSurfaceSize = null;
     }
 
     @Override
@@ -107,13 +115,8 @@ public class CameraPreview extends ViewGroup {
         Log.e(TAG, "*** WARNING *** surfaceChanged() gave us a null surface!");
         return;
       }
-      if(!hasSurface && surfaceRect != null) {
-        if(surfaceRect.width() == width && surfaceRect.height() == height) {
-          // We're only ready if the surface has the correct size
-          hasSurface = true;
-          startPreviewIfReady();
-        }
-      }
+      currentSurfaceSize = new Size(width, height);
+      startPreviewIfReady();
     }
   };
 
@@ -185,19 +188,6 @@ public class CameraPreview extends ViewGroup {
       listener.previewReady();
     }
   }
-  public PreviewScaleMode getPreviewScaleMode() {
-    return previewScaleMode;
-  }
-
-  /**
-   * Set the scale mode of the preview, when the aspect ratio is different from the BarcodeView.
-   *
-   * @param previewScaleMode PreviewScaleMode.CROP or PreviewScaleMode.CENTER
-   */
-  public void setPreviewScaleMode(PreviewScaleMode previewScaleMode) {
-    this.previewScaleMode = previewScaleMode;
-  }
-
 
   private void calculateFrames() {
     if(containerSize == null || previewSize == null || displayConfiguration == null) {
@@ -266,8 +256,12 @@ public class CameraPreview extends ViewGroup {
   }
 
   private void startPreviewIfReady() {
-    if(hasSurface && previewSize != null) {
-      startCameraPreview(surfaceView.getHolder());
+    if(currentSurfaceSize != null && previewSize != null && surfaceRect != null) {
+      if(currentSurfaceSize.equals(new Size(surfaceRect.width(), surfaceRect.height()))) {
+        startCameraPreview(surfaceView.getHolder());
+      } else {
+        // Surface is not the correct size yet
+      }
     }
   }
 
@@ -322,7 +316,7 @@ public class CameraPreview extends ViewGroup {
     // initCamera() does nothing if called twice, but does log a warning
     initCamera();
 
-    if (hasSurface) {
+    if (currentSurfaceSize != null) {
       // The activity was paused but not stopped, so the surface still exists. Therefore
       // surfaceCreated() won't be called, so init the camera here.
       startPreviewIfReady();
@@ -352,7 +346,7 @@ public class CameraPreview extends ViewGroup {
       cameraInstance = null;
       previewActive = false;
     }
-    if (!hasSurface) {
+    if (currentSurfaceSize == null) {
       SurfaceHolder surfaceHolder = surfaceView.getHolder();
       surfaceHolder.removeCallback(surfaceCallback);
     }
