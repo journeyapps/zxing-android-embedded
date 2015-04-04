@@ -16,7 +16,6 @@
 
 package com.journeyapps.barcodescanner.camera;
 
-import android.graphics.Point;
 import android.hardware.Camera;
 import android.os.Handler;
 import android.os.Message;

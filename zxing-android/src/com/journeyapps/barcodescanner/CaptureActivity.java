@@ -3,14 +3,10 @@ package com.journeyapps.barcodescanner;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -84,7 +80,7 @@ public class CaptureActivity extends Activity {
     Window window = getWindow();
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-    setContentView(R.layout.zxing_capture2);
+    setContentView(R.layout.zxing_capture);
 
     handler = new Handler();
 
