@@ -78,8 +78,23 @@ public final class ViewfinderView extends View {
     this.cameraPreview = view;
     view.addStateListener(new CameraPreview.StateListener() {
       @Override
-      public void previewReady() {
+      public void previewSized() {
         invalidate();
+      }
+
+      @Override
+      public void previewStarted() {
+
+      }
+
+      @Override
+      public void previewStopped() {
+
+      }
+
+      @Override
+      public void cameraError(Exception error) {
+
       }
     });
   }

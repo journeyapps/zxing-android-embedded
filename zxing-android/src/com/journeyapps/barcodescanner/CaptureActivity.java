@@ -1,12 +1,17 @@
 package com.journeyapps.barcodescanner;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Surface;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -46,6 +51,8 @@ public class CaptureActivity extends Activity {
 
   private Handler handler;
 
+  private boolean destroyed = false;
+
   // Delay long enough that the beep can be played.
   // TODO: play beep in background
   private static final long DELAY_BEEP = 150;
@@ -73,6 +80,28 @@ public class CaptureActivity extends Activity {
     }
   };
 
+  private final CameraPreview.StateListener stateListener = new CameraPreview.StateListener() {
+    @Override
+    public void previewSized() {
+
+    }
+
+    @Override
+    public void previewStarted() {
+
+    }
+
+    @Override
+    public void previewStopped() {
+
+    }
+
+    @Override
+    public void cameraError(Exception error) {
+      displayFrameworkBugMessageAndExit();
+    }
+  };
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -85,6 +114,7 @@ public class CaptureActivity extends Activity {
     handler = new Handler();
 
     barcodeView = (BarcodeView) findViewById(R.id.zxing_barcode_surface);
+    barcodeView.addStateListener(stateListener);
     barcodeView.decodeSingle(callback);
 
     viewFinder = (ViewfinderView)findViewById(R.id.zxing_viewfinder_view);
@@ -108,6 +138,7 @@ public class CaptureActivity extends Activity {
     CameraSettings settings = new CameraSettings();
 
     int orientation = intent.getIntExtra(Intents.Scan.ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+    // TODO: if the orientation will change, do not start the camera
     if(orientation == ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
       // Lock to landscape or reverse landscape
       //noinspection ResourceType
@@ -191,10 +222,15 @@ public class CaptureActivity extends Activity {
 
   @Override
   protected void onDestroy() {
-    inactivityTimer.shutdown();
     super.onDestroy();
+    destroyed = true;
+    inactivityTimer.shutdown();
   }
 
+  @Override
+  protected void onStop() {
+    super.onStop();
+  }
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -255,4 +291,28 @@ public class CaptureActivity extends Activity {
     setResult(RESULT_OK, intent);
     finish();
   }
+
+
+  protected void displayFrameworkBugMessageAndExit() {
+    if(this.isFinishing() || this.destroyed) {
+      return;
+    }
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setTitle(getString(R.string.zxing_app_name));
+    builder.setMessage(getString(R.string.zxing_msg_camera_framework_bug));
+    builder.setPositiveButton(R.string.zxing_button_ok, new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialog, int which) {
+        finish();
+      }
+    });
+    builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+      @Override
+      public void onCancel(DialogInterface dialog) {
+        finish();
+      }
+    });
+    builder.show();
+  }
+
 }

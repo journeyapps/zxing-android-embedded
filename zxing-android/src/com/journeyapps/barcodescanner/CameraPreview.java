@@ -45,7 +45,27 @@ import java.util.List;
  */
 public class CameraPreview extends ViewGroup {
   public static interface StateListener {
-    public void previewReady();
+    /**
+     * Preview and frame sizes are determined.
+     */
+    public void previewSized();
+
+    /**
+     * Preview has started.
+     */
+    public void previewStarted();
+
+    /**
+     * Preview has stopped.
+     */
+    public void previewStopped();
+
+    /**
+     * The camera has errored, and cannot display a preview.
+     *
+     * @param error the error
+     */
+    public void cameraError(Exception error);
   }
 
   public static enum PreviewScaleMode {
@@ -128,6 +148,14 @@ public class CameraPreview extends ViewGroup {
       if(message.what == R.id.zxing_prewiew_size_ready) {
         previewSized((Size)message.obj);
         return true;
+      } else if(message.what == R.id.zxing_camera_error) {
+        Exception error = (Exception)message.obj;
+
+        if(isActive()) {
+          // This check prevents multiple errors from begin passed through.
+          pause();
+          fireState.cameraError(error);
+        }
       }
       return false;
     }
@@ -185,11 +213,36 @@ public class CameraPreview extends ViewGroup {
     stateListeners.add(listener);
   }
 
-  private void firePreviewReady() {
-    for (StateListener listener : stateListeners) {
-      listener.previewReady();
+  private StateListener fireState = new StateListener() {
+    @Override
+    public void previewSized() {
+      for (StateListener listener : stateListeners) {
+        listener.previewSized();
+      }
     }
-  }
+
+    @Override
+    public void previewStarted() {
+      for (StateListener listener : stateListeners) {
+        listener.previewStarted();
+      }
+
+    }
+
+    @Override
+    public void previewStopped() {
+      for (StateListener listener : stateListeners) {
+        listener.previewStopped();
+      }
+    }
+
+    @Override
+    public void cameraError(Exception error) {
+      for (StateListener listener : stateListeners) {
+        listener.cameraError(error);
+      }
+    }
+  };
 
   private void calculateFrames() {
     if(containerSize == null || previewSize == null || displayConfiguration == null) {
@@ -222,7 +275,7 @@ public class CameraPreview extends ViewGroup {
       framingRect = null;
       Log.w(TAG, "Preview frame is too small");
     } else {
-      firePreviewReady();
+      fireState.previewSized();
     }
   }
 
@@ -370,6 +423,17 @@ public class CameraPreview extends ViewGroup {
     this.previewSize = null;
     this.previewFramingRect = null;
     rotationListener.disable();
+
+    fireState.previewStopped();
+  }
+
+  /**
+   * Considered active if between resume() and pause().
+   *
+   * @return true if active
+   */
+  protected boolean isActive() {
+    return cameraInstance != null;
   }
 
   private int getDisplayRotation() {
@@ -398,6 +462,7 @@ public class CameraPreview extends ViewGroup {
       previewActive = true;
 
       previewStarted();
+      fireState.previewStarted();
     }
   }
 

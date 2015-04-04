@@ -147,6 +147,7 @@ public class CameraInstance {
         Log.d(TAG, "Opening camera");
         cameraManager.open();
       } catch (Exception e) {
+        notifyError(e);
         Log.e(TAG, "Failed to open camera", e);
       }
     }
@@ -162,6 +163,7 @@ public class CameraInstance {
           readyHandler.obtainMessage(R.id.zxing_prewiew_size_ready, getPreviewSize()).sendToTarget();
         }
       } catch (Exception e) {
+        notifyError(e);
         Log.e(TAG, "Failed to configure camera", e);
       }
     }
@@ -175,6 +177,7 @@ public class CameraInstance {
         cameraManager.setPreviewDisplay(surfaceHolder);
         cameraManager.startPreview();
       } catch (Exception e) {
+        notifyError(e);
         Log.e(TAG, "Failed to start preview", e);
       }
     }
@@ -194,4 +197,10 @@ public class CameraInstance {
       cameraThread.decrementInstances();
     }
   };
+
+  private void notifyError(Exception error) {
+    if (readyHandler != null) {
+      readyHandler.obtainMessage(R.id.zxing_camera_error, error).sendToTarget();
+    }
+  }
 }
