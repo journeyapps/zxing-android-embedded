@@ -30,15 +30,9 @@
   <uses-feature android:name="android.hardware.camera.flash" android:required="false"/>
   <uses-feature android:name="android.hardware.screen.landscape" android:required="false" />
   <uses-feature android:name="android.hardware.wifi" android:required="false"/>
-  <!-- TODO make this not required again after android.hardware.camera.any is available -->
+
 
   <application>
-      <activity android:name="com.google.zxing.client.android.CaptureActivity"
-                android:clearTaskOnLaunch="true"
-                android:screenOrientation="sensorLandscape"
-                android:stateNotNeeded="true"
-                android:theme="@style/zxing_CaptureTheme"
-                android:windowSoftInputMode="stateAlwaysHidden"/>
       <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"
                 android:clearTaskOnLaunch="true"
                 android:screenOrientation="sensorLandscape"

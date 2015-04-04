@@ -25,6 +25,5 @@ package com.google.zxing.client.android;
 public final class PreferencesActivity {
   public static final String KEY_PLAY_BEEP = "zxing_preferences_play_beep";
   public static final String KEY_VIBRATE = "zxing_preferences_vibrate";
-  public static final String KEY_FRONT_LIGHT_MODE = "zxing_preferences_front_light_mode";
   public static final String KEY_AUTO_FOCUS = "zxing_preferences_auto_focus";
 }
