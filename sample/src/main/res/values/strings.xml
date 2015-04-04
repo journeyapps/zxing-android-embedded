@@ -3,8 +3,9 @@
 
     <string name="app_name">ZXing Sample</string>
     <string name="scan_barcode">Scan Barcode</string>
-    <string name="custom_layout">Custom Layout / Any Orientation</string>
+    <string name="any_orientation">Any Orientation</string>
     <string name="scan_from_fragment">Scan from fragment</string>
     <string name="front_camera">Front Camera</string>
+    <string name="custom_activity">Custom Activity</string>
 
 </resources>

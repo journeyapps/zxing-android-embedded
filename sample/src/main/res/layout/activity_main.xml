@@ -18,7 +18,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/custom_layout"
+        android:text="@string/any_orientation"
         android:onClick="scanBarcodeCustomLayout"/>
 
     <Button
@@ -38,7 +38,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/scan_barcode"
+        android:text="@string/custom_activity"
         android:onClick="scan2"/>
 
 </LinearLayout>
