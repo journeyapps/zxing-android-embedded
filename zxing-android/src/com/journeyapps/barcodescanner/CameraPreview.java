@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.google.zxing.client.android.R;
 import com.journeyapps.barcodescanner.camera.CameraInstance;
+import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.journeyapps.barcodescanner.camera.DisplayConfiguration;
 
 import java.util.ArrayList;
@@ -78,6 +79,7 @@ public class CameraPreview extends ViewGroup {
   private List<StateListener> stateListeners = new ArrayList<>();
 
   private DisplayConfiguration displayConfiguration;
+  private CameraSettings cameraSettings = new CameraSettings();
 
   // Size of this container, non-null after layout is performed
   private Size containerSize;
@@ -96,6 +98,7 @@ public class CameraPreview extends ViewGroup {
 
   // Framing rectangle relative to the preview resolution
   private Rect previewFramingRect = null;
+
 
   private final SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
 
@@ -303,6 +306,19 @@ public class CameraPreview extends ViewGroup {
     return previewFramingRect;
   }
 
+  public CameraSettings getCameraSettings() {
+    return cameraSettings;
+  }
+
+  /**
+   * This does not have an effect if the camera is already open.
+   *
+   * @param cameraSettings the new settings
+   */
+  public void setCameraSettings(CameraSettings cameraSettings) {
+    this.cameraSettings = cameraSettings;
+  }
+
   /**
    * Start the camera preview and decoding. Typically this should be called from the Activity's
    * onResume() method.
@@ -368,6 +384,7 @@ public class CameraPreview extends ViewGroup {
     }
 
     cameraInstance = new CameraInstance(getContext());
+    cameraInstance.setCameraSettings(cameraSettings);
 
     cameraInstance.setReadyHandler(stateHandler);
     cameraInstance.open();

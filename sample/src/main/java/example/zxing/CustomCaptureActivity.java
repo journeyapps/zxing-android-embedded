@@ -1,4 +1,4 @@
-package com.journeyapps.barcodescanner;
+package example.zxing;
 
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -6,29 +6,30 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.TextView;
 
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
-import com.google.zxing.client.android.R;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeView;
+import com.journeyapps.barcodescanner.ViewfinderView;
 
 import java.util.List;
 
 /**
  *
  */
-public class CaptureActivity2 extends Activity {
-  private static final String TAG = CaptureActivity2.class.getSimpleName();
+public class CustomCaptureActivity extends Activity {
+  private static final String TAG = CustomCaptureActivity.class.getSimpleName();
   private BarcodeView barcodeView;
   private ViewfinderView viewFinder;
 
   private BarcodeCallback callback = new BarcodeCallback() {
     @Override
     public void barcodeResult(Result result) {
-      TextView text = (TextView)findViewById(R.id.zxing_barcode_status);
-      if(result.getText() != null) {
-        text.setText(result.getText());
-      }
+//      TextView text = (TextView)findViewById(R.id.zxing_barcode_status);
+//      if(result.getText() != null) {
+//        text.setText(result.getText());
+//      }
     }
 
     @Override
@@ -43,7 +44,8 @@ public class CaptureActivity2 extends Activity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    setContentView(R.layout.zxing_capture2);
+    setContentView(R.layout.new_custom_layout);
+
     barcodeView = (BarcodeView) findViewById(R.id.zxing_barcode_surface);
     barcodeView.decodeContinuous(callback);
 

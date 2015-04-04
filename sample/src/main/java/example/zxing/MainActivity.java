@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.journeyapps.barcodescanner.CaptureActivity2;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -33,7 +32,8 @@ public class MainActivity extends ActionBarActivity {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setCaptureLayout(R.layout.custom_capture_layout);
         integrator.setLegacyCaptureLayout(R.layout.custom_legacy_capture_layout);
-//        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
+        integrator.setPrompt("Scan something");
         integrator.autoWide();
         integrator.setOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         integrator.initiateScan();
@@ -46,7 +46,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void scan2(View view) {
-        Intent intent = new Intent(this, CaptureActivity2.class);
+        Intent intent = new Intent(this, CustomCaptureActivity.class);
         startActivity(intent);
     }
 

@@ -20,7 +20,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Display;
@@ -114,34 +113,38 @@ public class IntentIntegrator {
 
     private Collection<String> desiredBarcodeFormats;
 
+    private static final boolean HAVE_NEW_SCANNER;
     private static final boolean HAVE_STANDARD_SCANNER;
     private static final boolean HAVE_LEGACY_SCANNER;
 
-    private static final String STANDARD_PACKAGE_NAME = "com.google.zxing.client.android";
-    private static final String LEGACY_PACKAGE_NAME = "com.google.zxing.client.androidlegacy";
+    private static final String NEW_ACTIVITY_NAME = "com.journeyapps.barcodescanner.CaptureActivity";
+    private static final String STANDARD_ACTIVITY_NAME = "com.google.zxing.client.android.CaptureActivity";
+    private static final String LEGACY_ACTIVITY_NAME = "com.google.zxing.client.androidlegacy.CaptureActivity";
 
     protected Class<?> getCaptureActivity() {
         try {
-            return Class.forName(getScannerPackage() + ".CaptureActivity");
+            return Class.forName(getScannerActivity());
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Could not find CaptureActivity. Make sure one of the zxing-android libraries are loaded.", e);
         }
     }
 
-    private static String getScannerPackage() {
-        if(HAVE_STANDARD_SCANNER && Build.VERSION.SDK_INT >= 15) {
-            return STANDARD_PACKAGE_NAME;
+    private static String getScannerActivity() {
+        if(HAVE_NEW_SCANNER && Build.VERSION.SDK_INT >= 9) {
+            return NEW_ACTIVITY_NAME;
+        } else if(HAVE_STANDARD_SCANNER && Build.VERSION.SDK_INT >= 15) {
+            return STANDARD_ACTIVITY_NAME;
         } else if(HAVE_LEGACY_SCANNER) {
-            return LEGACY_PACKAGE_NAME;
+            return LEGACY_ACTIVITY_NAME;
         } else {
-            return STANDARD_PACKAGE_NAME;
+            return STANDARD_ACTIVITY_NAME;
         }
     }
 
     static {
         boolean test1 = false;
         try {
-            Class.forName(STANDARD_PACKAGE_NAME + ".CaptureActivity");
+            Class.forName(STANDARD_ACTIVITY_NAME);
             test1 = true;
         } catch (ClassNotFoundException e) {
             // Ignore
@@ -150,12 +153,21 @@ public class IntentIntegrator {
 
         boolean test2 = false;
         try {
-            Class.forName(LEGACY_PACKAGE_NAME + ".CaptureActivity");
+            Class.forName(LEGACY_ACTIVITY_NAME);
             test2 = true;
         } catch (ClassNotFoundException e) {
             // Ignore
         }
         HAVE_LEGACY_SCANNER = test2;
+
+        boolean test3 = false;
+        try {
+            Class.forName(NEW_ACTIVITY_NAME);
+            test3 = true;
+        } catch (ClassNotFoundException e) {
+            // Ignore
+        }
+        HAVE_NEW_SCANNER = test3;
     }
 
     /**

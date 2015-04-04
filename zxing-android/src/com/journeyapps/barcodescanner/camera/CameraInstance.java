@@ -1,6 +1,7 @@
 package com.journeyapps.barcodescanner.camera;
 
 import android.content.Context;
+import android.graphics.Camera;
 import android.graphics.Point;
 import android.os.Handler;
 import android.util.Log;
@@ -22,12 +23,14 @@ public class CameraInstance {
   private Handler readyHandler;
   private DisplayConfiguration displayConfiguration;
   private boolean open = false;
+  private CameraSettings cameraSettings = new CameraSettings();
 
   public CameraInstance(Context context) {
     Util.validateMainThread();
 
     this.cameraThread = CameraThread.getInstance();
     this.cameraManager = new CameraManager(context);
+    this.cameraManager.setCameraSettings(cameraSettings);
   }
 
   public void setDisplayConfiguration(DisplayConfiguration configuration) {
@@ -45,6 +48,22 @@ public class CameraInstance {
 
   public void setSurfaceHolder(SurfaceHolder surfaceHolder) {
     this.surfaceHolder = surfaceHolder;
+  }
+
+  public CameraSettings getCameraSettings() {
+    return cameraSettings;
+  }
+
+  /**
+   * This only has an effect if the camera is not opened yet.
+   *
+   * @param cameraSettings the new camera settings
+   */
+  public void setCameraSettings(CameraSettings cameraSettings) {
+    if(!open) {
+      this.cameraSettings = cameraSettings;
+      this.cameraManager.setCameraSettings(cameraSettings);
+    }
   }
 
   /**

@@ -31,7 +31,7 @@ import com.google.zxing.DecodeHintType;
 /**
  * @author Lachezar Dobrev
  */
-final class DecodeHintManager {
+public final class DecodeHintManager {
   
   private static final String TAG = DecodeHintManager.class.getSimpleName();
 
@@ -198,7 +198,7 @@ final class DecodeHintManager {
     return hints;
   }
 
-  static Map<DecodeHintType, Object> parseDecodeHints(Intent intent) {
+  public static Map<DecodeHintType, Object> parseDecodeHints(Intent intent) {
     Bundle extras = intent.getExtras();
     if (extras == null || extras.isEmpty()) {
       return null;

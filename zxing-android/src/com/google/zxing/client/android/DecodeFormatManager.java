@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-final class DecodeFormatManager {
+public final class DecodeFormatManager {
 
   private static final Pattern COMMA_PATTERN = Pattern.compile(",");
 
@@ -67,7 +67,7 @@ final class DecodeFormatManager {
 
   private DecodeFormatManager() {}
 
-  static Set<BarcodeFormat> parseDecodeFormats(Intent intent) {
+  public static Set<BarcodeFormat> parseDecodeFormats(Intent intent) {
     Iterable<String> scanFormats = null;
     CharSequence scanFormatsString = intent.getStringExtra(Intents.Scan.FORMATS);
     if (scanFormatsString != null) {

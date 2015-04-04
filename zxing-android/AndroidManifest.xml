@@ -39,8 +39,10 @@
                 android:stateNotNeeded="true"
                 android:theme="@style/zxing_CaptureTheme"
                 android:windowSoftInputMode="stateAlwaysHidden"/>
-      <activity android:name="com.journeyapps.barcodescanner.CaptureActivity2"
-                android:screenOrientation="fullSensor"
+      <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"
+                android:clearTaskOnLaunch="true"
+                android:screenOrientation="sensorLandscape"
+                android:stateNotNeeded="true"
                 android:theme="@style/zxing_CaptureTheme"
                 android:windowSoftInputMode="stateAlwaysHidden"/>
   </application>
