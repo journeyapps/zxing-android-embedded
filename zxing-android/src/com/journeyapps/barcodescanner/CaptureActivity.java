@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Surface;
@@ -20,8 +21,10 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.BeepManager;
 import com.google.zxing.client.android.DecodeFormatManager;
 import com.google.zxing.client.android.DecodeHintManager;
+import com.google.zxing.client.android.InactivityTimer;
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.R;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
@@ -42,12 +45,28 @@ public class CaptureActivity extends Activity {
   private ViewfinderView viewFinder;
   private TextView statusView;
 
+  private InactivityTimer inactivityTimer;
+  private BeepManager beepManager;
+
+  private Handler handler;
+
+  // Delay long enough that the beep can be played.
+  // TODO: play beep in background
+  private static final long DELAY_BEEP = 150;
+
   private BarcodeCallback callback = new BarcodeCallback() {
     @Override
-    public void barcodeResult(Result result) {
+    public void barcodeResult(final Result result) {
       barcodeView.pause();
+      beepManager.playBeepSoundAndVibrate();
 
-      returnResult(result);
+      handler.postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          returnResult(result);
+        }
+      }, DELAY_BEEP);
+
     }
 
     @Override
@@ -67,6 +86,8 @@ public class CaptureActivity extends Activity {
 
     setContentView(R.layout.zxing_capture2);
 
+    handler = new Handler();
+
     barcodeView = (BarcodeView) findViewById(R.id.zxing_barcode_surface);
     barcodeView.decodeSingle(callback);
 
@@ -74,6 +95,9 @@ public class CaptureActivity extends Activity {
     viewFinder.setCameraPreview(barcodeView);
 
     statusView = (TextView) findViewById(R.id.zxing_status_view);
+
+    inactivityTimer = new InactivityTimer(this);
+    beepManager = new BeepManager(this);
 
     if(getIntent() != null && Intents.Scan.ACTION.equals(getIntent().getAction())) {
       initializeFromIntent(getIntent());
@@ -155,6 +179,8 @@ public class CaptureActivity extends Activity {
     super.onResume();
 
     barcodeView.resume();
+    beepManager.updatePrefs();
+    inactivityTimer.onResume();
   }
 
   @Override
@@ -162,6 +188,15 @@ public class CaptureActivity extends Activity {
     super.onPause();
 
     barcodeView.pause();
+
+    inactivityTimer.onPause();
+    beepManager.close();
+  }
+
+  @Override
+  protected void onDestroy() {
+    inactivityTimer.shutdown();
+    super.onDestroy();
   }
 
 

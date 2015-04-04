@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -28,7 +29,8 @@ import android.util.Log;
 /**
  * Finishes an activity after a period of inactivity if the device is on battery power.
  */
-final class InactivityTimer {
+@TargetApi(11)
+public final class InactivityTimer {
 
   private static final String TAG = InactivityTimer.class.getSimpleName();
 
@@ -39,7 +41,7 @@ final class InactivityTimer {
   private boolean registered;
   private AsyncTask<Object,Object,Object> inactivityTask;
 
-  InactivityTimer(Activity activity) {
+  public InactivityTimer(Activity activity) {
     this.activity = activity;
     powerStatusReceiver = new PowerStatusReceiver();
     registered = false;
@@ -80,7 +82,7 @@ final class InactivityTimer {
     }
   }
 
-  void shutdown() {
+  public void shutdown() {
     cancel();
   }
 

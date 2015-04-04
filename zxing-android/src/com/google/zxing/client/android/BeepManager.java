@@ -32,7 +32,7 @@ import java.io.IOException;
 /**
  * Manages beeps and vibrations for {@link CaptureActivity}.
  */
-final class BeepManager implements
+public final class BeepManager implements
     MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener, Closeable {
 
   private static final String TAG = BeepManager.class.getSimpleName();
@@ -45,13 +45,13 @@ final class BeepManager implements
   private boolean playBeep;
   private boolean vibrate;
 
-  BeepManager(Activity activity) {
+  public BeepManager(Activity activity) {
     this.activity = activity;
     this.mediaPlayer = null;
     updatePrefs();
   }
 
-  synchronized void updatePrefs() {
+  public synchronized void updatePrefs() {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
     playBeep = shouldBeep(prefs, activity);
     vibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
@@ -63,7 +63,7 @@ final class BeepManager implements
     }
   }
 
-  synchronized void playBeepSoundAndVibrate() {
+  public synchronized void playBeepSoundAndVibrate() {
     if (playBeep && mediaPlayer != null) {
       mediaPlayer.start();
     }
