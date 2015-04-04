@@ -1,8 +1,6 @@
 package com.journeyapps.barcodescanner.camera;
 
 import android.content.Context;
-import android.graphics.Camera;
-import android.graphics.Point;
 import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;

@@ -1,7 +1,5 @@
 package com.journeyapps.barcodescanner;
 
-import android.graphics.Point;
-
 /**
  *
  */

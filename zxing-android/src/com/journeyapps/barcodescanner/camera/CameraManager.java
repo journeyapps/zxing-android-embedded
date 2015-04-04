@@ -17,7 +17,6 @@
 package com.journeyapps.barcodescanner.camera;
 
 import android.content.Context;
-import android.graphics.Point;
 import android.hardware.Camera;
 import android.os.Handler;
 import android.util.Log;
@@ -30,7 +29,6 @@ import com.journeyapps.barcodescanner.Size;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -121,7 +119,7 @@ public final class CameraManager {
     if (theCamera != null && !previewing) {
       theCamera.startPreview();
       previewing = true;
-      autoFocusManager = new AutoFocusManager(context, camera);
+      autoFocusManager = new AutoFocusManager(context, camera, settings);
     }
   }
 

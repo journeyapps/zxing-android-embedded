@@ -16,17 +16,17 @@
 
 package com.google.zxing.client.android;
 
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.google.zxing.DecodeHintType;
+
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * @author Lachezar Dobrev

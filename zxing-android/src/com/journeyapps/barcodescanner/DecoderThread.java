@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
-import android.view.Display;
 import android.view.Surface;
 
 import com.google.zxing.LuminanceSource;

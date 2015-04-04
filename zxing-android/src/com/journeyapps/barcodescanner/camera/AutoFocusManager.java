@@ -16,19 +16,17 @@
 
 package com.journeyapps.barcodescanner.camera;
 
+import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.util.Log;
-
-import com.google.zxing.client.android.PreferencesActivity;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.RejectedExecutionException;
 
+@TargetApi(11)
 final class AutoFocusManager implements Camera.AutoFocusCallback {
 
   private static final String TAG = AutoFocusManager.class.getSimpleName();
@@ -47,13 +45,10 @@ final class AutoFocusManager implements Camera.AutoFocusCallback {
   private final Camera camera;
   private AsyncTask<?,?,?> outstandingTask;
 
-  AutoFocusManager(Context context, Camera camera) {
+  AutoFocusManager(Context context, Camera camera, CameraSettings settings) {
     this.camera = camera;
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     String currentFocusMode = camera.getParameters().getFocusMode();
-    useAutoFocus =
-        sharedPrefs.getBoolean(PreferencesActivity.KEY_AUTO_FOCUS, true) &&
-        FOCUS_MODES_CALLING_AF.contains(currentFocusMode);
+    useAutoFocus = settings.isAutoFocusEnabled();
     Log.i(TAG, "Current focus mode '" + currentFocusMode + "'; use auto focus? " + useAutoFocus);
     start();
   }
