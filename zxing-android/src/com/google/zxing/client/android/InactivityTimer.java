@@ -89,7 +89,6 @@ public final class InactivityTimer {
   }
 
   private void cancelCallback() {
-    Log.d(TAG, "cancel");
     handler.removeCallbacksAndMessages(null);
   }
 

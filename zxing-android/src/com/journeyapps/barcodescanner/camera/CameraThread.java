@@ -36,7 +36,9 @@ class CameraThread {
   /**
    * Call from main thread.
    *
-   * @param runnable
+   * Enqueues a task on the camera thread.
+   *
+   * @param runnable the task to enqueue
    */
   protected void enqueue(Runnable runnable) {
     synchronized (LOCK) {
@@ -44,7 +46,6 @@ class CameraThread {
         if(openCount <= 0) {
           throw new IllegalStateException("CameraThread is not open");
         }
-        Log.d(TAG, "Opening thread");
         this.thread = new HandlerThread("CameraThread");
         this.thread.start();
         this.handler = new Handler(thread.getLooper());
@@ -57,7 +58,6 @@ class CameraThread {
    * Call from camera thread.
    */
   private void quit() {
-    Log.d(TAG, "Closing thread");
     synchronized (LOCK) {
       this.thread.quit();
       this.thread = null;
