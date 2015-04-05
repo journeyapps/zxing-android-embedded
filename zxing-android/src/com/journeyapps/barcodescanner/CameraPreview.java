@@ -1,10 +1,12 @@
 package com.journeyapps.barcodescanner;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -202,9 +204,11 @@ public class CameraPreview extends ViewGroup {
     resume();
   }
 
-
   private void setupSurfaceView() {
     surfaceView = new SurfaceView(getContext());
+    if(Build.VERSION.SDK_INT < 11) {
+      surfaceView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+    }
     surfaceView.getHolder().addCallback(surfaceCallback);
     addView(surfaceView);
   }
