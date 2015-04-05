@@ -96,7 +96,7 @@ public class CaptureActivityAnyOrientation extends CaptureActivity {
           android:windowSoftInputMode="stateAlwaysHidden">
 
 </activity>
-xml
+```
 
 ```java
 IntentIntegrator integrator = new IntentIntegrator(this);
