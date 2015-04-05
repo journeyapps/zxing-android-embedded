@@ -16,103 +16,107 @@
 
 package com.google.zxing.client.android;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.BatteryManager;
+import android.os.Handler;
 import android.util.Log;
 
 /**
- * Finishes an activity after a period of inactivity if the device is on battery power.
+ * Finishes an context after a period of inactivity if the device is on battery power.
  */
-@TargetApi(11)
 public final class InactivityTimer {
 
   private static final String TAG = InactivityTimer.class.getSimpleName();
 
   private static final long INACTIVITY_DELAY_MS = 5 * 60 * 1000L;
 
-  private final Activity activity;
+  private final Context context;
   private final BroadcastReceiver powerStatusReceiver;
-  private boolean registered;
-  private AsyncTask<Object,Object,Object> inactivityTask;
+  private boolean registered = false;
+  private Handler handler;
+  private Runnable callback;
+  private boolean onBattery;
 
-  public InactivityTimer(Activity activity) {
-    this.activity = activity;
+  public InactivityTimer(Context context, Runnable callback) {
+    this.context = context;
+    this.callback = callback;
+
     powerStatusReceiver = new PowerStatusReceiver();
-    registered = false;
-    onActivity();
+    handler = new Handler();
   }
 
-  synchronized void onActivity() {
-    cancel();
-    inactivityTask = new InactivityAsyncTask();
-    inactivityTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-  }
-
-  public synchronized void onPause() {
-    cancel();
-    if (registered) {
-      activity.unregisterReceiver(powerStatusReceiver);
-      registered = false;
-    } else {
-      Log.w(TAG, "PowerStatusReceiver was never registered?");
+  /**
+   * Trigger activity, resetting the timer.
+   */
+  public void activity() {
+    cancelCallback();
+    if(onBattery) {
+      handler.postDelayed(callback, INACTIVITY_DELAY_MS);
     }
   }
 
-  public synchronized void onResume() {
+  /**
+   * Start the activity timer.
+   */
+  public void start() {
+    registerReceiver();
+    activity();
+  }
+
+  /**
+   * Cancel the activity timer.
+   */
+  public void cancel() {
+    cancelCallback();
+    unregisterReceiver();
+  }
+
+  private void unregisterReceiver() {
     if (registered) {
-      Log.w(TAG, "PowerStatusReceiver was already registered?");
-    } else {
-      activity.registerReceiver(powerStatusReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+      context.unregisterReceiver(powerStatusReceiver);
+      registered = false;
+    }
+  }
+
+  private void registerReceiver() {
+    if(!registered) {
+      context.registerReceiver(powerStatusReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
       registered = true;
     }
-    onActivity();
   }
 
-  private synchronized void cancel() {
-    AsyncTask<?,?,?> task = inactivityTask;
-    if (task != null) {
-      task.cancel(true);
-      inactivityTask = null;
+  private void cancelCallback() {
+    Log.d(TAG, "cancel");
+    handler.removeCallbacksAndMessages(null);
+  }
+
+  private void onBattery(boolean onBattery) {
+    this.onBattery = onBattery;
+
+    // To make sure we're still running
+    if(registered) {
+      // This will either cancel or reschedule, depending on the battery status.
+      activity();
     }
-  }
-
-  public void shutdown() {
-    cancel();
   }
 
   private final class PowerStatusReceiver extends BroadcastReceiver {
     @Override
-    public void onReceive(Context context, Intent intent){
+    public void onReceive(Context context, Intent intent) {
       if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
         // 0 indicates that we're on battery
-        boolean onBatteryNow = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1) <= 0;
-        if (onBatteryNow) {
-          InactivityTimer.this.onActivity();
-        } else {
-          InactivityTimer.this.cancel();
-        }
+        final boolean onBatteryNow = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1) <= 0;
+        // post on handler to run in main thread
+        handler.post(new Runnable() {
+          @Override
+          public void run() {
+            onBattery(onBatteryNow);
+          }
+        });
       }
     }
   }
-
-  private final class InactivityAsyncTask extends AsyncTask<Object,Object,Object> {
-    @Override
-    protected Object doInBackground(Object... objects) {
-      try {
-        Thread.sleep(INACTIVITY_DELAY_MS);
-        Log.i(TAG, "Finishing activity due to inactivity");
-        activity.finish();
-      } catch (InterruptedException e) {
-        // continue without killing
-      }
-      return null;
-    }
-  }
-
 }

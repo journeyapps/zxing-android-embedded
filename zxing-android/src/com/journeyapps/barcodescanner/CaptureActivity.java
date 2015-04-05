@@ -2,7 +2,6 @@ package com.journeyapps.barcodescanner;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -13,7 +12,6 @@ import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Surface;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -124,7 +122,14 @@ public class CaptureActivity extends Activity {
 
     statusView = (TextView) findViewById(R.id.zxing_status_view);
 
-    inactivityTimer = new InactivityTimer(this);
+    inactivityTimer = new InactivityTimer(this, new Runnable() {
+      @Override
+      public void run() {
+        Log.d(TAG, "Finishing due to inactivity");
+        finish();
+      }
+    });
+
     beepManager = new BeepManager(this);
 
     if(getIntent() != null && Intents.Scan.ACTION.equals(getIntent().getAction())) {
@@ -219,7 +224,7 @@ public class CaptureActivity extends Activity {
 
     barcodeView.resume();
     beepManager.updatePrefs();
-    inactivityTimer.onResume();
+    inactivityTimer.start();
   }
 
   @Override
@@ -228,7 +233,7 @@ public class CaptureActivity extends Activity {
 
     barcodeView.pause();
 
-    inactivityTimer.onPause();
+    inactivityTimer.cancel();
     beepManager.close();
   }
 
@@ -236,7 +241,7 @@ public class CaptureActivity extends Activity {
   protected void onDestroy() {
     super.onDestroy();
     destroyed = true;
-    inactivityTimer.shutdown();
+    inactivityTimer.cancel();
   }
 
   @Override
