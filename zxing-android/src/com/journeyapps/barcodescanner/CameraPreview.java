@@ -446,7 +446,7 @@ public class CameraPreview extends ViewGroup {
       return;
     }
 
-    cameraInstance = new CameraInstance(getContext());
+    cameraInstance = new CameraInstance();
     cameraInstance.setCameraSettings(cameraSettings);
 
     cameraInstance.setReadyHandler(stateHandler);

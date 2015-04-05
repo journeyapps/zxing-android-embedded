@@ -47,9 +47,6 @@ public final class CameraManager {
 
   private static final String TAG = CameraManager.class.getSimpleName();
 
-
-  private final Context context;
-
   private Camera camera;
   private Camera.CameraInfo cameraInfo;
 
@@ -72,8 +69,7 @@ public final class CameraManager {
    */
   private final PreviewCallback previewCallback;
 
-  public CameraManager(Context context) {
-    this.context = context;
+  public CameraManager() {
     previewCallback = new PreviewCallback();
   }
 
