@@ -37,7 +37,6 @@ import java.util.regex.Pattern;
  *
  * @author Sean Owen
  */
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
 public final class CameraConfigurationUtils {
 
   private static final String TAG = "CameraConfiguration";
@@ -168,6 +167,7 @@ public final class CameraConfigurationUtils {
     }
   }
 
+  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
   public static void setFocusArea(Camera.Parameters parameters) {
     if (parameters.getMaxNumFocusAreas() > 0) {
       Log.i(TAG, "Old focus areas: " + toString(parameters.getFocusAreas()));
@@ -179,6 +179,7 @@ public final class CameraConfigurationUtils {
     }
   }
 
+  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
   public static void setMetering(Camera.Parameters parameters) {
     if (parameters.getMaxNumMeteringAreas() > 0) {
       Log.i(TAG, "Old metering areas: " + parameters.getMeteringAreas());
@@ -190,11 +191,13 @@ public final class CameraConfigurationUtils {
     }
   }
 
+  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
   private static List<Camera.Area> buildMiddleArea(int areaPer1000) {
     return Collections.singletonList(
         new Camera.Area(new Rect(-areaPer1000, -areaPer1000, areaPer1000, areaPer1000), 1));
   }
 
+  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
   public static void setVideoStabilization(Camera.Parameters parameters) {
     if (parameters.isVideoStabilizationSupported()) {
       if (parameters.getVideoStabilization()) {
@@ -395,6 +398,7 @@ public final class CameraConfigurationUtils {
     return buffer.toString();
   }
 
+  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
   private static String toString(Iterable<Camera.Area> areas) {
     if (areas == null) {
       return null;
