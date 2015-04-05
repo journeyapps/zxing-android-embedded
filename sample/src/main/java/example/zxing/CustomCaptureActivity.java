@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
@@ -26,10 +27,10 @@ public class CustomCaptureActivity extends Activity {
   private BarcodeCallback callback = new BarcodeCallback() {
     @Override
     public void barcodeResult(Result result) {
-//      TextView text = (TextView)findViewById(R.id.zxing_barcode_status);
-//      if(result.getText() != null) {
-//        text.setText(result.getText());
-//      }
+      TextView text = (TextView)findViewById(R.id.zxing_barcode_status);
+      if(result.getText() != null) {
+        text.setText(result.getText());
+      }
     }
 
     @Override

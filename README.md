@@ -1,9 +1,9 @@
-# ZXing Android Minimal
+# ZXing Android Embedded
 
-This is a port of the [ZXing Android Barcode Scanner application](https://github.com/zxing/zxing/) as an Android
-library project, for embedding in other Android applications. This is not affiliated with the official ZXing project.
+This is an Android library based on the [ZXing Android Barcode Scanner application][2]
+for embedding in Android applications. This is not affiliated with the official ZXing project.
 
-Generally it is recommended to scan a barcode [via intents](https://github.com/zxing/zxing/wiki/Scanning-Via-Intent).
+Generally it is recommended to scan a barcode [via intents][3].
 There are however some cases in which it is not feasible:
 
 * Your users cannot install the Barcode Scanner application.
@@ -12,9 +12,22 @@ There are however some cases in which it is not feasible:
 
 In these cases, this library may be more suitable.
 
+## Version 3
+
+Where [version 2][4] was essentially just a stripped-down version of the [Barcode Scanner application][2],
+version 3 is a rewrite of a large part of the codebase, making it more versatile and customizable.
+
+With the rewrite, many APIs for UI customization were removed. Instead, it is now recommended
+to create a custom Activity using BarcodeView instead.
+
+Other notable changes:
+* The camera is now loaded in a background thread, making the activity start faster.
+* The camera preview and decoding now functions correctly in any orientation.
+
 ## Adding aar dependency with Gradle
 
-**Please note that the repository, group name and artifact names changed in 2.0.1.**
+From version 3 this is a single library, supporting Gingerbread and later versions of Android
+(API level 9+). If you need support for earlier Android versions, use [version 2][4].
 
 Add the following to your build.gradle file:
 
@@ -28,56 +41,14 @@ repositories {
 }
 
 dependencies {
-    // Supports Android 4.0.3 and later (API level 15)
-    compile 'com.journeyapps:zxing-android-embedded:2.3.0@aar'
-
-    // Supports Android 2.1 and later (API level 7), but not optimal for later Android versions.
-    // If you only plan on supporting Android 4.0.3 and up, you don't need to include this.
-    compile 'com.journeyapps:zxing-android-legacy:2.3.0@aar'
-
-    // Convenience library to launch the scanning Activities.
-    // It automatically picks the best scanning library from the above two, depending on the
-    // Android version and what is available.
-    compile 'com.journeyapps:zxing-android-integration:2.3.0@aar'
-
-    // Version 3.0.x of zxing core contains some code that is not compatible on Android 2.2 and earlier.
-    // This mostly affects encoding, but you should test if you plan to support these versions.
-    // Older versions e.g. 2.2 may also work if you need support for older Android versions.
-    compile 'com.google.zxing:core:3.2.0'
+    compile 'com.journeyapps:zxing-android-embedded:3.0.0@aar'
 }
 ```
 
-### What's the difference between zxing-android-embedded and zxing-android-legacy?
+## Usage with Maven
 
-The official ZXing Barcode Scanner application dropped support for older Android versions, and newer
-releases only support Android 4.0.3 and newer. If you install it on an older Android version from
-the Play Store, you will get an older version of the Barcode Scanner.
-
-In order to keep up to date with the latest changes and improvements from the official project, we
-need to do the same. However, many applications still need to support older Android versions.
-
-To cater for these applications, we have two libraries:
-
-1. zxing-android-embedded - This corresponds to the latest Barcode Scanner version.
-2. zxing-android-legacy - This corresponds to version 2.2 of the ZXing project -
-   the latest version that supported Android 2.2.
-
-`zxing-android-embedded` uses a `zxing` prefix for all its resources, while `zxing-android-legacy`
-uses a `zxinglegacy` prefix. It is therefore possible to include both of these in your application.
-If you include both, `IntentIntegrator` will automatically choose the best one.
-
-If you only need to support Android 4.0.3 and newer, you only need the `zxing-android-embedded`
-library.
-
-It is also possible to only use the `zxing-android-legacy` library, but it does not include the
-latest updates and bugfixes from the ZXing project.
-
-
-## Adding apklib dependency with Maven
-
-Support for Maven apklib is dropped in version 1.2.0.
-
-Use the [1.1.x branch](https://github.com/journeyapps/zxing-android-embedded/tree/1.1.x) if you need to use this from a Maven project.
+Support for Maven apklib is dropped in version 1.2.0. If you manage to get this working with the
+aar in Maven, please create an issue or pull request with instructions.
 
 ## Usage
 
@@ -98,32 +69,51 @@ Customize options:
 IntentIntegrator integrator = new IntentIntegrator(this);
 integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
 integrator.setPrompt("Scan a barcode");
-integrator.setResultDisplayDuration(0);
-integrator.setWide();  // Wide scanning rectangle, may work better for 1D barcodes
 integrator.setCameraId(0);  // Use a specific camera of the device
 integrator.initiateScan();
 ```
 
-See [IntentIntegrator](integration/src/main/java/com/google/zxing/integration/android/IntentIntegrator.java) for more options.
+See [IntentIntegrator][6] for more options.
 
-### Custom Layout
+### Changing the orientation
 
-You can provide a custom layout for the capture activity. Note that you'll need to provide two
-different layouts if you are using both zxing-android-embedded and zxing-android-legacy.
+To change the orientation, create a new Activity extending CaptureActivity, and specify the
+orientation in your `AndroidManifest.xml`.
 
-See [custom_capture_layout.xml](sample/src/main/res/layout/custom_capture_layout.xml) and
-[custom_legacy_capture_layout.xml](sample/src/main/res/layout/custom_legacy_capture_layout.xml) for
-examples.
+Sample:
+
+```java
+public class CaptureActivityAnyOrientation extends CaptureActivity {
+
+}
+```
+
+```xml
+<activity android:name=".CaptureActivityAnyOrientation"
+          android:screenOrientation="fullSensor"
+          android:stateNotNeeded="true"
+          android:theme="@style/zxing_CaptureTheme"
+          android:windowSoftInputMode="stateAlwaysHidden">
+
+</activity>
+xml
 
 ```java
 IntentIntegrator integrator = new IntentIntegrator(this);
-integrator.setCaptureLayout(R.layout.custom_layout);
-integrator.setLegacyCaptureLayout(R.layout.custom_legacy_layout);
+integrator.setOrientationLocked(false);
 integrator.initiateScan();
 ```
 
-For a cancel/back button, use the ids `@id/zxing_back_button` for zxing-android-embedded and
- `@id/zxinglegacy_back_button` for zxing-android-legacy.
+The previous API for `integrator.setOrientation()` was removed. It caused the Activity to be created
+in landscape orientation, then destroyed and re-created in the requested orientation, which creates
+a bad user experience. The only way around this is to specify the orientation in the manifest.
+
+### Customize the UI
+
+The core of the barcode scanning happens in the BarcodeView component. You can include this in
+any Activity. See [CustomCaptureActivity][6] in the sample application for an example.
+
+The API is not stable or documented yet, and will likely change in future releases.
 
 ## Building locally
 
@@ -146,6 +136,12 @@ You can then use your local version by specifying in your `build.gradle` file:
 
 ## License
 
-[Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+[Apache License 2.0][7]
 
 [1]: http://journeyapps.com
+[2]: https://github.com/zxing/zxing/
+[3]: https://github.com/zxing/zxing/wiki/Scanning-Via-Intent
+[4]: https://github.com/journeyapps/zxing-android-embedded/blob/v2.3.0/README.md
+[5]: zxing-android-embedded/src/com/google/zxing/integration/android/IntentIntegrator.java
+[6]: sample/src/main/java/example/zxing/CustomCaptureActivity.java
+[7]: http://www.apache.org/licenses/LICENSE-2.0
