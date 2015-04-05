@@ -20,79 +20,79 @@ import java.util.List;
  * The actual decoding should happen on a dedicated thread.
  */
 public class Decoder implements ResultPointCallback {
-  private Reader reader;
+    private Reader reader;
 
-  public Decoder(Reader reader) {
-    this.reader = reader;
-  }
-
-  public Reader getReader() {
-    return reader;
-  }
-
-  public void setReader(Reader reader) {
-    this.reader = reader;
-  }
-
-  /**
-   * Given an image source, attempt to decode the barcode.
-   *
-   * Must not raise an exception.
-   *
-   * @param source the image source
-   * @return a Result or null
-   */
-  public Result decode(LuminanceSource source) {
-    return decode(toBitmap(source));
-  }
-
-  /**
-   * Given an image source, convert to a binary bitmap.
-   *
-   * Override this to use a custom binarizer.
-   *
-   * @param source the image source
-   * @return a BinaryBitmap
-   */
-  protected BinaryBitmap toBitmap(LuminanceSource source) {
-    return new BinaryBitmap(new HybridBinarizer(source));
-  }
-
-  /**
-   * Decode a binary bitmap.
-   *
-   * @param bitmap the binary bitmap
-   * @return a Result or null
-   */
-  protected Result decode(BinaryBitmap bitmap) {
-    possibleResultPoints.clear();
-    try {
-      if(reader instanceof MultiFormatReader) {
-        return ((MultiFormatReader)reader).decodeWithState(bitmap);
-      } else {
-        return reader.decode(bitmap);
-      }
-    } catch (Exception e) {
-      // Decode error, try again next frame
-      return null;
-    } finally {
-      reader.reset();
+    public Decoder(Reader reader) {
+        this.reader = reader;
     }
-  }
 
-  private List<ResultPoint> possibleResultPoints = new ArrayList<>();
+    public Reader getReader() {
+        return reader;
+    }
 
-  /**
-   * Call immediately after decode(), from the same thread.
-   *
-   * @return possible ResultPoints from the last decode.
-   */
-  public List<ResultPoint> getPossibleResultPoints() {
-    return new ArrayList<>(possibleResultPoints);
-  }
+    public void setReader(Reader reader) {
+        this.reader = reader;
+    }
 
-  @Override
-  public void foundPossibleResultPoint(ResultPoint point) {
-    possibleResultPoints.add(point);
-  }
+    /**
+     * Given an image source, attempt to decode the barcode.
+     *
+     * Must not raise an exception.
+     *
+     * @param source the image source
+     * @return a Result or null
+     */
+    public Result decode(LuminanceSource source) {
+        return decode(toBitmap(source));
+    }
+
+    /**
+     * Given an image source, convert to a binary bitmap.
+     *
+     * Override this to use a custom binarizer.
+     *
+     * @param source the image source
+     * @return a BinaryBitmap
+     */
+    protected BinaryBitmap toBitmap(LuminanceSource source) {
+        return new BinaryBitmap(new HybridBinarizer(source));
+    }
+
+    /**
+     * Decode a binary bitmap.
+     *
+     * @param bitmap the binary bitmap
+     * @return a Result or null
+     */
+    protected Result decode(BinaryBitmap bitmap) {
+        possibleResultPoints.clear();
+        try {
+            if (reader instanceof MultiFormatReader) {
+                return ((MultiFormatReader) reader).decodeWithState(bitmap);
+            } else {
+                return reader.decode(bitmap);
+            }
+        } catch (Exception e) {
+            // Decode error, try again next frame
+            return null;
+        } finally {
+            reader.reset();
+        }
+    }
+
+    private List<ResultPoint> possibleResultPoints = new ArrayList<>();
+
+    /**
+     * Call immediately after decode(), from the same thread.
+     *
+     * @return possible ResultPoints from the last decode.
+     */
+    public List<ResultPoint> getPossibleResultPoints() {
+        return new ArrayList<>(possibleResultPoints);
+    }
+
+    @Override
+    public void foundPossibleResultPoint(ResultPoint point) {
+        possibleResultPoints.add(point);
+    }
 }

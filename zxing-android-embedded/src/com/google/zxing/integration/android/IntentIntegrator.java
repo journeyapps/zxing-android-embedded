@@ -109,7 +109,7 @@ public class IntentIntegrator {
     private android.app.Fragment fragment;
     private android.support.v4.app.Fragment supportFragment;
 
-    private final Map<String,Object> moreExtras = new HashMap<String,Object>(3);
+    private final Map<String, Object> moreExtras = new HashMap<String, Object>(3);
 
     private Collection<String> desiredBarcodeFormats;
 
@@ -132,11 +132,11 @@ public class IntentIntegrator {
     }
 
     private static String getScannerActivity() {
-        if(HAVE_NEW_SCANNER && Build.VERSION.SDK_INT >= 9) {
+        if (HAVE_NEW_SCANNER && Build.VERSION.SDK_INT >= 9) {
             return NEW_ACTIVITY_NAME;
-        } else if(HAVE_STANDARD_SCANNER && Build.VERSION.SDK_INT >= 15) {
+        } else if (HAVE_STANDARD_SCANNER && Build.VERSION.SDK_INT >= 15) {
             return STANDARD_ACTIVITY_NAME;
-        } else if(HAVE_LEGACY_SCANNER) {
+        } else if (HAVE_LEGACY_SCANNER) {
             return LEGACY_ACTIVITY_NAME;
         } else {
             return STANDARD_ACTIVITY_NAME;
@@ -180,7 +180,7 @@ public class IntentIntegrator {
     }
 
     public Class<?> getCaptureActivity() {
-        if(captureActivity == null) {
+        if (captureActivity == null) {
             captureActivity = getDefaultCaptureActivity();
         }
         return captureActivity;
@@ -192,8 +192,8 @@ public class IntentIntegrator {
 
     /**
      * @param fragment {@link Fragment} invoking the integration.
-     *  {@link #startActivityForResult(Intent, int)} will be called on the {@link Fragment} instead
-     *  of an {@link Activity}
+     *                 {@link #startActivityForResult(Intent, int)} will be called on the {@link Fragment} instead
+     *                 of an {@link Activity}
      */
     public static IntentIntegrator forSupportFragment(android.support.v4.app.Fragment fragment) {
         IntentIntegrator integrator = new IntentIntegrator(fragment.getActivity());
@@ -203,8 +203,8 @@ public class IntentIntegrator {
 
     /**
      * @param fragment {@link Fragment} invoking the integration.
-     *  {@link #startActivityForResult(Intent, int)} will be called on the {@link Fragment} instead
-     *  of an {@link Activity}
+     *                 {@link #startActivityForResult(Intent, int)} will be called on the {@link Fragment} instead
+     *                 of an {@link Activity}
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static IntentIntegrator forFragment(Fragment fragment) {
@@ -213,7 +213,7 @@ public class IntentIntegrator {
         return integrator;
     }
 
-    public Map<String,?> getMoreExtras() {
+    public Map<String, ?> getMoreExtras() {
         return moreExtras;
     }
 
@@ -247,7 +247,7 @@ public class IntentIntegrator {
     /**
      * Set the size of the scanning rectangle.
      *
-     * @param desiredWidth the desired width in pixels
+     * @param desiredWidth  the desired width in pixels
      * @param desiredHeight the desired height in pixels
      */
     public final IntentIntegrator setScanningRectangle(int desiredWidth, int desiredHeight) {
@@ -317,10 +317,10 @@ public class IntentIntegrator {
         boolean scan1d = false;
         boolean scan2d = false;
         for (String format : desiredBarcodeFormats) {
-            if(ONE_D_CODE_TYPES.contains(format)) {
+            if (ONE_D_CODE_TYPES.contains(format)) {
                 scan1d = true;
             }
-            if(QR_CODE_TYPES.contains(format) || DATA_MATRIX_TYPES.contains(format)) {
+            if (QR_CODE_TYPES.contains(format) || DATA_MATRIX_TYPES.contains(format)) {
                 scan2d = true;
             }
         }
@@ -336,7 +336,7 @@ public class IntentIntegrator {
      * @return this
      */
     public IntentIntegrator autoWide() {
-        if(desiredBarcodeFormats != null && shouldBeWide(desiredBarcodeFormats)) {
+        if (desiredBarcodeFormats != null && shouldBeWide(desiredBarcodeFormats)) {
             setWide();
         }
         return this;
@@ -418,16 +418,16 @@ public class IntentIntegrator {
      * newer versions of Android and for compatibility library.
      *
      * @param intent Intent to start.
-     * @param code Request code for the activity
+     * @param code   Request code for the activity
      * @see android.app.Activity#startActivityForResult(Intent, int)
      * @see android.app.Fragment#startActivityForResult(Intent, int)
      */
     protected void startActivityForResult(Intent intent, int code) {
         if (fragment != null) {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                 fragment.startActivityForResult(intent, code);
             }
-        } else if(supportFragment != null) {
+        } else if (supportFragment != null) {
             supportFragment.startActivityForResult(intent, code);
         } else {
             activity.startActivityForResult(intent, code);
@@ -437,10 +437,10 @@ public class IntentIntegrator {
 
     protected void startActivity(Intent intent) {
         if (fragment != null) {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                 fragment.startActivity(intent);
             }
-        } else if(supportFragment != null) {
+        } else if (supportFragment != null) {
             supportFragment.startActivity(intent);
         } else {
             activity.startActivity(intent);
@@ -452,11 +452,11 @@ public class IntentIntegrator {
      * {@link Activity#onActivityResult(int, int, Intent)} method.</p>
      *
      * @param requestCode request code from {@code onActivityResult()}
-     * @param resultCode result code from {@code onActivityResult()}
-     * @param intent {@link Intent} from {@code onActivityResult()}
+     * @param resultCode  result code from {@code onActivityResult()}
+     * @param intent      {@link Intent} from {@code onActivityResult()}
      * @return null if the event handled here was not related to this class, or
-     *  else an {@link IntentResult} containing the result of the scan. If the user cancelled scanning,
-     *  the fields will be null.
+     * else an {@link IntentResult} containing the result of the scan. If the user cancelled scanning,
+     * the fields will be null.
      */
     public static IntentResult parseActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == REQUEST_CODE) {
@@ -483,7 +483,7 @@ public class IntentIntegrator {
     }
 
     private void attachMoreExtras(Intent intent) {
-        for (Map.Entry<String,Object> entry : moreExtras.entrySet()) {
+        for (Map.Entry<String, Object> entry : moreExtras.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
             // Kind of hacky

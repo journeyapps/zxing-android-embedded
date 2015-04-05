@@ -25,37 +25,37 @@ import com.journeyapps.barcodescanner.Size;
 
 final class PreviewCallback implements Camera.PreviewCallback {
 
-  private static final String TAG = PreviewCallback.class.getSimpleName();
+    private static final String TAG = PreviewCallback.class.getSimpleName();
 
-  private Handler previewHandler;
-  private int previewMessage;
+    private Handler previewHandler;
+    private int previewMessage;
 
-  private Size resolution;
+    private Size resolution;
 
-  public PreviewCallback() {
-  }
-
-  public void setResolution(Size resolution) {
-    this.resolution = resolution;
-  }
-
-  public void setHandler(Handler previewHandler, int previewMessage) {
-    this.previewHandler = previewHandler;
-    this.previewMessage = previewMessage;
-  }
-
-  @Override
-  public void onPreviewFrame(byte[] data, Camera camera) {
-    Size cameraResolution = resolution;
-    Handler thePreviewHandler = previewHandler;
-    if (cameraResolution != null && thePreviewHandler != null) {
-      Message message = thePreviewHandler.obtainMessage(previewMessage, cameraResolution.width,
-          cameraResolution.height, data);
-      message.sendToTarget();
-      previewHandler = null;
-    } else {
-      Log.d(TAG, "Got preview callback, but no handler or resolution available");
+    public PreviewCallback() {
     }
-  }
+
+    public void setResolution(Size resolution) {
+        this.resolution = resolution;
+    }
+
+    public void setHandler(Handler previewHandler, int previewMessage) {
+        this.previewHandler = previewHandler;
+        this.previewMessage = previewMessage;
+    }
+
+    @Override
+    public void onPreviewFrame(byte[] data, Camera camera) {
+        Size cameraResolution = resolution;
+        Handler thePreviewHandler = previewHandler;
+        if (cameraResolution != null && thePreviewHandler != null) {
+            Message message = thePreviewHandler.obtainMessage(previewMessage, cameraResolution.width,
+                    cameraResolution.height, data);
+            message.sendToTarget();
+            previewHandler = null;
+        } else {
+            Log.d(TAG, "Got preview callback, but no handler or resolution available");
+        }
+    }
 
 }

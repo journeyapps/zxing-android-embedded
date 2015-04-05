@@ -13,29 +13,29 @@ import android.view.WindowManager;
  * See http://stackoverflow.com/q/9909037
  */
 public abstract class RotationListener extends OrientationEventListener {
-  private int lastRotation;
-  private WindowManager windowManager;
+    private int lastRotation;
+    private WindowManager windowManager;
 
-  public RotationListener(Context context) {
-    super(context, SensorManager.SENSOR_DELAY_NORMAL);
-    this.windowManager = (WindowManager) context
-            .getSystemService(Context.WINDOW_SERVICE);
+    public RotationListener(Context context) {
+        super(context, SensorManager.SENSOR_DELAY_NORMAL);
+        this.windowManager = (WindowManager) context
+                .getSystemService(Context.WINDOW_SERVICE);
 
-    lastRotation = getRotation();
-  }
-
-  @Override
-  public void onOrientationChanged(int orientation) {
-    int newRotation = getRotation();
-    if(newRotation != lastRotation) {
-      lastRotation = newRotation;
-      onRotationChanged(newRotation);
+        lastRotation = getRotation();
     }
-  }
 
-  public abstract void onRotationChanged(int rotation);
+    @Override
+    public void onOrientationChanged(int orientation) {
+        int newRotation = getRotation();
+        if (newRotation != lastRotation) {
+            lastRotation = newRotation;
+            onRotationChanged(newRotation);
+        }
+    }
 
-  public int getRotation() {
-    return windowManager.getDefaultDisplay().getRotation();
-  }
+    public abstract void onRotationChanged(int rotation);
+
+    public int getRotation() {
+        return windowManager.getDefaultDisplay().getRotation();
+    }
 }

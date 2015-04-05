@@ -34,66 +34,66 @@ import com.journeyapps.barcodescanner.camera.CameraSettings;
  */
 public final class AmbientLightManager implements SensorEventListener {
 
-  private static final float TOO_DARK_LUX = 45.0f;
-  private static final float BRIGHT_ENOUGH_LUX = 450.0f;
+    private static final float TOO_DARK_LUX = 45.0f;
+    private static final float BRIGHT_ENOUGH_LUX = 450.0f;
 
-  private CameraManager cameraManager;
-  private CameraSettings cameraSettings;
-  private Sensor lightSensor;
-  private Context context;
+    private CameraManager cameraManager;
+    private CameraSettings cameraSettings;
+    private Sensor lightSensor;
+    private Context context;
 
-  private Handler handler;
+    private Handler handler;
 
-  public AmbientLightManager(Context context, CameraManager cameraManager, CameraSettings settings) {
-    this.context = context;
-    this.cameraManager = cameraManager;
-    this.cameraSettings = settings;
+    public AmbientLightManager(Context context, CameraManager cameraManager, CameraSettings settings) {
+        this.context = context;
+        this.cameraManager = cameraManager;
+        this.cameraSettings = settings;
 
-    this.handler = new Handler();
-  }
-
-  public void start() {
-    if (cameraSettings.isAutoTorchEnabled()) {
-      SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-      lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-      if (lightSensor != null) {
-        sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-      }
+        this.handler = new Handler();
     }
-  }
 
-  public void stop() {
-    if (lightSensor != null) {
-      SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-      sensorManager.unregisterListener(this);
-      lightSensor = null;
+    public void start() {
+        if (cameraSettings.isAutoTorchEnabled()) {
+            SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+            lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+            if (lightSensor != null) {
+                sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            }
+        }
     }
-  }
 
-  private void setTorch(final boolean on) {
-    handler.post(new Runnable() {
-      @Override
-      public void run() {
-        cameraManager.setTorch(on);
-      }
-    });
-  }
-
-  @Override
-  public void onSensorChanged(SensorEvent sensorEvent) {
-    float ambientLightLux = sensorEvent.values[0];
-    if (cameraManager != null) {
-      if (ambientLightLux <= TOO_DARK_LUX) {
-        setTorch(true);
-      } else if (ambientLightLux >= BRIGHT_ENOUGH_LUX) {
-        setTorch(false);
-      }
+    public void stop() {
+        if (lightSensor != null) {
+            SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+            sensorManager.unregisterListener(this);
+            lightSensor = null;
+        }
     }
-  }
 
-  @Override
-  public void onAccuracyChanged(Sensor sensor, int accuracy) {
-    // do nothing
-  }
+    private void setTorch(final boolean on) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                cameraManager.setTorch(on);
+            }
+        });
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        float ambientLightLux = sensorEvent.values[0];
+        if (cameraManager != null) {
+            if (ambientLightLux <= TOO_DARK_LUX) {
+                setTorch(true);
+            } else if (ambientLightLux >= BRIGHT_ENOUGH_LUX) {
+                setTorch(false);
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // do nothing
+    }
 
 }

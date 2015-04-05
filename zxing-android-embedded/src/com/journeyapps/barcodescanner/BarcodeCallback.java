@@ -9,7 +9,7 @@ import java.util.List;
  *
  */
 public interface BarcodeCallback {
-  public void barcodeResult(Result result);
+    public void barcodeResult(Result result);
 
-  public void possibleResultPoints(List<ResultPoint> resultPoints);
+    public void possibleResultPoints(List<ResultPoint> resultPoints);
 }
