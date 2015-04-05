@@ -41,7 +41,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.journeyapps:zxing-android-embedded:3.0.0@aar'
+    compile 'com.journeyapps:zxing-android-embedded:3.0.0-beta1@aar'
 }
 ```
 

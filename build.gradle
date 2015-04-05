@@ -10,14 +10,14 @@ buildscript {
 }
 
 // Projects to be published to bintray
-def PUBLISH_PROJECTS = ['zxing-android', 'zxing-android-legacy', 'integration']
+def PUBLISH_PROJECTS = ['zxing-android-embedded']
 
 subprojects {
     repositories {
         jcenter()
     }
 
-    version = '2.3.0'
+    version = '3.0.0-beta1'
     group = 'com.journeyapps'
     apply plugin: 'android-sdk-manager'
 
@@ -70,6 +70,9 @@ subprojects {
                 }
             }
 
+            // To release, place bintray_user and bintray_key properties in ~/.gradle/gradle.properties,
+            // and run ./gradlew clean assembleRelease bintrayUpload
+            
             if(project.hasProperty('bintray_user') && project.hasProperty('bintray_key')) {
                 bintray {
                     user = bintray_user
