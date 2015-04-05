@@ -4,6 +4,9 @@ ext.artifactId = 'zxing-android-embedded'
 
 dependencies {
     compile project.zxingCore
+
+    // Optional dependency.
+    provided 'com.android.support:support-v4:21.0.3'
 }
 
 

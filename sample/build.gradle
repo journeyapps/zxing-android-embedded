@@ -19,8 +19,6 @@ android {
 }
 
 dependencies {
-    compile(project(':zxing-android')) { transitive = true }
-    compile(project(':zxing-android-legacy')) { transitive = true }
-    compile(project(':integration'))
+    compile(project(':zxing-android-embedded')) { transitive = true }
     compile 'com.android.support:appcompat-v7:21.0.3'
 }
