@@ -30,10 +30,10 @@ public class MainActivity extends ActionBarActivity {
 
     public void scanBarcodeCustomLayout(View view) {
         IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setCaptureActivity(CaptureActivityAnyOrientation.class);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
         integrator.setPrompt("Scan something");
-        integrator.autoWide();
-        integrator.setOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        integrator.setOrientationLocked(false);
         integrator.initiateScan();
     }
 

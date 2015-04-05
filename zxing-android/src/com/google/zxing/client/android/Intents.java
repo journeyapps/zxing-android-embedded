@@ -109,6 +109,8 @@ public final class Intents {
 
     public static final String ORIENTATION = "SCAN_ORIENTATION";
 
+    public static final String ORIENTATION_LOCKED = "SCAN_ORIENTATION_LOCKED";
+
 
     /**
      * Desired duration in milliseconds for which to pause after a successful scan before

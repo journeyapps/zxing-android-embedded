@@ -121,7 +121,9 @@ public class IntentIntegrator {
     private static final String STANDARD_ACTIVITY_NAME = "com.google.zxing.client.android.CaptureActivity";
     private static final String LEGACY_ACTIVITY_NAME = "com.google.zxing.client.androidlegacy.CaptureActivity";
 
-    protected Class<?> getCaptureActivity() {
+    private Class<?> captureActivity;
+
+    protected Class<?> getDefaultCaptureActivity() {
         try {
             return Class.forName(getScannerActivity());
         } catch (ClassNotFoundException e) {
@@ -175,6 +177,17 @@ public class IntentIntegrator {
      */
     public IntentIntegrator(Activity activity) {
         this.activity = activity;
+    }
+
+    public Class<?> getCaptureActivity() {
+        if(captureActivity == null) {
+            captureActivity = getDefaultCaptureActivity();
+        }
+        return captureActivity;
+    }
+
+    public void setCaptureActivity(Class<?> captureActivity) {
+        this.captureActivity = captureActivity;
     }
 
     /**
@@ -241,6 +254,15 @@ public class IntentIntegrator {
         addExtra("SCAN_WIDTH", desiredWidth);
         addExtra("SCAN_HEIGHT", desiredHeight);
         return this;
+    }
+
+    /**
+     * By default, the orientation is locked. Set to false to not lock.
+     *
+     * @param locked true to lock orientation
+     */
+    public void setOrientationLocked(boolean locked) {
+        addExtra("SCAN_ORIENTATION_LOCKED", locked);
     }
 
     /**

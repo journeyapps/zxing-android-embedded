@@ -6,9 +6,11 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Surface;
 import android.view.View;
@@ -137,15 +139,10 @@ public class CaptureActivity extends Activity {
 
     CameraSettings settings = new CameraSettings();
 
-    int orientation = intent.getIntExtra(Intents.Scan.ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-    // TODO: if the orientation will change, do not start the camera
-    if(orientation == ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
-      // Lock to landscape or reverse landscape
-      //noinspection ResourceType
-      setRequestedOrientation(getCurrentLandscapeOrientation());
-    } else {
-      //noinspection ResourceType
-      setRequestedOrientation(orientation);
+    boolean orientationLocked = intent.getBooleanExtra(Intents.Scan.ORIENTATION_LOCKED, true);
+
+    if(orientationLocked) {
+      lockOrientation();
     }
 
     if (intent.hasExtra(Intents.Scan.CAMERA_ID)) {
@@ -190,15 +187,30 @@ public class CaptureActivity extends Activity {
   }
 
 
-  private int getCurrentLandscapeOrientation() {
-    int rotation = getWindowManager().getDefaultDisplay().getRotation();
-    switch (rotation) {
-      case Surface.ROTATION_0:
-      case Surface.ROTATION_90:
-        return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-      default:
-        return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+  /**
+   * Lock display to current orientation.
+   */
+  protected void lockOrientation() {
+    // Adapted from http://stackoverflow.com/a/14565436
+    Display display = getWindowManager().getDefaultDisplay();
+    int rotation = display.getRotation();
+    int baseOrientation = getResources().getConfiguration().orientation;
+    int orientation = 0;
+    if(baseOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+      if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_90) {
+        orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+      } else {
+        orientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+      }
+    } else if(baseOrientation == Configuration.ORIENTATION_PORTRAIT) {
+      if(rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_270) {
+        orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+      } else {
+        orientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+      }
     }
+    //noinspection ResourceType
+    setRequestedOrientation(orientation);
   }
 
   @Override
