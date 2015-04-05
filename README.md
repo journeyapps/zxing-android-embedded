@@ -1,4 +1,4 @@
-# ZXing Android Minimal
+# ZXing Android Embedded
 
 This is a port of the [ZXing Android Barcode Scanner application](https://github.com/zxing/zxing/) as an Android
 library project, for embedding in other Android applications. This is not affiliated with the official ZXing project.
@@ -11,6 +11,11 @@ There are however some cases in which it is not feasible:
 * You need to customise the UI.
 
 In these cases, this library may be more suitable.
+
+**Note: A rewrite of a large part of the codebase is currently in progress on the
+[3.x branch](https://github.com/journeyapps/zxing-android-embedded/tree/3.x). This
+will provide much more control over the UI for applications that require it. Any
+new contributions should be done on the 3.x branch.**
 
 ## Adding aar dependency with Gradle
 
