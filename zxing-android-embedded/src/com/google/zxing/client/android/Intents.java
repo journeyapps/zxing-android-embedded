@@ -93,31 +93,12 @@ public final class Intents {
          */
         public static final String CHARACTER_SET = "CHARACTER_SET";
 
-        /**
-         * Optional parameters to specify the width and height of the scanning rectangle in pixels.
-         * The app will try to honor these, but will clamp them to the size of the preview frame.
-         * You should specify both or neither, and pass the size as an int.
-         */
-        public static final String WIDTH = "SCAN_WIDTH";
-        public static final String HEIGHT = "SCAN_HEIGHT";
 
         /**
-         * Boolen parameter to indicate that a wide scanning rectangle should be used.
+         * Whether or not the orientation should be locked when the activity is first started.
+         * Defaults to true.
          */
-        public static final String WIDE = "SCAN_WIDE";
-
-
-        public static final String ORIENTATION = "SCAN_ORIENTATION";
-
         public static final String ORIENTATION_LOCKED = "SCAN_ORIENTATION_LOCKED";
-
-
-        /**
-         * Desired duration in milliseconds for which to pause after a successful scan before
-         * returning to the calling intent. Specified as a long, not an integer!
-         * For example: 1000L, not 1000.
-         */
-        public static final String RESULT_DISPLAY_DURATION_MS = "RESULT_DISPLAY_DURATION_MS";
 
         /**
          * Prompt to show on-screen when scanning by intent. Specified as a {@link String}.

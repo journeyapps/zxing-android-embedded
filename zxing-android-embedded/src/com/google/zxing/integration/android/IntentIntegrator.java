@@ -25,6 +25,9 @@ import android.os.Bundle;
 import android.view.Display;
 import android.view.WindowManager;
 
+import com.google.zxing.client.android.Intents;
+import com.journeyapps.barcodescanner.CaptureActivity;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -33,55 +36,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>A utility class which helps ease integration with Barcode Scanner via {@link Intent}s. This is a simple
- * way to invoke barcode scanning and receive the result, without any need to integrate, modify, or learn the
- * project's source code.</p>
- *
- * <h2>Initiating a barcode scan</h2>
- *
- * <p>To integrate, create an instance of {@code IntentIntegrator} and call {@link #initiateScan()} and wait
- * for the result in your app.</p>
- *
- * <p>It does require that the Barcode Scanner (or work-alike) application is installed. The
- * {@link #initiateScan()} method will prompt the user to download the application, if needed.</p>
- *
- * <p>There are a few steps to using this integration. First, your {@link Activity} must implement
- * the method {@link Activity#onActivityResult(int, int, Intent)} and include a line of code like this:</p>
- *
- * <pre>{@code
- * public void onActivityResult(int requestCode, int resultCode, Intent intent) {
- *   IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
- *   if (scanResult != null) {
- *     // handle scan result
- *   }
- *   // else continue with any other code you need in the method
- *   ...
- * }
- * }</pre>
- *
- * <p>This is where you will handle a scan result.</p>
- *
- * <p>Second, just call this in response to a user action somewhere to begin the scan process:</p>
- *
- * <pre>{@code
- * IntentIntegrator integrator = new IntentIntegrator(yourActivity);
- * integrator.initiateScan();
- * }</pre>
- *
- * <p>Finally, you can use {@link #addExtra(String, Object)} to add more parameters to the Intent used
- * to invoke the scanner. This can be used to set additional options not directly exposed by this
- * simplified API.</p>
- *
- * <h2>Sharing text via barcode</h2>
- *
- * <p>Some code, particularly download integration, was contributed from the Anobiit application.</p>
- *
- * <h2>Enabling experimental barcode formats</h2>
- *
- * <p>Some formats are not enabled by default even when scanning with {@link #ALL_CODE_TYPES}, such as
- * PDF417. Use {@link #initiateScan(java.util.Collection)} with
- * a collection containing the names of formats to scan for explicitly, like "PDF_417", to use such
- * formats.</p>
  *
  * @author Sean Owen
  * @author Fred Lin
@@ -113,65 +67,11 @@ public class IntentIntegrator {
 
     private Collection<String> desiredBarcodeFormats;
 
-    private static final boolean HAVE_NEW_SCANNER;
-    private static final boolean HAVE_STANDARD_SCANNER;
-    private static final boolean HAVE_LEGACY_SCANNER;
-
-    private static final String NEW_ACTIVITY_NAME = "com.journeyapps.barcodescanner.CaptureActivity";
-    private static final String STANDARD_ACTIVITY_NAME = "com.google.zxing.client.android.CaptureActivity";
-    private static final String LEGACY_ACTIVITY_NAME = "com.google.zxing.client.androidlegacy.CaptureActivity";
-
     private Class<?> captureActivity;
 
     protected Class<?> getDefaultCaptureActivity() {
-        try {
-            return Class.forName(getScannerActivity());
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Could not find CaptureActivity. Make sure one of the zxing-android libraries are loaded.", e);
-        }
+        return CaptureActivity.class;
     }
-
-    private static String getScannerActivity() {
-        if (HAVE_NEW_SCANNER && Build.VERSION.SDK_INT >= 9) {
-            return NEW_ACTIVITY_NAME;
-        } else if (HAVE_STANDARD_SCANNER && Build.VERSION.SDK_INT >= 15) {
-            return STANDARD_ACTIVITY_NAME;
-        } else if (HAVE_LEGACY_SCANNER) {
-            return LEGACY_ACTIVITY_NAME;
-        } else {
-            return STANDARD_ACTIVITY_NAME;
-        }
-    }
-
-    static {
-        boolean test1 = false;
-        try {
-            Class.forName(STANDARD_ACTIVITY_NAME);
-            test1 = true;
-        } catch (ClassNotFoundException e) {
-            // Ignore
-        }
-        HAVE_STANDARD_SCANNER = test1;
-
-        boolean test2 = false;
-        try {
-            Class.forName(LEGACY_ACTIVITY_NAME);
-            test2 = true;
-        } catch (ClassNotFoundException e) {
-            // Ignore
-        }
-        HAVE_LEGACY_SCANNER = test2;
-
-        boolean test3 = false;
-        try {
-            Class.forName(NEW_ACTIVITY_NAME);
-            test3 = true;
-        } catch (ClassNotFoundException e) {
-            // Ignore
-        }
-        HAVE_NEW_SCANNER = test3;
-    }
-
     /**
      * @param activity {@link Activity} invoking the integration
      */
@@ -186,6 +86,12 @@ public class IntentIntegrator {
         return captureActivity;
     }
 
+    /**
+     * Set the Activity class to use. It can be any activity, but should handle the intent extras
+     * as used here.
+     *
+     * @param captureActivity the class
+     */
     public void setCaptureActivity(Class<?> captureActivity) {
         this.captureActivity = captureActivity;
     }
@@ -229,30 +135,8 @@ public class IntentIntegrator {
      */
     public final IntentIntegrator setPrompt(String prompt) {
         if (prompt != null) {
-            addExtra("PROMPT_MESSAGE", prompt);
+            addExtra(Intents.Scan.PROMPT_MESSAGE, prompt);
         }
-        return this;
-    }
-
-    /**
-     * Set the duration that the result should be displayed after scanning.
-     *
-     * @param ms time to display the result in ms
-     */
-    public final IntentIntegrator setResultDisplayDuration(long ms) {
-        addExtra("RESULT_DISPLAY_DURATION_MS", ms);
-        return this;
-    }
-
-    /**
-     * Set the size of the scanning rectangle.
-     *
-     * @param desiredWidth  the desired width in pixels
-     * @param desiredHeight the desired height in pixels
-     */
-    public final IntentIntegrator setScanningRectangle(int desiredWidth, int desiredHeight) {
-        addExtra("SCAN_WIDTH", desiredWidth);
-        addExtra("SCAN_HEIGHT", desiredHeight);
         return this;
     }
 
@@ -262,95 +146,18 @@ public class IntentIntegrator {
      * @param locked true to lock orientation
      */
     public void setOrientationLocked(boolean locked) {
-        addExtra("SCAN_ORIENTATION_LOCKED", locked);
+        addExtra(Intents.Scan.ORIENTATION_LOCKED, locked);
     }
 
     /**
-     * Set the activity orientation.
-     *
-     * Warning: This is experimental, and not tested on many devices yet. Please report any issues
-     * on https://github.com/journeyapps/zxing-android-embedded/issues
-     *
-     * @param orientation one of the ActivityInfo.SCREEN_ORIENTATION_* constants
-     */
-    public void setOrientation(int orientation) {
-        addExtra("SCAN_ORIENTATION", orientation);
-    }
-
-    /**
-     * Use a wide scanning rectangle.
-     *
-     * May work better for 1D barcodes.
-     */
-    public void setWide() {
-        addExtra("SCAN_WIDE", true);
-
-        // For zxing-android-legacy, which doesn't support SCAN_WIDE
-        WindowManager window = activity.getWindowManager();
-        Display display = window.getDefaultDisplay();
-        @SuppressWarnings("deprecation")
-        int displayWidth = display.getWidth();
-        @SuppressWarnings("deprecation")
-        int displayHeight = display.getHeight();
-        if (displayHeight > displayWidth) {
-            // This is portrait dimensions, but the legacy barcode scanner is always in landscape mode.
-            int temp = displayWidth;
-            //noinspection SuspiciousNameCombination
-            displayWidth = displayHeight;
-            displayHeight = temp;
-        }
-
-        int desiredWidth = displayWidth * 9 / 10;
-        int desiredHeight = Math.min(displayHeight * 3 / 4, 400);    // Limit to 400px
-        setScanningRectangle(desiredWidth, desiredHeight);
-    }
-
-    /**
-     * Heuristics for whether or not the barcode scanning rectangle should be wide or not.
-     *
-     * Current heuristics make it wide if 1D barcode formats are scanned, and no QR codes.
-     *
-     * @param desiredBarcodeFormats the formats that will be scanned
-     * @return true if it should be wide
-     */
-    public static boolean shouldBeWide(Collection<String> desiredBarcodeFormats) {
-        boolean scan1d = false;
-        boolean scan2d = false;
-        for (String format : desiredBarcodeFormats) {
-            if (ONE_D_CODE_TYPES.contains(format)) {
-                scan1d = true;
-            }
-            if (QR_CODE_TYPES.contains(format) || DATA_MATRIX_TYPES.contains(format)) {
-                scan2d = true;
-            }
-        }
-
-        return scan1d && !scan2d;
-    }
-
-    /**
-     * Make the scanning rectangle wide if only 1D barcodes are scanned.
-     *
-     * This must be called *after* setting the desired barcode formats.
-     *
-     * @return this
-     */
-    public IntentIntegrator autoWide() {
-        if (desiredBarcodeFormats != null && shouldBeWide(desiredBarcodeFormats)) {
-            setWide();
-        }
-        return this;
-    }
-
-    /**
-     * Use the specified camera ID to scan barcodes.
+     * Use the specified camera ID.
      *
      * @param cameraId camera ID of the camera to use. A negative value means "no preference".
      * @return this
      */
     public IntentIntegrator setCameraId(int cameraId) {
         if (cameraId >= 0) {
-            addExtra("SCAN_CAMERA_ID", cameraId);
+            addExtra(Intents.Scan.CAMERA_ID, cameraId);
         }
         return this;
     }
@@ -380,7 +187,7 @@ public class IntentIntegrator {
      */
     public Intent createScanIntent() {
         Intent intentScan = new Intent(activity, getCaptureActivity());
-        intentScan.setAction("com.google.zxing.client.android.SCAN");
+        intentScan.setAction(Intents.Scan.ACTION);
 
         // check which types of codes to scan for
         if (desiredBarcodeFormats != null) {
@@ -392,7 +199,7 @@ public class IntentIntegrator {
                 }
                 joinedByComma.append(format);
             }
-            intentScan.putExtra("SCAN_FORMATS", joinedByComma.toString());
+            intentScan.putExtra(Intents.Scan.FORMATS, joinedByComma.toString());
         }
 
         intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -461,12 +268,12 @@ public class IntentIntegrator {
     public static IntentResult parseActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                String contents = intent.getStringExtra("SCAN_RESULT");
-                String formatName = intent.getStringExtra("SCAN_RESULT_FORMAT");
-                byte[] rawBytes = intent.getByteArrayExtra("SCAN_RESULT_BYTES");
-                int intentOrientation = intent.getIntExtra("SCAN_RESULT_ORIENTATION", Integer.MIN_VALUE);
+                String contents = intent.getStringExtra(Intents.Scan.RESULT);
+                String formatName = intent.getStringExtra(Intents.Scan.RESULT_FORMAT);
+                byte[] rawBytes = intent.getByteArrayExtra(Intents.Scan.RESULT_BYTES);
+                int intentOrientation = intent.getIntExtra(Intents.Scan.RESULT_ORIENTATION, Integer.MIN_VALUE);
                 Integer orientation = intentOrientation == Integer.MIN_VALUE ? null : intentOrientation;
-                String errorCorrectionLevel = intent.getStringExtra("SCAN_RESULT_ERROR_CORRECTION_LEVEL");
+                String errorCorrectionLevel = intent.getStringExtra(Intents.Scan.RESULT_ERROR_CORRECTION_LEVEL);
                 return new IntentResult(contents,
                         formatName,
                         rawBytes,
