@@ -53,6 +53,10 @@ public class CaptureActivity extends Activity {
 
   private boolean destroyed = false;
 
+  private static final String SAVED_ORIENTATION_LOCK = "SAVED_ORIENTATION_LOCK";
+
+  private int orientationLock = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+
   // Delay long enough that the beep can be played.
   // TODO: play beep in background
   private static final long DELAY_BEEP = 150;
@@ -132,6 +136,13 @@ public class CaptureActivity extends Activity {
 
     beepManager = new BeepManager(this);
 
+    if(savedInstanceState != null) {
+      // If the screen was locked and unlocked again, we may start in a different orientation
+      // (even one not allowed by the manifest). In this case we restore the orientation we were
+      // previously locked to.
+      this.orientationLock = savedInstanceState.getInt(SAVED_ORIENTATION_LOCK, ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+    }
+
     if(getIntent() != null && Intents.Scan.ACTION.equals(getIntent().getAction())) {
       initializeFromIntent(getIntent());
     }
@@ -144,10 +155,13 @@ public class CaptureActivity extends Activity {
 
     CameraSettings settings = new CameraSettings();
 
-    boolean orientationLocked = intent.getBooleanExtra(Intents.Scan.ORIENTATION_LOCKED, true);
+    if(orientationLock == ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
+      // Only lock the orientation if it's not locked to something else yet
+      boolean orientationLocked = intent.getBooleanExtra(Intents.Scan.ORIENTATION_LOCKED, true);
 
-    if(orientationLocked) {
-      lockOrientation();
+      if (orientationLocked) {
+        lockOrientation();
+      }
     }
 
     if (intent.hasExtra(Intents.Scan.CAMERA_ID)) {
@@ -196,26 +210,31 @@ public class CaptureActivity extends Activity {
    * Lock display to current orientation.
    */
   protected void lockOrientation() {
-    // Adapted from http://stackoverflow.com/a/14565436
-    Display display = getWindowManager().getDefaultDisplay();
-    int rotation = display.getRotation();
-    int baseOrientation = getResources().getConfiguration().orientation;
-    int orientation = 0;
-    if(baseOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-      if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_90) {
-        orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-      } else {
-        orientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+    // Only get the orientation if it's not locked to one yet.
+    if(this.orientationLock == ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
+      // Adapted from http://stackoverflow.com/a/14565436
+      Display display = getWindowManager().getDefaultDisplay();
+      int rotation = display.getRotation();
+      int baseOrientation = getResources().getConfiguration().orientation;
+      int orientation = 0;
+      if (baseOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_90) {
+          orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+        } else {
+          orientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+        }
+      } else if (baseOrientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_270) {
+          orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+        } else {
+          orientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+        }
       }
-    } else if(baseOrientation == Configuration.ORIENTATION_PORTRAIT) {
-      if(rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_270) {
-        orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-      } else {
-        orientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
-      }
+
+      this.orientationLock = orientation;
     }
     //noinspection ResourceType
-    setRequestedOrientation(orientation);
+    setRequestedOrientation(this.orientationLock);
   }
 
   @Override
@@ -242,6 +261,12 @@ public class CaptureActivity extends Activity {
     super.onDestroy();
     destroyed = true;
     inactivityTimer.cancel();
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putInt(SAVED_ORIENTATION_LOCK, this.orientationLock);
   }
 
   @Override
