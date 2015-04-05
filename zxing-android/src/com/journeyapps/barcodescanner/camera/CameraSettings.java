@@ -13,6 +13,8 @@ public class CameraSettings {
   private boolean autoFocusEnabled = true;
   private boolean continuousFocusEnabled = false;
   private boolean exposureEnabled = false;
+  private boolean autoTorchEnabled = false;
+
 
   public int getRequestedCameraId() {
     return requestedCameraId;
@@ -109,5 +111,18 @@ public class CameraSettings {
 
   public void setContinuousFocusEnabled(boolean continuousFocusEnabled) {
     this.continuousFocusEnabled = continuousFocusEnabled;
+  }
+
+  /**
+   * Default to false.
+   *
+   * @return true if the torch is automatically controlled based on ambient light.
+   */
+  public boolean isAutoTorchEnabled() {
+    return autoTorchEnabled;
+  }
+
+  public void setAutoTorchEnabled(boolean autoTorchEnabled) {
+    this.autoTorchEnabled = autoTorchEnabled;
   }
 }

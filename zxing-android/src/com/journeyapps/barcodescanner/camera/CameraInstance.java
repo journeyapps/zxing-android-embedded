@@ -23,11 +23,11 @@ public class CameraInstance {
   private boolean open = false;
   private CameraSettings cameraSettings = new CameraSettings();
 
-  public CameraInstance() {
+  public CameraInstance(Context context) {
     Util.validateMainThread();
 
     this.cameraThread = CameraThread.getInstance();
-    this.cameraManager = new CameraManager();
+    this.cameraManager = new CameraManager(context);
     this.cameraManager.setCameraSettings(cameraSettings);
   }
 
