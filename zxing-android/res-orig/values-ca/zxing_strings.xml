@@ -16,19 +16,7 @@
  -->
 <resources>
   <string name="zxing_app_name">Barcode Scanner</string>
-  <string name="zxing_button_cancel">Cancel·la</string>
   <string name="zxing_button_ok">D\'acord</string>
-  <string name="zxing_contents_contact">Informació de contacte</string>
-  <string name="zxing_contents_email">Adreça electrònica</string>
-  <string name="zxing_contents_location">Coordenades geogràfiques</string>
-  <string name="zxing_contents_phone">Número de telèfon</string>
-  <string name="zxing_contents_sms">Adreça SMS</string>
-  <string name="zxing_contents_text">Text pla</string>
   <string name="zxing_msg_camera_framework_bug">S\'ha produït un problema amb la càmera de l\'Android. Potser haureu de reiniciar el dispositiu.</string>
-  <string name="zxing_msg_default_format">Format</string>
-  <string name="zxing_msg_default_meta">Metadadades</string>
   <string name="zxing_msg_default_status">Poseu un codi de barres dins el rectable per escanejar-lo.</string>
-  <string name="zxing_msg_default_time">Hora</string>
-  <string name="zxing_msg_default_type">Tipus</string>
-  <string name="zxing_msg_unmount_usb">La targeta SD no es troba disponible.</string>
 </resources>

@@ -16,19 +16,7 @@
  -->
 <resources>
   <string name="zxing_app_name">बारकोड स्कैनर</string>
-  <string name="zxing_button_cancel">रद्द करना</string>
   <string name="zxing_button_ok">ठीक है</string>
-  <string name="zxing_contents_contact">संपर्क जानकारी</string>
-  <string name="zxing_contents_email">ईमेल पता</string>
-  <string name="zxing_contents_location">भौगोलिक निर्देशांक</string>
-  <string name="zxing_contents_phone">फ़ोन नंबर</string>
-  <string name="zxing_contents_sms">एसएमएस पता</string>
-  <string name="zxing_contents_text">सादा पाठ</string>
   <string name="zxing_msg_camera_framework_bug">क्षमा करें, Android कैमरा एक समस्या का सामना करना पड़ा. आप डिवाइस को पुनरारंभ करने की आवश्यकता हो सकती है.</string>
-  <string name="zxing_msg_default_format">प्रारूप</string>
-  <string name="zxing_msg_default_meta">मेटाडाटा</string>
   <string name="zxing_msg_default_status">दृश्यदर्शी आयत के अंदर एक बारकोड प्लेस इसे स्कैन.</string>
-  <string name="zxing_msg_default_time">समय</string>
-  <string name="zxing_msg_default_type">टाइप</string>
-  <string name="zxing_msg_unmount_usb">क्षमा करें, एसडी कार्ड सुलभ नहीं है.</string>
 </resources>

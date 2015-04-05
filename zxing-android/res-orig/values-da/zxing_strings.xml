@@ -16,19 +16,7 @@
  -->
 <resources>
   <string name="zxing_app_name">Barcode Scanner</string>
-  <string name="zxing_button_cancel">Annullér</string>
   <string name="zxing_button_ok">OK</string>
-  <string name="zxing_contents_contact">Kontaktinfo</string>
-  <string name="zxing_contents_email">E-mailadresse</string>
-  <string name="zxing_contents_location">Geografiske koordinater</string>
-  <string name="zxing_contents_phone">Telefonnummer</string>
-  <string name="zxing_contents_sms">SMS-adresse</string>
-  <string name="zxing_contents_text">Almindelig tekst</string>
   <string name="zxing_msg_camera_framework_bug">Beklager, Android-kameraet er stødt på et problem. Du skal muligvis genstarte enheden.</string>
-  <string name="zxing_msg_default_format">Format</string>
-  <string name="zxing_msg_default_meta">Metadata</string>
   <string name="zxing_msg_default_status">Placér en stregkode inden i firkanten for at aflæse den.</string>
-  <string name="zxing_msg_default_time">Tid</string>
-  <string name="zxing_msg_default_type">Type</string>
-  <string name="zxing_msg_unmount_usb">Beklager, SD-kortet er ikke tilgængelig.</string>
 </resources>

@@ -16,19 +16,7 @@
  -->
 <resources>
   <string name="zxing_app_name">Barcode Scanner</string>
-  <string name="zxing_button_cancel">Cancelar</string>
   <string name="zxing_button_ok">OK</string>
-  <string name="zxing_contents_contact">Informação de contacto</string>
-  <string name="zxing_contents_email">Endereço de e-mail</string>
-  <string name="zxing_contents_location">Coordenadas geográficas</string>
-  <string name="zxing_contents_phone">Número de telefone</string>
-  <string name="zxing_contents_sms">Endereço SMS</string>
-  <string name="zxing_contents_text">Texto simples</string>
   <string name="zxing_msg_camera_framework_bug">Desculpe, a câmera do Android encontrou um problema. Poderá precisar de reiniciar o dispositivo.</string>
-  <string name="zxing_msg_default_format">Formato</string>
-  <string name="zxing_msg_default_meta">Metadata</string>
   <string name="zxing_msg_default_status">Alinhar código de barras com o exemplo para ser lido.</string>
-  <string name="zxing_msg_default_time">Tempo</string>
-  <string name="zxing_msg_default_type">Tipo</string>
-  <string name="zxing_msg_unmount_usb">Desculpe, o cartão SD não está disponível.</string>
 </resources>

@@ -16,19 +16,7 @@
  -->
 <resources>
   <string name="zxing_app_name">Barra-kode Eskanerra</string>
-  <string name="zxing_button_cancel">Utzi</string>
   <string name="zxing_button_ok">Ados</string>
-  <string name="zxing_contents_contact">Kontaktuaren informazioa</string>
-  <string name="zxing_contents_email">E-posta helbidea</string>
-  <string name="zxing_contents_location">Koordenatu geografikoak</string>
-  <string name="zxing_contents_phone">Telefono zenbakia</string>
-  <string name="zxing_contents_sms">SMS helbidea</string>
-  <string name="zxing_contents_text">Testu laua</string>
   <string name="zxing_msg_camera_framework_bug">Barkatu, Android kamerak arazo bat izan du. Behar bada gailua berrabiarazi beharko duzu.</string>
-  <string name="zxing_msg_default_format">Formatua</string>
-  <string name="zxing_msg_default_meta">Metadatuak</string>
   <string name="zxing_msg_default_status">Kokatu barra-kode bat laukizuzenaren barruan eskaneatzeko.</string>
-  <string name="zxing_msg_default_time">Denbora</string>
-  <string name="zxing_msg_default_type">Mota</string>
-  <string name="zxing_msg_unmount_usb">Barkatu, SD txartela ez dago eskuragarri.</string>
 </resources>

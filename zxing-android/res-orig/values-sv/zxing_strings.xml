@@ -16,19 +16,7 @@
  -->
 <resources>
   <string name="zxing_app_name">Barcode Scanner</string>
-  <string name="zxing_button_cancel">Avbryt</string>
   <string name="zxing_button_ok">OK</string>
-  <string name="zxing_contents_contact">Kontaktinfo</string>
-  <string name="zxing_contents_email">E-postadress</string>
-  <string name="zxing_contents_location">Geografiska koordinater</string>
-  <string name="zxing_contents_phone">Telefonnummer</string>
-  <string name="zxing_contents_sms">SMS-adress</string>
-  <string name="zxing_contents_text">Vanlig text</string>
   <string name="zxing_msg_camera_framework_bug">Det uppstod tyvärr ett fel med Androidkameran.</string>
-  <string name="zxing_msg_default_format">Format</string>
-  <string name="zxing_msg_default_meta">Metadata</string>
   <string name="zxing_msg_default_status">Placera steckkoden inom sökarens rektangel för att läsa den.</string>
-  <string name="zxing_msg_default_time">Tid</string>
-  <string name="zxing_msg_default_type">Typ</string>
-  <string name="zxing_msg_unmount_usb">SD-kortet är tyvärr inte tillgängligt.</string>
 </resources>

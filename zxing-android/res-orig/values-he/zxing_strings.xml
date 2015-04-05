@@ -16,19 +16,7 @@
  -->
 <resources>
   <string name="zxing_app_name">סורק ברקודים</string>
-  <string name="zxing_button_cancel">ביטול</string>
   <string name="zxing_button_ok">אישור</string>
-  <string name="zxing_contents_contact">פרטי איש קשר</string>
-  <string name="zxing_contents_email">כתובת דואר אלקטרוני</string>
-  <string name="zxing_contents_location">קואורדינטות גאוגרפיות</string>
-  <string name="zxing_contents_phone">מספר טלפון</string>
-  <string name="zxing_contents_sms">כתובת SMS</string>
-  <string name="zxing_contents_text">טקסט רגיל</string>
   <string name="zxing_msg_camera_framework_bug">סליחה, מצלמת האנדרואיד נתקלה בבעיה. ייתכן שיהיה עליך להפעיל מחדש את המכשיר.</string>
-  <string name="zxing_msg_default_format">פורמט</string>
-  <string name="zxing_msg_default_meta">מטה-נתונים</string>
   <string name="zxing_msg_default_status">הצב ברקוד בתוך המלבן כדי לסרוק אותו.</string>
-  <string name="zxing_msg_default_time">זמן</string>
-  <string name="zxing_msg_default_type">סוג</string>
-  <string name="zxing_msg_unmount_usb">סליחה, כרטיס הזכרון אינו נגיש.</string>
 </resources>

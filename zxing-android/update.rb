@@ -30,11 +30,13 @@ remove_strings = <<-LINES
 zxing_history_.*?
 zxing_preferences_.*?
 zxing_result_.*?
+zxing_contents_.+?
 zxing_app_picker_name
 zxing_bookmark_picker_name
 zxing_button_add_calendar
 zxing_button_add_contact
 zxing_button_book_search
+zxing_button_cancel
 zxing_button_custom_product_search
 zxing_button_dial
 zxing_button_email
@@ -60,7 +62,11 @@ zxing_menu_encode_vcard
 zxing_menu_help
 zxing_menu_share
 zxing_msg_bulk_mode_scanned
+zxing_msg_default_format
+zxing_msg_default_meta
 zxing_msg_default_mms_subject
+zxing_msg_default_time
+zxing_msg_default_type
 zxing_msg_error
 zxing_msg_google_books
 zxing_msg_google_product
@@ -78,6 +84,7 @@ zxing_msg_share_explanation
 zxing_msg_share_text
 zxing_msg_sure
 zxing_msg_encode_contents_failed
+zxing_msg_unmount_usb
 zxing_sbc_name
 zxing_wifi_changing_network
 LINES
@@ -91,32 +98,7 @@ process Dir['res-orig/**/zxing_strings.xml'] do |text|
   text
 end
 
-# Remove unused color value
-process %w(res-orig/values/zxing_colors.xml) do |text|
-  text.gsub!(/\s+<color name="zxing_encode_view">.*?<\/color>/, '')
-  text
-end
-
-# Remove title and summary from preferences, since we don't use them,
-# and we don't have the string resources anymore.
-process %w(res-orig/xml/zxing_preferences.xml) do |text|
-  text.gsub! /\s+android:title=".+?"/, ''
-  text.gsub! /\s+android:summary=".+?"/, ''
-  text.gsub! /\s+android:entries=".+?"/, ''
-  text
-end
-
-# We have custom versions of each of these files - remove the original ones and log the diff
-FileUtils.rm_f 'res.patch'
-Dir['res/**/*.xml'].each do |our_file|
-  orig_file = our_file.gsub(/res/, 'res-orig')
-  if File.exists? orig_file
-    `git diff --no-index #{orig_file} #{our_file} >> res.patch`
-    FileUtils.rm orig_file
-  end
-end
-
-
 # Remove unused resource files
 remove_all 'res-orig/', %w(drawable drawable-*)
-remove_all 'res-orig/', %w(layout layout-ldpi layout-land menu)
+remove_all 'res-orig/', %w(layout layout-ldpi layout-land menu xml)
+remove_all 'res-orig/values/', %w(zxing_arrays.xml zxing_dimens.xml zxing_styles.xml zxing_ids.xml zxing_themes.xml zxing_colors.xml)

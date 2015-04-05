@@ -16,19 +16,7 @@
  -->
 <resources>
   <string name="zxing_app_name">Barcode Scanner</string>
-  <string name="zxing_button_cancel">Annulla</string>
   <string name="zxing_button_ok">OK</string>
-  <string name="zxing_contents_contact">Info contatto</string>
-  <string name="zxing_contents_email">Indirizzo email</string>
-  <string name="zxing_contents_location">Coordinate geografiche</string>
-  <string name="zxing_contents_phone">Numero di telefono</string>
-  <string name="zxing_contents_sms">Numero SMS</string>
-  <string name="zxing_contents_text">Testo puro</string>
   <string name="zxing_msg_camera_framework_bug">Spiacenti, la fotocamera Android ha riscontrato un problema. Potrebbe essere necessario riavviare il dispositivo.</string>
-  <string name="zxing_msg_default_format">Formato</string>
-  <string name="zxing_msg_default_meta">Metadati</string>
   <string name="zxing_msg_default_status">Posiziona un codice a barre dentro il mirino rettangolare per la scansione.</string>
-  <string name="zxing_msg_default_time">Tempo</string>
-  <string name="zxing_msg_default_type">Tipo</string>
-  <string name="zxing_msg_unmount_usb">Spiacenti, la scheda SD non è accessibile.</string>
 </resources>

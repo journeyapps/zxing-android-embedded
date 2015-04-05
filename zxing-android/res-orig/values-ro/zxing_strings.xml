@@ -16,19 +16,7 @@
  -->
 <resources>
   <string name="zxing_app_name">Barcode Scanner</string>
-  <string name="zxing_button_cancel">Renunță</string>
   <string name="zxing_button_ok">Acceptă</string>
-  <string name="zxing_contents_contact">Informații de contact</string>
-  <string name="zxing_contents_email">Adresă de e-mail</string>
-  <string name="zxing_contents_location">Coordonate geografice</string>
-  <string name="zxing_contents_phone">Telefon</string>
-  <string name="zxing_contents_sms">Număr de SMS</string>
-  <string name="zxing_contents_text">Text</string>
   <string name="zxing_msg_camera_framework_bug">Probleme cu camera foto. Repornește dispozitivul.</string>
-  <string name="zxing_msg_default_format">Format</string>
-  <string name="zxing_msg_default_meta">Metadate</string>
   <string name="zxing_msg_default_status">Plasează codul de bare în interiorul vizorului pentru a-l scana</string>
-  <string name="zxing_msg_default_time">Ora</string>
-  <string name="zxing_msg_default_type">Tip</string>
-  <string name="zxing_msg_unmount_usb">Card SD inaccesibil</string>
 </resources>
