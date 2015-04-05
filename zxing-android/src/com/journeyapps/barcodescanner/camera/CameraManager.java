@@ -119,7 +119,7 @@ public final class CameraManager {
     if (theCamera != null && !previewing) {
       theCamera.startPreview();
       previewing = true;
-      autoFocusManager = new AutoFocusManager(context, camera, settings);
+      autoFocusManager = new AutoFocusManager(camera, settings);
     }
   }
 
