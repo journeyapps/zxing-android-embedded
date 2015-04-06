@@ -31,7 +31,6 @@ import com.google.zxing.client.android.R;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 import java.util.Collection;
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -182,29 +181,8 @@ public class CaptureActivity extends Activity {
         reader.setHints(decodeHints);
 
         barcodeView.setCameraSettings(settings);
-        barcodeView.setDecoder(createDecoder(decodeFormats, decodeHints, characterSet));
+        barcodeView.setDecoderFactory(new DefaultDecoderFactory(decodeFormats, decodeHints, characterSet));
     }
-
-    public static Decoder createDecoder(Collection<BarcodeFormat> decodeFormats, Map<DecodeHintType, ?> baseHints, String characterSet) {
-        Map<DecodeHintType, Object> hints = new EnumMap<>(DecodeHintType.class);
-        if (baseHints != null) {
-            hints.putAll(baseHints);
-        }
-
-        hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
-
-        if (characterSet != null) {
-            hints.put(DecodeHintType.CHARACTER_SET, characterSet);
-        }
-
-        MultiFormatReader reader = new MultiFormatReader();
-
-        Decoder decoder = new Decoder(reader);
-        hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, decoder);
-        reader.setHints(hints);
-        return decoder;
-    }
-
 
     /**
      * Lock display to current orientation.

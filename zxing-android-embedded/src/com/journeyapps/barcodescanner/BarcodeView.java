@@ -30,14 +30,11 @@ public class BarcodeView extends CameraPreview {
         CONTINUOUS
     }
 
-    ;
-
-
     private DecodeMode decodeMode = DecodeMode.NONE;
     private BarcodeCallback callback = null;
     private DecoderThread decoderThread;
 
-    private Decoder decoder;
+    private DecoderFactory decoderFactory;
 
 
     private Handler resultHandler;
@@ -89,34 +86,42 @@ public class BarcodeView extends CameraPreview {
 
 
     private void initialize() {
-        decoder = createDefaultDecoder();
+        decoderFactory = new DefaultDecoderFactory();
         resultHandler = new Handler(resultCallback);
     }
 
 
     /**
-     * Set the Decoder to use. Use this for more advanced customization of the decoding process,
-     * when Decoder#setReader() is not enough.
-     *
-     * The decoder's decode method will only be called from a dedicated DecoderThread.
+     * Set the DecoderFactory to use.
      *
      * Call this from UI thread only.
      *
-     * @param decoder the decoder used to decode barcodes.
+     * @param decoderFactory the DecoderFactory creating Decoders.
      */
-    public void setDecoder(Decoder decoder) {
+    public void setDecoderFactory(DecoderFactory decoderFactory) {
         Util.validateMainThread();
 
-        this.decoder = decoder;
+        this.decoderFactory = decoderFactory;
         if (this.decoderThread != null) {
-            this.decoderThread.setDecoder(decoder);
+            this.decoderThread.setDecoder(createDecoder());
         }
     }
 
-    public Decoder getDecoder() {
+    private Decoder createDecoder() {
+        if(decoderFactory == null) {
+            decoderFactory = createDefaultDecoderFactory();
+        }
+        DecoderResultPointCallback callback = new DecoderResultPointCallback();
+        Map<DecodeHintType, Object> hints = new HashMap<>();
+        hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, callback);
+        Decoder decoder = this.decoderFactory.createDecoder(hints);
+        callback.setDecoder(decoder);
         return decoder;
     }
 
+    public DecoderFactory getDecoderFactory() {
+        return decoderFactory;
+    }
 
     /**
      * Decode a single barcode, then stop decoding.
@@ -154,13 +159,8 @@ public class BarcodeView extends CameraPreview {
         stopDecoderThread();
     }
 
-    protected Decoder createDefaultDecoder() {
-        MultiFormatReader defaultReader = new MultiFormatReader();
-        Map<DecodeHintType, Object> hints = new HashMap<>();
-        Decoder decoder = new Decoder(defaultReader);
-        hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, decoder);
-        defaultReader.setHints(hints);
-        return decoder;
+    protected DecoderFactory createDefaultDecoderFactory() {
+        return new DefaultDecoderFactory();
     }
 
     private void startDecoderThread() {
@@ -170,7 +170,7 @@ public class BarcodeView extends CameraPreview {
             // We only start the thread if both:
             // 1. decoding was requested
             // 2. the preview is active
-            decoderThread = new DecoderThread(getCameraInstance(), decoder, resultHandler);
+            decoderThread = new DecoderThread(getCameraInstance(), createDecoder(), resultHandler);
             decoderThread.setCropRect(getPreviewFramingRect());
             decoderThread.start();
         }
