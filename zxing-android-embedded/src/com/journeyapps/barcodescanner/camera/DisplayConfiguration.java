@@ -37,25 +37,14 @@ public class DisplayConfiguration {
         return viewfinderSize;
     }
 
-    public boolean isRotated() {
-        switch (rotation) {
-            case Surface.ROTATION_0:
-            case Surface.ROTATION_180:
-                return true;
-            case Surface.ROTATION_90:
-            case Surface.ROTATION_270:
-                return false;
-        }
-        return false;
-    }
-
     /**
-     * @return desired preview size in landscape orientation.
+     * @param rotate true to rotate the preview size
+     * @return desired preview size in natural camera orientation.
      */
-    public Size getDesiredLandscapePreviewSize() {
+    public Size getDesiredPreviewSize(boolean rotate) {
         if (viewfinderSize == null) {
             return null;
-        } else if (isRotated()) {
+        } else if (rotate) {
             return viewfinderSize.rotate();
         } else {
             return viewfinderSize;
@@ -76,24 +65,27 @@ public class DisplayConfiguration {
      * In the future we may consider choosing the biggest possible preview size, to maximize the
      * resolution we have for decoding. We need more testing to see whether or not that is feasible.
      *
-     * @param sizes supported preview sizes, containing at least one size. Sizes are in landscape orientation.
+     * @param sizes supported preview sizes, containing at least one size. Sizes are in natural camera orientation.
+     * @param isRotated true if the camera is rotated perpendicular to the current display orientation
      * @return the best preview size, never null
      */
-    public Size getBestPreviewSize(List<Size> sizes) {
+    public Size getBestPreviewSize(List<Size> sizes, boolean isRotated) {
         // Sample of supported preview sizes:
         // http://www.kirill.org/ar/ar.php
-        final Size landscape = getDesiredLandscapePreviewSize();
 
-        if (landscape == null) {
+
+        final Size desired = getDesiredPreviewSize(isRotated);
+
+        if (desired == null) {
             return sizes.get(0);
         }
 
         Collections.sort(sizes, new Comparator<Size>() {
             @Override
             public int compare(Size a, Size b) {
-                Size ascaled = scale(a, landscape);
+                Size ascaled = scale(a, desired);
                 int aScale = ascaled.width - a.width;
-                Size bscaled = scale(b, landscape);
+                Size bscaled = scale(b, desired);
                 int bScale = bscaled.width - b.width;
 
                 if (aScale == 0 && bScale == 0) {
@@ -121,7 +113,7 @@ public class DisplayConfiguration {
             }
         });
 
-        Log.i(TAG, "Viewfinder size: " + landscape);
+        Log.i(TAG, "Viewfinder size: " + desired);
         Log.i(TAG, "Preview in order of preference: " + sizes);
 
         return sizes.get(0);

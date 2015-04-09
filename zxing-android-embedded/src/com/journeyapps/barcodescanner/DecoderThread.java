@@ -103,7 +103,7 @@ public class DecoderThread {
         } else {
             DisplayConfiguration config = cameraInstance.getDisplayConfiguration();
             byte[] rotated = rotateCameraPreview(config.getRotation(), data, dataWidth, dataHeight);
-            if (config.isRotated()) {
+            if (cameraInstance.isCameraRotated()) {
                 //noinspection SuspiciousNameCombination
                 return new PlanarYUVLuminanceSource(rotated, dataHeight, dataWidth, cropRect.left, cropRect.top, cropRect.width(), cropRect.height(), false);
             } else {

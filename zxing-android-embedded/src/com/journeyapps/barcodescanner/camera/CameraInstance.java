@@ -73,6 +73,13 @@ public class CameraInstance {
         return cameraManager.getPreviewSize();
     }
 
+    /**
+     * @return true if the camera preview is rotated perpendicular to the current display rotation.
+     */
+    public boolean isCameraRotated() {
+        return cameraManager.isCameraRotated();
+    }
+
     public void open() {
         Util.validateMainThread();
 

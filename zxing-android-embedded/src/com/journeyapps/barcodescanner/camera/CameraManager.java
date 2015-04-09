@@ -66,6 +66,8 @@ public final class CameraManager {
     private Size requestedPreviewSize;
     private Size previewSize;
 
+    private int rotationDegrees = -1;    // camera rotation vs display rotation
+
     private Context context;
 
     /**
@@ -161,6 +163,16 @@ public final class CameraManager {
         }
     }
 
+    /**
+     * @return true if the camera rotation is perpendicular to the current display rotation.
+     */
+    public boolean isCameraRotated() {
+        if(rotationDegrees == -1) {
+            throw new IllegalStateException("Rotation not calculated yet. Call configure() first.");
+        }
+        return rotationDegrees % 180 != 0;
+    }
+
 
     private Camera.Parameters getDefaultCameraParameters() {
         Camera.Parameters parameters = camera.getParameters();
@@ -215,7 +227,7 @@ public final class CameraManager {
         if (previewSizes.size() == 0) {
             requestedPreviewSize = null;
         } else {
-            requestedPreviewSize = displayConfiguration.getBestPreviewSize(previewSizes);
+            requestedPreviewSize = displayConfiguration.getBestPreviewSize(previewSizes, isCameraRotated());
 
             parameters.setPreviewSize(requestedPreviewSize.width, requestedPreviewSize.height);
         }
@@ -242,8 +254,7 @@ public final class CameraManager {
         return previewSizes;
     }
 
-
-    private void setCameraDisplayOrientation() {
+    private int calculateDisplayRotation() {
         // http://developer.android.com/reference/android/hardware/Camera.html#setDisplayOrientation(int)
         int rotation = displayConfiguration.getRotation();
         int degrees = 0;
@@ -269,13 +280,19 @@ public final class CameraManager {
         } else {  // back-facing
             result = (cameraInfo.orientation - degrees + 360) % 360;
         }
-        camera.setDisplayOrientation(result);
+        Log.i(TAG, "Camera Display Orientation: " + result);
+        return result;
+    }
+
+    private void setCameraDisplayOrientation(int rotation) {
+        camera.setDisplayOrientation(rotation);
     }
 
 
     private void setParameters() {
         try {
-            setCameraDisplayOrientation();
+            this.rotationDegrees = calculateDisplayRotation();
+            setCameraDisplayOrientation(rotationDegrees);
         } catch (Exception e) {
             Log.w(TAG, "Failed to set rotation.");
         }
@@ -306,23 +323,23 @@ public final class CameraManager {
     }
 
     /**
-     * Actual preview size in landscape orientation. null if not determined yet.
+     * Actual preview size in *natural camera* orientation. null if not determined yet.
      *
      * @return preview size
      */
-    public Size getLandscapePreviewSize() {
+    public Size getNaturalPreviewSize() {
         return previewSize;
     }
 
     /**
-     * Actual preview size in current rotation. null if not determined yet.
+     * Actual preview size in *current display* rotation. null if not determined yet.
      *
      * @return preview size
      */
     public Size getPreviewSize() {
         if (previewSize == null) {
             return null;
-        } else if (displayConfiguration.isRotated()) {
+        } else if (this.isCameraRotated()) {
             return previewSize.rotate();
         } else {
             return previewSize;
