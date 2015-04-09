@@ -80,6 +80,15 @@ public class CameraInstance {
         return cameraManager.isCameraRotated();
     }
 
+    /**
+     *
+     * @return the camera rotation relative to display rotation, in degrees. Typically 0 if the
+     *    display is in landscape orientation.
+     */
+    public int getCameraRotation() {
+        return cameraManager.getCameraRotation();
+    }
+
     public void open() {
         Util.validateMainThread();
 

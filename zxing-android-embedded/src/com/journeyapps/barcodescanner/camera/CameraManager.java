@@ -173,6 +173,15 @@ public final class CameraManager {
         return rotationDegrees % 180 != 0;
     }
 
+    /**
+     *
+     * @return the camera rotation relative to display rotation, in degrees. Typically 0 if the
+     *    display is in landscape orientation.
+     */
+    public int getCameraRotation() {
+        return rotationDegrees;
+    }
+
 
     private Camera.Parameters getDefaultCameraParameters() {
         Camera.Parameters parameters = camera.getParameters();

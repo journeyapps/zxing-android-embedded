@@ -101,8 +101,10 @@ public class DecoderThread {
         if (this.cropRect == null) {
             return null;
         } else {
-            DisplayConfiguration config = cameraInstance.getDisplayConfiguration();
-            byte[] rotated = rotateCameraPreview(config.getRotation(), data, dataWidth, dataHeight);
+            int rotation = cameraInstance.getCameraRotation();
+            byte[] rotated = rotateCameraPreview(rotation, data, dataWidth, dataHeight);
+            // TODO: handle mirrored (front) camera. Probably only the ResultPoints should be mirrored,
+            // not the preview for decoding.
             if (cameraInstance.isCameraRotated()) {
                 //noinspection SuspiciousNameCombination
                 return new PlanarYUVLuminanceSource(rotated, dataHeight, dataWidth, cropRect.left, cropRect.top, cropRect.width(), cropRect.height(), false);
@@ -145,17 +147,18 @@ public class DecoderThread {
         requestNextPreview();
     }
 
-    public static byte[] rotateCameraPreview(int displayRotation, byte[] data, int imageWidth, int imageHeight) {
-        switch (displayRotation) {
-            case Surface.ROTATION_90:
+    public static byte[] rotateCameraPreview(int cameraRotation, byte[] data, int imageWidth, int imageHeight) {
+        switch (cameraRotation) {
+            case 0:
                 return data;
-            case Surface.ROTATION_0:
+            case 90:
                 return rotateCW(data, imageWidth, imageHeight);
-            case Surface.ROTATION_270:
+            case 180:
                 return rotate180(data, imageWidth, imageHeight);
-            case Surface.ROTATION_180:
+            case 270:
                 return rotateCCW(data, imageWidth, imageHeight);
             default:
+                // Should not happen
                 return data;
         }
     }
