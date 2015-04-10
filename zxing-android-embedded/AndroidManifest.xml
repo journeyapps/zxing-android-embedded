@@ -18,7 +18,7 @@
 
   <uses-permission android:name="android.permission.CAMERA"/>
 
-  <!-- In reality, the min supported version is 15 -->
+  <!-- Support Android 2.3+. -->
   <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="21"/>
 
   <!-- Don't require camera, as this requires a rear camera. This allows it to work on the Nexus 7 -->
