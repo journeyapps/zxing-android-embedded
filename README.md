@@ -101,6 +101,7 @@ public class CaptureActivityAnyOrientation extends CaptureActivity {
 
 ```java
 IntentIntegrator integrator = new IntentIntegrator(this);
+integrator.setCaptureActivity(CaptureActivityAnyOrientation.class);
 integrator.setOrientationLocked(false);
 integrator.initiateScan();
 ```
