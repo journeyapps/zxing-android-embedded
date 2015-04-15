@@ -6,15 +6,12 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
-import android.view.Surface;
 
-import com.google.zxing.LuminanceSource;
 import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.R;
 import com.journeyapps.barcodescanner.camera.CameraInstance;
-import com.journeyapps.barcodescanner.camera.DisplayConfiguration;
 
 import java.util.List;
 
@@ -97,7 +94,7 @@ public class DecoderThread {
         }
     }
 
-    protected LuminanceSource createSource(byte[] data, int dataWidth, int dataHeight) {
+    protected PlanarYUVLuminanceSource createSource(byte[] data, int dataWidth, int dataHeight) {
         if (this.cropRect == null) {
             return null;
         } else {
@@ -117,7 +114,7 @@ public class DecoderThread {
     private void decode(byte[] data, int width, int height) {
         long start = System.currentTimeMillis();
         Result rawResult = null;
-        LuminanceSource source = createSource(data, width, height);
+        PlanarYUVLuminanceSource source = createSource(data, width, height);
 
         if (source != null) {
             rawResult = decoder.decode(source);
@@ -128,7 +125,8 @@ public class DecoderThread {
             long end = System.currentTimeMillis();
             Log.d(TAG, "Found barcode in " + (end - start) + " ms");
             if (resultHandler != null) {
-                Message message = Message.obtain(resultHandler, R.id.zxing_decode_succeeded, rawResult);
+                BarcodeResult barcodeResult = new BarcodeResult(rawResult, source);
+                Message message = Message.obtain(resultHandler, R.id.zxing_decode_succeeded, barcodeResult);
                 Bundle bundle = new Bundle();
                 message.setData(bundle);
                 message.sendToTarget();
