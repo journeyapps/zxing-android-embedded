@@ -20,9 +20,9 @@ import java.util.Map;
 public class BarcodeResult {
     static final float PREVIEW_LINE_WIDTH = 4.0f;
     static final float PREVIEW_DOT_WIDTH = 10.0f;
-    Result mResult;
-    Bitmap mBitmap = null;
-    int mScaleFactor;
+    protected Result mResult;
+    protected Bitmap mBitmap = null;
+    protected int mScaleFactor;
 
     public BarcodeResult(Result result, PlanarYUVLuminanceSource source) {
         this.mResult = result;
@@ -47,7 +47,7 @@ public class BarcodeResult {
     /**
      * @return wrapped {@link com.google.zxing.Result}
      */
-    Result getResult() {
+    public Result getResult() {
         return mResult;
     }
 
@@ -92,6 +92,14 @@ public class BarcodeResult {
             }
         }
         return barcode;
+    }
+
+    /**
+     *
+     * @return Bitmap preview scale factor
+     */
+    public int getBitmapScaleFactor(){
+        return mScaleFactor;
     }
 
     /**
