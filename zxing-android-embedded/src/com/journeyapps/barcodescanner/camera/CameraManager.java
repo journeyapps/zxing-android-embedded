@@ -30,6 +30,7 @@ import com.google.zxing.client.android.camera.open.OpenCameraInterface;
 import com.journeyapps.barcodescanner.Size;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -145,7 +146,6 @@ public final class CameraManager {
         }
         if (camera != null && previewing) {
             camera.stopPreview();
-            previewCallback.setHandler(null, 0);
             previewing = false;
         }
     }
@@ -363,7 +363,7 @@ public final class CameraManager {
      * @param handler The handler to send the message to.
      * @param message The what field of the message to be sent.
      */
-    public void requestPreviewFrame(Handler handler, int message) {
+    public void requestPreviewFrame(WeakReference<Handler> handler, int message) {
         Camera theCamera = camera;
         if (theCamera != null && previewing) {
             previewCallback.setHandler(handler, message);
