@@ -23,11 +23,13 @@ import android.util.Log;
 
 import com.journeyapps.barcodescanner.Size;
 
+import java.lang.ref.WeakReference;
+
 final class PreviewCallback implements Camera.PreviewCallback {
 
     private static final String TAG = PreviewCallback.class.getSimpleName();
 
-    private Handler previewHandler;
+    private WeakReference<Handler> previewHandler;
     private int previewMessage;
 
     private Size resolution;
@@ -39,7 +41,7 @@ final class PreviewCallback implements Camera.PreviewCallback {
         this.resolution = resolution;
     }
 
-    public void setHandler(Handler previewHandler, int previewMessage) {
+    public void setHandler(WeakReference<Handler> previewHandler, int previewMessage) {
         this.previewHandler = previewHandler;
         this.previewMessage = previewMessage;
     }
@@ -47,12 +49,11 @@ final class PreviewCallback implements Camera.PreviewCallback {
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
         Size cameraResolution = resolution;
-        Handler thePreviewHandler = previewHandler;
+        Handler thePreviewHandler = previewHandler.get();
         if (cameraResolution != null && thePreviewHandler != null) {
             Message message = thePreviewHandler.obtainMessage(previewMessage, cameraResolution.width,
                     cameraResolution.height, data);
             message.sendToTarget();
-            previewHandler = null;
         } else {
             Log.d(TAG, "Got preview callback, but no handler or resolution available");
         }

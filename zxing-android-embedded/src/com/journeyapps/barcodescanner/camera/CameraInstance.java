@@ -9,6 +9,8 @@ import com.google.zxing.client.android.R;
 import com.journeyapps.barcodescanner.Size;
 import com.journeyapps.barcodescanner.Util;
 
+import java.lang.ref.WeakReference;
+
 /**
  *
  */
@@ -138,7 +140,7 @@ public class CameraInstance {
         return open;
     }
 
-    public void requestPreview(final Handler handler, final int message) {
+    public void requestPreview(final WeakReference<Handler> handler, final int message) {
         validateOpen();
 
         cameraThread.enqueue(new Runnable() {
