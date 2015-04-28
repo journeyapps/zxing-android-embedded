@@ -36,7 +36,7 @@ repositories {
     mavenCentral()
 
     maven {
-        url "http://dl.bintray.com/journeyapps/maven"
+        url "https://dl.bintray.com/journeyapps/maven"
     }
 }
 
