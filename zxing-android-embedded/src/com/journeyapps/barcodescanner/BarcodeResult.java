@@ -13,8 +13,10 @@ import com.google.zxing.ResultPoint;
 import java.util.Map;
 
 /**
+ * This contains the result of a barcode scan.
+ *
  * This class delegate all read-only fields of {@link com.google.zxing.Result},
- * because it declared as final, and adds bitmap with scanned barcode
+ * and adds a bitmap with scanned barcode.
  */
 public class BarcodeResult {
     private static final float PREVIEW_LINE_WIDTH = 4.0f;

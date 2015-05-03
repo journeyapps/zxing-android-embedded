@@ -22,16 +22,19 @@ import java.util.List;
 public class Decoder implements ResultPointCallback {
     private Reader reader;
 
+    /**
+     * Create a new Decoder with the specified Reader.
+     *
+     * It is recommended to use an instance of MultiFormatReader in most cases.
+     *
+     * @param reader the reader
+     */
     public Decoder(Reader reader) {
         this.reader = reader;
     }
 
-    public Reader getReader() {
+    protected Reader getReader() {
         return reader;
-    }
-
-    public void setReader(Reader reader) {
-        this.reader = reader;
     }
 
     /**
@@ -68,6 +71,7 @@ public class Decoder implements ResultPointCallback {
         possibleResultPoints.clear();
         try {
             if (reader instanceof MultiFormatReader) {
+                // Optimization - MultiFormatReader's normal decode() method is slow.
                 return ((MultiFormatReader) reader).decodeWithState(bitmap);
             } else {
                 return reader.decode(bitmap);
@@ -84,6 +88,8 @@ public class Decoder implements ResultPointCallback {
 
     /**
      * Call immediately after decode(), from the same thread.
+     *
+     * The result is undefined while decode() is running.
      *
      * @return possible ResultPoints from the last decode.
      */

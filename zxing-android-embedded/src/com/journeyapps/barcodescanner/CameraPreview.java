@@ -45,45 +45,29 @@ import java.util.List;
  * 7. set surface and start preview
  */
 public class CameraPreview extends ViewGroup {
-    public static interface StateListener {
+    public interface StateListener {
         /**
          * Preview and frame sizes are determined.
          */
-        public void previewSized();
+        void previewSized();
 
         /**
          * Preview has started.
          */
-        public void previewStarted();
+        void previewStarted();
 
         /**
          * Preview has stopped.
          */
-        public void previewStopped();
+        void previewStopped();
 
         /**
          * The camera has errored, and cannot display a preview.
          *
          * @param error the error
          */
-        public void cameraError(Exception error);
+        void cameraError(Exception error);
     }
-
-    public static enum PreviewScaleMode {
-        /**
-         * Center the preview inside the BarcodeView. It may contain black bars above and below, or
-         * left and right.
-         */
-        CENTER,
-
-        /**
-         * Drop the preview inside the BarcodeView (default). It will fill all available space, but sections may
-         * be cut off.
-         */
-        CROP
-    }
-
-    ;
 
     private static final String TAG = CameraPreview.class.getSimpleName();
 
@@ -214,11 +198,16 @@ public class CameraPreview extends ViewGroup {
         addView(surfaceView);
     }
 
+    /**
+     * Add a listener to be notified of changes to the preview state, as well as camera errors.
+     *
+     * @param listener the listener
+     */
     public void addStateListener(StateListener listener) {
         stateListeners.add(listener);
     }
 
-    private StateListener fireState = new StateListener() {
+    private final StateListener fireState = new StateListener() {
         @Override
         public void previewSized() {
             for (StateListener listener : stateListeners) {
@@ -363,12 +352,18 @@ public class CameraPreview extends ViewGroup {
         return previewFramingRect;
     }
 
+    /**
+     * @return the CameraSettings currently in use
+     */
     public CameraSettings getCameraSettings() {
         return cameraSettings;
     }
 
     /**
-     * This does not have an effect if the camera is already open.
+     * Set the CameraSettings. Use this to select a different camera, change exposure and torch
+     * settings, and some other options.
+     *
+     * This has no effect if the camera is already open.
      *
      * @param cameraSettings the new settings
      */

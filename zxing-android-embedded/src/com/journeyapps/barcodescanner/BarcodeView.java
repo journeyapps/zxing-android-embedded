@@ -16,13 +16,17 @@ import java.util.Map;
 /**
  * A view for scanning barcodes.
  *
+ * Two methods MUST be called to manage the state:
+ * 1. resume() - initialize the camera and start the preview. Call from the Activity's onResume().
+ * 2. pause() - stop the preview and release any resources. Call from the Activity's onPause().
+ *
  * Start decoding with decodeSingle() or decodeContinuous(). Stop decoding with stopDecoding().
  *
- * @see CameraPreview for details on the preview lifecycle.
+ * @see CameraPreview for more details on the preview lifecycle.
  */
 public class BarcodeView extends CameraPreview {
 
-    public static enum DecodeMode {
+    private enum DecodeMode {
         NONE,
         SINGLE,
         CONTINUOUS
@@ -90,11 +94,12 @@ public class BarcodeView extends CameraPreview {
 
 
     /**
-     * Set the DecoderFactory to use.
+     * Set the DecoderFactory to use. Use this to specify the formats to decode.
      *
      * Call this from UI thread only.
      *
      * @param decoderFactory the DecoderFactory creating Decoders.
+     * @see DefaultDecoderFactory
      */
     public void setDecoderFactory(DecoderFactory decoderFactory) {
         Util.validateMainThread();
@@ -106,7 +111,7 @@ public class BarcodeView extends CameraPreview {
     }
 
     private Decoder createDecoder() {
-        if(decoderFactory == null) {
+        if (decoderFactory == null) {
             decoderFactory = createDefaultDecoderFactory();
         }
         DecoderResultPointCallback callback = new DecoderResultPointCallback();
@@ -117,6 +122,10 @@ public class BarcodeView extends CameraPreview {
         return decoder;
     }
 
+    /**
+     *
+     * @return the current DecoderFactory in use.
+     */
     public DecoderFactory getDecoderFactory() {
         return decoderFactory;
     }
@@ -188,6 +197,11 @@ public class BarcodeView extends CameraPreview {
         }
     }
 
+    /**
+     * Stops the live preview and decoding.
+     *
+     * Call from the Activity's onPause() method.
+     */
     @Override
     public void pause() {
         stopDecoderThread();

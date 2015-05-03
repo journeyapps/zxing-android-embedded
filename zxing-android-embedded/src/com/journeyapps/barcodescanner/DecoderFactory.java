@@ -6,6 +6,8 @@ import java.util.Map;
 
 /**
  * Factory to create Decoder instances. Typically one instance will be created per DecoderThread.
+ *
+ * @see DefaultDecoderFactory
  */
 public interface DecoderFactory {
 
@@ -18,5 +20,5 @@ public interface DecoderFactory {
      * @param baseHints default hints. Typically specifies DecodeHintType.NEED_RESULT_POINT_CALLBACK.
      * @return a new Decoder
      */
-    public Decoder createDecoder(Map<DecodeHintType, ?> baseHints);
+    Decoder createDecoder(Map<DecodeHintType, ?> baseHints);
 }

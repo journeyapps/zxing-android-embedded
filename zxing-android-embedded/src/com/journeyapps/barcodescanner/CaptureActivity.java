@@ -268,6 +268,12 @@ public class CaptureActivity extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
+    /**
+     * Create a intent to return as the Activity result.
+     *
+     * @param rawResult the BarcodeResult, must not be null.
+     * @return the Intent
+     */
     public static Intent resultIntent(BarcodeResult rawResult) {
         Intent intent = new Intent(Intents.Scan.ACTION);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
@@ -309,7 +315,6 @@ public class CaptureActivity extends Activity {
         setResult(RESULT_OK, intent);
         finish();
     }
-
 
     protected void displayFrameworkBugMessageAndExit() {
         if (this.isFinishing() || this.destroyed) {

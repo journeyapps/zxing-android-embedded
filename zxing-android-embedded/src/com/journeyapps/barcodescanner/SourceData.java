@@ -11,7 +11,7 @@ import com.google.zxing.PlanarYUVLuminanceSource;
 import java.io.ByteArrayOutputStream;
 
 /**
- * Represents raw preview data from a camera.
+ * Raw preview data from a camera.
  */
 public class SourceData {
     /** Raw YUV data */
@@ -65,26 +65,26 @@ public class SourceData {
         return data;
     }
 
+    /**
+     *
+     * @return width of the data
+     */
     public int getDataWidth() {
         return dataWidth;
     }
 
+    /**
+     *
+     * @return height of the data
+     */
     public int getDataHeight() {
         return dataHeight;
     }
 
-    public int getWidth() {
-        return isRotated() ? dataHeight : dataWidth;
-    }
-
-    public int getHeight() {
-        return isRotated() ? dataWidth : dataHeight;
-    }
-
-    public int getRotation() {
-        return rotation;
-    }
-
+    /**
+     *
+     * @return true if the preview image is rotated orthogonal to the display
+     */
     public boolean isRotated() {
         return rotation % 180 != 0;
     }
