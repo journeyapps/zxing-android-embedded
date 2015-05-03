@@ -38,15 +38,16 @@ import java.util.Set;
  */
 public class CaptureActivity extends Activity {
     private CaptureManager capture;
+    private DefaultBarcodeScannerView barcodeScannerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.zxing_capture);
-        DefaultBarcodeScannerView view = (DefaultBarcodeScannerView)findViewById(R.id.zxing_barcode_scanner);
+        barcodeScannerView = (DefaultBarcodeScannerView)findViewById(R.id.zxing_barcode_scanner);
 
-        capture = new CaptureManager(this, view);
+        capture = new CaptureManager(this, barcodeScannerView);
         capture.initializeFromIntent(getIntent(), savedInstanceState);
         capture.decode();
     }
@@ -73,5 +74,10 @@ public class CaptureActivity extends Activity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         capture.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return barcodeScannerView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
     }
 }

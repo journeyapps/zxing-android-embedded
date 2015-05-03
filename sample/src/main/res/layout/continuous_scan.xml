@@ -3,25 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
+    <com.journeyapps.barcodescanner.DefaultBarcodeScannerView
+        android:id="@+id/barcode_scanner"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
-        android:layout_margin="0dp"
         android:layout_above="@+id/buttonsLayout"
         android:layout_alignParentTop="true">
 
-        <com.journeyapps.barcodescanner.BarcodeView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/zxing_barcode_surface" />
-
-        <com.journeyapps.barcodescanner.ViewfinderView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/zxing_viewfinder_view" />
-    </FrameLayout>
-
+    </com.journeyapps.barcodescanner.DefaultBarcodeScannerView>
 
     <LinearLayout
         android:orientation="vertical"
@@ -30,13 +19,6 @@
         android:layout_alignParentBottom="true"
         android:id="@+id/buttonsLayout"
         android:layout_toLeftOf="@+id/centerHorizont">
-
-        <TextView
-            android:id="@+id/zxing_barcode_status"
-            android:layout_width="match_parent"
-            android:layout_height="30dip"
-            android:layout_weight="0"
-            android:text="Scanning..." />
 
         <Button
             android:layout_width="match_parent"

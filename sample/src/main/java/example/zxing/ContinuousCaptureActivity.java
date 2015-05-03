@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
-import com.journeyapps.barcodescanner.BarcodeView;
+import com.journeyapps.barcodescanner.DefaultBarcodeScannerView;
 import com.journeyapps.barcodescanner.ViewfinderView;
 
 import java.util.List;
@@ -21,17 +21,15 @@ import java.util.List;
 /**
  *
  */
-public class CustomCaptureActivity extends Activity {
-    private static final String TAG = CustomCaptureActivity.class.getSimpleName();
-    private BarcodeView barcodeView;
-    private ViewfinderView viewFinder;
+public class ContinuousCaptureActivity extends Activity {
+    private static final String TAG = ContinuousCaptureActivity.class.getSimpleName();
+    private DefaultBarcodeScannerView barcodeView;
 
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
-            TextView text = (TextView) findViewById(R.id.zxing_barcode_status);
             if (result.getText() != null) {
-                text.setText(result.getText());
+                barcodeView.setStatusText(result.getText());
             }
             //Added preview of scanned barcode
             ImageView imageView = (ImageView) findViewById(R.id.barcodePreview);
@@ -40,9 +38,6 @@ public class CustomCaptureActivity extends Activity {
 
         @Override
         public void possibleResultPoints(List<ResultPoint> resultPoints) {
-            for (ResultPoint point : resultPoints) {
-                viewFinder.addPossibleResultPoint(point);
-            }
         }
     };
 
@@ -50,13 +45,10 @@ public class CustomCaptureActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.new_custom_layout);
+        setContentView(R.layout.continuous_scan);
 
-        barcodeView = (BarcodeView) findViewById(R.id.zxing_barcode_surface);
+        barcodeView = (DefaultBarcodeScannerView) findViewById(R.id.barcode_scanner);
         barcodeView.decodeContinuous(callback);
-
-        viewFinder = (ViewfinderView) findViewById(R.id.zxing_viewfinder_view);
-        viewFinder.setCameraPreview(barcodeView);
     }
 
     @Override
@@ -64,12 +56,6 @@ public class CustomCaptureActivity extends Activity {
         super.onConfigurationChanged(newConfig);
 
         Log.d(TAG, "Configuration changed");
-
-    }
-
-    private void orientationChanged() {
-        barcodeView.pause();
-        barcodeView.resume();
     }
 
     @Override
@@ -98,22 +84,8 @@ public class CustomCaptureActivity extends Activity {
         barcodeView.decodeSingle(callback);
     }
 
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_FOCUS:
-            case KeyEvent.KEYCODE_CAMERA:
-                // Handle these events so they don't launch the Camera app
-                return true;
-            // Use volume up/down to turn on light
-            case KeyEvent.KEYCODE_VOLUME_DOWN:
-                barcodeView.setTorch(false);
-                return true;
-            case KeyEvent.KEYCODE_VOLUME_UP:
-                barcodeView.setTorch(true);
-                return true;
-        }
-        return super.onKeyDown(keyCode, event);
+        return barcodeView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
     }
 }

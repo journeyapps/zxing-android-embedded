@@ -30,7 +30,7 @@ public class MainActivity extends ActionBarActivity {
 
     public void scanBarcodeCustomLayout(View view) {
         IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setCaptureActivity(CaptureActivityAnyOrientation.class);
+        integrator.setCaptureActivity(AnyOrientationCaptureActivity.class);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
         integrator.setPrompt("Scan something");
         integrator.setOrientationLocked(false);
@@ -44,7 +44,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void scanContinuous(View view) {
-        Intent intent = new Intent(this, CustomCaptureActivity.class);
+        Intent intent = new Intent(this, ContinuousCaptureActivity.class);
         startActivity(intent);
     }
 

@@ -3,6 +3,7 @@ package example.zxing;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DefaultBarcodeScannerView;
@@ -12,6 +13,7 @@ import com.journeyapps.barcodescanner.DefaultBarcodeScannerView;
  */
 public class ToolbarCaptureActivity extends ActionBarActivity {
     private CaptureManager capture;
+    private DefaultBarcodeScannerView barcodeScannerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +26,9 @@ public class ToolbarCaptureActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        DefaultBarcodeScannerView view = (DefaultBarcodeScannerView)findViewById(R.id.zxing_barcode_scanner);
+        barcodeScannerView = (DefaultBarcodeScannerView)findViewById(R.id.zxing_barcode_scanner);
 
-        capture = new CaptureManager(this, view);
+        capture = new CaptureManager(this, barcodeScannerView);
         capture.initializeFromIntent(getIntent(), savedInstanceState);
         capture.decode();
     }
@@ -53,5 +55,10 @@ public class ToolbarCaptureActivity extends ActionBarActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         capture.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return barcodeScannerView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
     }
 }

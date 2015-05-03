@@ -5,6 +5,6 @@ import com.journeyapps.barcodescanner.CaptureActivity;
 /**
  *
  */
-public class CaptureActivityAnyOrientation extends CaptureActivity {
+public class AnyOrientationCaptureActivity extends CaptureActivity {
 
 }
