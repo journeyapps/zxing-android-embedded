@@ -29,6 +29,7 @@ public class DecoderThread {
     private Handler resultHandler;
     private Rect cropRect;
     private boolean running = false;
+    private final Object LOCK = new Object();
 
     private final Handler.Callback callback = new Handler.Callback() {
         @Override
@@ -88,8 +89,11 @@ public class DecoderThread {
     public void stop() {
         Util.validateMainThread();
 
-        running = false;
-        thread.quit();
+        synchronized (LOCK) {
+            running = false;
+            handler.removeCallbacksAndMessages(null);
+            thread.quit();
+        }
     }
 
 
@@ -98,12 +102,13 @@ public class DecoderThread {
         public void onPreview(SourceData sourceData) {
             // Only post if running, to prevent a warning like this:
             //   java.lang.RuntimeException: Handler (android.os.Handler) sending message to a Handler on a dead thread
-            // This check is not fool-proof, since onPreview() may be called concurrently with stop().
-            // However, this should prevent the warning in most cases. And if the warning does occur,
-            // nothing should actually break.
-            if(running) {
-                // Post to our thread.
-                handler.obtainMessage(R.id.zxing_decode, sourceData).sendToTarget();
+
+            // synchronize to handle cases where this is called concurrently with stop()
+            synchronized (LOCK) {
+                if (running) {
+                    // Post to our thread.
+                    handler.obtainMessage(R.id.zxing_decode, sourceData).sendToTarget();
+                }
             }
         }
     };
