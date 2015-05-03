@@ -23,10 +23,10 @@ import java.util.Set;
 
 /**
  * Encapsulates BarcodeView, ViewfinderView and status text.
+ *
+ * To customize the UI, use BarcodeView and ViewfinderView directly.
  */
-public class DefaultBarcodeScannerView extends FrameLayout {
-    private static final String TAG = DefaultBarcodeScannerView.class.getSimpleName();
-
+public class CompoundBarcodeView extends FrameLayout {
     private BarcodeView barcodeView;
     private ViewfinderView viewFinder;
     private TextView statusView;
@@ -48,20 +48,21 @@ public class DefaultBarcodeScannerView extends FrameLayout {
             for (ResultPoint point : resultPoints) {
                 viewFinder.addPossibleResultPoint(point);
             }
+            delegate.possibleResultPoints(resultPoints);
         }
     }
 
-    public DefaultBarcodeScannerView(Context context) {
+    public CompoundBarcodeView(Context context) {
         super(context);
         initialize();
     }
 
-    public DefaultBarcodeScannerView(Context context, AttributeSet attrs) {
+    public CompoundBarcodeView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initialize();
     }
 
-    public DefaultBarcodeScannerView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CompoundBarcodeView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initialize();
     }
@@ -114,10 +115,17 @@ public class DefaultBarcodeScannerView extends FrameLayout {
         statusView.setText(text);
     }
 
+
+    /**
+     * @see BarcodeView#pause()
+     */
     public void pause() {
         barcodeView.pause();
     }
 
+    /**
+     * @see BarcodeView#resume()
+     */
     public void resume() {
         barcodeView.resume();
     }
@@ -134,17 +142,28 @@ public class DefaultBarcodeScannerView extends FrameLayout {
         return statusView;
     }
 
+
+    /**
+     * @see BarcodeView#decodeSingle(BarcodeCallback)
+     */
     public void decodeSingle(BarcodeCallback callback) {
         barcodeView.decodeSingle(new WrappedCallback(callback));
 
     }
 
+    /**
+     * @see BarcodeView#decodeContinuous(BarcodeCallback)
+     */
     public void decodeContinuous(BarcodeCallback callback) {
         barcodeView.decodeContinuous(new WrappedCallback(callback));
     }
 
-
     @Override
+    /**
+     * Handles focus, camera, volume up and volume down keys.
+     *
+     * Note that this view is not usually focused, so the Activity should call this directly.
+     */
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_FOCUS:

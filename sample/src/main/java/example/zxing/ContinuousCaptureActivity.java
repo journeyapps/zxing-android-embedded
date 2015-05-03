@@ -8,13 +8,11 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
-import com.journeyapps.barcodescanner.DefaultBarcodeScannerView;
-import com.journeyapps.barcodescanner.ViewfinderView;
+import com.journeyapps.barcodescanner.CompoundBarcodeView;
 
 import java.util.List;
 
@@ -23,7 +21,7 @@ import java.util.List;
  */
 public class ContinuousCaptureActivity extends Activity {
     private static final String TAG = ContinuousCaptureActivity.class.getSimpleName();
-    private DefaultBarcodeScannerView barcodeView;
+    private CompoundBarcodeView barcodeView;
 
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
@@ -47,15 +45,8 @@ public class ContinuousCaptureActivity extends Activity {
 
         setContentView(R.layout.continuous_scan);
 
-        barcodeView = (DefaultBarcodeScannerView) findViewById(R.id.barcode_scanner);
+        barcodeView = (CompoundBarcodeView) findViewById(R.id.barcode_scanner);
         barcodeView.decodeContinuous(callback);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        Log.d(TAG, "Configuration changed");
     }
 
     @Override

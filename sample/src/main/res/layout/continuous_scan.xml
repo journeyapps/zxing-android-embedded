@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.journeyapps.barcodescanner.DefaultBarcodeScannerView
+    <com.journeyapps.barcodescanner.CompoundBarcodeView
         android:id="@+id/barcode_scanner"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_above="@+id/buttonsLayout"
         android:layout_alignParentTop="true">
 
-    </com.journeyapps.barcodescanner.DefaultBarcodeScannerView>
+    </com.journeyapps.barcodescanner.CompoundBarcodeView>
 
     <LinearLayout
         android:orientation="vertical"

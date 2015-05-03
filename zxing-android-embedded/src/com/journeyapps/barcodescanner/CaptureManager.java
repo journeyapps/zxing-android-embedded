@@ -44,7 +44,7 @@ public class CaptureManager {
     private static final String TAG = CaptureManager.class.getSimpleName();
 
     private Activity activity;
-    private DefaultBarcodeScannerView barcodeView;
+    private CompoundBarcodeView barcodeView;
     private int orientationLock = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
     private static final String SAVED_ORIENTATION_LOCK = "SAVED_ORIENTATION_LOCK";
 
@@ -102,7 +102,7 @@ public class CaptureManager {
         }
     };
 
-    public CaptureManager(Activity activity, DefaultBarcodeScannerView barcodeView) {
+    public CaptureManager(Activity activity, CompoundBarcodeView barcodeView) {
         this.activity = activity;
         this.barcodeView = barcodeView;
         barcodeView.getBarcodeView().addStateListener(stateListener);
