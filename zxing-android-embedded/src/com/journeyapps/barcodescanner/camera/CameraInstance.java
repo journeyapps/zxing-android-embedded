@@ -7,6 +7,7 @@ import android.view.SurfaceHolder;
 
 import com.google.zxing.client.android.R;
 import com.journeyapps.barcodescanner.Size;
+import com.journeyapps.barcodescanner.SourceData;
 import com.journeyapps.barcodescanner.Util;
 
 /**
@@ -131,13 +132,13 @@ public class CameraInstance {
         return open;
     }
 
-    public void requestPreview(final Handler handler, final int message) {
+    public void requestPreview(final PreviewCallback callback) {
         validateOpen();
 
         cameraThread.enqueue(new Runnable() {
             @Override
             public void run() {
-                cameraManager.requestPreviewFrame(handler, message);
+                cameraManager.requestPreviewFrame(callback);
             }
         });
     }
