@@ -19,6 +19,9 @@ android {
 }
 
 dependencies {
+    // If you use this from an external project, use the following instead:
+    //   compile 'com.journeyapps:zxing-android-embedded:<version>@aar'
+    //   compile 'com.google.zxing:core:3.2.0'
     compile(project(':zxing-android-embedded')) { transitive = true }
     compile 'com.android.support:appcompat-v7:21.0.3'
 }
