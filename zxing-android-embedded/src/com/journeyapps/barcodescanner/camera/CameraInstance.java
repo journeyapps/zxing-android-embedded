@@ -74,13 +74,6 @@ public class CameraInstance {
     }
 
     /**
-     * @return true if the camera preview is rotated perpendicular to the current display rotation.
-     */
-    public boolean isCameraRotated() {
-        return cameraManager.isCameraRotated();
-    }
-
-    /**
      *
      * @return the camera rotation relative to display rotation, in degrees. Typically 0 if the
      *    display is in landscape orientation.

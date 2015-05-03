@@ -1,6 +1,5 @@
 package com.journeyapps.barcodescanner;
 
-import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.List;
  *
  */
 public interface BarcodeCallback {
-    public void barcodeResult(Result result);
+    void barcodeResult(BarcodeResult result);
 
-    public void possibleResultPoints(List<ResultPoint> resultPoints);
+    void possibleResultPoints(List<ResultPoint> resultPoints);
 }

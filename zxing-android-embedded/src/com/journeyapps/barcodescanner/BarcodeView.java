@@ -6,8 +6,6 @@ import android.os.Message;
 import android.util.AttributeSet;
 
 import com.google.zxing.DecodeHintType;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.R;
 
@@ -43,7 +41,7 @@ public class BarcodeView extends CameraPreview {
         @Override
         public boolean handleMessage(Message message) {
             if (message.what == R.id.zxing_decode_succeeded) {
-                Result result = (Result) message.obj;
+                BarcodeResult result = (BarcodeResult) message.obj;
 
                 if (result != null) {
                     if (callback != null && decodeMode != DecodeMode.NONE) {

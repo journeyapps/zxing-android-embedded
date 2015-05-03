@@ -2,15 +2,17 @@ package example.zxing;
 
 import android.app.Activity;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.BarcodeView;
 import com.journeyapps.barcodescanner.ViewfinderView;
 
@@ -26,11 +28,14 @@ public class CustomCaptureActivity extends Activity {
 
   private BarcodeCallback callback = new BarcodeCallback() {
     @Override
-    public void barcodeResult(Result result) {
+    public void barcodeResult(BarcodeResult result) {
       TextView text = (TextView)findViewById(R.id.zxing_barcode_status);
       if(result.getText() != null) {
         text.setText(result.getText());
       }
+      //Added preview of scanned barcode
+      ImageView imageView = (ImageView) findViewById(R.id.barcodePreview);
+      imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.YELLOW));
     }
 
     @Override

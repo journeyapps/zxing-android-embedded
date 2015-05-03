@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
-import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
@@ -30,7 +29,6 @@ import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.R;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -62,7 +60,7 @@ public class CaptureActivity extends Activity {
 
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
-        public void barcodeResult(final Result result) {
+        public void barcodeResult(final BarcodeResult result) {
             barcodeView.pause();
             beepManager.playBeepSoundAndVibrate();
 
@@ -270,7 +268,7 @@ public class CaptureActivity extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
-    public static Intent resultIntent(Result rawResult) {
+    public static Intent resultIntent(BarcodeResult rawResult) {
         Intent intent = new Intent(Intents.Scan.ACTION);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         intent.putExtra(Intents.Scan.RESULT, rawResult.toString());
@@ -306,7 +304,7 @@ public class CaptureActivity extends Activity {
         return intent;
     }
 
-    protected void returnResult(Result rawResult) {
+    protected void returnResult(BarcodeResult rawResult) {
         Intent intent = resultIntent(rawResult);
         setResult(RESULT_OK, intent);
         finish();
