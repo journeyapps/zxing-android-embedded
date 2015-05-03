@@ -20,6 +20,7 @@ import android.content.Context;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -28,6 +29,7 @@ import com.google.zxing.client.android.AmbientLightManager;
 import com.google.zxing.client.android.camera.CameraConfigurationUtils;
 import com.google.zxing.client.android.camera.open.OpenCameraInterface;
 import com.journeyapps.barcodescanner.Size;
+import com.journeyapps.barcodescanner.SourceData;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -69,6 +71,41 @@ public final class CameraManager {
     private int rotationDegrees = -1;    // camera rotation vs display rotation
 
     private Context context;
+
+
+    private final class PreviewCallback implements Camera.PreviewCallback {
+        private Handler previewHandler;
+        private int previewMessage;
+
+        private Size resolution;
+
+        public PreviewCallback() {
+        }
+
+        public void setResolution(Size resolution) {
+            this.resolution = resolution;
+        }
+
+        public void setHandler(Handler previewHandler, int previewMessage) {
+            this.previewHandler = previewHandler;
+            this.previewMessage = previewMessage;
+        }
+
+        @Override
+        public void onPreviewFrame(byte[] data, Camera camera) {
+            Size cameraResolution = resolution;
+            Handler thePreviewHandler = previewHandler;
+            if (cameraResolution != null && thePreviewHandler != null) {
+                int format = camera.getParameters().getPreviewFormat();
+                SourceData source = new SourceData(data, cameraResolution.width, cameraResolution.height, format, getCameraRotation());
+                Message message = thePreviewHandler.obtainMessage(previewMessage, source);
+                message.sendToTarget();
+                previewHandler = null;
+            } else {
+                Log.d(TAG, "Got preview callback, but no handler or resolution available");
+            }
+        }
+    }
 
     /**
      * Preview frames are delivered here, which we pass on to the registered handler. Make sure to

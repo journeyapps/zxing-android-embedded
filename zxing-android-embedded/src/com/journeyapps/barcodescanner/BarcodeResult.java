@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
@@ -18,20 +17,17 @@ import java.util.Map;
  * because it declared as final, and adds bitmap with scanned barcode
  */
 public class BarcodeResult {
-    static final float PREVIEW_LINE_WIDTH = 4.0f;
-    static final float PREVIEW_DOT_WIDTH = 10.0f;
+    private static final float PREVIEW_LINE_WIDTH = 4.0f;
+    private static final float PREVIEW_DOT_WIDTH = 10.0f;
+
     protected Result mResult;
-    protected Bitmap mBitmap = null;
-    protected int mScaleFactor;
+    protected SourceData sourceData;
 
-    public BarcodeResult(Result result, PlanarYUVLuminanceSource source) {
+    private final int mScaleFactor = 1;
+
+    public BarcodeResult(Result result, SourceData sourceData) {
         this.mResult = result;
-
-        int thumbnailWidth = source.getThumbnailWidth();
-        int thumbnailHeight = source.getThumbnailHeight();
-        int[] colors = source.renderThumbnail();
-        mBitmap = Bitmap.createBitmap(colors, thumbnailWidth, thumbnailHeight, Bitmap.Config.ARGB_8888);
-        mScaleFactor = source.getWidth() / thumbnailWidth;
+        this.sourceData = sourceData;
     }
 
     private static void drawLine(Canvas canvas, Paint paint, ResultPoint a, ResultPoint b, int scaleFactor) {
@@ -56,7 +52,7 @@ public class BarcodeResult {
      * @see #getBitmapWithResultPoints(int)
      */
     public Bitmap getBitmap() {
-        return mBitmap;
+        return sourceData.getBitmap();
     }
 
     /**
@@ -64,13 +60,14 @@ public class BarcodeResult {
      * @return {@link Bitmap} with result points on it, or plain bitmap, if no result points
      */
     public Bitmap getBitmapWithResultPoints(int color) {
-        Bitmap barcode = mBitmap;
+        Bitmap bitmap = getBitmap();
+        Bitmap barcode = bitmap;
         ResultPoint[] points = mResult.getResultPoints();
 
-        if (points != null && points.length > 0 && mBitmap!=null) {
-            barcode = Bitmap.createBitmap(mBitmap.getWidth(), mBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        if (points != null && points.length > 0 && bitmap != null) {
+            barcode = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(barcode);
-            canvas.drawBitmap(mBitmap,0,0,null);
+            canvas.drawBitmap(bitmap, 0, 0, null);
             Paint paint = new Paint();
             paint.setColor(color);
             if (points.length == 2) {
