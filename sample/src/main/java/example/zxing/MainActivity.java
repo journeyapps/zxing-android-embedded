@@ -1,11 +1,11 @@
 package example.zxing;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,9 +43,13 @@ public class MainActivity extends ActionBarActivity {
         integrator.initiateScan();
     }
 
-    public void scan2(View view) {
+    public void scanContinuous(View view) {
         Intent intent = new Intent(this, CustomCaptureActivity.class);
         startActivity(intent);
+    }
+
+    public void scanToolbar(View view) {
+        new IntentIntegrator(this).setCaptureActivity(ToolbarCaptureActivity.class).initiateScan();
     }
 
     @Override
@@ -53,11 +57,14 @@ public class MainActivity extends ActionBarActivity {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
             if(result.getContents() == null) {
+                Log.d("MainActivity", "Cancelled scan");
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
+                Log.d("MainActivity", "Scanned");
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
             }
         } else {
+            Log.d("MainActivity", "Weird");
             // This is important, otherwise the result will not be passed to the fragment
             super.onActivityResult(requestCode, resultCode, data);
         }

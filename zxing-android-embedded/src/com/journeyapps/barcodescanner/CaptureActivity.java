@@ -74,10 +74,4 @@ public class CaptureActivity extends Activity {
         super.onSaveInstanceState(outState);
         capture.onSaveInstanceState(outState);
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
 }

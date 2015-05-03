@@ -192,7 +192,7 @@ public class CaptureManager {
     /**
      * Call from Activity#onResume().
      */
-    protected void onResume() {
+    public void onResume() {
         barcodeView.resume();
         beepManager.updatePrefs();
         inactivityTimer.start();
@@ -201,7 +201,7 @@ public class CaptureManager {
     /**
      * Call from Activity#onPause().
      */
-    protected void onPause() {
+    public void onPause() {
         barcodeView.pause();
 
         inactivityTimer.cancel();
@@ -211,7 +211,7 @@ public class CaptureManager {
     /**
      * Call from Activity#onDestroy().
      */
-    protected void onDestroy() {
+    public void onDestroy() {
         destroyed = true;
         inactivityTimer.cancel();
     }
@@ -219,7 +219,7 @@ public class CaptureManager {
     /**
      * Call from Activity#onSaveInstanceState().
      */
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
         outState.putInt(SAVED_ORIENTATION_LOCK, this.orientationLock);
     }
 

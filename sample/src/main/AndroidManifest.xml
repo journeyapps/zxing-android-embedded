@@ -28,6 +28,20 @@
                   android:windowSoftInputMode="stateAlwaysHidden">
 
         </activity>
+
+
+        <activity android:name=".ToolbarCaptureActivity"
+                  android:parentActivityName="example.zxing.MainActivity"
+                  android:clearTaskOnLaunch="true"
+                  android:screenOrientation="sensorLandscape"
+                  android:stateNotNeeded="true"
+                  android:theme="@style/AppCompatCaptureTheme"
+                  android:windowSoftInputMode="stateAlwaysHidden">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="example.zxing.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
