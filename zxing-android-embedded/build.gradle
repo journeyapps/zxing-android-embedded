@@ -6,7 +6,7 @@ dependencies {
     compile project.zxingCore
 
     // Optional dependency.
-    provided 'com.android.support:support-v4:21.0.3'
+    provided 'com.android.support:support-v4:22.0.0'
 }
 
 

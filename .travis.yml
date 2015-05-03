@@ -1,6 +1,13 @@
 language: android
 jdk: oraclejdk7
-
+android:
+  components:
+    - extra-android-support
+    - extra-android-m2repository
+    - extra-google-m2repository
+  licenses:
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
 script:
     - TERM=dumb ./gradlew build
 

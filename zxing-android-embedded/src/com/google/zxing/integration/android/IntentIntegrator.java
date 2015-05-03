@@ -92,8 +92,9 @@ public class IntentIntegrator {
      *
      * @param captureActivity the class
      */
-    public void setCaptureActivity(Class<?> captureActivity) {
+    public IntentIntegrator setCaptureActivity(Class<?> captureActivity) {
         this.captureActivity = captureActivity;
+        return this;
     }
 
     /**
@@ -145,8 +146,9 @@ public class IntentIntegrator {
      *
      * @param locked true to lock orientation
      */
-    public void setOrientationLocked(boolean locked) {
+    public IntentIntegrator setOrientationLocked(boolean locked) {
         addExtra(Intents.Scan.ORIENTATION_LOCKED, locked);
+        return this;
     }
 
     /**
