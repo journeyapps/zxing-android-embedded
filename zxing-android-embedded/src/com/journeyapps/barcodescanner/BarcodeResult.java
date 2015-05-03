@@ -23,7 +23,7 @@ public class BarcodeResult {
     protected Result mResult;
     protected SourceData sourceData;
 
-    private final int mScaleFactor = 1;
+    private final int mScaleFactor = 2;
 
     public BarcodeResult(Result result, SourceData sourceData) {
         this.mResult = result;
@@ -52,7 +52,7 @@ public class BarcodeResult {
      * @see #getBitmapWithResultPoints(int)
      */
     public Bitmap getBitmap() {
-        return sourceData.getBitmap();
+        return sourceData.getBitmap(mScaleFactor);
     }
 
     /**

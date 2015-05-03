@@ -111,10 +111,20 @@ public class SourceData {
      * @return the bitmap
      */
     public Bitmap getBitmap() {
-        return getBitmap(cropRect);
+        return getBitmap(1);
     }
 
-    private Bitmap getBitmap(Rect cropRect) {
+    /**
+     * Return the source bitmap (cropped; in display orientation).
+     *
+     * @param scaleFactor factor to scale down by. Must be a power of 2.
+     * @return the bitmap
+     */
+    public Bitmap getBitmap(int scaleFactor) {
+        return getBitmap(cropRect, scaleFactor);
+    }
+
+    private Bitmap getBitmap(Rect cropRect, int scaleFactor) {
         if(isRotated()) {
             //noinspection SuspiciousNameCombination
             cropRect = new Rect(cropRect.top, cropRect.left, cropRect.bottom, cropRect.right);
@@ -126,7 +136,9 @@ public class SourceData {
         img.compressToJpeg(cropRect, 90, buffer);
         byte[] jpegData = buffer.toByteArray();
 
-        Bitmap bitmap = BitmapFactory.decodeByteArray(jpegData, 0, jpegData.length);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = scaleFactor;
+        Bitmap bitmap = BitmapFactory.decodeByteArray(jpegData, 0, jpegData.length, options);
 
         // Rotate if required
         if (rotation != 0) {
