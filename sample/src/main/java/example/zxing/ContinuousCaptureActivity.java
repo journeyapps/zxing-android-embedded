@@ -17,7 +17,8 @@ import com.journeyapps.barcodescanner.CompoundBarcodeView;
 import java.util.List;
 
 /**
- *
+ * This sample performs continuous scanning, displaying the barcode and source image whenever
+ * a barcode is scanned.
  */
 public class ContinuousCaptureActivity extends Activity {
     private static final String TAG = ContinuousCaptureActivity.class.getSimpleName();

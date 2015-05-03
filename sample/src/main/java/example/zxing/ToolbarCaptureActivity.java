@@ -9,7 +9,7 @@ import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.CompoundBarcodeView;
 
 /**
- *
+ * Sample Activity extending from ActionBarActivity to display a Toolbar.
  */
 public class ToolbarCaptureActivity extends ActionBarActivity {
     private CaptureManager capture;
