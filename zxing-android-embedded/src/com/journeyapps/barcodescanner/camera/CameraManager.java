@@ -73,34 +73,30 @@ public final class CameraManager {
     private Context context;
 
 
-    private final class PreviewCallback implements Camera.PreviewCallback {
-        private Handler previewHandler;
-        private int previewMessage;
+    private final class CameraPreviewCallback implements Camera.PreviewCallback {
+        private PreviewCallback callback;
 
         private Size resolution;
 
-        public PreviewCallback() {
+        public CameraPreviewCallback() {
         }
 
         public void setResolution(Size resolution) {
             this.resolution = resolution;
         }
 
-        public void setHandler(Handler previewHandler, int previewMessage) {
-            this.previewHandler = previewHandler;
-            this.previewMessage = previewMessage;
+        public void setCallback(PreviewCallback callback) {
+            this.callback = callback;
         }
 
         @Override
         public void onPreviewFrame(byte[] data, Camera camera) {
             Size cameraResolution = resolution;
-            Handler thePreviewHandler = previewHandler;
-            if (cameraResolution != null && thePreviewHandler != null) {
+            PreviewCallback callback = this.callback;
+            if (cameraResolution != null && callback != null) {
                 int format = camera.getParameters().getPreviewFormat();
                 SourceData source = new SourceData(data, cameraResolution.width, cameraResolution.height, format, getCameraRotation());
-                Message message = thePreviewHandler.obtainMessage(previewMessage, source);
-                message.sendToTarget();
-                previewHandler = null;
+                callback.onPreview(source);
             } else {
                 Log.d(TAG, "Got preview callback, but no handler or resolution available");
             }
@@ -111,11 +107,11 @@ public final class CameraManager {
      * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
      * clear the handler so it will only receive one message.
      */
-    private final PreviewCallback previewCallback;
+    private final CameraPreviewCallback cameraPreviewCallback;
 
     public CameraManager(Context context) {
         this.context = context;
-        previewCallback = new PreviewCallback();
+        cameraPreviewCallback = new CameraPreviewCallback();
     }
 
     /**
@@ -182,7 +178,7 @@ public final class CameraManager {
         }
         if (camera != null && previewing) {
             camera.stopPreview();
-            previewCallback.setHandler(null, 0);
+            cameraPreviewCallback.setCallback(null);
             previewing = false;
         }
     }
@@ -360,7 +356,7 @@ public final class CameraManager {
         } else {
             previewSize = new Size(realPreviewSize.width, realPreviewSize.height);
         }
-        previewCallback.setResolution(previewSize);
+        cameraPreviewCallback.setResolution(previewSize);
     }
 
 
@@ -393,18 +389,18 @@ public final class CameraManager {
     }
 
     /**
-     * A single preview frame will be returned to the handler supplied. The data will arrive as byte[]
-     * in the message.obj field, with width and height encoded as message.arg1 and message.arg2,
-     * respectively.
+     * A single preview frame will be returned to the supplied callback.
      *
-     * @param handler The handler to send the message to.
-     * @param message The what field of the message to be sent.
+     * The thread on which this called is undefined, so a Handler should be used to post the result
+     * to the correct thread.
+     *
+     * @param callback The callback to receive the preview.
      */
-    public void requestPreviewFrame(Handler handler, int message) {
+    public void requestPreviewFrame(PreviewCallback callback) {
         Camera theCamera = camera;
         if (theCamera != null && previewing) {
-            previewCallback.setHandler(handler, message);
-            theCamera.setOneShotPreviewCallback(previewCallback);
+            cameraPreviewCallback.setCallback(callback);
+            theCamera.setOneShotPreviewCallback(cameraPreviewCallback);
         }
     }
 

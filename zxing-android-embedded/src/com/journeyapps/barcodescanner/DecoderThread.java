@@ -12,6 +12,7 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.R;
 import com.journeyapps.barcodescanner.camera.CameraInstance;
+import com.journeyapps.barcodescanner.camera.PreviewCallback;
 
 import java.util.List;
 
@@ -27,6 +28,8 @@ public class DecoderThread {
     private Decoder decoder;
     private Handler resultHandler;
     private Rect cropRect;
+    private boolean running = false;
+    private final Object LOCK = new Object();
 
     private final Handler.Callback callback = new Handler.Callback() {
         @Override
@@ -73,6 +76,7 @@ public class DecoderThread {
         thread = new HandlerThread(TAG);
         thread.start();
         handler = new Handler(thread.getLooper(), callback);
+        running = true;
         requestNextPreview();
     }
 
@@ -85,12 +89,33 @@ public class DecoderThread {
     public void stop() {
         Util.validateMainThread();
 
-        thread.quit();
+        synchronized (LOCK) {
+            running = false;
+            handler.removeCallbacksAndMessages(null);
+            thread.quit();
+        }
     }
+
+
+    private final PreviewCallback previewCallback = new PreviewCallback() {
+        @Override
+        public void onPreview(SourceData sourceData) {
+            // Only post if running, to prevent a warning like this:
+            //   java.lang.RuntimeException: Handler (android.os.Handler) sending message to a Handler on a dead thread
+
+            // synchronize to handle cases where this is called concurrently with stop()
+            synchronized (LOCK) {
+                if (running) {
+                    // Post to our thread.
+                    handler.obtainMessage(R.id.zxing_decode, sourceData).sendToTarget();
+                }
+            }
+        }
+    };
 
     private void requestNextPreview() {
         if (cameraInstance.isOpen()) {
-            cameraInstance.requestPreview(handler, R.id.zxing_decode);
+            cameraInstance.requestPreview(previewCallback);
         }
     }
 
