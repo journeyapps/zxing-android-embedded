@@ -17,16 +17,25 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CustomCaptureActivity">
+        <activity android:name=".ContinuousCaptureActivity">
 
         </activity>
 
-        <activity android:name=".CaptureActivityAnyOrientation"
+        <activity android:name=".AnyOrientationCaptureActivity"
                   android:screenOrientation="fullSensor"
                   android:stateNotNeeded="true"
                   android:theme="@style/zxing_CaptureTheme"
                   android:windowSoftInputMode="stateAlwaysHidden">
 
+        </activity>
+
+
+        <activity android:name=".ToolbarCaptureActivity"
+                  android:clearTaskOnLaunch="true"
+                  android:screenOrientation="sensorLandscape"
+                  android:stateNotNeeded="true"
+                  android:theme="@style/AppCompatCaptureTheme"
+                  android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
     </application>
 

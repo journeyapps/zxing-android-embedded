@@ -1,15 +1,17 @@
-package com.journeyapps.barcodescanner;
+package example.zxing;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 
-import com.google.zxing.client.android.R;
+import com.journeyapps.barcodescanner.CaptureManager;
+import com.journeyapps.barcodescanner.CompoundBarcodeView;
 
 /**
- *
+ * Sample Activity extending from ActionBarActivity to display a Toolbar.
  */
-public class CaptureActivity extends Activity {
+public class ToolbarCaptureActivity extends ActionBarActivity {
     private CaptureManager capture;
     private CompoundBarcodeView barcodeScannerView;
 
@@ -17,7 +19,12 @@ public class CaptureActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.zxing_capture);
+        setContentView(R.layout.capture_appcompat);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+        toolbar.setTitle("Scan Barcode");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         barcodeScannerView = (CompoundBarcodeView)findViewById(R.id.zxing_barcode_scanner);
 
         capture = new CaptureManager(this, barcodeScannerView);
@@ -47,6 +54,12 @@ public class CaptureActivity extends Activity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         capture.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     @Override

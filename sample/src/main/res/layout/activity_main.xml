@@ -1,44 +1,57 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
     tools:context="example.zxing.MainActivity">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/scan_barcode"
-        android:onClick="scanBarcode"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/any_orientation"
-        android:onClick="scanBarcodeCustomLayout"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/front_camera"
-        android:onClick="scanBarcodeFrontCamera"/>
-
-
-    <fragment
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin">
 
-        android:name="example.zxing.MainActivity$ScanFragment" tools:layout="@layout/fragment_scan" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/scan_barcode"
+            android:onClick="scanBarcode"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/any_orientation"
+            android:onClick="scanBarcodeCustomLayout"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/front_camera"
+            android:onClick="scanBarcodeFrontCamera"/>
 
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/custom_activity"
-        android:onClick="scan2"/>
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
-</LinearLayout>
+            android:name="example.zxing.MainActivity$ScanFragment" tools:layout="@layout/fragment_scan" />
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/custom_activity"
+            android:onClick="scanContinuous"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/toolbar_activity"
+            android:onClick="scanToolbar"/>
+
+    </LinearLayout>
+
+
+</ScrollView>
