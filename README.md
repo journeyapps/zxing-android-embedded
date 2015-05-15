@@ -33,11 +33,7 @@ Add the following to your build.gradle file:
 
 ```groovy
 repositories {
-    mavenCentral()
-
-    maven {
-        url "https://dl.bintray.com/journeyapps/maven"
-    }
+    jcenter()
 }
 
 dependencies {
