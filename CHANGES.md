@@ -1,3 +1,7 @@
+### 3.0.0
+
+* First stable release of 3.0.
+
 ### 3.0.0-beta4
 
 * Extract functionality out of CaptureActivity into CompoundBarcodeView and CaptureManager.

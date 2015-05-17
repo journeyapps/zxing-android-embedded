@@ -1,14 +1,14 @@
 # ZXing Android Embedded
 
-This is an Android library based on the [ZXing Android Barcode Scanner application][2]
+This is an Android library loosely based on the [ZXing Android Barcode Scanner application][2]
 for embedding in Android applications. This is not affiliated with the official ZXing project.
 
 Generally it is recommended to scan a barcode [via intents][3].
 There are however some cases in which it is not feasible:
 
-* Your users cannot install the Barcode Scanner application.
 * You need to customise the barcode scanning logic.
 * You need to customise the UI.
+* The users cannot install the Barcode Scanner application.
 
 In these cases, this library may be more suitable.
 
@@ -18,11 +18,12 @@ Where [version 2][4] was essentially just a stripped-down version of the [Barcod
 version 3 is a rewrite of a large part of the codebase, making it more versatile and customizable.
 
 With the rewrite, many APIs for UI customization were removed. Instead, it is now recommended
-to create a custom Activity using BarcodeView instead.
+to create a custom Activity using the lower-level components directly
+(see [Customization](#customization) for details).
 
 Other notable changes:
 * The camera is now loaded in a background thread, making the activity start faster.
-* The camera preview and decoding now functions correctly in any orientation.
+* The camera preview and decoding now function correctly in any orientation.
 
 ## Adding aar dependency with Gradle
 
@@ -37,17 +38,17 @@ repositories {
 }
 
 dependencies {
-    compile 'com.journeyapps:zxing-android-embedded:3.0.0-beta4@aar'
+    compile 'com.journeyapps:zxing-android-embedded:3.0.0@aar'
     compile 'com.google.zxing:core:3.2.0'
 }
 ```
 
 ## Usage with Maven
 
-Support for Maven apklib is dropped in version 1.2.0. If you manage to get this working with the
-aar in Maven, please create an issue or pull request with instructions.
+Maven is not supported currently, but it is possible that the aar can be used. Pull requests are
+welcome.
 
-## Usage
+## Usage with IntentIntegrator
 
 Launch the intent with the default options:
 ```java
@@ -70,7 +71,7 @@ integrator.setCameraId(0);  // Use a specific camera of the device
 integrator.initiateScan();
 ```
 
-See [IntentIntegrator][6] for more options.
+See [IntentIntegrator][5] for more options.
 
 ### Changing the orientation
 
@@ -106,12 +107,21 @@ The previous API for `integrator.setOrientation()` was removed. It caused the Ac
 in landscape orientation, then destroyed and re-created in the requested orientation, which creates
 a bad user experience. The only way around this is to specify the orientation in the manifest.
 
-### Customize the UI
+### Customization
 
-The core of the barcode scanning happens in the BarcodeView component. You can include this in
-any Activity. See [CustomCaptureActivity][6] in the sample application for an example.
+For more control over the UI or scanning behaviour, some components may be used directly:
 
-The API is not stable or documented yet, and will likely change in future releases.
+* BarcodeView: Handles displaying the preview and decoding of the barcodes.
+* CompoundBarcodeView: Combines BarcodeView with a viewfinder for feedback, as well as some status /
+  prompt text.
+* CaptureManager: Manages the InactivityTimer, BeepManager, orientation lock, and returning of the
+  barcode result.
+
+These components can be used from any Activity.
+
+Samples:
+* [ContinuousCaptureActivity][6]: continuously scan and display results (instead of a once-off scan).
+* [ToolbarCaptureActivity][8]: Same as the normal CaptureActivity, but with a Lollipop Toolbar.
 
 ## Building locally
 
@@ -136,10 +146,12 @@ You can then use your local version by specifying in your `build.gradle` file:
 
 [Apache License 2.0][7]
 
+
 [1]: http://journeyapps.com
 [2]: https://github.com/zxing/zxing/
 [3]: https://github.com/zxing/zxing/wiki/Scanning-Via-Intent
-[4]: https://github.com/journeyapps/zxing-android-embedded/blob/v2.3.0/README.md
+[4]: https://github.com/journeyapps/zxing-android-embedded/blob/2.x/README.md
 [5]: zxing-android-embedded/src/com/google/zxing/integration/android/IntentIntegrator.java
-[6]: sample/src/main/java/example/zxing/CustomCaptureActivity.java
+[6]: sample/src/main/java/example/zxing/ContinuousCaptureActivity.java
 [7]: http://www.apache.org/licenses/LICENSE-2.0
+[8]: sample/src/main/java/example/zxing/ToolbarCaptureActivity.java
