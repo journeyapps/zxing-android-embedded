@@ -1,3 +1,23 @@
+### 3.0.0-beta4
+
+* Extract functionality out of CaptureActivity into CompoundBarcodeView and CaptureManager.
+* Add sample with Lollipop Toolbar/Actionbar (using appcompat library).
+
+### 3.0.0-beta3
+
+* Add preview of scanned image to the result.
+* For some warnings for "sending message to a Handler on a dead thread"
+
+### 3.0.0-beta2
+
+* Use DecoderFactory instead of Decoder.
+* Fix some orientation issues.
+
+### 3.0.0-beta1
+
+* Major rewrite, allowing the library to be embedded in other Activities. See the new README for
+  details.
+
 ### 2.3.0 (2015-04-01)
 
 * Fix issues with portrait orientation.
