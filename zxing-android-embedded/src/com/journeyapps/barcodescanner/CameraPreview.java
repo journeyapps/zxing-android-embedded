@@ -148,6 +148,19 @@ public class CameraPreview extends ViewGroup {
         }
     };
 
+    private RotationCallback rotationCallback = new RotationCallback() {
+        @Override
+        public void onRotationChanged(int rotation) {
+            // Make sure this is run on the main thread.
+            stateHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    rotationChanged();
+                }
+            });
+        }
+    };
+
     public CameraPreview(Context context) {
         super(context);
         initialize(context, null, 0, 0);
@@ -176,12 +189,7 @@ public class CameraPreview extends ViewGroup {
 
         setupSurfaceView();
 
-        rotationListener = new RotationListener(context) {
-            @Override
-            public void onRotationChanged(int rotation) {
-                rotationChanged();
-            }
-        };
+        rotationListener = new RotationListener();
     }
 
     private void rotationChanged() {
@@ -380,6 +388,7 @@ public class CameraPreview extends ViewGroup {
     public void resume() {
         // This must be safe to call multiple times
         Util.validateMainThread();
+        Log.d(TAG, "resume()");
 
         // initCamera() does nothing if called twice, but does log a warning
         initCamera();
@@ -395,7 +404,7 @@ public class CameraPreview extends ViewGroup {
 
         // To trigger surfaceSized again
         requestLayout();
-        rotationListener.enable();
+        rotationListener.listen(getContext(), rotationCallback);
     }
 
 
@@ -408,6 +417,7 @@ public class CameraPreview extends ViewGroup {
     public void pause() {
         // This must be safe to call multiple times.
         Util.validateMainThread();
+        Log.d(TAG, "pause()");
 
         if (cameraInstance != null) {
             cameraInstance.close();
@@ -422,7 +432,7 @@ public class CameraPreview extends ViewGroup {
         this.containerSize = null;
         this.previewSize = null;
         this.previewFramingRect = null;
-        rotationListener.disable();
+        rotationListener.stop();
 
         fireState.previewStopped();
     }
