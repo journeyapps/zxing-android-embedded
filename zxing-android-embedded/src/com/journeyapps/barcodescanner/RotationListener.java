@@ -2,6 +2,7 @@ package com.journeyapps.barcodescanner;
 
 import android.content.Context;
 import android.hardware.SensorManager;
+import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.WindowManager;
 
@@ -12,30 +13,57 @@ import android.view.WindowManager;
  *
  * See http://stackoverflow.com/q/9909037
  */
-public abstract class RotationListener extends OrientationEventListener {
+public class RotationListener {
     private int lastRotation;
-    private WindowManager windowManager;
 
-    public RotationListener(Context context) {
-        super(context, SensorManager.SENSOR_DELAY_NORMAL);
+    private WindowManager windowManager;
+    private OrientationEventListener orientationEventListener;
+    private RotationCallback callback;
+
+    public RotationListener() {
+    }
+
+
+    public void listen(Context context, RotationCallback callback) {
+        // Stop to make sure we're not registering the listening twice.
+        stop();
+
+        // Only use the ApplicationContext. In case of a memory leak (e.g. from a framework bug),
+        // this will result in less being leaked.
+        context = context.getApplicationContext();
+
+        this.callback = callback;
+
         this.windowManager = (WindowManager) context
                 .getSystemService(Context.WINDOW_SERVICE);
 
-        lastRotation = getRotation();
+        this.orientationEventListener = new OrientationEventListener(context, SensorManager.SENSOR_DELAY_NORMAL) {
+            @Override
+            public void onOrientationChanged(int orientation) {
+                WindowManager localWindowManager = windowManager;
+                RotationCallback localCallback = RotationListener.this.callback;
+                if(windowManager != null && localCallback != null) {
+                    int newRotation = localWindowManager.getDefaultDisplay().getRotation();
+                    if (newRotation != lastRotation) {
+                        lastRotation = newRotation;
+                        localCallback.onRotationChanged(newRotation);
+                    }
+                }
+            }
+        };
+        this.orientationEventListener.enable();
+
+        lastRotation = windowManager.getDefaultDisplay().getRotation();
     }
 
-    @Override
-    public void onOrientationChanged(int orientation) {
-        int newRotation = getRotation();
-        if (newRotation != lastRotation) {
-            lastRotation = newRotation;
-            onRotationChanged(newRotation);
+    public void stop() {
+        // To reduce the effect of possible leaks, we clear any references we have to external
+        // objects.
+        if(this.orientationEventListener != null) {
+            this.orientationEventListener.disable();
         }
-    }
-
-    public abstract void onRotationChanged(int rotation);
-
-    public int getRotation() {
-        return windowManager.getDefaultDisplay().getRotation();
+        this.orientationEventListener = null;
+        this.windowManager = null;
+        this.callback = null;
     }
 }
