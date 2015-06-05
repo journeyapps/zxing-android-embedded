@@ -54,7 +54,7 @@ public final class AutoFocusManager {
         @Override
         public boolean handleMessage(Message msg) {
             if (msg.what == MESSAGE_FOCUS) {
-                start();
+                focus();
                 return true;
             }
             return false;
@@ -94,6 +94,7 @@ public final class AutoFocusManager {
      * Start auto-focus. The first focus will happen now, then repeated every two seconds.
      */
     public void start() {
+        stopped = false;
         focus();
     }
 
@@ -122,6 +123,7 @@ public final class AutoFocusManager {
      */
     public void stop() {
         stopped = true;
+        focusing = false;
         cancelOutstandingTask();
         if (useAutoFocus) {
             // Doesn't hurt to call this even if not focusing
