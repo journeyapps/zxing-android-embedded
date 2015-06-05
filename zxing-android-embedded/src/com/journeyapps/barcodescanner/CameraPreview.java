@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.google.zxing.client.android.R;
 import com.journeyapps.barcodescanner.camera.CameraInstance;
@@ -72,7 +73,8 @@ public class CameraPreview extends ViewGroup {
     private static final String TAG = CameraPreview.class.getSimpleName();
 
     private CameraInstance cameraInstance;
-    private Activity activity;
+
+    private WindowManager windowManager;
 
     private Handler stateHandler;
 
@@ -183,7 +185,7 @@ public class CameraPreview extends ViewGroup {
             setBackgroundColor(Color.BLACK);
         }
 
-        activity = (Activity) context;
+        windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
         stateHandler = new Handler(stateCallback);
 
@@ -447,7 +449,7 @@ public class CameraPreview extends ViewGroup {
     }
 
     private int getDisplayRotation() {
-        return activity.getWindowManager().getDefaultDisplay().getRotation();
+        return windowManager.getDefaultDisplay().getRotation();
     }
 
     private void initCamera() {
