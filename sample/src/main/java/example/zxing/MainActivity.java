@@ -34,6 +34,7 @@ public class MainActivity extends ActionBarActivity {
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
         integrator.setPrompt("Scan something");
         integrator.setOrientationLocked(false);
+        integrator.setBeepEnabled(false);
         integrator.initiateScan();
     }
 

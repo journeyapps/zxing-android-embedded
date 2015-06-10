@@ -93,6 +93,11 @@ public final class Intents {
          */
         public static final String CHARACTER_SET = "CHARACTER_SET";
 
+        /**
+         * Set to false to disable beep. Defaults to true.
+         */
+        public static final String BEEP_ENABLED = "BEEP_ENABLED";
+
 
         /**
          * Whether or not the orientation should be locked when the activity is first started.

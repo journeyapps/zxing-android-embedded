@@ -165,6 +165,17 @@ public class IntentIntegrator {
     }
 
     /**
+     * Set to false to disable beep on scan.
+     *
+     * @param enabled false to disable beep
+     * @return this
+     */
+    public IntentIntegrator setBeepEnabled(boolean enabled) {
+        addExtra(Intents.Scan.BEEP_ENABLED, enabled);
+        return this;
+    }
+
+    /**
      * Set the desired barcode formats to scan.
      *
      * @param desiredBarcodeFormats names of {@code BarcodeFormat}s to scan for
