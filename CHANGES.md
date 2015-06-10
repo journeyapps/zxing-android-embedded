@@ -1,23 +1,30 @@
-### 3.0.0
+### 3.0.1 (2015-06-10)
+
+* Fix auto-focus stopping when enabling the torch.
+* Fix rendering of BarcodeView / CompoundBarcodeView in layout preview of Android Studio.
+* Add option to disable beep via IntentIntegrator.
+* Fix some memory leaks with RotationListener (affected some devices only).
+
+### 3.0.0 (2015-05-17)
 
 * First stable release of 3.0.
 
-### 3.0.0-beta4
+### 3.0.0-beta4 (2015-05-03)
 
 * Extract functionality out of CaptureActivity into CompoundBarcodeView and CaptureManager.
 * Add sample with Lollipop Toolbar/Actionbar (using appcompat library).
 
-### 3.0.0-beta3
+### 3.0.0-beta3 (2015-05-03)
 
 * Add preview of scanned image to the result.
 * For some warnings for "sending message to a Handler on a dead thread"
 
-### 3.0.0-beta2
+### 3.0.0-beta2 (2015-04-10)
 
 * Use DecoderFactory instead of Decoder.
 * Fix some orientation issues.
 
-### 3.0.0-beta1
+### 3.0.0-beta1 (2015-04-05)
 
 * Major rewrite, allowing the library to be embedded in other Activities. See the new README for
   details.
