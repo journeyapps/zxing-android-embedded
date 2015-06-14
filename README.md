@@ -1,16 +1,14 @@
 # ZXing Android Embedded
 
-This is an Android library loosely based on the [ZXing Android Barcode Scanner application][2]
-for embedding in Android applications. This is not affiliated with the official ZXing project.
+Barcode scanning library for Android, using [ZXing][2] for decoding.
 
-Generally it is recommended to scan a barcode [via intents][3].
-There are however some cases in which it is not feasible:
+The project is loosly based on the [ZXing Android Barcode Scanner application][2], but is not affiliated with the official ZXing project.
 
-* You need to customise the barcode scanning logic.
-* You need to customise the UI.
-* The users cannot install the Barcode Scanner application.
-
-In these cases, this library may be more suitable.
+Features:
+1. Can be used via Intents (little code required).
+2. Can be embedded in an Activity, for advanced customization of UI and logic.
+3. Scanning can be performed in landscape or portrait mode.
+4. Camera is managed in a background thread, for fast startup time.
 
 ## Version 3
 
