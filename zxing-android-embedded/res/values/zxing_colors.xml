@@ -21,4 +21,9 @@
   <color name="zxing_transparent">#00000000</color>
   <color name="zxing_viewfinder_laser">#ffcc0000</color> <!-- Android standard ICS color -->
   <color name="zxing_viewfinder_mask">#60000000</color>
+
+  <color name="zxing_custom_possible_result_points">#903A89CF</color>
+  <color name="zxing_custom_result_view">#b0000000</color>
+  <color name="zxing_custom_viewfinder_laser">#1976D2</color>
+  <color name="zxing_custom_viewfinder_mask">#60000000</color>
 </resources>

@@ -30,7 +30,6 @@
 
         </activity>
 
-
         <activity android:name=".ToolbarCaptureActivity"
                   android:clearTaskOnLaunch="true"
                   android:screenOrientation="sensorLandscape"
@@ -38,6 +37,15 @@
                   android:theme="@style/AppCompatCaptureTheme"
                   android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
+
+        <activity
+            android:name=".CustomScannerActivity"
+            android:screenOrientation="fullSensor"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden">
+        </activity>
+
     </application>
 
 </manifest>
