@@ -82,9 +82,9 @@ public class CustomScannerActivity extends Activity implements
 
     public void switchFlashlight(View view) {
         if (getString(R.string.turn_on_flashlight).equals(switchFlashlightButton.getText())) {
-            barcodeScannerView.turnOnFlashLight();
+            barcodeScannerView.turnOnFlashlight();
         } else {
-            barcodeScannerView.turnOffFlashLight();
+            barcodeScannerView.turnOffFlashlight();
         }
     }
 

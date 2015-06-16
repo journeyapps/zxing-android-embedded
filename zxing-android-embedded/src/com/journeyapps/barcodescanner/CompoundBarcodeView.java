@@ -211,7 +211,7 @@ public class CompoundBarcodeView extends FrameLayout {
     /**
      * Turn on the device's flashlight.
      */
-    public void turnOnFlashLight() {
+    public void turnOnFlashlight() {
         barcodeView.setTorch(true);
 
         if (flashlightListener != null) {
@@ -222,7 +222,7 @@ public class CompoundBarcodeView extends FrameLayout {
     /**
      * Turn off the device's flashlight.
      */
-    public void turnOffFlashLight() {
+    public void turnOffFlashlight() {
         barcodeView.setTorch(false);
 
         if (flashlightListener != null) {
@@ -244,10 +244,10 @@ public class CompoundBarcodeView extends FrameLayout {
                 return true;
             // Use volume up/down to turn on light
             case KeyEvent.KEYCODE_VOLUME_DOWN:
-                turnOffFlashLight();
+                turnOffFlashlight();
                 return true;
             case KeyEvent.KEYCODE_VOLUME_UP:
-                turnOnFlashLight();
+                turnOnFlashlight();
                 return true;
         }
         return super.onKeyDown(keyCode, event);
