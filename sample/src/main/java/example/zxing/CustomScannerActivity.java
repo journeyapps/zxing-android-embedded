@@ -27,7 +27,7 @@ public class CustomScannerActivity extends Activity implements
         setContentView(R.layout.activity_custom_scanner);
 
         barcodeScannerView = (CompoundBarcodeView)findViewById(R.id.zxing_barcode_scanner);
-        barcodeScannerView.setFlashLightListener(this);
+        barcodeScannerView.setFlashlightListener(this);
 
         switchFlashlightButton = (Button)findViewById(R.id.switch_flashlight);
 

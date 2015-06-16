@@ -253,7 +253,7 @@ public class CompoundBarcodeView extends FrameLayout {
         return super.onKeyDown(keyCode, event);
     }
 
-    public void setFlashLightListener(FlashlightListener listener) {
+    public void setFlashlightListener(FlashlightListener listener) {
         this.flashlightListener = listener;
     }
 
