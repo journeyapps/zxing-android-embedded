@@ -19,6 +19,7 @@ package com.journeyapps.barcodescanner;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -64,11 +65,23 @@ public final class ViewfinderView extends View {
 
         // Initialize these once for performance rather than calling them every time in onDraw().
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
         Resources resources = getResources();
-        maskColor = resources.getColor(R.color.zxing_viewfinder_mask);
-        resultColor = resources.getColor(R.color.zxing_result_view);
-        laserColor = resources.getColor(R.color.zxing_viewfinder_laser);
-        resultPointColor = resources.getColor(R.color.zxing_possible_result_points);
+
+        // Get setted attributes on view
+        TypedArray attributes = getContext().obtainStyledAttributes(attrs, R.styleable.zxing_finder);
+
+        this.maskColor = attributes.getColor(R.styleable.zxing_finder_zxing_viewfinder_mask,
+                resources.getColor(R.color.zxing_viewfinder_mask));
+        this.resultColor = attributes.getColor(R.styleable.zxing_finder_zxing_result_view,
+                resources.getColor(R.color.zxing_result_view));
+        this.laserColor = attributes.getColor(R.styleable.zxing_finder_zxing_viewfinder_laser,
+                resources.getColor(R.color.zxing_viewfinder_laser));
+        this.resultPointColor = attributes.getColor(R.styleable.zxing_finder_zxing_possible_result_points,
+                resources.getColor(R.color.zxing_possible_result_points));
+
+        attributes.recycle();
+
         scannerAlpha = 0;
         possibleResultPoints = new ArrayList<>(5);
         lastPossibleResultPoints = null;

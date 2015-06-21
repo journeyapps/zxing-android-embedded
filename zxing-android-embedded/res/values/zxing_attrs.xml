@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+  <declare-styleable name="zxing_view">
+    <attr name="zxing_scanner_layout" format="reference"/>
+  </declare-styleable>
+
+  <declare-styleable name="zxing_finder">
+    <attr name="zxing_possible_result_points" format="color"/>
+    <attr name="zxing_result_view" format="color"/>
+    <attr name="zxing_viewfinder_laser" format="color"/>
+    <attr name="zxing_viewfinder_mask" format="color"/>
+  </declare-styleable>
+
+</resources>

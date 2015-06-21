@@ -53,6 +53,10 @@ public class MainActivity extends ActionBarActivity {
         new IntentIntegrator(this).setCaptureActivity(ToolbarCaptureActivity.class).initiateScan();
     }
 
+    public void scanCustomScanner(View view) {
+        new IntentIntegrator(this).setCaptureActivity(CustomScannerActivity.class).initiateScan();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);

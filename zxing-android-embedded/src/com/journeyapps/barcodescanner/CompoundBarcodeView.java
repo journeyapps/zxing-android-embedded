@@ -2,6 +2,7 @@ package com.journeyapps.barcodescanner;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
@@ -31,6 +32,11 @@ public class CompoundBarcodeView extends FrameLayout {
     private ViewfinderView viewFinder;
     private TextView statusView;
 
+    /**
+     * The instance of @link TorchListener to send events callback.
+     */
+    private TorchListener torchListener;
+
     private class WrappedCallback implements BarcodeCallback {
         private BarcodeCallback delegate;
 
@@ -59,23 +65,57 @@ public class CompoundBarcodeView extends FrameLayout {
 
     public CompoundBarcodeView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initialize();
+        initialize(attrs);
     }
 
     public CompoundBarcodeView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initialize();
+        initialize(attrs);
     }
 
-    private void initialize() {
-        inflate(getContext(), R.layout.zxing_barcode_scanner, this);
+    /**
+     * Initialize the view with the xml configuration based on styleable attributes.
+     *
+     * @param attrs The attributes to use on view.
+     */
+    private void initialize(AttributeSet attrs) {
+        // Get attributes set on view
+        TypedArray attributes = getContext().obtainStyledAttributes(attrs, R.styleable.zxing_view);
+
+        int scannerLayout = attributes.getResourceId(
+                R.styleable.zxing_view_zxing_scanner_layout, R.layout.zxing_barcode_scanner);
+
+        attributes.recycle();
+
+        inflate(getContext(), scannerLayout, this);
 
         barcodeView = (BarcodeView) findViewById(R.id.zxing_barcode_surface);
 
+        if (barcodeView == null) {
+            throw new IllegalArgumentException(
+                "There is no a com.journeyapps.barcodescanner.BarcodeView on provided layout " +
+                "with the id \"zxing_barcode_surface\".");
+        }
+
         viewFinder = (ViewfinderView) findViewById(R.id.zxing_viewfinder_view);
+
+        if (viewFinder == null) {
+            throw new IllegalArgumentException(
+                "There is no a com.journeyapps.barcodescanner.ViewfinderView on provided layout " +
+                "with the id \"zxing_viewfinder_view\".");
+        }
+
         viewFinder.setCameraPreview(barcodeView);
 
+        // statusView is optional
         statusView = (TextView) findViewById(R.id.zxing_status_view);
+    }
+
+    /**
+     * Initialize with no custom attributes setted.
+     */
+    private void initialize() {
+        initialize(null);
     }
 
     /**
@@ -112,7 +152,10 @@ public class CompoundBarcodeView extends FrameLayout {
     }
 
     public void setStatusText(String text) {
-        statusView.setText(text);
+        // statusView is optional when using a custom layout
+        if(statusView != null) {
+            statusView.setText(text);
+        }
     }
 
 
@@ -158,12 +201,34 @@ public class CompoundBarcodeView extends FrameLayout {
         barcodeView.decodeContinuous(new WrappedCallback(callback));
     }
 
-    @Override
+    /**
+     * Turn on the device's flashlight.
+     */
+    public void setTorchOn() {
+        barcodeView.setTorch(true);
+
+        if (torchListener != null) {
+            torchListener.onTorchOn();
+        }
+    }
+
+    /**
+     * Turn off the device's flashlight.
+     */
+    public void setTorchOff() {
+        barcodeView.setTorch(false);
+
+        if (torchListener != null) {
+            torchListener.onTorchOff();
+        }
+    }
+
     /**
      * Handles focus, camera, volume up and volume down keys.
      *
      * Note that this view is not usually focused, so the Activity should call this directly.
      */
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_FOCUS:
@@ -172,12 +237,28 @@ public class CompoundBarcodeView extends FrameLayout {
                 return true;
             // Use volume up/down to turn on light
             case KeyEvent.KEYCODE_VOLUME_DOWN:
-                barcodeView.setTorch(false);
+                setTorchOff();
                 return true;
             case KeyEvent.KEYCODE_VOLUME_UP:
-                barcodeView.setTorch(true);
+                setTorchOn();
                 return true;
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    public void setTorchListener(TorchListener listener) {
+        this.torchListener = listener;
+    }
+
+    /**
+     * The Listener to torch/fflashlight events (turn on, turn off).
+     */
+    public interface TorchListener {
+
+        void onTorchOn();
+
+        void onTorchOff();
+
+    }
+
 }

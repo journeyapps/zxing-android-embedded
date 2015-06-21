@@ -8,5 +8,8 @@
     <string name="front_camera">Front Camera</string>
     <string name="custom_activity">Continuous Scan</string>
     <string name="toolbar_activity">Activity with Toolbar</string>
+    <string name="custom_scanner">Custom Scanner Activity</string>
+    <string name="turn_on_flashlight">Turn on Flashlight</string>
+    <string name="turn_off_flashlight">Turn off Flashlight</string>
 
 </resources>
