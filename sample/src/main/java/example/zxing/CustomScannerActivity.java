@@ -3,7 +3,6 @@ package example.zxing;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +14,7 @@ import com.journeyapps.barcodescanner.CompoundBarcodeView;
  * Custom Scannner Activity extending from Activity to display a custom layout form scanner view.
  */
 public class CustomScannerActivity extends Activity implements
-        CompoundBarcodeView.FlashlightListener {
+        CompoundBarcodeView.TorchListener {
 
     private CaptureManager capture;
     private CompoundBarcodeView barcodeScannerView;
@@ -27,7 +26,7 @@ public class CustomScannerActivity extends Activity implements
         setContentView(R.layout.activity_custom_scanner);
 
         barcodeScannerView = (CompoundBarcodeView)findViewById(R.id.zxing_barcode_scanner);
-        barcodeScannerView.setFlashlightListener(this);
+        barcodeScannerView.setTorchListener(this);
 
         switchFlashlightButton = (Button)findViewById(R.id.switch_flashlight);
 
@@ -82,19 +81,19 @@ public class CustomScannerActivity extends Activity implements
 
     public void switchFlashlight(View view) {
         if (getString(R.string.turn_on_flashlight).equals(switchFlashlightButton.getText())) {
-            barcodeScannerView.turnOnFlashlight();
+            barcodeScannerView.setTorchOn();
         } else {
-            barcodeScannerView.turnOffFlashlight();
+            barcodeScannerView.setTorchOff();
         }
     }
 
     @Override
-    public void onFlashlightTurnOn() {
+    public void onTorchOn() {
         switchFlashlightButton.setText(R.string.turn_off_flashlight);
     }
 
     @Override
-    public void onFlashlightTurnOff() {
+    public void onTorchOff() {
         switchFlashlightButton.setText(R.string.turn_on_flashlight);
     }
 

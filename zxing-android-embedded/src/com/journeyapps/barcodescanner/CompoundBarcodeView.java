@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -34,9 +33,9 @@ public class CompoundBarcodeView extends FrameLayout {
     private TextView statusView;
 
     /**
-     * The instance of @link FlashlightListener to send events callback.
+     * The instance of @link TorchListener to send events callback.
      */
-    private FlashlightListener flashlightListener;
+    private TorchListener torchListener;
 
     private class WrappedCallback implements BarcodeCallback {
         private BarcodeCallback delegate;
@@ -205,22 +204,22 @@ public class CompoundBarcodeView extends FrameLayout {
     /**
      * Turn on the device's flashlight.
      */
-    public void turnOnFlashlight() {
+    public void setTorchOn() {
         barcodeView.setTorch(true);
 
-        if (flashlightListener != null) {
-            flashlightListener.onFlashlightTurnOn();
+        if (torchListener != null) {
+            torchListener.onTorchOn();
         }
     }
 
     /**
      * Turn off the device's flashlight.
      */
-    public void turnOffFlashlight() {
+    public void setTorchOff() {
         barcodeView.setTorch(false);
 
-        if (flashlightListener != null) {
-            flashlightListener.onFlashlightTurnOff();
+        if (torchListener != null) {
+            torchListener.onTorchOff();
         }
     }
 
@@ -238,27 +237,27 @@ public class CompoundBarcodeView extends FrameLayout {
                 return true;
             // Use volume up/down to turn on light
             case KeyEvent.KEYCODE_VOLUME_DOWN:
-                turnOffFlashlight();
+                setTorchOff();
                 return true;
             case KeyEvent.KEYCODE_VOLUME_UP:
-                turnOnFlashlight();
+                setTorchOn();
                 return true;
         }
         return super.onKeyDown(keyCode, event);
     }
 
-    public void setFlashlightListener(FlashlightListener listener) {
-        this.flashlightListener = listener;
+    public void setTorchListener(TorchListener listener) {
+        this.torchListener = listener;
     }
 
     /**
-     * The Listener to Flashlight events (turn on, Turn Off).
+     * The Listener to torch/fflashlight events (turn on, turn off).
      */
-    public interface FlashlightListener {
+    public interface TorchListener {
 
-        void onFlashlightTurnOn();
+        void onTorchOn();
 
-        void onFlashlightTurnOff();
+        void onTorchOff();
 
     }
 
