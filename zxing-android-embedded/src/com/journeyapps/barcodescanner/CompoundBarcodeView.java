@@ -34,11 +34,6 @@ public class CompoundBarcodeView extends FrameLayout {
     private TextView statusView;
 
     /**
-     * View Attributes.
-     */
-    private int scannerLayout;
-
-    /**
      * The instance of @link FlashlightListener to send events callback.
      */
     private FlashlightListener flashlightListener;
@@ -85,20 +80,20 @@ public class CompoundBarcodeView extends FrameLayout {
      * @param attrs The attributes to use on view.
      */
     private void initialize(AttributeSet attrs) {
-        // Get setted attributes on view
+        // Get attributes set on view
         TypedArray attributes = getContext().obtainStyledAttributes(attrs, R.styleable.zxing_view);
 
-        this.scannerLayout = attributes.getResourceId(
+        int scannerLayout = attributes.getResourceId(
                 R.styleable.zxing_view_zxing_scanner_layout, R.layout.zxing_barcode_scanner);
 
         attributes.recycle();
 
-        inflate(getContext(), this.scannerLayout , this);
+        inflate(getContext(), scannerLayout, this);
 
         barcodeView = (BarcodeView) findViewById(R.id.zxing_barcode_surface);
 
         if (barcodeView == null) {
-            throw new ZXingComponentNotFoundException(
+            throw new IllegalArgumentException(
                 "There is no a com.journeyapps.barcodescanner.BarcodeView on provided layout " +
                 "with the id \"zxing_barcode_surface\".");
         }
@@ -106,19 +101,15 @@ public class CompoundBarcodeView extends FrameLayout {
         viewFinder = (ViewfinderView) findViewById(R.id.zxing_viewfinder_view);
 
         if (viewFinder == null) {
-            throw new ZXingComponentNotFoundException(
+            throw new IllegalArgumentException(
                 "There is no a com.journeyapps.barcodescanner.ViewfinderView on provided layout " +
                 "with the id \"zxing_viewfinder_view\".");
         }
 
         viewFinder.setCameraPreview(barcodeView);
 
+        // statusView is optional
         statusView = (TextView) findViewById(R.id.zxing_status_view);
-
-        if (statusView == null) {
-            throw new ZXingComponentNotFoundException(
-                "There is no a TextView on provided layout with the id \"zxing_status_view\".");
-        }
     }
 
     /**
@@ -162,7 +153,10 @@ public class CompoundBarcodeView extends FrameLayout {
     }
 
     public void setStatusText(String text) {
-        statusView.setText(text);
+        // statusView is optional when using a custom layout
+        if(statusView != null) {
+            statusView.setText(text);
+        }
     }
 
 
