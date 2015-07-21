@@ -1,3 +1,8 @@
+### 3.0.2 (2015-07-21)
+
+* Add helper class for encoding barcodes.
+* Support custom layouts for CompoundBarcodeView.
+
 ### 3.0.1 (2015-06-10)
 
 * Fix auto-focus stopping when enabling the torch.
