@@ -98,6 +98,10 @@ public final class Intents {
          */
         public static final String BEEP_ENABLED = "BEEP_ENABLED";
 
+        /**
+         * Set to true to return a path to the barcode's image as it was captured. Defaults to false.
+         */
+        public static final String BARCODE_IMAGE_ENABLED = "BARCODE_IMAGE_ENABLED";
 
         /**
          * Whether or not the orientation should be locked when the activity is first started.
@@ -161,6 +165,15 @@ public final class Intents {
          * Call {@link android.content.Intent#getByteArrayExtra(String)} with these keys.
          */
         public static final String RESULT_BYTE_SEGMENTS_PREFIX = "SCAN_RESULT_BYTE_SEGMENTS_";
+
+        /**
+         * Call {@link android.content.Intent#getStringExtra(String)} with {@link #SCAN_RESULT_IMAGE_PATH}
+         * to get a {@code String} path to a cropped and compressed png file of the barcode's image
+         * as it was displayed. Only available if
+         * {@link com.google.zxing.integration.android.IntentIntegrator#setBarcodeImageEnabled(boolean)}
+         * is called with true.
+         */
+        public static final String RESULT_BARCODE_IMAGE_PATH = "SCAN_RESULT_IMAGE_PATH";
 
         private Scan() {
         }
