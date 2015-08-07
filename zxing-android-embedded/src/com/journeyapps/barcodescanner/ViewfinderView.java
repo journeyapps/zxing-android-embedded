@@ -39,25 +39,25 @@ import java.util.List;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class ViewfinderView extends View {
-    private static final String TAG = ViewfinderView.class.getSimpleName();
+public class ViewfinderView extends View {
+    protected static final String TAG = ViewfinderView.class.getSimpleName();
 
-    private static final int[] SCANNER_ALPHA = {0, 64, 128, 192, 255, 192, 128, 64};
-    private static final long ANIMATION_DELAY = 80L;
-    private static final int CURRENT_POINT_OPACITY = 0xA0;
-    private static final int MAX_RESULT_POINTS = 20;
-    private static final int POINT_SIZE = 6;
+    protected static final int[] SCANNER_ALPHA = {0, 64, 128, 192, 255, 192, 128, 64};
+    protected static final long ANIMATION_DELAY = 80L;
+    protected static final int CURRENT_POINT_OPACITY = 0xA0;
+    protected static final int MAX_RESULT_POINTS = 20;
+    protected static final int POINT_SIZE = 6;
 
-    private final Paint paint;
-    private Bitmap resultBitmap;
-    private final int maskColor;
-    private final int resultColor;
-    private final int laserColor;
-    private final int resultPointColor;
-    private int scannerAlpha;
-    private List<ResultPoint> possibleResultPoints;
-    private List<ResultPoint> lastPossibleResultPoints;
-    private CameraPreview cameraPreview;
+    protected final Paint paint;
+    protected Bitmap resultBitmap;
+    protected final int maskColor;
+    protected final int resultColor;
+    protected final int laserColor;
+    protected final int resultPointColor;
+    protected int scannerAlpha;
+    protected List<ResultPoint> possibleResultPoints;
+    protected List<ResultPoint> lastPossibleResultPoints;
+    protected CameraPreview cameraPreview;
 
     // This constructor is used when the class is built from an XML resource.
     public ViewfinderView(Context context, AttributeSet attrs) {
