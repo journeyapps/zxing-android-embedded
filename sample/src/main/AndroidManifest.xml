@@ -32,7 +32,7 @@
 
         <activity android:name=".ToolbarCaptureActivity"
                   android:clearTaskOnLaunch="true"
-                  android:screenOrientation="sensorLandscape"
+                  android:screenOrientation="portrait"
                   android:stateNotNeeded="true"
                   android:theme="@style/AppCompatCaptureTheme"
                   android:windowSoftInputMode="stateAlwaysHidden">

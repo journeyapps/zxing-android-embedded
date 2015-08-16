@@ -14,24 +14,38 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+    <com.journeyapps.barcodescanner.CompoundBarcodeView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/my_awesome_toolbar"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/zxing_barcode_scanner"/>
+
+    <!-- The Toolbar must be defined after the CompoundBarcodeView, to ensure it's always on top. -->
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_awesome_toolbar"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:minHeight="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
         app:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>
 
-    <com.journeyapps.barcodescanner.CompoundBarcodeView
+    <!-- Sample for a footer. Also add to CompoundBarcodeView: android:layout_above="@+id/footer" -->
+    <!-- <TextView
+        android:id="@+id/footer"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/zxing_barcode_scanner"/>
-</LinearLayout>
+        android:layout_height="150dp"
+        android:text="Footer"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"/> -->
+</RelativeLayout>
