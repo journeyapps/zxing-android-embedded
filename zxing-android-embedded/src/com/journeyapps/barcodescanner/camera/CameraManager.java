@@ -274,6 +274,12 @@ public final class CameraManager {
             parameters.setPreviewSize(requestedPreviewSize.width, requestedPreviewSize.height);
         }
 
+        if (Build.DEVICE.equals("glass-1")) {
+            // We need to set the FPS on Google Glass devices, otherwise the preview is scrambled.
+            // FIXME - can/should we do this for other devices as well?
+            CameraConfigurationUtils.setBestPreviewFPS(parameters);
+        }
+
         Log.i(TAG, "Final camera parameters: " + parameters.flatten());
 
         camera.setParameters(parameters);
