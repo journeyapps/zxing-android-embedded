@@ -176,6 +176,17 @@ public class IntentIntegrator {
     }
 
     /**
+     * Set to true to enable saving the barcode image and sending its path in the result Intent.
+     *
+     * @param enabled true to enable barcode image
+     * @return this
+     */
+    public IntentIntegrator setBarcodeImageEnabled(boolean enabled) {
+        addExtra(Intents.Scan.BARCODE_IMAGE_ENABLED, enabled);
+        return this;
+    }
+
+    /**
      * Set the desired barcode formats to scan.
      *
      * @param desiredBarcodeFormats names of {@code BarcodeFormat}s to scan for
@@ -287,11 +298,13 @@ public class IntentIntegrator {
                 int intentOrientation = intent.getIntExtra(Intents.Scan.RESULT_ORIENTATION, Integer.MIN_VALUE);
                 Integer orientation = intentOrientation == Integer.MIN_VALUE ? null : intentOrientation;
                 String errorCorrectionLevel = intent.getStringExtra(Intents.Scan.RESULT_ERROR_CORRECTION_LEVEL);
+                String barcodeImagePath = intent.getStringExtra(Intents.Scan.RESULT_BARCODE_IMAGE_PATH);
                 return new IntentResult(contents,
                         formatName,
                         rawBytes,
                         orientation,
-                        errorCorrectionLevel);
+                        errorCorrectionLevel,
+                        barcodeImagePath);
             }
             return new IntentResult();
         }

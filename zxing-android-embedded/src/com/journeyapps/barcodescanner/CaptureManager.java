@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -21,6 +22,9 @@ import com.google.zxing.client.android.InactivityTimer;
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.R;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +51,7 @@ public class CaptureManager {
     private CompoundBarcodeView barcodeView;
     private int orientationLock = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
     private static final String SAVED_ORIENTATION_LOCK = "SAVED_ORIENTATION_LOCK";
+    private boolean returnBarcodeImagePath = false;
 
     private boolean destroyed = false;
 
@@ -155,6 +160,10 @@ public class CaptureManager {
                 beepManager.setBeepEnabled(false);
                 beepManager.updatePrefs();
             }
+
+            if (intent.getBooleanExtra(Intents.Scan.BARCODE_IMAGE_ENABLED, false)) {
+                returnBarcodeImagePath = true;
+            }
         }
     }
 
@@ -235,9 +244,10 @@ public class CaptureManager {
      * Create a intent to return as the Activity result.
      *
      * @param rawResult the BarcodeResult, must not be null.
+     * @param barcodeImagePath a path to an exported file of the Barcode Image, can be null.
      * @return the Intent
      */
-    public static Intent resultIntent(BarcodeResult rawResult) {
+    public static Intent resultIntent(BarcodeResult rawResult, String barcodeImagePath) {
         Intent intent = new Intent(Intents.Scan.ACTION);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         intent.putExtra(Intents.Scan.RESULT, rawResult.toString());
@@ -270,7 +280,34 @@ public class CaptureManager {
                 }
             }
         }
+        if (barcodeImagePath != null) {
+            intent.putExtra(Intents.Scan.RESULT_BARCODE_IMAGE_PATH, barcodeImagePath);
+        }
         return intent;
+    }
+
+    /**
+     * Save the barcode image to a temporary file stored in the application's cache, and return its path.
+     * Only does so if returnBarcodeImagePath is enabled.
+     *
+     * @param rawResult the BarcodeResult, must not be null
+     * @return the path or null
+     */
+    private String getBarcodeImagePath(BarcodeResult rawResult) {
+        String barcodeImagePath = null;
+        if (returnBarcodeImagePath) {
+            Bitmap bmp = rawResult.getBitmap();
+            try {
+                File bitmapFile = File.createTempFile("barcodeimage", ".jpg", activity.getCacheDir());
+                FileOutputStream outputStream = new FileOutputStream(bitmapFile);
+                bmp.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                outputStream.close();
+                barcodeImagePath = bitmapFile.getAbsolutePath();
+            } catch (IOException e) {
+                Log.w(TAG, "Unable to create temporary file and store bitmap! " + e);
+            }
+        }
+        return barcodeImagePath;
     }
 
     private void finish() {
@@ -279,7 +316,7 @@ public class CaptureManager {
 
 
     protected void returnResult(BarcodeResult rawResult) {
-        Intent intent = resultIntent(rawResult);
+        Intent intent = resultIntent(rawResult, getBarcodeImagePath(rawResult));
         activity.setResult(Activity.RESULT_OK, intent);
         finish();
     }
