@@ -1,3 +1,9 @@
+### 3.0.3 (2015-08-16)
+
+* Fix for preview on Google Glass.
+* Make ViewfinderView extensible. (#75)
+* Add option to return image of barcode via Intents. (#72)
+
 ### 3.0.2 (2015-07-21)
 
 * Add helper class for encoding barcodes.
