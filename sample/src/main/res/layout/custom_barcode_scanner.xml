@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
        xmlns:tools="http://schemas.android.com/tools"
+       xmlns:zxing_barcode_view="http://schemas.android.com/apk/res-auto"
        xmlns:zxing_finder="http://schemas.android.com/apk/res-auto">
 
     <com.journeyapps.barcodescanner.BarcodeView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/zxing_barcode_surface"/>
+        android:id="@+id/zxing_barcode_surface"
+        zxing_barcode_view:zxing_framing_rect_width="250dp"
+        zxing_barcode_view:zxing_framing_rect_height="50dp"/>
 
     <com.journeyapps.barcodescanner.ViewfinderView
         android:layout_width="match_parent"

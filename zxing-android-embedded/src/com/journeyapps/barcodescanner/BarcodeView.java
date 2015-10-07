@@ -1,6 +1,8 @@
 package com.journeyapps.barcodescanner;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -37,6 +39,7 @@ public class BarcodeView extends CameraPreview {
     private DecoderThread decoderThread;
 
     private DecoderFactory decoderFactory;
+    private Size framingRectSize = null;
 
 
     private Handler resultHandler;
@@ -73,23 +76,31 @@ public class BarcodeView extends CameraPreview {
 
     public BarcodeView(Context context) {
         super(context);
-        initialize();
+        initialize(context, null);
     }
 
     public BarcodeView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initialize();
+        initialize(context, attrs);
     }
 
     public BarcodeView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initialize();
+        initialize(context, attrs);
     }
 
 
-    private void initialize() {
+    private void initialize(Context context, AttributeSet attrs) {
         decoderFactory = new DefaultDecoderFactory();
         resultHandler = new Handler(resultCallback);
+
+        TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.zxing_barcode_view);
+        int framingRectWidth = (int) attributes.getDimension(R.styleable.zxing_barcode_view_zxing_framing_rect_width, -1);
+        int framingRectHeight = (int) attributes.getDimension(R.styleable.zxing_barcode_view_zxing_framing_rect_height, -1);
+
+        if (framingRectWidth > 0 && framingRectHeight > 0) {
+            this.framingRectSize = new Size(framingRectWidth, framingRectHeight);
+        }
     }
 
 
@@ -195,6 +206,20 @@ public class BarcodeView extends CameraPreview {
             decoderThread.stop();
             decoderThread = null;
         }
+    }
+
+    @Override
+    protected Rect calculateFramingRect(Rect container, Rect surface) {
+        if (this.framingRectSize == null) {
+            return super.calculateFramingRect(container, surface);
+        }
+
+        Rect intersection = new Rect(container);
+        intersection.intersect(surface);
+
+        intersection.inset((intersection.width() - framingRectSize.width) / 2, (intersection.height() - framingRectSize.height) / 2);
+
+        return intersection;
     }
 
     /**
