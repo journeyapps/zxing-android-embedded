@@ -194,6 +194,7 @@ public class CameraPreview extends ViewGroup {
         TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.zxing_camera_preview);
         int framingRectWidth = (int) attributes.getDimension(R.styleable.zxing_camera_preview_zxing_framing_rect_width, -1);
         int framingRectHeight = (int) attributes.getDimension(R.styleable.zxing_camera_preview_zxing_framing_rect_height, -1);
+        attributes.recycle();
 
         if (framingRectWidth > 0 && framingRectHeight > 0) {
             this.framingRectSize = new Size(framingRectWidth, framingRectHeight);
@@ -451,6 +452,36 @@ public class CameraPreview extends ViewGroup {
         rotationListener.stop();
 
         fireState.previewStopped();
+    }
+
+    public Size getFramingRectSize() {
+        return framingRectSize;
+    }
+
+    /**
+     * Set an exact size for the framing rectangle. It will be centered in the view.
+     *
+     * @param framingRectSize the size
+     */
+    public void setFramingRectSize(Size framingRectSize) {
+        this.framingRectSize = framingRectSize;
+    }
+
+    public double getMarginFraction() {
+        return marginFraction;
+    }
+
+    /**
+     * The the fraction of the width/height of view to be used as a margin for the framing rect.
+     * This is ignored if framingRectSize is specified.
+     *
+     * @param marginFraction the fraction
+     */
+    public void setMarginFraction(double marginFraction) {
+        if(marginFraction >= 0.5d) {
+            throw new IllegalArgumentException("The margin fraction must be less than 0.5");
+        }
+        this.marginFraction = marginFraction;
     }
 
     /**
