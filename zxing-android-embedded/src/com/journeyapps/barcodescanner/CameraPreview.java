@@ -571,8 +571,10 @@ public class CameraPreview extends ViewGroup {
         boolean intersects = intersection.intersect(surface);
 
         if(framingRectSize != null) {
-            // Specific size is specified
-            intersection.inset((intersection.width() - framingRectSize.width) / 2, (intersection.height() - framingRectSize.height) / 2);
+            // Specific size is specified. Make sure it's not larger than the container or surface.
+            int horizontalMargin = Math.max(0, (intersection.width() - framingRectSize.width) / 2);
+            int verticalMargin = Math.max(0, (intersection.height() - framingRectSize.height) / 2);
+            intersection.inset(horizontalMargin, verticalMargin);
             return intersection;
         }
         // margin as 10% (default) of the smaller of width, height
