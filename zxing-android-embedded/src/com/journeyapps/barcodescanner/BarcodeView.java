@@ -1,6 +1,8 @@
 package com.journeyapps.barcodescanner;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -73,21 +75,21 @@ public class BarcodeView extends CameraPreview {
 
     public BarcodeView(Context context) {
         super(context);
-        initialize();
+        initialize(context, null);
     }
 
     public BarcodeView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initialize();
+        initialize(context, attrs);
     }
 
     public BarcodeView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initialize();
+        initialize(context, attrs);
     }
 
 
-    private void initialize() {
+    private void initialize(Context context, AttributeSet attrs) {
         decoderFactory = new DefaultDecoderFactory();
         resultHandler = new Handler(resultCallback);
     }
@@ -196,7 +198,6 @@ public class BarcodeView extends CameraPreview {
             decoderThread = null;
         }
     }
-
     /**
      * Stops the live preview and decoding.
      *

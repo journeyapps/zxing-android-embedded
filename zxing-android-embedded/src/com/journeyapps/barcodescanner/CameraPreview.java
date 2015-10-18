@@ -1,8 +1,8 @@
 package com.journeyapps.barcodescanner;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
@@ -107,6 +107,12 @@ public class CameraPreview extends ViewGroup {
     // Framing rectangle relative to the preview resolution
     private Rect previewFramingRect = null;
 
+    // Size of the framing rectangle. If null, defaults to using a margin percentage.
+    private Size framingRectSize = null;
+
+    // Fraction of the width / heigth to use as a margin. This fraction is used on each size, so
+    // must be smaller than 0.5;
+    private double marginFraction = 0.1d;
 
     private final SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
 
@@ -183,6 +189,15 @@ public class CameraPreview extends ViewGroup {
         if (getBackground() == null) {
             // Default to SurfaceView colour, so that there are less changes.
             setBackgroundColor(Color.BLACK);
+        }
+
+        TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.zxing_camera_preview);
+        int framingRectWidth = (int) attributes.getDimension(R.styleable.zxing_camera_preview_zxing_framing_rect_width, -1);
+        int framingRectHeight = (int) attributes.getDimension(R.styleable.zxing_camera_preview_zxing_framing_rect_height, -1);
+        attributes.recycle();
+
+        if (framingRectWidth > 0 && framingRectHeight > 0) {
+            this.framingRectSize = new Size(framingRectWidth, framingRectHeight);
         }
 
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -439,6 +454,36 @@ public class CameraPreview extends ViewGroup {
         fireState.previewStopped();
     }
 
+    public Size getFramingRectSize() {
+        return framingRectSize;
+    }
+
+    /**
+     * Set an exact size for the framing rectangle. It will be centered in the view.
+     *
+     * @param framingRectSize the size
+     */
+    public void setFramingRectSize(Size framingRectSize) {
+        this.framingRectSize = framingRectSize;
+    }
+
+    public double getMarginFraction() {
+        return marginFraction;
+    }
+
+    /**
+     * The the fraction of the width/height of view to be used as a margin for the framing rect.
+     * This is ignored if framingRectSize is specified.
+     *
+     * @param marginFraction the fraction
+     */
+    public void setMarginFraction(double marginFraction) {
+        if(marginFraction >= 0.5d) {
+            throw new IllegalArgumentException("The margin fraction must be less than 0.5");
+        }
+        this.marginFraction = marginFraction;
+    }
+
     /**
      * Considered active if between resume() and pause().
      *
@@ -512,16 +557,26 @@ public class CameraPreview extends ViewGroup {
     /**
      * Calculate framing rectangle, relative to the preview frame.
      *
+     * Note that the SurfaceView may be larger than the container.
+     *
+     * Override this for more control over the framing rect calculations.
+     *
      * @param container this container, with left = top = 0
      * @param surface   the SurfaceView, relative to this container
      * @return the framing rect, relative to this container
      */
     protected Rect calculateFramingRect(Rect container, Rect surface) {
+        // intersection is the part of the container that is used for the preview
         Rect intersection = new Rect(container);
-        intersection.intersect(surface);
+        boolean intersects = intersection.intersect(surface);
 
-        // margin as 10% of the smaller of width, height
-        int margin = Math.min(intersection.width() / 10, intersection.height() / 10);
+        if(framingRectSize != null) {
+            // Specific size is specified
+            intersection.inset((intersection.width() - framingRectSize.width) / 2, (intersection.height() - framingRectSize.height) / 2);
+            return intersection;
+        }
+        // margin as 10% (default) of the smaller of width, height
+        int margin = (int)Math.min(intersection.width() * marginFraction, intersection.height() * marginFraction);
         intersection.inset(margin, margin);
         if (intersection.height() > intersection.width()) {
             // We don't want a frame that is taller than wide.
