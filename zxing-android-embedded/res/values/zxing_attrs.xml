@@ -5,7 +5,7 @@
     <attr name="zxing_scanner_layout" format="reference"/>
   </declare-styleable>
 
-  <declare-styleable name="zxing_barcode_view">
+  <declare-styleable name="zxing_camera_preview">
     <attr name="zxing_framing_rect_width" format="dimension" />
     <attr name="zxing_framing_rect_height" format="dimension" />
   </declare-styleable>
