@@ -1,10 +1,13 @@
 package com.journeyapps.barcodescanner;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.graphics.SurfaceTexture;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -12,6 +15,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
@@ -79,7 +83,10 @@ public class CameraPreview extends ViewGroup {
 
     private Handler stateHandler;
 
+    private boolean useTextureView = true;
+
     private SurfaceView surfaceView;
+    private TextureView textureView;
 
     private boolean previewActive = false;
 
@@ -114,6 +121,33 @@ public class CameraPreview extends ViewGroup {
     // Fraction of the width / heigth to use as a margin. This fraction is used on each size, so
     // must be smaller than 0.5;
     private double marginFraction = 0.1d;
+
+    @TargetApi(14)
+    private TextureView.SurfaceTextureListener surfaceTextureListener() {
+        // Cannot initialize automatically, since we may be API < 14
+        return new TextureView.SurfaceTextureListener() {
+            @Override
+            public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+                onSurfaceTextureSizeChanged(surface, width, height);
+            }
+
+            @Override
+            public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+                currentSurfaceSize = new Size(width, height);
+                startPreviewIfReady();
+            }
+
+            @Override
+            public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+                return false;
+            }
+
+            @Override
+            public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+
+            }
+        };
+    }
 
     private final SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
 
@@ -216,12 +250,20 @@ public class CameraPreview extends ViewGroup {
     }
 
     private void setupSurfaceView() {
-        surfaceView = new SurfaceView(getContext());
-        if (Build.VERSION.SDK_INT < 11) {
-            surfaceView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        if(useTextureView && Build.VERSION.SDK_INT >= 14) {
+            textureView = new TextureView(getContext());
+            textureView.setSurfaceTextureListener(surfaceTextureListener());
+            textureView.setScaleX(1);
+            textureView.setScaleY(1);
+            addView(textureView);
+        } else {
+            surfaceView = new SurfaceView(getContext());
+            if (Build.VERSION.SDK_INT < 11) {
+                surfaceView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+            }
+            surfaceView.getHolder().addCallback(surfaceCallback);
+            addView(surfaceView);
         }
-        surfaceView.getHolder().addCallback(surfaceCallback);
-        addView(surfaceView);
     }
 
     /**
@@ -332,8 +374,40 @@ public class CameraPreview extends ViewGroup {
 
     private void startPreviewIfReady() {
         if (currentSurfaceSize != null && previewSize != null && surfaceRect != null) {
-            if (currentSurfaceSize.equals(new Size(surfaceRect.width(), surfaceRect.height()))) {
+            if (surfaceView != null && currentSurfaceSize.equals(new Size(surfaceRect.width(), surfaceRect.height()))) {
                 startCameraPreview(new CameraSurface(surfaceView.getHolder()));
+            } else if(textureView != null && Build.VERSION.SDK_INT >= 14 && textureView.getSurfaceTexture() != null) {
+                if(previewSize != null) {
+                    // TODO: fix this math
+                    float ratioSurface = (float) textureView.getWidth() / (float) textureView.getHeight();
+                    float ratioPreview = (float) previewSize.width / (float) previewSize.height;
+
+                    float scaleX;
+                    float scaleY;
+
+                    if (ratioSurface < ratioPreview) {
+                        scaleX = ratioPreview / ratioSurface;
+                        scaleY = 1;
+                    } else {
+                        scaleX = 1;
+                        scaleY = ratioSurface / ratioPreview;
+                    }
+
+                    Matrix matrix = new Matrix();
+
+                    matrix.setScale(scaleX, scaleY);
+
+                    float scaledWidth = textureView.getWidth() * scaleX;
+                    float scaledHeight = textureView.getHeight() * scaleY;
+                    float dx = (textureView.getWidth() - scaledWidth) / 2;
+                    float dy = (textureView.getHeight() - scaledHeight) / 2;
+
+                    // TODO: fix translation
+//                    matrix.setTranslate(-dx, -dy);
+                    textureView.setTransform(matrix);
+                }
+
+                startCameraPreview(new CameraSurface(textureView.getSurfaceTexture()));
             } else {
                 // Surface is not the correct size yet
             }
@@ -345,12 +419,16 @@ public class CameraPreview extends ViewGroup {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         containerSized(new Size(r - l, b - t));
 
-        if (surfaceRect == null) {
-            // Match the container, to reduce the risk of issues. The preview should never be drawn
-            // while the surface has this size.
-            surfaceView.layout(0, 0, getWidth(), getHeight());
-        } else {
-            surfaceView.layout(surfaceRect.left, surfaceRect.top, surfaceRect.right, surfaceRect.bottom);
+        if(surfaceView != null) {
+            if (surfaceRect == null) {
+                // Match the container, to reduce the risk of issues. The preview should never be drawn
+                // while the surface has this size.
+                surfaceView.layout(0, 0, getWidth(), getHeight());
+            } else {
+                surfaceView.layout(surfaceRect.left, surfaceRect.top, surfaceRect.right, surfaceRect.bottom);
+            }
+        } else if(textureView != null) {
+            textureView.layout(0, 0, getWidth(), getHeight());
         }
     }
 
@@ -415,7 +493,7 @@ public class CameraPreview extends ViewGroup {
             // The activity was paused but not stopped, so the surface still exists. Therefore
             // surfaceCreated() won't be called, so init the camera here.
             startPreviewIfReady();
-        } else {
+        } else if(surfaceView != null) {
             // Install the callback and wait for surfaceCreated() to init the camera.
             surfaceView.getHolder().addCallback(surfaceCallback);
         }
