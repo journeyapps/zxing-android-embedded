@@ -16,7 +16,9 @@
 
 package com.journeyapps.barcodescanner.camera;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Handler;
@@ -143,7 +145,11 @@ public final class CameraManager {
      * Must be called from camera thread.
      */
     public void setPreviewDisplay(SurfaceHolder holder) throws IOException {
-        camera.setPreviewDisplay(holder);
+        setPreviewDisplay(new CameraSurface(holder));
+    }
+
+    public void setPreviewDisplay(CameraSurface surface) throws IOException {
+        surface.setPreview(camera);
     }
 
     /**

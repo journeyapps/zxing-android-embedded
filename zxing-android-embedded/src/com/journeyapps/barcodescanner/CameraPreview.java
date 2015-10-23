@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import com.google.zxing.client.android.R;
 import com.journeyapps.barcodescanner.camera.CameraInstance;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
+import com.journeyapps.barcodescanner.camera.CameraSurface;
 import com.journeyapps.barcodescanner.camera.DisplayConfiguration;
 
 import java.util.ArrayList;
@@ -332,7 +333,7 @@ public class CameraPreview extends ViewGroup {
     private void startPreviewIfReady() {
         if (currentSurfaceSize != null && previewSize != null && surfaceRect != null) {
             if (currentSurfaceSize.equals(new Size(surfaceRect.width(), surfaceRect.height()))) {
-                startCameraPreview(surfaceView.getHolder());
+                startCameraPreview(new CameraSurface(surfaceView.getHolder()));
             } else {
                 // Surface is not the correct size yet
             }
@@ -511,10 +512,10 @@ public class CameraPreview extends ViewGroup {
     }
 
 
-    private void startCameraPreview(SurfaceHolder holder) {
+    private void startCameraPreview(CameraSurface surface) {
         if (!previewActive) {
             Log.i(TAG, "Starting preview");
-            cameraInstance.setSurfaceHolder(holder);
+            cameraInstance.setSurface(surface);
             cameraInstance.startPreview();
             previewActive = true;
 
