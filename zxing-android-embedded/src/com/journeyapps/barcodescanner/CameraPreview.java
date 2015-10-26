@@ -372,39 +372,56 @@ public class CameraPreview extends ViewGroup {
         }
     }
 
+    /**
+     * Calculate transformation for the TextureView.
+     *
+     * An identity matrix would cause the preview to be scaled up/down to fill the TextureView.
+     *
+     * @param textureSize the size of the textureView
+     * @param previewSize the camera preview resolution
+     * @return the transform matrix for the TextureView
+     */
+    protected Matrix calculateTextureTransform(Size textureSize, Size previewSize) {
+        float ratioTexture = (float) textureSize.width / (float) textureSize.height;
+        float ratioPreview = (float) previewSize.width / (float) previewSize.height;
+
+        float scaleX;
+        float scaleY;
+
+        // We scale so that either width or height fits exactly in the TextureView, and the other
+        // is bigger (cropped).
+        if (ratioTexture < ratioPreview) {
+            scaleX = ratioPreview / ratioTexture;
+            scaleY = 1;
+        } else {
+            scaleX = 1;
+            scaleY = ratioTexture / ratioPreview;
+        }
+
+        Matrix matrix = new Matrix();
+
+        matrix.setScale(scaleX, scaleY);
+
+        // Center the preview
+        float scaledWidth = textureSize.width * scaleX;
+        float scaledHeight = textureSize.height * scaleY;
+        float dx = (textureSize.width - scaledWidth) / 2;
+        float dy = (textureSize.height - scaledHeight) / 2;
+
+        // Perform the translation on the scaled preview
+        matrix.postTranslate(dx, dy);
+
+        return matrix;
+    }
+
     private void startPreviewIfReady() {
         if (currentSurfaceSize != null && previewSize != null && surfaceRect != null) {
             if (surfaceView != null && currentSurfaceSize.equals(new Size(surfaceRect.width(), surfaceRect.height()))) {
                 startCameraPreview(new CameraSurface(surfaceView.getHolder()));
             } else if(textureView != null && Build.VERSION.SDK_INT >= 14 && textureView.getSurfaceTexture() != null) {
                 if(previewSize != null) {
-                    // TODO: fix this math
-                    float ratioSurface = (float) textureView.getWidth() / (float) textureView.getHeight();
-                    float ratioPreview = (float) previewSize.width / (float) previewSize.height;
-
-                    float scaleX;
-                    float scaleY;
-
-                    if (ratioSurface < ratioPreview) {
-                        scaleX = ratioPreview / ratioSurface;
-                        scaleY = 1;
-                    } else {
-                        scaleX = 1;
-                        scaleY = ratioSurface / ratioPreview;
-                    }
-
-                    Matrix matrix = new Matrix();
-
-                    matrix.setScale(scaleX, scaleY);
-
-                    float scaledWidth = textureView.getWidth() * scaleX;
-                    float scaledHeight = textureView.getHeight() * scaleY;
-                    float dx = (textureView.getWidth() - scaledWidth) / 2;
-                    float dy = (textureView.getHeight() - scaledHeight) / 2;
-
-                    // TODO: fix translation
-//                    matrix.setTranslate(-dx, -dy);
-                    textureView.setTransform(matrix);
+                    Matrix transform = calculateTextureTransform(new Size(textureView.getWidth(), textureView.getHeight()), previewSize);
+                    textureView.setTransform(transform);
                 }
 
                 startCameraPreview(new CameraSurface(textureView.getSurfaceTexture()));
@@ -520,7 +537,7 @@ public class CameraPreview extends ViewGroup {
             cameraInstance = null;
             previewActive = false;
         }
-        if (currentSurfaceSize == null) {
+        if (currentSurfaceSize == null && surfaceView != null) {
             SurfaceHolder surfaceHolder = surfaceView.getHolder();
             surfaceHolder.removeCallback(surfaceCallback);
         }

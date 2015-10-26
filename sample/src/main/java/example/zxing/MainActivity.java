@@ -58,7 +58,10 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void scanMarginScanner(View view) {
-        new IntentIntegrator(this).setCaptureActivity(SmallCaptureActivity.class).initiateScan();
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setOrientationLocked(false);
+        integrator.setCaptureActivity(SmallCaptureActivity.class);
+        integrator.initiateScan();
     }
 
     @Override
