@@ -28,6 +28,7 @@
         android:layout_marginRight="50dp"
         android:layout_marginTop="150dp"
         android:layout_marginBottom="150dp"
-        android:id="@+id/zxing_barcode_scanner"/>
+        android:id="@+id/zxing_barcode_scanner"
+        app:zxing_use_texture_view="true"/>
 
 </FrameLayout>

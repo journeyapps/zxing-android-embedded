@@ -83,7 +83,7 @@ public class CameraPreview extends ViewGroup {
 
     private Handler stateHandler;
 
-    private boolean useTextureView = true;
+    private boolean useTextureView = false;
 
     private SurfaceView surfaceView;
     private TextureView textureView;
@@ -226,22 +226,40 @@ public class CameraPreview extends ViewGroup {
             setBackgroundColor(Color.BLACK);
         }
 
-        TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.zxing_camera_preview);
-        int framingRectWidth = (int) attributes.getDimension(R.styleable.zxing_camera_preview_zxing_framing_rect_width, -1);
-        int framingRectHeight = (int) attributes.getDimension(R.styleable.zxing_camera_preview_zxing_framing_rect_height, -1);
-        attributes.recycle();
-
-        if (framingRectWidth > 0 && framingRectHeight > 0) {
-            this.framingRectSize = new Size(framingRectWidth, framingRectHeight);
-        }
+        initializeAttributes(attrs);
 
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
         stateHandler = new Handler(stateCallback);
 
-        setupSurfaceView();
-
         rotationListener = new RotationListener();
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        setupSurfaceView();
+    }
+
+    /**
+     * Initialize from XML attributes.
+     *
+     * @param attrs the attributes
+     */
+    protected void initializeAttributes(AttributeSet attrs) {
+        TypedArray styledAttributes = getContext().obtainStyledAttributes(attrs, R.styleable.zxing_camera_preview);
+
+        int framingRectWidth = (int) styledAttributes.getDimension(R.styleable.zxing_camera_preview_zxing_framing_rect_width, -1);
+        int framingRectHeight = (int) styledAttributes.getDimension(R.styleable.zxing_camera_preview_zxing_framing_rect_height, -1);
+
+        if (framingRectWidth > 0 && framingRectHeight > 0) {
+            this.framingRectSize = new Size(framingRectWidth, framingRectHeight);
+        }
+
+        this.useTextureView = styledAttributes.getBoolean(R.styleable.zxing_camera_preview_zxing_use_texture_view, false);
+
+        styledAttributes.recycle();
     }
 
     private void rotationChanged() {
@@ -581,6 +599,21 @@ public class CameraPreview extends ViewGroup {
             throw new IllegalArgumentException("The margin fraction must be less than 0.5");
         }
         this.marginFraction = marginFraction;
+    }
+
+    public boolean isUseTextureView() {
+        return useTextureView;
+    }
+
+    /**
+     * Set to true to use TextureView instead of SurfaceView.
+     *
+     * Will only have an effect on API >= 14.
+     *
+     * @param useTextureView true to use TextureView.
+     */
+    public void setUseTextureView(boolean useTextureView) {
+        this.useTextureView = useTextureView;
     }
 
     /**

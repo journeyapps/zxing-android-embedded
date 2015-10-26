@@ -97,6 +97,10 @@ public class CompoundBarcodeView extends FrameLayout {
                 "with the id \"zxing_barcode_surface\".");
         }
 
+        // Pass on any preview-related attributes
+        barcodeView.initializeAttributes(attrs);
+
+
         viewFinder = (ViewfinderView) findViewById(R.id.zxing_viewfinder_view);
 
         if (viewFinder == null) {
