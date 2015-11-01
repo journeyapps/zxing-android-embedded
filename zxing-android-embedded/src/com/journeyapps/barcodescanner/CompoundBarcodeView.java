@@ -151,6 +151,22 @@ public class CompoundBarcodeView extends FrameLayout {
         barcodeView.setDecoderFactory(new DefaultDecoderFactory(decodeFormats, decodeHints, characterSet));
     }
 
+    public void setCameraSettings(CameraSettings cameraSettings) {
+        barcodeView.setCameraSettings(cameraSettings);
+    }
+
+    public void setDecoderFactory(DecoderFactory decoderFactory) {
+        barcodeView.setDecoderFactory(decoderFactory);
+    }
+
+    public DecoderFactory getDecoderFactory() {
+        return barcodeView.getDecoderFactory();
+    }
+
+    public CameraSettings getCameraSettings() {
+        return barcodeView.getCameraSettings();
+    }
+
     public void setStatusText(String text) {
         // statusView is optional when using a custom layout
         if(statusView != null) {

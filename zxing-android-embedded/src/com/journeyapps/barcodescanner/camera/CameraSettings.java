@@ -1,6 +1,7 @@
 package com.journeyapps.barcodescanner.camera;
 
 import com.google.zxing.client.android.camera.open.OpenCameraInterface;
+import com.journeyapps.barcodescanner.Size;
 
 /**
  *
@@ -14,6 +15,7 @@ public class CameraSettings {
     private boolean continuousFocusEnabled = false;
     private boolean exposureEnabled = false;
     private boolean autoTorchEnabled = false;
+    private Size maximumPreviewSize;
 
 
     public int getRequestedCameraId() {
@@ -29,6 +31,21 @@ public class CameraSettings {
      */
     public void setRequestedCameraId(int requestedCameraId) {
         this.requestedCameraId = requestedCameraId;
+    }
+
+    public Size getMaximumPreviewSize() {
+        return maximumPreviewSize;
+    }
+
+    /**
+     * Set the maximum preview size to use. A preview will be excluded if it's it does not fit into
+     * a rectangle of this size in any orientation. For example, a 800x500 preview will be
+     * considered to fit into a 600x800 maximum size.
+     *
+     * @param maximumPreviewSize the maximum size. null means no maximum.
+     */
+    public void setMaximumPreviewSize(Size maximumPreviewSize) {
+        this.maximumPreviewSize = maximumPreviewSize;
     }
 
     /**

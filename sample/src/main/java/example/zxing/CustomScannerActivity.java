@@ -9,6 +9,8 @@ import android.widget.Button;
 
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.CompoundBarcodeView;
+import com.journeyapps.barcodescanner.Size;
+import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 /**
  * Custom Scannner Activity extending from Activity to display a custom layout form scanner view.
@@ -27,7 +29,6 @@ public class CustomScannerActivity extends Activity implements
 
         barcodeScannerView = (CompoundBarcodeView)findViewById(R.id.zxing_barcode_scanner);
         barcodeScannerView.setTorchListener(this);
-
         switchFlashlightButton = (Button)findViewById(R.id.switch_flashlight);
 
         // if the device does not have flashlight in its camera,
@@ -38,6 +39,11 @@ public class CustomScannerActivity extends Activity implements
 
         capture = new CaptureManager(this, barcodeScannerView);
         capture.initializeFromIntent(getIntent(), savedInstanceState);
+
+        CameraSettings settings = barcodeScannerView.getCameraSettings();
+        // Override settings here, for example:
+        //   settings.setMaximumPreviewSize(new Size(320, 240));
+
         capture.decode();
     }
 

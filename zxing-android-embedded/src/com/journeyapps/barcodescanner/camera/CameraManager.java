@@ -285,20 +285,32 @@ public final class CameraManager {
         camera.setParameters(parameters);
     }
 
-    private static List<Size> getPreviewSizes(Camera.Parameters parameters) {
+    private boolean fitsInMaximum(Size size) {
+        Size maximum = settings.getMaximumPreviewSize();
+        return maximum == null || size.fitsIn(maximum) || size.rotate().fitsIn(maximum);
+    }
+
+    private List<Size> getPreviewSizes(Camera.Parameters parameters) {
         List<Camera.Size> rawSupportedSizes = parameters.getSupportedPreviewSizes();
         List<Size> previewSizes = new ArrayList<>();
         if (rawSupportedSizes == null) {
             Camera.Size defaultSize = parameters.getPreviewSize();
             if (defaultSize != null) {
                 // Work around potential platform bugs
-                previewSizes.add(new Size(defaultSize.width, defaultSize.height));
+                Size previewSize = new Size(defaultSize.width, defaultSize.height);
+                if(fitsInMaximum(previewSize)) {
+                    previewSizes.add(previewSize);
+                }
             }
             return previewSizes;
         }
         for (Camera.Size size : rawSupportedSizes) {
-            previewSizes.add(new Size(size.width, size.height));
+            Size previewSize = new Size(size.width, size.height);
+            if(fitsInMaximum(previewSize)) {
+                previewSizes.add(previewSize);
+            }
         }
+
         return previewSizes;
     }
 
@@ -349,7 +361,7 @@ public final class CameraManager {
         } catch (Exception e) {
             // Failed, use safe mode
             try {
-                setDesiredParameters(false);
+                setDesiredParameters(true);
             } catch (Exception e2) {
                 // Well, darn. Give up
                 Log.w(TAG, "Camera rejected even safe-mode parameters! No configuration");
