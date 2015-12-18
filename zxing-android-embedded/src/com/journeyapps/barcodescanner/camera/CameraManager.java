@@ -242,7 +242,7 @@ public final class CameraManager {
         }
 
 
-        CameraConfigurationUtils.setFocus(parameters, settings.isAutoFocusEnabled(), !settings.isContinuousFocusEnabled(), safeMode);
+        CameraConfigurationUtils.setFocus(parameters, settings.getFocusMode(), safeMode);
 
         if (!safeMode) {
             CameraConfigurationUtils.setTorch(parameters, false);
