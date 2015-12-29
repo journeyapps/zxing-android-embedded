@@ -1,14 +1,20 @@
 package com.journeyapps.barcodescanner;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
@@ -46,6 +52,8 @@ import java.util.Map;
  */
 public class CaptureManager {
     private static final String TAG = CaptureManager.class.getSimpleName();
+
+    private static final int CAMERA_PERMISSION_REQUEST = 89433;
 
     private Activity activity;
     private CompoundBarcodeView barcodeView;
@@ -209,10 +217,51 @@ public class CaptureManager {
      * Call from Activity#onResume().
      */
     public void onResume() {
-        barcodeView.resume();
+        if(Build.VERSION.SDK_INT >= 23) {
+            openCameraWithPermission();
+        } else {
+            barcodeView.resume();
+        }
+        openCameraWithPermission();
         beepManager.updatePrefs();
         inactivityTimer.start();
     }
+
+    private boolean askedPermission = false;
+
+    @TargetApi(23)
+    private void openCameraWithPermission() {
+        if (ContextCompat.checkSelfPermission(this.activity, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED) {
+            barcodeView.resume();
+        } else if(!askedPermission) {
+            ActivityCompat.requestPermissions(this.activity,
+                    new String[]{Manifest.permission.CAMERA},
+                    CAMERA_PERMISSION_REQUEST);
+            askedPermission = true;
+        } else {
+            // Wait for permission result
+        }
+    }
+
+    /**
+     * Call from Activity#onRequestPermissionsResult
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if(requestCode == CAMERA_PERMISSION_REQUEST) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // permission was granted
+                barcodeView.resume();
+            } else {
+                // TODO: display better error message.
+                displayFrameworkBugMessageAndExit();
+            }
+        }
+    }
+
 
     /**
      * Call from Activity#onPause().

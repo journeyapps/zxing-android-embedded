@@ -23,7 +23,7 @@ dependencies {
     //   compile 'com.journeyapps:zxing-android-embedded:<version>@aar'
     //   compile 'com.google.zxing:core:3.2.0'
     compile(project(':zxing-android-embedded')) { transitive = true }
-    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.android.support:appcompat-v7:23.1.0'
 
 
     // For development purposes only

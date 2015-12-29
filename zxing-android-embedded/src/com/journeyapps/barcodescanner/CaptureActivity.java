@@ -1,7 +1,9 @@
 package com.journeyapps.barcodescanner;
 
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.view.KeyEvent;
 
 import com.google.zxing.client.android.R;
@@ -48,6 +50,12 @@ public class CaptureActivity extends Activity {
         super.onSaveInstanceState(outState);
         capture.onSaveInstanceState(outState);
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        capture.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

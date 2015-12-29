@@ -1,12 +1,14 @@
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
 
 ext.artifactId = 'zxing-android-embedded'
 
 dependencies {
     compile project.zxingCore
 
-    // Optional dependency.
-    provided 'com.android.support:support-v4:22.0.0'
+    compile 'com.android.support:support-v4:23.1.0'
 }
 
 
@@ -37,4 +39,56 @@ android {
     }
 }
 
+task sourceJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+publishing {
+    publications {
+        // We need this check to cover Android Studio gradle sync
+        if(project.tasks.findByPath('bundleRelease') != null) {
+            maven(MavenPublication) {
+                artifact bundleRelease
+                artifactId project.artifactId
+
+                artifact sourceJar
+
+                pom.withXml {
+                    // HACK to add dependencies to POM.
+                    // When maven-publish can do this automatically for Android projects,
+                    // remove this section.
+                    def deps = asNode().appendNode('dependencies')
+
+                    project.configurations.compile.allDependencies.each { dep ->
+                        def node = deps.appendNode('dependency')
+                        node.appendNode('groupId', dep.group)
+                        node.appendNode('artifactId', dep.name)
+                        node.appendNode('version', dep.version)
+                        node.appendNode('scope', 'compile')
+                    }
+
+                }
+
+            }
+        }
+    }
+}
+
+// To release, place bintray_user and bintray_key properties in ~/.gradle/gradle.properties,
+// and run ./gradlew clean assembleRelease bintrayUpload
+
+if(project.hasProperty('bintray_user') && project.hasProperty('bintray_key')) {
+    bintray {
+        user = bintray_user
+        key = bintray_key
+        publications = ['maven']
+        publish = true
+        pkg {
+            userOrg = 'journeyapps'
+            repo = 'maven'
+            name = 'zxing-android-embedded'
+        }
+    }
+}
 
