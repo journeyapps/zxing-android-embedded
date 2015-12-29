@@ -37,15 +37,10 @@ repositories {
 }
 
 dependencies {
-    compile 'com.journeyapps:zxing-android-embedded:3.0.3@aar'
+    compile 'com.journeyapps:zxing-android-embedded:3.1.0@aar'
     compile 'com.google.zxing:core:3.2.0'
 }
 ```
-
-## Usage with Maven
-
-Maven is not supported currently, but it is possible that the aar can be used. Pull requests are
-welcome.
 
 ## Usage with IntentIntegrator
 
@@ -123,6 +118,15 @@ These components can be used from any Activity.
 Samples:
 * [ContinuousCaptureActivity][6]: continuously scan and display results (instead of a once-off scan).
 * [ToolbarCaptureActivity][8]: Same as the normal CaptureActivity, but with a Lollipop Toolbar.
+
+## Android Permissions
+
+The camera permission is required for barcode scanning to function. It is automatically included as
+part of the library. On Android 6 it is requested at runtime when the barcode scanner is first opened.
+
+When using BarcodeView directly (instead of via IntentIntegrator / CaptureActivity), you have to
+request the permission manually before calling `BarcodeView#resume()`, otherwise the camera will
+fail to open.
 
 ## Building locally
 

@@ -1,3 +1,11 @@
+### 3.1.0 (2015-12-29)
+
+* Add support for Android 6 runtime permissions (Camera only).
+* Experimental support for using TextureView instead of SurfaceView.
+* Fix build issues with custom attributes.
+* Support library version 23+ is now a requirement.
+
+
 ### 3.0.3 (2015-08-16)
 
 * Fix for preview on Google Glass.

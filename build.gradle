@@ -18,7 +18,7 @@ subprojects {
         mavenLocal()
     }
 
-    version = '3.0.3-t1'
+    version = '3.1.0'
     group = 'com.journeyapps'
     apply plugin: 'android-sdk-manager'
 
