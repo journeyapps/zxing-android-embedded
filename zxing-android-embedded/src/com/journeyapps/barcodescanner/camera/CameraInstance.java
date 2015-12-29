@@ -1,6 +1,7 @@
 package com.journeyapps.barcodescanner.camera;
 
 import android.content.Context;
+import android.graphics.SurfaceTexture;
 import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -17,7 +18,8 @@ public class CameraInstance {
     private static final String TAG = CameraInstance.class.getSimpleName();
 
     private CameraThread cameraThread;
-    private SurfaceHolder surfaceHolder;
+    private CameraSurface surface;
+
     private CameraManager cameraManager;
     private Handler readyHandler;
     private DisplayConfiguration displayConfiguration;
@@ -46,8 +48,13 @@ public class CameraInstance {
     }
 
     public void setSurfaceHolder(SurfaceHolder surfaceHolder) {
-        this.surfaceHolder = surfaceHolder;
+        setSurface(new CameraSurface(surfaceHolder));
     }
+
+    public void setSurface(CameraSurface surface) {
+        this.surface = surface;
+    }
+
 
     public CameraSettings getCameraSettings() {
         return cameraSettings;
@@ -184,7 +191,7 @@ public class CameraInstance {
         public void run() {
             try {
                 Log.d(TAG, "Starting preview");
-                cameraManager.setPreviewDisplay(surfaceHolder);
+                cameraManager.setPreviewDisplay(surface);
                 cameraManager.startPreview();
             } catch (Exception e) {
                 notifyError(e);

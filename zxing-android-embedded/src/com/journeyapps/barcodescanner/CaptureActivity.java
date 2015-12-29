@@ -19,12 +19,21 @@ public class CaptureActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.zxing_capture);
-        barcodeScannerView = (CompoundBarcodeView)findViewById(R.id.zxing_barcode_scanner);
+        barcodeScannerView = initializeContent();
 
         capture = new CaptureManager(this, barcodeScannerView);
         capture.initializeFromIntent(getIntent(), savedInstanceState);
         capture.decode();
+    }
+
+    /**
+     * Override to use a different layout.
+     *
+     * @return the CompoundBarcodeView
+     */
+    protected CompoundBarcodeView initializeContent() {
+        setContentView(R.layout.zxing_capture);
+        return (CompoundBarcodeView)findViewById(R.id.zxing_barcode_scanner);
     }
 
     @Override
