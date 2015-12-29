@@ -460,7 +460,7 @@ public class CameraPreview extends ViewGroup {
             } else {
                 surfaceView.layout(surfaceRect.left, surfaceRect.top, surfaceRect.right, surfaceRect.bottom);
             }
-        } else if(textureView != null) {
+        } else if(textureView != null && Build.VERSION.SDK_INT >= 14) {
             textureView.layout(0, 0, getWidth(), getHeight());
         }
     }
