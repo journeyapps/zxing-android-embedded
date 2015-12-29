@@ -5,6 +5,9 @@ android:
     - extra-android-support
     - extra-android-m2repository
     - extra-google-m2repository
+    # We need "tools" for build-tools. See https://github.com/travis-ci/travis-ci/issues/5036
+    - tools
+    - build-tools-23.0.2
   licenses:
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
