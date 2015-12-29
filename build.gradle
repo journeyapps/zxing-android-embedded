@@ -3,7 +3,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:1.0.1'
+    classpath 'com.android.tools.build:gradle:1.5.0'
     classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
     classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
   }
@@ -15,77 +15,14 @@ def PUBLISH_PROJECTS = ['zxing-android-embedded']
 subprojects {
     repositories {
         jcenter()
+        mavenLocal()
     }
 
-    version = '3.0.3'
+    version = '3.0.3-t1'
     group = 'com.journeyapps'
     apply plugin: 'android-sdk-manager'
 
-    ext.androidBuildTools = '21.1.2'
-    ext.androidTargetSdk = 21
+    ext.androidBuildTools = '23.0.2'
+    ext.androidTargetSdk = 23
     ext.zxingCore = 'com.google.zxing:core:3.2.0'
-
-    if (PUBLISH_PROJECTS.contains(project.name)) {
-        apply plugin: 'maven-publish'
-        apply plugin: 'com.jfrog.bintray'
-
-        project.ext.artifactId = project.name // Default to subproject name
-
-
-        afterEvaluate {
-
-            task sourceJar(type: Jar) {
-                classifier = 'sources'
-                from android.sourceSets.main.java.srcDirs
-            }
-
-            publishing {
-                publications {
-                    // We need this check to cover Android Studio gradle sync
-                    if(project.tasks.findByPath('bundleRelease') != null) {
-                        maven(MavenPublication) {
-                            artifact bundleRelease
-                            artifactId project.artifactId
-
-                            artifact sourceJar
-
-                            pom.withXml {
-                                // HACK to add dependencies to POM.
-                                // When maven-publish can do this automatically for Android projects,
-                                // remove this section.
-                                def deps = asNode().appendNode('dependencies')
-
-                                project.configurations.compile.allDependencies.each { dep ->
-                                    def node = deps.appendNode('dependency')
-                                    node.appendNode('groupId', dep.group)
-                                    node.appendNode('artifactId', dep.name)
-                                    node.appendNode('version', dep.version)
-                                    node.appendNode('scope', 'compile')
-                                }
-
-                            }
-
-                        }
-                    }
-                }
-            }
-
-            // To release, place bintray_user and bintray_key properties in ~/.gradle/gradle.properties,
-            // and run ./gradlew clean assembleRelease bintrayUpload
-            
-            if(project.hasProperty('bintray_user') && project.hasProperty('bintray_key')) {
-                bintray {
-                    user = bintray_user
-                    key = bintray_key
-                    publications = ['maven']
-                    publish = true
-                    pkg {
-                        userOrg = 'journeyapps'
-                        repo = 'maven'
-                        name = 'zxing-android-embedded'
-                    }
-                }
-            }
-        }
-    }
 }

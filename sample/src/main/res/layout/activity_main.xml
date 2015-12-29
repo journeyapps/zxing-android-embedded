@@ -32,6 +32,7 @@
             android:onClick="scanBarcodeFrontCamera"/>
 
         <fragment
+            android:id="@+id/fragment_scan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
