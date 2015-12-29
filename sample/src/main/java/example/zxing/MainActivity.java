@@ -76,7 +76,6 @@ public class MainActivity extends ActionBarActivity {
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
             }
         } else {
-            Log.d("MainActivity", "Weird");
             // This is important, otherwise the result will not be passed to the fragment
             super.onActivityResult(requestCode, resultCode, data);
         }

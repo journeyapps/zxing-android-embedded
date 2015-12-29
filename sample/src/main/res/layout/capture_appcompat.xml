@@ -21,14 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <com.journeyapps.barcodescanner.CompoundBarcodeView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_below="@+id/my_awesome_toolbar"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/zxing_barcode_scanner"/>
 
-    <!-- The Toolbar must be defined after the CompoundBarcodeView, to ensure it's always on top. -->
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_awesome_toolbar"
         android:layout_height="wrap_content"
@@ -38,6 +31,15 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         app:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>
+
+    <com.journeyapps.barcodescanner.CompoundBarcodeView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/my_awesome_toolbar"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/zxing_barcode_scanner"
+        app:zxing_use_texture_view="true"/>
+
 
     <!-- Sample for a footer. Also add to CompoundBarcodeView: android:layout_above="@+id/footer" -->
     <!-- <TextView
