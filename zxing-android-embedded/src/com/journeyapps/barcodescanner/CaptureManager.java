@@ -222,7 +222,7 @@ public class CaptureManager {
         } else {
             barcodeView.resume();
         }
-        openCameraWithPermission();
+        //openCameraWithPermission();
         beepManager.updatePrefs();
         inactivityTimer.start();
     }
