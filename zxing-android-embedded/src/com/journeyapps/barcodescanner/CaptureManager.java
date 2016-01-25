@@ -53,7 +53,7 @@ import java.util.Map;
 public class CaptureManager {
     private static final String TAG = CaptureManager.class.getSimpleName();
 
-    private static final int CAMERA_PERMISSION_REQUEST = 89433;
+    private static int cameraPermissionReqCode = 250;
 
     private Activity activity;
     private CompoundBarcodeView barcodeView;
@@ -222,7 +222,6 @@ public class CaptureManager {
         } else {
             barcodeView.resume();
         }
-        openCameraWithPermission();
         beepManager.updatePrefs();
         inactivityTimer.start();
     }
@@ -237,7 +236,7 @@ public class CaptureManager {
         } else if(!askedPermission) {
             ActivityCompat.requestPermissions(this.activity,
                     new String[]{Manifest.permission.CAMERA},
-                    CAMERA_PERMISSION_REQUEST);
+                    cameraPermissionReqCode);
             askedPermission = true;
         } else {
             // Wait for permission result
@@ -251,7 +250,7 @@ public class CaptureManager {
      * @param grantResults
      */
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        if(requestCode == CAMERA_PERMISSION_REQUEST) {
+        if(requestCode == cameraPermissionReqCode) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // permission was granted
                 barcodeView.resume();
@@ -392,5 +391,11 @@ public class CaptureManager {
         builder.show();
     }
 
+    public static int getCameraPermissionReqCode() {
+        return cameraPermissionReqCode;
+    }
 
+    public static void setCameraPermissionReqCode(int cameraPermissionReqCode) {
+        CaptureManager.cameraPermissionReqCode = cameraPermissionReqCode;
+    }
 }
