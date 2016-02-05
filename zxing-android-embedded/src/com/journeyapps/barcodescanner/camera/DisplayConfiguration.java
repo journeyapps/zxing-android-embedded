@@ -1,13 +1,9 @@
 package com.journeyapps.barcodescanner.camera;
 
 import android.graphics.Rect;
-import android.util.Log;
-import android.view.Surface;
 
 import com.journeyapps.barcodescanner.Size;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -19,6 +15,7 @@ public class DisplayConfiguration {
     private Size viewfinderSize;
     private int rotation;
     private boolean center = false;
+    private PreviewScalingStrategy previewScalingStrategy = new CenterFitStrategy();
 
     public DisplayConfiguration(int rotation) {
         this.rotation = rotation;
@@ -35,6 +32,14 @@ public class DisplayConfiguration {
 
     public Size getViewfinderSize() {
         return viewfinderSize;
+    }
+
+    public PreviewScalingStrategy getPreviewScalingStrategy() {
+        return previewScalingStrategy;
+    }
+
+    public void setPreviewScalingStrategy(PreviewScalingStrategy previewScalingStrategy) {
+        this.previewScalingStrategy = previewScalingStrategy;
     }
 
     /**
@@ -76,100 +81,7 @@ public class DisplayConfiguration {
 
         final Size desired = getDesiredPreviewSize(isRotated);
 
-        if (desired == null) {
-            return sizes.get(0);
-        }
-
-        Collections.sort(sizes, new Comparator<Size>() {
-            @Override
-            public int compare(Size a, Size b) {
-                Size ascaled = scale(a, desired);
-                int aScale = ascaled.width - a.width;
-                Size bscaled = scale(b, desired);
-                int bScale = bscaled.width - b.width;
-
-                if (aScale == 0 && bScale == 0) {
-                    // Both no scaling, pick the smaller one
-                    return a.compareTo(b);
-                } else if (aScale == 0) {
-                    // No scaling for a; pick a
-                    return -1;
-                } else if (bScale == 0) {
-                    // No scaling for b; pick b
-                    return 1;
-                } else if (aScale < 0 && bScale < 0) {
-                    // Both downscaled. Pick the smaller one (less downscaling).
-                    return a.compareTo(b);
-                } else if (aScale > 0 && bScale > 0) {
-                    // Both upscaled. Pick the larger one (less upscaling).
-                    return -a.compareTo(b);
-                } else if (aScale < 0) {
-                    // a downscaled, b upscaled. Pick a.
-                    return -1;
-                } else {
-                    // a upscaled, b downscaled. Pick b.
-                    return 1;
-                }
-            }
-        });
-
-        Log.i(TAG, "Viewfinder size: " + desired);
-        Log.i(TAG, "Preview in order of preference: " + sizes);
-
-        return sizes.get(0);
-    }
-
-    /**
-     * Scale from so that to.fitsIn(size). Tries to scale by powers of two, or by 3/2. Aspect ratio
-     * is preserved.
-     *
-     * These scaling factors will theoretically result in fast scaling with minimal quality loss.
-     *
-     * TODO: confirm whether or not this is the case in practice.
-     *
-     * @param from the start size
-     * @param to   the minimum desired size
-     * @return the scaled size
-     */
-    public static Size scale(Size from, Size to) {
-        Size current = from;
-
-        if (!to.fitsIn(current)) {
-            // Scale up
-            while (true) {
-                Size scaled150 = current.scale(3, 2);
-                Size scaled200 = current.scale(2, 1);
-                if (to.fitsIn(scaled150)) {
-                    // Scale by 3/2
-                    return scaled150;
-                } else if (to.fitsIn(scaled200)) {
-                    // Scale by 2/1
-                    return scaled200;
-                } else {
-                    // Scale by 2/1 and continue
-                    current = scaled200;
-                }
-            }
-        } else {
-            // Scale down
-            while (true) {
-                Size scaled66 = current.scale(2, 3);
-                Size scaled50 = current.scale(1, 2);
-
-                if (!to.fitsIn(scaled50)) {
-                    if (to.fitsIn(scaled66)) {
-                        // Scale by 2/3
-                        return scaled66;
-                    } else {
-                        // No more downscaling
-                        return current;
-                    }
-                } else {
-                    // Scale by 1/2
-                    current = scaled50;
-                }
-            }
-        }
+        return previewScalingStrategy.getBestPreviewSize(sizes, desired);
     }
 
     /**
@@ -177,17 +89,10 @@ public class DisplayConfiguration {
      *
      * Aspect ratio is preserved.
      *
-     * @param previewSize the size of the preview
+     * @param previewSize the size of the preview (camera), in current display orientation
      * @return a rect placing the preview
      */
     public Rect scalePreview(Size previewSize) {
-        // We avoid scaling if feasible.
-        Size scaledPreview = scale(previewSize, viewfinderSize);
-        Log.i(TAG, "Preview: " + previewSize + "; Scaled: " + scaledPreview + "; Want: " + viewfinderSize);
-
-        int dx = (scaledPreview.width - viewfinderSize.width) / 2;
-        int dy = (scaledPreview.height - viewfinderSize.height) / 2;
-
-        return new Rect(-dx, -dy, scaledPreview.width - dx, scaledPreview.height - dy);
+        return previewScalingStrategy.scalePreview(previewSize, viewfinderSize);
     }
 }

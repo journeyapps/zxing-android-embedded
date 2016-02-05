@@ -34,6 +34,40 @@ public class Size implements Comparable<Size> {
     }
 
     /**
+     * Scales the dimensions so that it fits entirely inside the parent.One of width or height will
+     * fit exactly. Aspect ratio is preserved.
+     *
+     * @param into the parent to fit into
+     * @return the scaled size
+     */
+    public Size scaleFit(Size into) {
+        if(width * into.height >= into.width * height) {
+            // match width
+            return new Size(into.width, height * into.width / width);
+        } else {
+            // match height
+            return new Size(width * into.height / height, into.height);
+        }
+    }
+    /**
+     * Scales the size so that both dimensions will be greater than or equal to the corresponding
+     * dimension of the parent. One of width or height will fit exactly. Aspect ratio is preserved.
+     *
+     * @param into the parent to fit into
+     * @return the scaled size
+     */
+    public Size scaleCrop(Size into) {
+        if(width * into.height <= into.width * height) {
+            // match width
+            return new Size(into.width, height * into.width / width);
+        } else {
+            // match height
+            return new Size(width * into.height / height, into.height);
+        }
+    }
+
+
+    /**
      * Checks if both dimensions of the other size are at least as large as this size.
      *
      * @param other the size to compare with
