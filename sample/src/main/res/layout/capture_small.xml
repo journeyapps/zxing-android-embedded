@@ -30,6 +30,6 @@
         android:layout_marginBottom="150dp"
         android:id="@+id/zxing_barcode_scanner"
         app:zxing_use_texture_view="false"
-        app:zxing_preview_scaling_strategy="fitXY"/>
+        app:zxing_preview_scaling_strategy="centerCrop"/>
 
 </FrameLayout>
