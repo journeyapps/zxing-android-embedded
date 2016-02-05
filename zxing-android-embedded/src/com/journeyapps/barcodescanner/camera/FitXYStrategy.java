@@ -10,12 +10,19 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Scales the size so that both dimensions will be greater than or equal to the corresponding
- * dimension of the parent. One of width or height will fit exactly. Aspect ratio is preserved.
+ * Scales the size so that it fits exactly. Aspect ratio is NOT preserved.
  */
-public class CenterFitStrategy implements PreviewScalingStrategy {
-    private static final String TAG = CenterFitStrategy.class.getSimpleName();
+public class FitXYStrategy implements PreviewScalingStrategy {
+    private static final String TAG = FitXYStrategy.class.getSimpleName();
 
+
+    private static float absRatio(float ratio) {
+        if(ratio < 1.0f) {
+            return 1.0f / ratio;
+        } else {
+            return ratio;
+        }
+    }
 
     /**
      * Get a score for our size.
@@ -30,30 +37,17 @@ public class CenterFitStrategy implements PreviewScalingStrategy {
      * @return the score
      */
     private float getScore(Size size, Size desired) {
-        Size scaled = size.scaleFit(desired);
-        // Scaling preserves aspect ratio
-        float scaleRatio = scaled.width * 1.0f / size.width;
+        float scaleX = absRatio(size.width * 1.0f / desired.width);
+        float scaleY = absRatio(size.height * 1.0f / desired.height);
 
-        // Treat downscaling as slightly better than upscaling
-        float scaleScore;
-        if(scaleRatio > 1.0f) {
-            // Upscaling
-            scaleScore = 1.0f / scaleRatio * 0.9f;
-        } else {
-            // Downscaling
-            scaleScore = scaleRatio;
-        }
+        float scaleScore = 1.0f / scaleX / scaleY;
 
-        // Ratio of scaledDimension / dimension.
-        // Note that with scaleCrop, only one dimension is cropped.
-        float cropRatio = desired.width * 1.0f / scaled.width +
-                desired.height * 1.0f / scaled.height;
+        float distortion = absRatio((1.0f * size.width / size.height) / (1.0f * desired.width / desired.height));
 
-        // Cropping is very bad, since it's used-visible for centerFit
-        // 1.0 means no cropping.
-        float cropScore = 1.0f / cropRatio / cropRatio / cropRatio;
+        // Distortion is bad!
+        float distortionScore = 1.0f / distortion / distortion / distortion;
 
-        return scaleScore * cropScore;
+        return scaleScore * distortionScore;
     }
 
     /**
@@ -93,23 +87,14 @@ public class CenterFitStrategy implements PreviewScalingStrategy {
 
 
     /**
-     * Scale the preview to cover the viewfinder, then center it.
-     *
-     * Aspect ratio is preserved.
+     * Scale the preview to match the viewfinder exactly.
      *
      * @param previewSize the size of the preview (camera), in current display orientation
      * @param viewfinderSize the size of the viewfinder (display), in current display orientation
      * @return a rect placing the preview
      */
     public Rect scalePreview(Size previewSize, Size viewfinderSize) {
-        // We avoid scaling if feasible.
-        Size scaledPreview = previewSize.scaleFit(viewfinderSize);
-        Log.i(TAG, "Preview: " + previewSize + "; Scaled: " + scaledPreview + "; Want: " + viewfinderSize);
-
-        int dx = (scaledPreview.width - viewfinderSize.width) / 2;
-        int dy = (scaledPreview.height - viewfinderSize.height) / 2;
-
-        return new Rect(-dx, -dy, scaledPreview.width - dx, scaledPreview.height - dy);
+        return new Rect(0, 0, viewfinderSize.width, viewfinderSize.height);
     }
 
 }

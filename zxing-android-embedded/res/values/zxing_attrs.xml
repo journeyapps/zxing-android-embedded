@@ -9,6 +9,11 @@
     <attr name="zxing_framing_rect_width" format="dimension" />
     <attr name="zxing_framing_rect_height" format="dimension" />
     <attr name="zxing_use_texture_view" format="boolean" />
+    <attr name="zxing_preview_scaling_strategy" format="enum">
+      <enum name="centerCrop" value="1" />
+      <enum name="fitCenter" value="2" />
+      <enum name="fitXY" value="3" />
+    </attr>
   </declare-styleable>
 
   <declare-styleable name="zxing_finder">

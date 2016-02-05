@@ -24,8 +24,9 @@ import com.journeyapps.barcodescanner.camera.CameraInstance;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.journeyapps.barcodescanner.camera.CameraSurface;
 import com.journeyapps.barcodescanner.camera.CenterCropStrategy;
-import com.journeyapps.barcodescanner.camera.CenterFitStrategy;
+import com.journeyapps.barcodescanner.camera.FitCenterStrategy;
 import com.journeyapps.barcodescanner.camera.DisplayConfiguration;
+import com.journeyapps.barcodescanner.camera.FitXYStrategy;
 import com.journeyapps.barcodescanner.camera.PreviewScalingStrategy;
 
 import java.util.ArrayList;
@@ -124,6 +125,8 @@ public class CameraPreview extends ViewGroup {
     // Fraction of the width / heigth to use as a margin. This fraction is used on each size, so
     // must be smaller than 0.5;
     private double marginFraction = 0.1d;
+
+    private PreviewScalingStrategy previewScalingStrategy = null;
 
     @TargetApi(14)
     private TextureView.SurfaceTextureListener surfaceTextureListener() {
@@ -262,6 +265,16 @@ public class CameraPreview extends ViewGroup {
 
         this.useTextureView = styledAttributes.getBoolean(R.styleable.zxing_camera_preview_zxing_use_texture_view, false);
 
+        // See zxing_attrs.xml for the enum values
+        int scalingStrategyNumber = (int) styledAttributes.getInteger(R.styleable.zxing_camera_preview_zxing_preview_scaling_strategy, -1);
+        if(scalingStrategyNumber == 1) {
+            previewScalingStrategy = new CenterCropStrategy();
+        } else if(scalingStrategyNumber == 2) {
+            previewScalingStrategy = new FitCenterStrategy();
+        } else if(scalingStrategyNumber == 3) {
+            previewScalingStrategy = new FitXYStrategy();
+        }
+
         styledAttributes.recycle();
     }
 
@@ -384,16 +397,29 @@ public class CameraPreview extends ViewGroup {
     }
 
     /**
-     * Override this to specify a different preview scaling strategy
+     * Override the preview scaling strategy.
+     *
+     * @param previewScalingStrategy null for the default
      */
-    protected PreviewScalingStrategy getPreviewScalingStrategy() {
+    public void setPreviewScalingStrategy(PreviewScalingStrategy previewScalingStrategy) {
+        this.previewScalingStrategy = previewScalingStrategy;
+    }
+
+    /**
+     * Override this to specify a different preview scaling strategy.
+     */
+    public PreviewScalingStrategy getPreviewScalingStrategy() {
+        if(previewScalingStrategy != null) {
+            return previewScalingStrategy;
+        }
+
         // If we are using SurfaceTexture, it is safe to use centerCrop.
-        // For SurfaceView, it's better to use centerFit, otherwise the preview may overlap to
+        // For SurfaceView, it's better to use fitCenter, otherwise the preview may overlap to
         // other views.
         if(textureView != null) {
             return new CenterCropStrategy();
         } else {
-            return new CenterFitStrategy();
+            return new FitCenterStrategy();
         }
 
     }

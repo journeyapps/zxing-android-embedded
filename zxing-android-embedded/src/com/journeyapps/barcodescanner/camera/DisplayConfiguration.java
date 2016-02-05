@@ -15,7 +15,7 @@ public class DisplayConfiguration {
     private Size viewfinderSize;
     private int rotation;
     private boolean center = false;
-    private PreviewScalingStrategy previewScalingStrategy = new CenterFitStrategy();
+    private PreviewScalingStrategy previewScalingStrategy = new FitCenterStrategy();
 
     public DisplayConfiguration(int rotation) {
         this.rotation = rotation;
