@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Scales the size so that it fits exactly. Aspect ratio is NOT preserved.
  */
-public class FitXYStrategy implements PreviewScalingStrategy {
+public class FitXYStrategy extends PreviewScalingStrategy {
     private static final String TAG = FitXYStrategy.class.getSimpleName();
 
 
@@ -36,7 +36,8 @@ public class FitXYStrategy implements PreviewScalingStrategy {
      * @param desired the viewfinder size
      * @return the score
      */
-    private float getScore(Size size, Size desired) {
+    @Override
+    protected float getScore(Size size, Size desired) {
         float scaleX = absRatio(size.width * 1.0f / desired.width);
         float scaleY = absRatio(size.height * 1.0f / desired.height);
 
@@ -49,42 +50,6 @@ public class FitXYStrategy implements PreviewScalingStrategy {
 
         return scaleScore * distortionScore;
     }
-
-    /**
-     * Choose the best preview size, based on our display size.
-     *
-     * We prefer:
-     * 1. less scaling
-     * 2. less cropping
-     *
-     * @param sizes supported preview sizes, containing at least one size. Sizes are in natural camera orientation.
-     * @param desired The desired display size, in the same orientation
-     * @return the best preview size, never null
-     */
-    public Size getBestPreviewSize(List<Size> sizes, final Size desired) {
-        // Sample of supported preview sizes:
-        // http://www.kirill.org/ar/ar.php
-
-        if (desired == null) {
-            return sizes.get(0);
-        }
-
-        Collections.sort(sizes, new Comparator<Size>() {
-            @Override
-            public int compare(Size a, Size b) {
-                float aScore = getScore(a, desired);
-                float bScore = getScore(b, desired);
-                // Bigger score first
-                return Float.compare(bScore, aScore);
-            }
-        });
-
-        Log.i(TAG, "Viewfinder size: " + desired);
-        Log.i(TAG, "Preview in order of preference: " + sizes);
-
-        return sizes.get(0);
-    }
-
 
     /**
      * Scale the preview to match the viewfinder exactly.

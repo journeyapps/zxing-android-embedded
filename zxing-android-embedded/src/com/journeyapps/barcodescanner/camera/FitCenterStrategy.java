@@ -13,7 +13,7 @@ import java.util.List;
  * Scales the size so that both dimensions will be greater than or equal to the corresponding
  * dimension of the parent. One of width or height will fit exactly. Aspect ratio is preserved.
  */
-public class FitCenterStrategy implements PreviewScalingStrategy {
+public class FitCenterStrategy extends PreviewScalingStrategy {
     private static final String TAG = FitCenterStrategy.class.getSimpleName();
 
 
@@ -29,7 +29,8 @@ public class FitCenterStrategy implements PreviewScalingStrategy {
      * @param desired the viewfinder size
      * @return the score
      */
-    private float getScore(Size size, Size desired) {
+    @Override
+    protected float getScore(Size size, Size desired) {
         Size scaled = size.scaleFit(desired);
         // Scaling preserves aspect ratio
         float scaleRatio = scaled.width * 1.0f / size.width;
@@ -55,42 +56,6 @@ public class FitCenterStrategy implements PreviewScalingStrategy {
 
         return scaleScore * cropScore;
     }
-
-    /**
-     * Choose the best preview size, based on our display size.
-     *
-     * We prefer:
-     * 1. less scaling
-     * 2. less cropping
-     *
-     * @param sizes supported preview sizes, containing at least one size. Sizes are in natural camera orientation.
-     * @param desired The desired display size, in the same orientation
-     * @return the best preview size, never null
-     */
-    public Size getBestPreviewSize(List<Size> sizes, final Size desired) {
-        // Sample of supported preview sizes:
-        // http://www.kirill.org/ar/ar.php
-
-        if (desired == null) {
-            return sizes.get(0);
-        }
-
-        Collections.sort(sizes, new Comparator<Size>() {
-            @Override
-            public int compare(Size a, Size b) {
-                float aScore = getScore(a, desired);
-                float bScore = getScore(b, desired);
-                // Bigger score first
-                return Float.compare(bScore, aScore);
-            }
-        });
-
-        Log.i(TAG, "Viewfinder size: " + desired);
-        Log.i(TAG, "Preview in order of preference: " + sizes);
-
-        return sizes.get(0);
-    }
-
 
     /**
      * Scale the preview to cover the viewfinder, then center it.

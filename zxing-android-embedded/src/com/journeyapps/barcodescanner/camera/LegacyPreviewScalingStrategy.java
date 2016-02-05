@@ -12,7 +12,7 @@ import java.util.List;
 /**
  *
  */
-public class LegacyPreviewScalingStrategy implements PreviewScalingStrategy {
+public class LegacyPreviewScalingStrategy extends PreviewScalingStrategy {
     private static final String TAG = LegacyPreviewScalingStrategy.class.getSimpleName();
 
     /**
