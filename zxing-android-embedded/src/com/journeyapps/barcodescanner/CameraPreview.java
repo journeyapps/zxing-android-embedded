@@ -266,7 +266,7 @@ public class CameraPreview extends ViewGroup {
         this.useTextureView = styledAttributes.getBoolean(R.styleable.zxing_camera_preview_zxing_use_texture_view, true);
 
         // See zxing_attrs.xml for the enum values
-        int scalingStrategyNumber = (int) styledAttributes.getInteger(R.styleable.zxing_camera_preview_zxing_preview_scaling_strategy, -1);
+        int scalingStrategyNumber = styledAttributes.getInteger(R.styleable.zxing_camera_preview_zxing_preview_scaling_strategy, -1);
         if(scalingStrategyNumber == 1) {
             previewScalingStrategy = new CenterCropStrategy();
         } else if(scalingStrategyNumber == 2) {

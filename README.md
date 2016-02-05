@@ -103,21 +103,10 @@ The previous API for `integrator.setOrientation()` was removed. It caused the Ac
 in landscape orientation, then destroyed and re-created in the requested orientation, which creates
 a bad user experience. The only way around this is to specify the orientation in the manifest.
 
-### Customization
+### Customization and advanced options
 
-For more control over the UI or scanning behaviour, some components may be used directly:
+See [EMBEDDING](EMBEDDING.md).
 
-* BarcodeView: Handles displaying the preview and decoding of the barcodes.
-* CompoundBarcodeView: Combines BarcodeView with a viewfinder for feedback, as well as some status /
-  prompt text.
-* CaptureManager: Manages the InactivityTimer, BeepManager, orientation lock, and returning of the
-  barcode result.
-
-These components can be used from any Activity.
-
-Samples:
-* [ContinuousCaptureActivity][6]: continuously scan and display results (instead of a once-off scan).
-* [ToolbarCaptureActivity][8]: Same as the normal CaptureActivity, but with a Lollipop Toolbar.
 
 ## Android Permissions
 
@@ -157,6 +146,4 @@ You can then use your local version by specifying in your `build.gradle` file:
 [3]: https://github.com/zxing/zxing/wiki/Scanning-Via-Intent
 [4]: https://github.com/journeyapps/zxing-android-embedded/blob/2.x/README.md
 [5]: zxing-android-embedded/src/com/google/zxing/integration/android/IntentIntegrator.java
-[6]: sample/src/main/java/example/zxing/ContinuousCaptureActivity.java
 [7]: http://www.apache.org/licenses/LICENSE-2.0
-[8]: sample/src/main/java/example/zxing/ToolbarCaptureActivity.java
