@@ -23,7 +23,10 @@ import com.google.zxing.client.android.R;
 import com.journeyapps.barcodescanner.camera.CameraInstance;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.journeyapps.barcodescanner.camera.CameraSurface;
+import com.journeyapps.barcodescanner.camera.CenterCropStrategy;
+import com.journeyapps.barcodescanner.camera.CenterFitStrategy;
 import com.journeyapps.barcodescanner.camera.DisplayConfiguration;
+import com.journeyapps.barcodescanner.camera.PreviewScalingStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -373,10 +376,26 @@ public class CameraPreview extends ViewGroup {
         if (cameraInstance != null) {
             if (cameraInstance.getDisplayConfiguration() == null) {
                 displayConfiguration = new DisplayConfiguration(getDisplayRotation(), containerSize);
+                displayConfiguration.setPreviewScalingStrategy(getPreviewScalingStrategy());
                 cameraInstance.setDisplayConfiguration(displayConfiguration);
                 cameraInstance.configureCamera();
             }
         }
+    }
+
+    /**
+     * Override this to specify a different preview scaling strategy
+     */
+    protected PreviewScalingStrategy getPreviewScalingStrategy() {
+        // If we are using SurfaceTexture, it is safe to use centerCrop.
+        // For SurfaceView, it's better to use centerFit, otherwise the preview may overlap to
+        // other views.
+        if(textureView != null) {
+            return new CenterCropStrategy();
+        } else {
+            return new CenterFitStrategy();
+        }
+
     }
 
     private void previewSized(Size size) {
