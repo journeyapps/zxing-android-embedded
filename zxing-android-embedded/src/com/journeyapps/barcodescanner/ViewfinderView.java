@@ -59,6 +59,11 @@ public class ViewfinderView extends View {
     protected List<ResultPoint> lastPossibleResultPoints;
     protected CameraPreview cameraPreview;
 
+    // Cache the framingRect and previewFramingRect, so that we can still draw it after the preview
+    // stopped.
+    protected Rect framingRect;
+    protected Rect previewFramingRect;
+
     // This constructor is used when the class is built from an XML resource.
     public ViewfinderView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -92,6 +97,7 @@ public class ViewfinderView extends View {
         view.addStateListener(new CameraPreview.StateListener() {
             @Override
             public void previewSized() {
+                refreshSizes();
                 invalidate();
             }
 
@@ -112,16 +118,29 @@ public class ViewfinderView extends View {
         });
     }
 
+    protected void refreshSizes() {
+        if(cameraPreview == null) {
+            return;
+        }
+        Rect framingRect = cameraPreview.getFramingRect();
+        Rect previewFramingRect = cameraPreview.getPreviewFramingRect();
+        if(framingRect != null && previewFramingRect != null) {
+            this.framingRect = framingRect;
+            this.previewFramingRect = previewFramingRect;
+        }
+    }
+
 
     @SuppressLint("DrawAllocation")
     @Override
     public void onDraw(Canvas canvas) {
-        if (cameraPreview == null || cameraPreview.getPreviewFramingRect() == null || cameraPreview.getFramingRect() == null) {
+        refreshSizes();
+        if (framingRect == null || previewFramingRect == null) {
             return;
         }
 
-        Rect frame = cameraPreview.getFramingRect();
-        Rect previewFrame = cameraPreview.getPreviewFramingRect();
+        Rect frame = framingRect;
+        Rect previewFrame = previewFramingRect;
 
         int width = canvas.getWidth();
         int height = canvas.getHeight();

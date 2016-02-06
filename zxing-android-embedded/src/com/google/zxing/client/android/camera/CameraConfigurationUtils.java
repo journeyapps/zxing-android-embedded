@@ -22,6 +22,8 @@ import android.hardware.Camera;
 import android.os.Build;
 import android.util.Log;
 
+import com.journeyapps.barcodescanner.camera.CameraSettings;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -50,24 +52,31 @@ public final class CameraConfigurationUtils {
     }
 
     public static void setFocus(Camera.Parameters parameters,
-                                boolean autoFocus,
-                                boolean disableContinuous,
+								CameraSettings.FocusMode focusModeSetting,
                                 boolean safeMode) {
         List<String> supportedFocusModes = parameters.getSupportedFocusModes();
         String focusMode = null;
-        if (autoFocus) {
-            if (safeMode || disableContinuous) {
-                focusMode = findSettableValue("focus mode",
-                        supportedFocusModes,
-                        Camera.Parameters.FOCUS_MODE_AUTO);
-            } else {
-                focusMode = findSettableValue("focus mode",
-                        supportedFocusModes,
-                        Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE,
-                        Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO,
-                        Camera.Parameters.FOCUS_MODE_AUTO);
-            }
-        }
+
+		if (safeMode || focusModeSetting == CameraSettings.FocusMode.AUTO) {
+			focusMode = findSettableValue("focus mode",
+					supportedFocusModes,
+					Camera.Parameters.FOCUS_MODE_AUTO);
+		} else if (focusModeSetting == CameraSettings.FocusMode.CONTINUOUS) {
+			focusMode = findSettableValue("focus mode",
+					supportedFocusModes,
+					Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE,
+					Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO,
+					Camera.Parameters.FOCUS_MODE_AUTO);
+		} else if (focusModeSetting == CameraSettings.FocusMode.INFINITY) {
+			focusMode = findSettableValue("focus mode",
+					supportedFocusModes,
+					Camera.Parameters.FOCUS_MODE_INFINITY);
+		} else if (focusModeSetting == CameraSettings.FocusMode.MACRO) {
+			focusMode = findSettableValue("focus mode",
+					supportedFocusModes,
+					Camera.Parameters.FOCUS_MODE_MACRO);
+		}
+
         // Maybe selected auto-focus but not available, so fall through here:
         if (!safeMode && focusMode == null) {
             focusMode = findSettableValue("focus mode",

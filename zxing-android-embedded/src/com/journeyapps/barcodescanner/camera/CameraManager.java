@@ -138,6 +138,9 @@ public final class CameraManager {
      * Must be called from camera thread.
      */
     public void configure() {
+        if(camera == null) {
+            throw new RuntimeException("Camera not open");
+        }
         setParameters();
     }
 
@@ -248,7 +251,7 @@ public final class CameraManager {
         }
 
 
-        CameraConfigurationUtils.setFocus(parameters, settings.isAutoFocusEnabled(), !settings.isContinuousFocusEnabled(), safeMode);
+        CameraConfigurationUtils.setFocus(parameters, settings.getFocusMode(), safeMode);
 
         if (!safeMode) {
             CameraConfigurationUtils.setTorch(parameters, false);
@@ -355,7 +358,7 @@ public final class CameraManager {
         } catch (Exception e) {
             // Failed, use safe mode
             try {
-                setDesiredParameters(false);
+                setDesiredParameters(true);
             } catch (Exception e2) {
                 // Well, darn. Give up
                 Log.w(TAG, "Camera rejected even safe-mode parameters! No configuration");
