@@ -14,7 +14,14 @@ public class CameraSettings {
     private boolean continuousFocusEnabled = false;
     private boolean exposureEnabled = false;
     private boolean autoTorchEnabled = false;
+    private FocusMode focusMode = FocusMode.AUTO;
 
+    public enum FocusMode {
+        AUTO,
+        CONTINUOUS,
+        INFINITY,
+        MACRO
+    }
 
     public int getRequestedCameraId() {
         return requestedCameraId;
@@ -98,6 +105,14 @@ public class CameraSettings {
 
     public void setAutoFocusEnabled(boolean autoFocusEnabled) {
         this.autoFocusEnabled = autoFocusEnabled;
+
+        if (autoFocusEnabled && continuousFocusEnabled) {
+            focusMode = FocusMode.CONTINUOUS;
+        } else if (autoFocusEnabled) {
+            focusMode = FocusMode.AUTO;
+        } else {
+            focusMode = null;
+        }
     }
 
     /**
@@ -111,6 +126,27 @@ public class CameraSettings {
 
     public void setContinuousFocusEnabled(boolean continuousFocusEnabled) {
         this.continuousFocusEnabled = continuousFocusEnabled;
+
+        if (continuousFocusEnabled) {
+            focusMode = FocusMode.CONTINUOUS;
+        } else if (autoFocusEnabled) {
+            focusMode = FocusMode.AUTO;
+        } else {
+            focusMode = null;
+        }
+    }
+
+    /**
+     * Default to FocusMode.AUTO.
+     *
+     * @return value of selected focus mode
+     */
+    public FocusMode getFocusMode() {
+        return focusMode;
+    }
+
+    public void setFocusMode(FocusMode focusMode) {
+        this.focusMode = focusMode;
     }
 
     /**
