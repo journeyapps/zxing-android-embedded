@@ -39,7 +39,13 @@ repositories {
 dependencies {
     compile 'com.journeyapps:zxing-android-embedded:3.1.0@aar'
     compile 'com.google.zxing:core:3.2.0'
+    compile 'com.android.support:appcompat-v7:23.1.0'   // Version 23+ is required
 }
+
+android {
+    buildToolsVersion '23.0.2' // Older versions may give compile errors
+}
+
 ```
 
 ## Usage with IntentIntegrator

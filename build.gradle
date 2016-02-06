@@ -9,9 +9,6 @@ buildscript {
   }
 }
 
-// Projects to be published to bintray
-def PUBLISH_PROJECTS = ['zxing-android-embedded']
-
 subprojects {
     repositories {
         jcenter()
