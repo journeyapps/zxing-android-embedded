@@ -67,7 +67,6 @@ class CameraThread {
                 if (openCount <= 0) {
                     throw new IllegalStateException("CameraThread is not open");
                 }
-                Log.i(TAG, "Starting new camera thread");
                 this.thread = new HandlerThread("CameraThread");
                 this.thread.start();
                 this.handler = new Handler(thread.getLooper());
