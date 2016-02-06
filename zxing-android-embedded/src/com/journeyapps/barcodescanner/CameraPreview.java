@@ -9,8 +9,10 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -121,6 +123,8 @@ public class CameraPreview extends ViewGroup {
     // Fraction of the width / heigth to use as a margin. This fraction is used on each size, so
     // must be smaller than 0.5;
     private double marginFraction = 0.1d;
+
+    private boolean torchOn = false;
 
     @TargetApi(14)
     private TextureView.SurfaceTextureListener surfaceTextureListener() {
@@ -363,6 +367,7 @@ public class CameraPreview extends ViewGroup {
      * @param on true to turn on the torch
      */
     public void setTorch(boolean on) {
+        torchOn = on;
         if (cameraInstance != null) {
             cameraInstance.setTorch(on);
         }
@@ -375,6 +380,9 @@ public class CameraPreview extends ViewGroup {
                 displayConfiguration = new DisplayConfiguration(getDisplayRotation(), containerSize);
                 cameraInstance.setDisplayConfiguration(displayConfiguration);
                 cameraInstance.configureCamera();
+                if(torchOn) {
+                    cameraInstance.setTorch(torchOn);
+                }
             }
         }
     }
@@ -717,5 +725,28 @@ public class CameraPreview extends ViewGroup {
             intersection.inset(0, (intersection.height() - intersection.width()) / 2);
         }
         return intersection;
+    }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Parcelable superState = super.onSaveInstanceState();
+
+        Bundle myState = new Bundle();
+        myState.putParcelable("super", superState);
+        myState.putBoolean("torch", torchOn);
+        return myState;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if(!(state instanceof Bundle)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+        Bundle myState = (Bundle)state;
+        Parcelable superState = myState.getParcelable("super");
+        super.onRestoreInstanceState(superState);
+        boolean torch = myState.getBoolean("torch");
+        setTorch(torch);
     }
 }
