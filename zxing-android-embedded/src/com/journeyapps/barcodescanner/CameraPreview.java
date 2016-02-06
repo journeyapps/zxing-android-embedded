@@ -657,7 +657,7 @@ public class CameraPreview extends ViewGroup {
 
 
     private void startCameraPreview(CameraSurface surface) {
-        if (!previewActive) {
+        if (!previewActive && cameraInstance != null) {
             Log.i(TAG, "Starting preview");
             cameraInstance.setSurface(surface);
             cameraInstance.startPreview();
