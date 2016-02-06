@@ -138,6 +138,9 @@ public final class CameraManager {
      * Must be called from camera thread.
      */
     public void configure() {
+        if(camera == null) {
+            throw new RuntimeException("Camera not open");
+        }
         setParameters();
     }
 

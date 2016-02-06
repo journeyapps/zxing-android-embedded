@@ -91,6 +91,11 @@ public class CameraPreview extends ViewGroup {
     private boolean previewActive = false;
 
     private RotationListener rotationListener;
+    private int openedOrientation = -1;
+
+    // Delay after rotation change is detected before we reorientate ourselves.
+    // This is to avoid double-reinitialization when the Activity is destroyed and recreated.
+    private static final int ROTATION_LISTENER_DELAY_MS = 250;
 
     private List<StateListener> stateListeners = new ArrayList<>();
 
@@ -195,12 +200,12 @@ public class CameraPreview extends ViewGroup {
         @Override
         public void onRotationChanged(int rotation) {
             // Make sure this is run on the main thread.
-            stateHandler.post(new Runnable() {
+            stateHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     rotationChanged();
                 }
-            });
+            }, ROTATION_LISTENER_DELAY_MS);
         }
     };
 
@@ -263,8 +268,11 @@ public class CameraPreview extends ViewGroup {
     }
 
     private void rotationChanged() {
-        pause();
-        resume();
+        // Confirm that it did actually change
+        if(isActive() && getDisplayRotation() != openedOrientation) {
+            pause();
+            resume();
+        }
     }
 
     private void setupSurfaceView() {
@@ -550,6 +558,7 @@ public class CameraPreview extends ViewGroup {
         Util.validateMainThread();
         Log.d(TAG, "pause()");
 
+        openedOrientation = -1;
         if (cameraInstance != null) {
             cameraInstance.close();
             cameraInstance = null;
@@ -640,6 +649,10 @@ public class CameraPreview extends ViewGroup {
 
         cameraInstance.setReadyHandler(stateHandler);
         cameraInstance.open();
+
+        // Keep track of the orientation we opened at, so that we don't reopen the camera if we
+        // don't need to.
+        openedOrientation = getDisplayRotation();
     }
 
 
