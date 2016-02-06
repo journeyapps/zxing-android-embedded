@@ -1,3 +1,13 @@
+
+### 3.2.0 (2016-02-06)
+
+* Improved preview scaling strategies, configurable between centerCrop, fitCenter, fitXY (#135)
+* Fix issues with Android 6 permission support (#123)
+* Fix camera initialization issues, specifically related to orientation changes (#133)
+* More control over focus mode (#112)
+* Keep drawing viewfinder frame after scanning / pausing (#134)
+* More control over torch state, and save the state on orientation change (#136)
+
 ### 3.1.0 (2015-12-29)
 
 * Add support for Android 6 runtime permissions (Camera only).
@@ -5,6 +15,10 @@
 * Fix build issues with custom attributes.
 * Support library version 23+ is now a requirement.
 
+
+### 3.1.0 (2015-12-29)
+
+* Initial Android 6 permission supoprt
 
 ### 3.0.3 (2015-08-16)
 

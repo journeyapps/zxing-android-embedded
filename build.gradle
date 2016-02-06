@@ -15,11 +15,11 @@ subprojects {
         mavenLocal()
     }
 
-    version = '3.1.0'
+    version = '3.2.0'
     group = 'com.journeyapps'
     apply plugin: 'android-sdk-manager'
 
     ext.androidBuildTools = '23.0.2'
     ext.androidTargetSdk = 23
-    ext.zxingCore = 'com.google.zxing:core:3.2.0'
+    ext.zxingCore = 'com.google.zxing:core:3.2.1'
 }

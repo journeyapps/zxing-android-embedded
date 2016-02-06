@@ -2,7 +2,7 @@
 
 Barcode scanning library for Android, using [ZXing][2] for decoding.
 
-The project is loosly based on the [ZXing Android Barcode Scanner application][2], but is not affiliated with the official ZXing project.
+The project is loosely based on the [ZXing Android Barcode Scanner application][2], but is not affiliated with the official ZXing project.
 
 Features:
 
@@ -10,19 +10,6 @@ Features:
 2. Can be embedded in an Activity, for advanced customization of UI and logic.
 3. Scanning can be performed in landscape or portrait mode.
 4. Camera is managed in a background thread, for fast startup time.
-
-## Version 3
-
-Where [version 2][4] was essentially just a stripped-down version of the [Barcode Scanner application][2],
-version 3 is a rewrite of a large part of the codebase, making it more versatile and customizable.
-
-With the rewrite, many APIs for UI customization were removed. Instead, it is now recommended
-to create a custom Activity using the lower-level components directly
-(see [Customization](#customization) for details).
-
-Other notable changes:
-* The camera is now loaded in a background thread, making the activity start faster.
-* The camera preview and decoding now function correctly in any orientation.
 
 ## Adding aar dependency with Gradle
 
@@ -37,8 +24,8 @@ repositories {
 }
 
 dependencies {
-    compile 'com.journeyapps:zxing-android-embedded:3.1.0@aar'
-    compile 'com.google.zxing:core:3.2.0'
+    compile 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
+    compile 'com.google.zxing:core:3.2.1'
     compile 'com.android.support:appcompat-v7:23.1.0'   // Version 23+ is required
 }
 
@@ -139,7 +126,7 @@ You can then use your local version by specifying in your `build.gradle` file:
 
 ## Sponsored by
 
-[Journey][1] - Build enterprise mobile apps for iOS and Android. Work in the cloud, code in JavaScript and forget about back-end development.
+[JourneyApps][1] - Creating business solutions with mobile apps. Fast.
 
 
 ## License
