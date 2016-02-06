@@ -358,7 +358,7 @@ public final class CameraManager {
         } catch (Exception e) {
             // Failed, use safe mode
             try {
-                setDesiredParameters(false);
+                setDesiredParameters(true);
             } catch (Exception e2) {
                 // Well, darn. Give up
                 Log.w(TAG, "Camera rejected even safe-mode parameters! No configuration");
