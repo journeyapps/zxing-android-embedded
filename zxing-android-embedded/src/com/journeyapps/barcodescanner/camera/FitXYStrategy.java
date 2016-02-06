@@ -38,6 +38,9 @@ public class FitXYStrategy extends PreviewScalingStrategy {
      */
     @Override
     protected float getScore(Size size, Size desired) {
+        if(size.width <= 0 || size.height <= 0) {
+            return 0f;
+        }
         float scaleX = absRatio(size.width * 1.0f / desired.width);
         float scaleY = absRatio(size.height * 1.0f / desired.height);
 

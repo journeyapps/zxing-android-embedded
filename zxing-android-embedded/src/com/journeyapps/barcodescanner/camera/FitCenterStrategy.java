@@ -31,6 +31,9 @@ public class FitCenterStrategy extends PreviewScalingStrategy {
      */
     @Override
     protected float getScore(Size size, Size desired) {
+        if(size.width <= 0 || size.height <= 0) {
+            return 0f;
+        }
         Size scaled = size.scaleFit(desired);
         // Scaling preserves aspect ratio
         float scaleRatio = scaled.width * 1.0f / size.width;
@@ -39,7 +42,7 @@ public class FitCenterStrategy extends PreviewScalingStrategy {
         float scaleScore;
         if(scaleRatio > 1.0f) {
             // Upscaling
-            scaleScore = 1.0f / scaleRatio * 0.9f;
+            scaleScore = (float)Math.pow(1.0f / scaleRatio, 1.1);
         } else {
             // Downscaling
             scaleScore = scaleRatio;
@@ -47,8 +50,8 @@ public class FitCenterStrategy extends PreviewScalingStrategy {
 
         // Ratio of scaledDimension / dimension.
         // Note that with scaleCrop, only one dimension is cropped.
-        float cropRatio = desired.width * 1.0f / scaled.width +
-                desired.height * 1.0f / scaled.height;
+        float cropRatio = (desired.width * 1.0f / scaled.width) *
+                (desired.height * 1.0f / scaled.height);
 
         // Cropping is very bad, since it's used-visible for centerFit
         // 1.0 means no cropping.

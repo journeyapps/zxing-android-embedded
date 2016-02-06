@@ -21,6 +21,8 @@ public abstract class PreviewScalingStrategy {
      * The default implementation lets subclasses calculate a score for each size, the picks the one
      * with the best score.
      *
+     * The sizes list may be reordered by this call.
+     *
      * @param sizes supported preview sizes, containing at least one size. Sizes are in natural camera orientation.
      * @param desired The desired viewfinder size, in the same orientation
      * @return the best preview size, never null
@@ -29,8 +31,28 @@ public abstract class PreviewScalingStrategy {
         // Sample of supported preview sizes:
         // http://www.kirill.org/ar/ar.php
 
+        List<Size> ordered = getBestPreviewOrder(sizes, desired);
+
+        Log.i(TAG, "Viewfinder size: " + desired);
+        Log.i(TAG, "Preview in order of preference: " + ordered);
+
+        return ordered.get(0);
+    }
+
+    /**
+     * Sort previews based on their suitability.
+     *
+     * In most cases, {@link #getBestPreviewSize(List, Size)} should be used instead.
+     *
+     * The sizes list may be reordered by this call.
+     *
+     * @param sizes supported preview sizes, containing at least one size. Sizes are in natural camera orientation.
+     * @param desired The desired viewfinder size, in the same orientation
+     * @return an ordered list, best preview first
+     */
+    public List<Size> getBestPreviewOrder(List<Size> sizes, final Size desired) {
         if (desired == null) {
-            return sizes.get(0);
+            return sizes;
         }
 
         Collections.sort(sizes, new Comparator<Size>() {
@@ -43,10 +65,8 @@ public abstract class PreviewScalingStrategy {
             }
         });
 
-        Log.i(TAG, "Viewfinder size: " + desired);
-        Log.i(TAG, "Preview in order of preference: " + sizes);
 
-        return sizes.get(0);
+        return sizes;
     }
 
     /**
