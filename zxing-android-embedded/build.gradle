@@ -9,6 +9,9 @@ dependencies {
     compile project.zxingCore
 
     compile 'com.android.support:support-v4:23.1.0'
+
+    testCompile 'junit:junit:4.12'
+    testCompile "org.mockito:mockito-core:1.9.5"
 }
 
 
@@ -20,10 +23,11 @@ android {
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src-orig', 'src']
+            java.srcDirs = ['src']
             res.srcDirs = ['res-orig', 'res']
             assets.srcDirs = ['assets']
         }
+        test.setRoot('test');
     }
 
     // This is bad practice - we should fix the warnings instead.
@@ -36,6 +40,11 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    testOptions {
+        // We test with primitives such as Rect, and rely on their default behaviour working.
+        unitTests.returnDefaultValues = true
     }
 }
 

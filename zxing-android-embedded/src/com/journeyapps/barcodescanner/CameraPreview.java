@@ -25,7 +25,11 @@ import com.google.zxing.client.android.R;
 import com.journeyapps.barcodescanner.camera.CameraInstance;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.journeyapps.barcodescanner.camera.CameraSurface;
+import com.journeyapps.barcodescanner.camera.CenterCropStrategy;
+import com.journeyapps.barcodescanner.camera.FitCenterStrategy;
 import com.journeyapps.barcodescanner.camera.DisplayConfiguration;
+import com.journeyapps.barcodescanner.camera.FitXYStrategy;
+import com.journeyapps.barcodescanner.camera.PreviewScalingStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,6 +132,8 @@ public class CameraPreview extends ViewGroup {
     // Fraction of the width / heigth to use as a margin. This fraction is used on each size, so
     // must be smaller than 0.5;
     private double marginFraction = 0.1d;
+
+    private PreviewScalingStrategy previewScalingStrategy = null;
 
     private boolean torchOn = false;
 
@@ -266,7 +272,17 @@ public class CameraPreview extends ViewGroup {
             this.framingRectSize = new Size(framingRectWidth, framingRectHeight);
         }
 
-        this.useTextureView = styledAttributes.getBoolean(R.styleable.zxing_camera_preview_zxing_use_texture_view, false);
+        this.useTextureView = styledAttributes.getBoolean(R.styleable.zxing_camera_preview_zxing_use_texture_view, true);
+
+        // See zxing_attrs.xml for the enum values
+        int scalingStrategyNumber = styledAttributes.getInteger(R.styleable.zxing_camera_preview_zxing_preview_scaling_strategy, -1);
+        if(scalingStrategyNumber == 1) {
+            previewScalingStrategy = new CenterCropStrategy();
+        } else if(scalingStrategyNumber == 2) {
+            previewScalingStrategy = new FitCenterStrategy();
+        } else if(scalingStrategyNumber == 3) {
+            previewScalingStrategy = new FitXYStrategy();
+        }
 
         styledAttributes.recycle();
     }
@@ -386,6 +402,7 @@ public class CameraPreview extends ViewGroup {
         if (cameraInstance != null) {
             if (cameraInstance.getDisplayConfiguration() == null) {
                 displayConfiguration = new DisplayConfiguration(getDisplayRotation(), containerSize);
+                displayConfiguration.setPreviewScalingStrategy(getPreviewScalingStrategy());
                 cameraInstance.setDisplayConfiguration(displayConfiguration);
                 cameraInstance.configureCamera();
                 if(torchOn) {
@@ -393,6 +410,34 @@ public class CameraPreview extends ViewGroup {
                 }
             }
         }
+    }
+
+    /**
+     * Override the preview scaling strategy.
+     *
+     * @param previewScalingStrategy null for the default
+     */
+    public void setPreviewScalingStrategy(PreviewScalingStrategy previewScalingStrategy) {
+        this.previewScalingStrategy = previewScalingStrategy;
+    }
+
+    /**
+     * Override this to specify a different preview scaling strategy.
+     */
+    public PreviewScalingStrategy getPreviewScalingStrategy() {
+        if(previewScalingStrategy != null) {
+            return previewScalingStrategy;
+        }
+
+        // If we are using SurfaceTexture, it is safe to use centerCrop.
+        // For SurfaceView, it's better to use fitCenter, otherwise the preview may overlap to
+        // other views.
+        if(textureView != null) {
+            return new CenterCropStrategy();
+        } else {
+            return new FitCenterStrategy();
+        }
+
     }
 
     private void previewSized(Size size) {

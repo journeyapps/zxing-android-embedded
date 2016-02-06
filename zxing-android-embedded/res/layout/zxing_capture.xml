@@ -15,11 +15,17 @@
  limitations under the License.
  -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-       xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!--
+    This Activity is typically full-screen. Therefore we can safely use centerCrop scaling with
+    a SurfaceView, without fear of weird artifacts. -->
     <com.journeyapps.barcodescanner.CompoundBarcodeView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/zxing_barcode_scanner"/>
+        android:id="@+id/zxing_barcode_scanner"
+        app:zxing_preview_scaling_strategy="centerCrop"
+        app:zxing_use_texture_view="false"/>
 
 </merge>

@@ -12,5 +12,6 @@ android:
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
 script:
+    # build includes lint and test
     - TERM=dumb ./gradlew build
 
