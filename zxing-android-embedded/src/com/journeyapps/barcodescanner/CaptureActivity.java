@@ -1,9 +1,7 @@
 package com.journeyapps.barcodescanner;
 
 import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.view.KeyEvent;
 
 import com.google.zxing.client.android.R;
@@ -13,7 +11,7 @@ import com.google.zxing.client.android.R;
  */
 public class CaptureActivity extends Activity {
     private CaptureManager capture;
-    private CompoundBarcodeView barcodeScannerView;
+    private DecoratedBarcodeView barcodeScannerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +29,9 @@ public class CaptureActivity extends Activity {
      *
      * @return the CompoundBarcodeView
      */
-    protected CompoundBarcodeView initializeContent() {
+    protected DecoratedBarcodeView initializeContent() {
         setContentView(R.layout.zxing_capture);
-        return (CompoundBarcodeView)findViewById(R.id.zxing_barcode_scanner);
+        return (DecoratedBarcodeView)findViewById(R.id.zxing_barcode_scanner);
     }
 
     @Override

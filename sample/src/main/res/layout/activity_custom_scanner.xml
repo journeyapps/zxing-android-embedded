@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     tools:context="example.zxing.CustomScannerActivity">
 
-    <com.journeyapps.barcodescanner.CompoundBarcodeView
+    <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:id="@+id/zxing_barcode_scanner"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:zxing_scanner_layout="@layout/custom_barcode_scanner">
-    </com.journeyapps.barcodescanner.CompoundBarcodeView>
+    </com.journeyapps.barcodescanner.DecoratedBarcodeView>
 
     <Button
         android:id="@+id/switch_flashlight"

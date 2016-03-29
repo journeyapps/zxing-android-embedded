@@ -1,3 +1,6 @@
+### 3.3.0 (Pending)
+
+* Rename CompoundBarcodeView to DecoratedBarcodeView.
 
 ### 3.2.0 (2016-02-06)
 

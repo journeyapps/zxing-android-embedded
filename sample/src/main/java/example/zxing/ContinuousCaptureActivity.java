@@ -1,10 +1,8 @@
 package example.zxing;
 
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,7 +10,7 @@ import android.widget.ImageView;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
-import com.journeyapps.barcodescanner.CompoundBarcodeView;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import java.util.List;
 
@@ -22,7 +20,7 @@ import java.util.List;
  */
 public class ContinuousCaptureActivity extends Activity {
     private static final String TAG = ContinuousCaptureActivity.class.getSimpleName();
-    private CompoundBarcodeView barcodeView;
+    private DecoratedBarcodeView barcodeView;
 
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
@@ -46,7 +44,7 @@ public class ContinuousCaptureActivity extends Activity {
 
         setContentView(R.layout.continuous_scan);
 
-        barcodeView = (CompoundBarcodeView) findViewById(R.id.barcode_scanner);
+        barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
         barcodeView.decodeContinuous(callback);
     }
 

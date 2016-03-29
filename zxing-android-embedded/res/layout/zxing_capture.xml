@@ -21,7 +21,7 @@
     <!--
     This Activity is typically full-screen. Therefore we can safely use centerCrop scaling with
     a SurfaceView, without fear of weird artifacts. -->
-    <com.journeyapps.barcodescanner.CompoundBarcodeView
+    <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/zxing_barcode_scanner"
