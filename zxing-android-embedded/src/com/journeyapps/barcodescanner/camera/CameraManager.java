@@ -38,6 +38,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Wrapper to manage the Camera. This is not thread-safe, and the methods must always be called
+ * from the same thread.
+ *
+ *
  * Call order:
  *
  * 1. setCameraSettings()
@@ -374,7 +378,10 @@ public final class CameraManager {
         cameraPreviewCallback.setResolution(previewSize);
     }
 
-
+    /**
+     * This returns false if the camera is not opened yet, failed to open, or has
+     * been closed.
+     */
     public boolean isOpen() {
         return camera != null;
     }
@@ -467,5 +474,15 @@ public final class CameraManager {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Returns the Camera. This returns null if the camera is not opened yet, failed to open, or has
+     * been closed.
+     *
+     * @return the Camera
+     */
+    public Camera getCamera() {
+        return camera;
     }
 }
