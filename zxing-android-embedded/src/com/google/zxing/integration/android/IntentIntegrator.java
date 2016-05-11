@@ -47,7 +47,6 @@ import java.util.Map;
 public class IntentIntegrator {
 
     public static final int REQUEST_CODE = 0x0000c0de; // Only use bottom 16 bits
-    public static final String TIMEOUT = "timeout";
     private static final String TAG = IntentIntegrator.class.getSimpleName();
 
     // supported barcode formats
@@ -210,10 +209,9 @@ public class IntentIntegrator {
      * And starts a timer to finish on timeout
      * @return Activity.RESULT_CANCELED and true on parameter TIMEOUT.
      */
-    public final void initiateScanTimeout(long timeout) {
-        Intent intentScan = createScanIntent();
-        intentScan.putExtra(TIMEOUT, timeout);
-        startActivityForResult(createScanIntent(), REQUEST_CODE);
+    public IntentIntegrator setTimeout(long timeout) {
+        addExtra(Intents.Scan.TIMEOUT, timeout);
+        return this;
     }
 
     /**

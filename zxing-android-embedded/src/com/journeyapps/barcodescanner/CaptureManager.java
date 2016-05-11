@@ -170,14 +170,14 @@ public class CaptureManager {
                 beepManager.updatePrefs();
             }
 
-            if (!intent.hasExtra(IntentIntegrator.TIMEOUT)) {
+            if (intent.hasExtra(Intents.Scan.TIMEOUT)) {
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
                         returnResultTimeout();
                     }
                 };
-                handler.postDelayed(runnable, intent.getLongExtra(IntentIntegrator.TIMEOUT, 0L));
+                handler.postDelayed(runnable, intent.getLongExtra(Intents.Scan.TIMEOUT, 0L));
             }
 
             if (intent.getBooleanExtra(Intents.Scan.BARCODE_IMAGE_ENABLED, false)) {
@@ -375,7 +375,7 @@ public class CaptureManager {
 
     protected void returnResultTimeout() {
         Intent intent = new Intent(Intents.Scan.ACTION);
-        intent.putExtra(IntentIntegrator.TIMEOUT, true);
+        intent.putExtra(Intents.Scan.TIMEOUT, true);
         activity.setResult(Activity.RESULT_CANCELED, intent);
         finish();
     }

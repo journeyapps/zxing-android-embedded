@@ -104,6 +104,11 @@ public final class Intents {
         public static final String BARCODE_IMAGE_ENABLED = "BARCODE_IMAGE_ENABLED";
 
         /**
+         * Set the time to finish the scan screen.
+         */
+        public static final String TIMEOUT = "TIMEOUT";
+
+        /**
          * Whether or not the orientation should be locked when the activity is first started.
          * Defaults to true.
          */
