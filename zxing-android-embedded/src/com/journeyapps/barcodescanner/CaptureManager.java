@@ -27,6 +27,7 @@ import com.google.zxing.client.android.BeepManager;
 import com.google.zxing.client.android.InactivityTimer;
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.R;
+import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -167,6 +168,16 @@ public class CaptureManager {
             if (!intent.getBooleanExtra(Intents.Scan.BEEP_ENABLED, true)) {
                 beepManager.setBeepEnabled(false);
                 beepManager.updatePrefs();
+            }
+
+            if (!intent.hasExtra(IntentIntegrator.TIMEOUT)) {
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        returnResultTimeout();
+                    }
+                };
+                handler.postDelayed(runnable, intent.getLongExtra(IntentIntegrator.TIMEOUT, 0L));
             }
 
             if (intent.getBooleanExtra(Intents.Scan.BARCODE_IMAGE_ENABLED, false)) {
@@ -362,6 +373,12 @@ public class CaptureManager {
         activity.finish();
     }
 
+    protected void returnResultTimeout() {
+        Intent intent = new Intent(Intents.Scan.ACTION);
+        intent.putExtra(IntentIntegrator.TIMEOUT, true);
+        activity.setResult(Activity.RESULT_CANCELED, intent);
+        finish();
+    }
 
     protected void returnResult(BarcodeResult rawResult) {
         Intent intent = resultIntent(rawResult, getBarcodeImagePath(rawResult));
