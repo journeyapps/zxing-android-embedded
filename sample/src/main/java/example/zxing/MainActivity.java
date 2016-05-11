@@ -64,6 +64,12 @@ public class MainActivity extends ActionBarActivity {
         integrator.initiateScan();
     }
 
+    public void scanWithTimeout(View view) {
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setTimeout(8000);
+        integrator.initiateScan();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);

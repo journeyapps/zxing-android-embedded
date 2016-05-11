@@ -205,6 +205,16 @@ public class IntentIntegrator {
     }
 
     /**
+     * Initiates a scan for all known barcode types with the default camera.
+     * And starts a timer to finish on timeout
+     * @return Activity.RESULT_CANCELED and true on parameter TIMEOUT.
+     */
+    public IntentIntegrator setTimeout(long timeout) {
+        addExtra(Intents.Scan.TIMEOUT, timeout);
+        return this;
+    }
+
+    /**
      * Create an scan intent with the specified options.
      *
      * @return the intent
