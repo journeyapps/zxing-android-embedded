@@ -64,30 +64,19 @@ See [IntentIntegrator][5] for more options.
 
 ### Changing the orientation
 
-To change the orientation, create a new Activity extending CaptureActivity, and specify the
-orientation in your `AndroidManifest.xml`.
+To change the orientation, specify the orientation in your `AndroidManifest.xml` and let the `ManifestMerger` to update the Activity's definition.
 
 Sample:
 
-```java
-public class CaptureActivityAnyOrientation extends CaptureActivity {
-
-}
-```
-
 ```xml
-<activity android:name=".CaptureActivityAnyOrientation"
-          android:screenOrientation="fullSensor"
-          android:stateNotNeeded="true"
-          android:theme="@style/zxing_CaptureTheme"
-          android:windowSoftInputMode="stateAlwaysHidden">
-
-</activity>
+<activity
+		android:name="com.journeyapps.barcodescanner.CaptureActivity"
+		android:screenOrientation="fullSensor"
+		tools:replace="screenOrientation" />
 ```
 
 ```java
 IntentIntegrator integrator = new IntentIntegrator(this);
-integrator.setCaptureActivity(CaptureActivityAnyOrientation.class);
 integrator.setOrientationLocked(false);
 integrator.initiateScan();
 ```
