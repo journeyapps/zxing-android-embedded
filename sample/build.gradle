@@ -7,11 +7,37 @@ android {
     defaultConfig {
         minSdkVersion 9
         targetSdkVersion project.androidTargetSdk
-        versionCode 1
-        versionName "1.0"
+        versionCode 330
+        versionName "3.3.0"
     }
+
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    def keystoreFile = properties.getProperty('keystore.file')
+    def keystorePassword = properties.getProperty('keystore.password')
+    def keystoreAlias = properties.getProperty('keystore.alias')
+    def validConfig = keystoreFile != null && keystorePassword != null && keystoreAlias != null;
+
+    if(validConfig) {
+        System.out.println("Release signing configured with " + keystoreFile)
+        signingConfigs {
+            release {
+                storeFile project.rootProject.file(keystoreFile)
+                storePassword keystorePassword
+                keyAlias keystoreAlias
+                keyPassword keystorePassword
+            }
+        }
+    } else {
+        System.out.println("Specify keystore.file, keystore.alias and keystore.password in local.properties to enable release signing.")
+    }
+
     buildTypes {
         release {
+            if(validConfig) {
+                signingConfig signingConfigs.release
+            }
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
