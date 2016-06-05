@@ -11,6 +11,8 @@ Features:
 3. Scanning can be performed in landscape or portrait mode.
 4. Camera is managed in a background thread, for fast startup time.
 
+A sample application is available in [Releases](https://github.com/journeyapps/zxing-android-embedded/releases).
+
 ## Adding aar dependency with Gradle
 
 From version 3 this is a single library, supporting Gingerbread and later versions of Android
@@ -40,6 +42,22 @@ android {
 Launch the intent with the default options:
 ```java
 new IntentIntegrator(this).initiateScan(); // `this` is the current Activity
+
+
+// Get the results:
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+    if(result != null) {
+        if(result.getContents() == null) {
+            Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+        }
+    } else {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+}
 ```
 
 Use from a Fragment:
@@ -81,14 +99,12 @@ integrator.setOrientationLocked(false);
 integrator.initiateScan();
 ```
 
-The previous API for `integrator.setOrientation()` was removed. It caused the Activity to be created
-in landscape orientation, then destroyed and re-created in the requested orientation, which creates
-a bad user experience. The only way around this is to specify the orientation in the manifest.
-
 ### Customization and advanced options
 
 See [EMBEDDING](EMBEDDING.md).
 
+For more advanced options, look at the [Sample Application](https://github.com/journeyapps/zxing-android-embedded/blob/master/sample/src/main/java/example/zxing/MainActivity.java),
+and browse the source code of the library.
 
 ## Android Permissions
 
