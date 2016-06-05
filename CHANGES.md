@@ -1,6 +1,8 @@
-### 3.3.0 (Pending)
+### 3.3.0 (2016-06-05)
 
+* Add an optional timeout to cancel scanning. (#161)
 * Rename CompoundBarcodeView to DecoratedBarcodeView.
+* Add more internal documentation (comments).
 
 ### 3.2.0 (2016-02-06)
 

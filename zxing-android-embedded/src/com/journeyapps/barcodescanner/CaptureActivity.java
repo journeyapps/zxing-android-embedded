@@ -27,7 +27,7 @@ public class CaptureActivity extends Activity {
     /**
      * Override to use a different layout.
      *
-     * @return the CompoundBarcodeView
+     * @return the DecoratedBarcodeView
      */
     protected DecoratedBarcodeView initializeContent() {
         setContentView(R.layout.zxing_capture);
