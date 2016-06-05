@@ -57,7 +57,7 @@ public class CaptureManager {
     private static int cameraPermissionReqCode = 250;
 
     private Activity activity;
-    private CompoundBarcodeView barcodeView;
+    private DecoratedBarcodeView barcodeView;
     private int orientationLock = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
     private static final String SAVED_ORIENTATION_LOCK = "SAVED_ORIENTATION_LOCK";
     private boolean returnBarcodeImagePath = false;
@@ -116,7 +116,7 @@ public class CaptureManager {
         }
     };
 
-    public CaptureManager(Activity activity, CompoundBarcodeView barcodeView) {
+    public CaptureManager(Activity activity, DecoratedBarcodeView barcodeView) {
         this.activity = activity;
         this.barcodeView = barcodeView;
         barcodeView.getBarcodeView().addStateListener(stateListener);

@@ -8,16 +8,16 @@ import android.view.View;
 import android.widget.Button;
 
 import com.journeyapps.barcodescanner.CaptureManager;
-import com.journeyapps.barcodescanner.CompoundBarcodeView;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 /**
  * Custom Scannner Activity extending from Activity to display a custom layout form scanner view.
  */
 public class CustomScannerActivity extends Activity implements
-        CompoundBarcodeView.TorchListener {
+        DecoratedBarcodeView.TorchListener {
 
     private CaptureManager capture;
-    private CompoundBarcodeView barcodeScannerView;
+    private DecoratedBarcodeView barcodeScannerView;
     private Button switchFlashlightButton;
 
     @Override
@@ -25,7 +25,7 @@ public class CustomScannerActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_scanner);
 
-        barcodeScannerView = (CompoundBarcodeView)findViewById(R.id.zxing_barcode_scanner);
+        barcodeScannerView = (DecoratedBarcodeView)findViewById(R.id.zxing_barcode_scanner);
         barcodeScannerView.setTorchListener(this);
 
         switchFlashlightButton = (Button)findViewById(R.id.switch_flashlight);

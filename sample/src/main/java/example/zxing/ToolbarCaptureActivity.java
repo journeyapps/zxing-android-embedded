@@ -6,14 +6,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 
 import com.journeyapps.barcodescanner.CaptureManager;
-import com.journeyapps.barcodescanner.CompoundBarcodeView;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 /**
  * Sample Activity extending from ActionBarActivity to display a Toolbar.
  */
 public class ToolbarCaptureActivity extends ActionBarActivity {
     private CaptureManager capture;
-    private CompoundBarcodeView barcodeScannerView;
+    private DecoratedBarcodeView barcodeScannerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +25,7 @@ public class ToolbarCaptureActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        barcodeScannerView = (CompoundBarcodeView)findViewById(R.id.zxing_barcode_scanner);
+        barcodeScannerView = (DecoratedBarcodeView)findViewById(R.id.zxing_barcode_scanner);
 
         capture = new CaptureManager(this, barcodeScannerView);
         capture.initializeFromIntent(getIntent(), savedInstanceState);

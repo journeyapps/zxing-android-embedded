@@ -697,8 +697,7 @@ public class CameraPreview extends ViewGroup {
             return;
         }
 
-        cameraInstance = new CameraInstance(getContext());
-        cameraInstance.setCameraSettings(cameraSettings);
+        cameraInstance = createCameraInstance();
 
         cameraInstance.setReadyHandler(stateHandler);
         cameraInstance.open();
@@ -706,6 +705,19 @@ public class CameraPreview extends ViewGroup {
         // Keep track of the orientation we opened at, so that we don't reopen the camera if we
         // don't need to.
         openedOrientation = getDisplayRotation();
+    }
+
+    /**
+     * Create a new CameraInstance.
+     *
+     * Override to use a custom CameraInstance.
+     *
+     * @return a new CameraInstance
+     */
+    protected CameraInstance createCameraInstance() {
+        CameraInstance cameraInstance = new CameraInstance(getContext());
+        cameraInstance.setCameraSettings(cameraSettings);
+        return cameraInstance;
     }
 
 

@@ -32,7 +32,7 @@
         android:layout_alignParentLeft="true"
         app:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>
 
-    <com.journeyapps.barcodescanner.CompoundBarcodeView
+    <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_below="@+id/my_awesome_toolbar"
@@ -41,7 +41,7 @@
         app:zxing_use_texture_view="true"/>
 
 
-    <!-- Sample for a footer. Also add to CompoundBarcodeView: android:layout_above="@+id/footer" -->
+    <!-- Sample for a footer. Also add to DecoratedBarcodeView: android:layout_above="@+id/footer" -->
     <!-- <TextView
         android:id="@+id/footer"
         android:layout_width="match_parent"

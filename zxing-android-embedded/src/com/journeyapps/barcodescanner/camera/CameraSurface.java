@@ -8,7 +8,9 @@ import android.view.SurfaceHolder;
 import java.io.IOException;
 
 /**
+ * A surface on which a camera preview is displayed.
  *
+ * This wraps either a SurfaceHolder or a SurfaceTexture.
  */
 public class CameraSurface {
     private SurfaceHolder surfaceHolder;

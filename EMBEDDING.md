@@ -3,7 +3,7 @@
 For more control over the UI or scanning behaviour, some components may be used directly:
 
 * BarcodeView: Handles displaying the preview and decoding of the barcodes.
-* CompoundBarcodeView: Combines BarcodeView with a viewfinder for feedback, as well as some status /
+* DecoratedBarcodeView: Combines BarcodeView with a viewfinder for feedback, as well as some status /
   prompt text.
 * CaptureManager: Manages the InactivityTimer, BeepManager, orientation lock, and returning of the
   barcode result.
@@ -31,7 +31,7 @@ SurfaceView and other components, the camera preview may end up displaying outsi
 and over other components. This happens especially when:
 
 1. Placing the scanner inside a dialog, or:
-2. Other components are placed before the (Compound)BarcodeView, resulting in a lower z-order.
+2. Other components are placed before the (Decorated)BarcodeView, resulting in a lower z-order.
 
 For these cases we have two solutions:
 
@@ -50,7 +50,7 @@ The default is to:
 You can override these options:
 
 ```xml
-<com.journeyapps.barcodescanner.CompoundBarcodeView
+<com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:layout_width="..."
         android:layout_height="..."
         app:zxing_use_texture_view="false" (defaults to true, only has an effect on Android API 14+)
