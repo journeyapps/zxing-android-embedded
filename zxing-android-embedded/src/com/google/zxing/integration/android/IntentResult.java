@@ -92,14 +92,12 @@ public final class IntentResult {
 
     @Override
     public String toString() {
-        StringBuilder dialogText = new StringBuilder(120);
-        dialogText.append("Format: ").append(formatName).append('\n');
-        dialogText.append("Contents: ").append(contents).append('\n');
         int rawBytesLength = rawBytes == null ? 0 : rawBytes.length;
-        dialogText.append("Raw bytes: (").append(rawBytesLength).append(" bytes)\n");
-        dialogText.append("Orientation: ").append(orientation).append('\n');
-        dialogText.append("EC level: ").append(errorCorrectionLevel).append('\n');
-        dialogText.append("Barcode image: ").append(barcodeImagePath).append('\n');
-        return dialogText.toString();
+        return "Format: " + formatName + '\n' +
+            "Contents: " + contents + '\n' +
+            "Raw bytes: (" + rawBytesLength + " bytes)\n" +
+            "Orientation: " + orientation + '\n' +
+            "EC level: " + errorCorrectionLevel + '\n' +
+            "Barcode image: " + barcodeImagePath + '\n';
     }
 }
