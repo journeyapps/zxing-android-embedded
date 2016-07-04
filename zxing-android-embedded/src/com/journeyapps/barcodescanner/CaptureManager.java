@@ -255,9 +255,11 @@ public class CaptureManager {
 
     /**
      * Call from Activity#onRequestPermissionsResult
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
+     * @param requestCode The request code passed in {@link android.support.v4.app.ActivityCompat#requestPermissions(Activity, String[], int)}.
+     * @param permissions The requested permissions.
+     * @param grantResults The grant results for the corresponding permissions
+     *     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
+     *     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
      */
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         if(requestCode == cameraPermissionReqCode) {

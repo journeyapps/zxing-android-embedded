@@ -172,7 +172,7 @@ public final class Intents {
         public static final String RESULT_BYTE_SEGMENTS_PREFIX = "SCAN_RESULT_BYTE_SEGMENTS_";
 
         /**
-         * Call {@link android.content.Intent#getStringExtra(String)} with {@link #SCAN_RESULT_IMAGE_PATH}
+         * Call {@link android.content.Intent#getStringExtra(String)} with {@link #RESULT_BARCODE_IMAGE_PATH}
          * to get a {@code String} path to a cropped and compressed png file of the barcode's image
          * as it was displayed. Only available if
          * {@link com.google.zxing.integration.android.IntentIntegrator#setBarcodeImageEnabled(boolean)}

@@ -99,7 +99,7 @@ class CameraThread {
     /**
      * Call from main thread.
      *
-     * @param runner
+     * @param runner The {@link Runnable} to be enqueued
      */
     protected void incrementAndEnqueue(Runnable runner) {
         synchronized (LOCK) {
