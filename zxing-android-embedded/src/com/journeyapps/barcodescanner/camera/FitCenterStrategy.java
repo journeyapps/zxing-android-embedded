@@ -5,10 +5,6 @@ import android.util.Log;
 
 import com.journeyapps.barcodescanner.Size;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 /**
  * Scales the size so that both dimensions will be greater than or equal to the corresponding
  * dimension of the parent. One of width or height will fit exactly. Aspect ratio is preserved.

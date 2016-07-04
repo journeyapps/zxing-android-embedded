@@ -2,7 +2,6 @@ package com.journeyapps.barcodescanner;
 
 import android.content.Context;
 import android.hardware.SensorManager;
-import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.WindowManager;
 

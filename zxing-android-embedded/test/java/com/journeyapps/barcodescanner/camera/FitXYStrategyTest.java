@@ -1,7 +1,5 @@
 package com.journeyapps.barcodescanner.camera;
 
-import android.graphics.Rect;
-
 import com.journeyapps.barcodescanner.Size;
 
 import org.junit.Test;
