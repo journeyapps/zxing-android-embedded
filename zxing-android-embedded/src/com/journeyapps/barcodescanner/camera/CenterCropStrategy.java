@@ -75,5 +75,4 @@ public class CenterCropStrategy extends PreviewScalingStrategy {
 
         return new Rect(-dx, -dy, scaledPreview.width - dx, scaledPreview.height - dy);
     }
-
 }

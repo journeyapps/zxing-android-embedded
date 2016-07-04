@@ -83,7 +83,6 @@ public final class AutoFocusManager {
         start();
     }
 
-
     private synchronized void autoFocusAgainLater() {
         if (!stopped && !handler.hasMessages(MESSAGE_FOCUS)) {
             handler.sendMessageDelayed(handler.obtainMessage(MESSAGE_FOCUS), AUTO_FOCUS_INTERVAL_MS);
@@ -135,5 +134,4 @@ public final class AutoFocusManager {
             }
         }
     }
-
 }

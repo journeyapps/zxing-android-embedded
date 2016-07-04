@@ -85,7 +85,6 @@ public abstract class PreviewScalingStrategy {
         return 0.5f;
     }
 
-
     /**
      * Scale and position the preview relative to the viewfinder.
      *

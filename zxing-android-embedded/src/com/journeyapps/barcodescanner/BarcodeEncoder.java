@@ -70,8 +70,4 @@ public class BarcodeEncoder {
     public Bitmap encodeBitmap(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType, ?> hints) throws WriterException {
         return createBitmap(encode(contents, format, width, height, hints));
     }
-
-
-
-
 }

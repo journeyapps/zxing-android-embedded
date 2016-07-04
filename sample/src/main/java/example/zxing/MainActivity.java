@@ -87,7 +87,6 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-
     /**
      * Sample of scanning from a Fragment
      */

@@ -271,7 +271,6 @@ public class CaptureManager {
         }
     }
 
-
     /**
      * Call from Activity#onPause().
      */
@@ -296,7 +295,6 @@ public class CaptureManager {
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt(SAVED_ORIENTATION_LOCK, this.orientationLock);
     }
-
 
     /**
      * Create a intent to return as the Activity result.

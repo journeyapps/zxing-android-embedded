@@ -83,5 +83,4 @@ public final class OpenCameraInterface {
             return Camera.open(cameraId);
         }
     }
-
 }

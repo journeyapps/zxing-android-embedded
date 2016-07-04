@@ -20,7 +20,6 @@ class CameraThread {
         return instance;
     }
 
-
     private Handler handler;
     private HandlerThread thread;
 

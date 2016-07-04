@@ -66,7 +66,6 @@ public class Size implements Comparable<Size> {
         }
     }
 
-
     /**
      * Checks if both dimensions of the other size are at least as large as this size.
      *
@@ -105,7 +104,6 @@ public class Size implements Comparable<Size> {
         Size size = (Size) o;
 
         return width == size.width && height == size.height;
-
     }
 
     @Override

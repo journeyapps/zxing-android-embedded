@@ -160,5 +160,4 @@ public final class BeepManager implements
             mediaPlayer = null;
         }
     }
-
 }

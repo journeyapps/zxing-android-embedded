@@ -86,12 +86,10 @@ public class BarcodeView extends CameraPreview {
         initialize(context, attrs);
     }
 
-
     private void initialize(Context context, AttributeSet attrs) {
         decoderFactory = new DefaultDecoderFactory();
         resultHandler = new Handler(resultCallback);
     }
-
 
     /**
      * Set the DecoderFactory to use. Use this to specify the formats to decode.
@@ -142,7 +140,6 @@ public class BarcodeView extends CameraPreview {
         this.callback = callback;
         startDecoderThread();
     }
-
 
     /**
      * Continuously decode barcodes. The same barcode may be returned multiple times per second.

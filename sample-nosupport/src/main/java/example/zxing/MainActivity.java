@@ -47,7 +47,6 @@ public class MainActivity extends Activity {
         }
     }
 
-
     /**
      * Sample of scanning from a Fragment
      */

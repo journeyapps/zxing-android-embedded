@@ -130,7 +130,6 @@ public class ViewfinderView extends View {
         }
     }
 
-
     @SuppressLint("DrawAllocation")
     @Override
     public void onDraw(Canvas canvas) {
@@ -239,5 +238,4 @@ public class ViewfinderView extends View {
             points.subList(0, size - MAX_RESULT_POINTS / 2).clear();
         }
     }
-
 }

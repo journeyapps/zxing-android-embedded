@@ -22,7 +22,6 @@ public class RotationListener {
     public RotationListener() {
     }
 
-
     public void listen(Context context, RotationCallback callback) {
         // Stop to make sure we're not registering the listening twice.
         stop();

@@ -273,7 +273,6 @@ public class IntentIntegrator {
         }
     }
 
-
     protected void startActivity(Intent intent) {
         if (fragment != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -345,5 +344,4 @@ public class IntentIntegrator {
             }
         }
     }
-
 }

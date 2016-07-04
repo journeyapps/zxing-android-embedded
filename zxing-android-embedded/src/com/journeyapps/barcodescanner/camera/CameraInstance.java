@@ -73,7 +73,6 @@ public class CameraInstance {
         this.surface = surface;
     }
 
-
     public CameraSettings getCameraSettings() {
         return cameraSettings;
     }
@@ -173,7 +172,6 @@ public class CameraInstance {
             throw new IllegalStateException("CameraInstance is not open");
         }
     }
-
 
     private Runnable opener = new Runnable() {
         @Override

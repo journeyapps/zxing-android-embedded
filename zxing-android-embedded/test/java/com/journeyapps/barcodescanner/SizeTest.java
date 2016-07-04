@@ -19,7 +19,6 @@ public class SizeTest {
 
         assertEquals(12, a.width);
         assertEquals(9, a.height);
-
     }
 
     @Test

@@ -102,5 +102,4 @@ public final class IntentResult {
         dialogText.append("Barcode image: ").append(barcodeImagePath).append('\n');
         return dialogText.toString();
     }
-
 }

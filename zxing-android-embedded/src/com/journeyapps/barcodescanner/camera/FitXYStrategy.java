@@ -59,5 +59,4 @@ public class FitXYStrategy extends PreviewScalingStrategy {
     public Rect scalePreview(Size previewSize, Size viewfinderSize) {
         return new Rect(0, 0, viewfinderSize.width, viewfinderSize.height);
     }
-
 }
