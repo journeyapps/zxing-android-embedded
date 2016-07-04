@@ -61,7 +61,7 @@ public class IntentIntegrator {
     private android.app.Fragment fragment;
     private android.support.v4.app.Fragment supportFragment;
 
-    private final Map<String, Object> moreExtras = new HashMap<String, Object>(3);
+    private final Map<String, Object> moreExtras = new HashMap<>(3);
 
     private Collection<String> desiredBarcodeFormats;
 
