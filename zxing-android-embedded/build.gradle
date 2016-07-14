@@ -14,7 +14,6 @@ dependencies {
     testCompile "org.mockito:mockito-core:1.9.5"
 }
 
-
 android {
     resourcePrefix 'zxing_'
     compileSdkVersion project.androidTargetSdk

@@ -80,7 +80,6 @@ public class DecoderThread {
         requestNextPreview();
     }
 
-
     /**
      * Stop decoding.
      *
@@ -95,7 +94,6 @@ public class DecoderThread {
             thread.quit();
         }
     }
-
 
     private final PreviewCallback previewCallback = new PreviewCallback() {
         @Override
@@ -161,5 +159,4 @@ public class DecoderThread {
         }
         requestNextPreview();
     }
-
 }

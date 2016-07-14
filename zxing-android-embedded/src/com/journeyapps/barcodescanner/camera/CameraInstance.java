@@ -1,14 +1,12 @@
 package com.journeyapps.barcodescanner.camera;
 
 import android.content.Context;
-import android.graphics.SurfaceTexture;
 import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
 import com.google.zxing.client.android.R;
 import com.journeyapps.barcodescanner.Size;
-import com.journeyapps.barcodescanner.SourceData;
 import com.journeyapps.barcodescanner.Util;
 
 /**
@@ -74,7 +72,6 @@ public class CameraInstance {
     public void setSurface(CameraSurface surface) {
         this.surface = surface;
     }
-
 
     public CameraSettings getCameraSettings() {
         return cameraSettings;
@@ -175,7 +172,6 @@ public class CameraInstance {
             throw new IllegalStateException("CameraInstance is not open");
         }
     }
-
 
     private Runnable opener = new Runnable() {
         @Override

@@ -1,13 +1,8 @@
 package com.journeyapps.barcodescanner.camera;
 
 import android.graphics.Rect;
-import android.util.Log;
 
 import com.journeyapps.barcodescanner.Size;
-
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 /**
  * Scales the size so that it fits exactly. Aspect ratio is NOT preserved.
@@ -64,5 +59,4 @@ public class FitXYStrategy extends PreviewScalingStrategy {
     public Rect scalePreview(Size previewSize, Size viewfinderSize) {
         return new Rect(0, 0, viewfinderSize.width, viewfinderSize.height);
     }
-
 }

@@ -2,7 +2,6 @@ package com.journeyapps.barcodescanner;
 
 import android.content.Context;
 import android.hardware.SensorManager;
-import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.WindowManager;
 
@@ -22,7 +21,6 @@ public class RotationListener {
 
     public RotationListener() {
     }
-
 
     public void listen(Context context, RotationCallback callback) {
         // Stop to make sure we're not registering the listening twice.

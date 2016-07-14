@@ -234,7 +234,6 @@ public class CameraPreview extends ViewGroup {
         initialize(context, attrs, defStyleAttr, 0);
     }
 
-
     private void initialize(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         if (getBackground() == null) {
             // Default to SurfaceView colour, so that there are less changes.
@@ -295,6 +294,7 @@ public class CameraPreview extends ViewGroup {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void setupSurfaceView() {
         if(useTextureView && Build.VERSION.SDK_INT >= 14) {
             textureView = new TextureView(getContext());
@@ -599,7 +599,6 @@ public class CameraPreview extends ViewGroup {
         rotationListener.listen(getContext(), rotationCallback);
     }
 
-
     /**
      * Pause scanning and the camera preview. Typically this should be called from the Activity's
      * onPause() method.
@@ -720,7 +719,6 @@ public class CameraPreview extends ViewGroup {
         return cameraInstance;
     }
 
-
     private void startCameraPreview(CameraSurface surface) {
         if (!previewActive && cameraInstance != null) {
             Log.i(TAG, "Starting preview");
@@ -762,7 +760,6 @@ public class CameraPreview extends ViewGroup {
     public boolean isPreviewActive() {
         return previewActive;
     }
-
 
     /**
      * Calculate framing rectangle, relative to the preview frame.

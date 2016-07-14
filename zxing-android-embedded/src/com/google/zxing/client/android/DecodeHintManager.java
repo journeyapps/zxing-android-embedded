@@ -233,5 +233,4 @@ public final class DecodeHintManager {
         Log.i(TAG, "Hints from the Intent: " + hints);
         return hints;
     }
-
 }

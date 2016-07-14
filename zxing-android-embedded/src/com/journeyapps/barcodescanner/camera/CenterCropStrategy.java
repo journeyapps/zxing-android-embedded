@@ -5,10 +5,6 @@ import android.util.Log;
 
 import com.journeyapps.barcodescanner.Size;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 /**
  * Scales the dimensions so that it fits entirely inside the parent.One of width or height will
  * fit exactly. Aspect ratio is preserved.
@@ -79,5 +75,4 @@ public class CenterCropStrategy extends PreviewScalingStrategy {
 
         return new Rect(-dx, -dy, scaledPreview.width - dx, scaledPreview.height - dy);
     }
-
 }

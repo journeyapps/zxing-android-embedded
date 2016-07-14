@@ -96,5 +96,4 @@ public class CustomScannerActivity extends Activity implements
     public void onTorchOff() {
         switchFlashlightButton.setText(R.string.turn_on_flashlight);
     }
-
 }

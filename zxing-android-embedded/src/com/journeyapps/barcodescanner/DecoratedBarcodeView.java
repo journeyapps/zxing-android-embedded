@@ -162,7 +162,6 @@ public class DecoratedBarcodeView extends FrameLayout {
         }
     }
 
-
     /**
      * @see BarcodeView#pause()
      */
@@ -189,13 +188,11 @@ public class DecoratedBarcodeView extends FrameLayout {
         return statusView;
     }
 
-
     /**
      * @see BarcodeView#decodeSingle(BarcodeCallback)
      */
     public void decodeSingle(BarcodeCallback callback) {
         barcodeView.decodeSingle(new WrappedCallback(callback));
-
     }
 
     /**
@@ -262,7 +259,5 @@ public class DecoratedBarcodeView extends FrameLayout {
         void onTorchOn();
 
         void onTorchOff();
-
     }
-
 }

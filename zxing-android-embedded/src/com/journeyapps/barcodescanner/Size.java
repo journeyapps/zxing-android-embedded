@@ -1,5 +1,7 @@
 package com.journeyapps.barcodescanner;
 
+import android.support.annotation.NonNull;
+
 /**
  *
  */
@@ -66,7 +68,6 @@ public class Size implements Comparable<Size> {
         }
     }
 
-
     /**
      * Checks if both dimensions of the other size are at least as large as this size.
      *
@@ -81,7 +82,7 @@ public class Size implements Comparable<Size> {
      * Default sort order is ascending by size.
      */
     @Override
-    public int compareTo(Size other) {
+    public int compareTo(@NonNull Size other) {
         int aPixels = this.height * this.width;
         int bPixels = other.height * other.width;
         if (bPixels < aPixels) {
@@ -104,9 +105,7 @@ public class Size implements Comparable<Size> {
 
         Size size = (Size) o;
 
-        if (width != size.width) return false;
-        return height == size.height;
-
+        return width == size.width && height == size.height;
     }
 
     @Override

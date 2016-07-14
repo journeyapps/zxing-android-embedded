@@ -16,13 +16,9 @@
 
 package com.journeyapps.barcodescanner.camera;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -196,7 +192,6 @@ public final class CameraManager {
         }
     }
 
-
     /**
      * Closes the camera driver if still in use.
      *
@@ -228,7 +223,6 @@ public final class CameraManager {
         return rotationDegrees;
     }
 
-
     private Camera.Parameters getDefaultCameraParameters() {
         Camera.Parameters parameters = camera.getParameters();
         if (defaultParameters == null) {
@@ -253,7 +247,6 @@ public final class CameraManager {
         if (safeMode) {
             Log.w(TAG, "In camera config safe mode -- most settings will not be honored");
         }
-
 
         CameraConfigurationUtils.setFocus(parameters, settings.getFocusMode(), safeMode);
 
@@ -348,7 +341,6 @@ public final class CameraManager {
     private void setCameraDisplayOrientation(int rotation) {
         camera.setDisplayOrientation(rotation);
     }
-
 
     private void setParameters() {
         try {

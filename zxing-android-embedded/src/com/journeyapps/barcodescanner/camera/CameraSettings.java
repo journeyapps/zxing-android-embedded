@@ -27,7 +27,6 @@ public class CameraSettings {
         return requestedCameraId;
     }
 
-
     /**
      * Allows third party apps to specify the camera ID, rather than determine
      * it automatically based on available cameras and their orientation.

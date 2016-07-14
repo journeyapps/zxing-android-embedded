@@ -229,5 +229,4 @@ public class SourceData {
         }
         return yuv;
     }
-
 }

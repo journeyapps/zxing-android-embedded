@@ -95,5 +95,4 @@ public final class AmbientLightManager implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // do nothing
     }
-
 }

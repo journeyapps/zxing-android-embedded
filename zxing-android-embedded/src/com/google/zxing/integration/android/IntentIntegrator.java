@@ -22,8 +22,6 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Display;
-import android.view.WindowManager;
 
 import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.CaptureActivity;
@@ -63,7 +61,7 @@ public class IntentIntegrator {
     private android.app.Fragment fragment;
     private android.support.v4.app.Fragment supportFragment;
 
-    private final Map<String, Object> moreExtras = new HashMap<String, Object>(3);
+    private final Map<String, Object> moreExtras = new HashMap<>(3);
 
     private Collection<String> desiredBarcodeFormats;
 
@@ -275,7 +273,6 @@ public class IntentIntegrator {
         }
     }
 
-
     protected void startActivity(Intent intent) {
         if (fragment != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -347,5 +344,4 @@ public class IntentIntegrator {
             }
         }
     }
-
 }

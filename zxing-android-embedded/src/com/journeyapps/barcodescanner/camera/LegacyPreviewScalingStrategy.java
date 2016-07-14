@@ -80,8 +80,6 @@ public class LegacyPreviewScalingStrategy extends PreviewScalingStrategy {
         return sizes.get(0);
     }
 
-
-
     /**
      * Scale from so that to.fitsIn(size). Tries to scale by powers of two, or by 3/2. Aspect ratio
      * is preserved.
@@ -154,5 +152,4 @@ public class LegacyPreviewScalingStrategy extends PreviewScalingStrategy {
 
         return new Rect(-dx, -dy, scaledPreview.width - dx, scaledPreview.height - dy);
     }
-
 }
