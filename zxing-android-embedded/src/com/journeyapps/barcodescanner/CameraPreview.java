@@ -295,6 +295,7 @@ public class CameraPreview extends ViewGroup {
     }
 
     @SuppressWarnings("deprecation")
+    @SuppressLint("NewAPI")
     private void setupSurfaceView() {
         if(useTextureView && Build.VERSION.SDK_INT >= 14) {
             textureView = new TextureView(getContext());
