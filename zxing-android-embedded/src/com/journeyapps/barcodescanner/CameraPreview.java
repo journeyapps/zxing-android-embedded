@@ -592,7 +592,11 @@ public class CameraPreview extends ViewGroup {
             // Install the callback and wait for surfaceCreated() to init the camera.
             surfaceView.getHolder().addCallback(surfaceCallback);
         } else if(textureView != null && Build.VERSION.SDK_INT >= 14) {
-            textureView.setSurfaceTextureListener(surfaceTextureListener());
+            if(textureView.isAvailable()) {
+                surfaceTextureListener().onSurfaceTextureAvailable(textureView.getSurfaceTexture(), textureView.getWidth(), textureView.getHeight());
+            } else {
+                textureView.setSurfaceTextureListener(surfaceTextureListener());
+            }
         }
 
         // To trigger surfaceSized again
