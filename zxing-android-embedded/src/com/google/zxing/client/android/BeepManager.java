@@ -39,7 +39,6 @@ public final class BeepManager implements
     private static final long VIBRATE_DURATION = 200L;
 
     private final Activity activity;
-    private MediaPlayer mediaPlayer;
     private boolean playBeep;
 
     private boolean beepEnabled = true;
@@ -47,7 +46,6 @@ public final class BeepManager implements
 
     public BeepManager(Activity activity) {
         this.activity = activity;
-        this.mediaPlayer = null;
         updatePrefs();
     }
 
@@ -81,17 +79,16 @@ public final class BeepManager implements
 
     public synchronized void updatePrefs() {
         playBeep = shouldBeep(beepEnabled, activity);
-        if (playBeep && mediaPlayer == null) {
+        if (playBeep) {
             // The volume on STREAM_SYSTEM is not adjustable, and users found it too loud,
             // so we now play on the music stream.
             activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
-            mediaPlayer = buildMediaPlayer(activity);
         }
     }
 
     public synchronized void playBeepSoundAndVibrate() {
-        if (playBeep && mediaPlayer != null) {
-            mediaPlayer.start();
+        if (playBeep) {
+            buildMediaPlayer(activity).start();
         }
         if (vibrateEnabled) {
             Vibrator vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
@@ -136,7 +133,8 @@ public final class BeepManager implements
     @Override
     public void onCompletion(MediaPlayer mp) {
         // When the beep has finished playing, rewind to queue up another one.
-        mp.seekTo(0);
+        mp.stop();
+        mp.release();
     }
 
     @Override
@@ -147,7 +145,6 @@ public final class BeepManager implements
         } else {
             // possibly media player error, so release and recreate
             mp.release();
-            mediaPlayer = null;
             updatePrefs();
         }
         return true;
@@ -155,9 +152,5 @@ public final class BeepManager implements
 
     @Override
     public synchronized void close() {
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
     }
 }
