@@ -166,7 +166,6 @@ public class CaptureManager {
 
             if (!intent.getBooleanExtra(Intents.Scan.BEEP_ENABLED, true)) {
                 beepManager.setBeepEnabled(false);
-                beepManager.updatePrefs();
             }
 
             if (intent.hasExtra(Intents.Scan.TIMEOUT)) {
@@ -232,7 +231,6 @@ public class CaptureManager {
         } else {
             barcodeView.resume();
         }
-        beepManager.updatePrefs();
         inactivityTimer.start();
     }
 
@@ -280,7 +278,6 @@ public class CaptureManager {
         barcodeView.pause();
 
         inactivityTimer.cancel();
-        beepManager.close();
     }
 
     /**

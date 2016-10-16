@@ -30,23 +30,23 @@ import java.io.IOException;
 /**
  * Manages beeps and vibrations.
  */
-public final class BeepManager implements
-        MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener, Closeable {
+public final class BeepManager {
 
     private static final String TAG = BeepManager.class.getSimpleName();
 
     private static final float BEEP_VOLUME = 0.10f;
     private static final long VIBRATE_DURATION = 200L;
 
-    private final Activity activity;
-    private boolean playBeep;
+    private final Context context;
 
     private boolean beepEnabled = true;
     private boolean vibrateEnabled = false;
 
     public BeepManager(Activity activity) {
-        this.activity = activity;
-        updatePrefs();
+        activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+        // We do not keep a reference to the Activity itself, to prevent leaks
+        this.context = activity.getApplicationContext();
     }
 
     public boolean isBeepEnabled() {
@@ -77,44 +77,39 @@ public final class BeepManager implements
         this.vibrateEnabled = vibrateEnabled;
     }
 
-    public synchronized void updatePrefs() {
-        playBeep = shouldBeep(beepEnabled, activity);
-        if (playBeep) {
-            // The volume on STREAM_SYSTEM is not adjustable, and users found it too loud,
-            // so we now play on the music stream.
-            activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
-        }
-    }
-
     public synchronized void playBeepSoundAndVibrate() {
-        if (playBeep) {
-            buildMediaPlayer(activity).start();
+        if (beepEnabled) {
+            playBeepSound();
         }
         if (vibrateEnabled) {
-            Vibrator vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+            Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.vibrate(VIBRATE_DURATION);
         }
     }
 
-    private static boolean shouldBeep(boolean beep, Context activity) {
-        boolean shouldPlayBeep = beep;
-        if (shouldPlayBeep) {
-            // See if sound settings overrides this
-            AudioManager audioService = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
-            if (audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
-                shouldPlayBeep = false;
-            }
-        }
-        return shouldPlayBeep;
-    }
 
-    private MediaPlayer buildMediaPlayer(Context activity) {
+    public MediaPlayer playBeepSound() {
         MediaPlayer mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setOnCompletionListener(this);
-        mediaPlayer.setOnErrorListener(this);
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.stop();
+                mp.release();
+            }
+        });
+        mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                Log.w(TAG, "Failed to beep " + what + ", " + extra);
+                // possibly media player error, so release and recreate
+                mp.stop();
+                mp.release();
+                return true;
+            }
+        });
         try {
-            AssetFileDescriptor file = activity.getResources().openRawResourceFd(R.raw.zxing_beep);
+            AssetFileDescriptor file = context.getResources().openRawResourceFd(R.raw.zxing_beep);
             try {
                 mediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
             } finally {
@@ -122,35 +117,12 @@ public final class BeepManager implements
             }
             mediaPlayer.setVolume(BEEP_VOLUME, BEEP_VOLUME);
             mediaPlayer.prepare();
+            mediaPlayer.start();
             return mediaPlayer;
         } catch (IOException ioe) {
             Log.w(TAG, ioe);
             mediaPlayer.release();
             return null;
         }
-    }
-
-    @Override
-    public void onCompletion(MediaPlayer mp) {
-        // When the beep has finished playing, rewind to queue up another one.
-        mp.stop();
-        mp.release();
-    }
-
-    @Override
-    public synchronized boolean onError(MediaPlayer mp, int what, int extra) {
-        if (what == MediaPlayer.MEDIA_ERROR_SERVER_DIED) {
-            // we are finished, so put up an appropriate error toast if required and finish
-            activity.finish();
-        } else {
-            // possibly media player error, so release and recreate
-            mp.release();
-            updatePrefs();
-        }
-        return true;
-    }
-
-    @Override
-    public synchronized void close() {
     }
 }
