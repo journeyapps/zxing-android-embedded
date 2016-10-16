@@ -36,6 +36,9 @@ public class DecoderThread {
         public boolean handleMessage(Message message) {
             if (message.what == R.id.zxing_decode) {
                 decode((SourceData) message.obj);
+            } else if(message.what == R.id.zxing_preview_failed) {
+                // Error already logged. Try again.
+                requestNextPreview();
             }
             return true;
         }
@@ -106,6 +109,16 @@ public class DecoderThread {
                 if (running) {
                     // Post to our thread.
                     handler.obtainMessage(R.id.zxing_decode, sourceData).sendToTarget();
+                }
+            }
+        }
+
+        @Override
+        public void onPreviewError(Exception e) {
+            synchronized (LOCK) {
+                if (running) {
+                    // Post to our thread.
+                    handler.obtainMessage(R.id.zxing_preview_failed).sendToTarget();
                 }
             }
         }
