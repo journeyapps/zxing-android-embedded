@@ -1,3 +1,17 @@
+### 3.4.0 (2016-10-16)
+
+Changes:
+* Beep on scan is now controlled only by the media volume, and still plays
+  even if the device is in "silent mode", as long as the media volume is not muted.
+* The 150ms delay after scanning is removed.
+  
+Fixes:
+* An issue where the beep sometimes played twice is fixed (#221).
+* Fix rare crash (#209)
+* Fix orientation lock issue (#181)
+* Fix race condition with TextureView (#204)
+
+
 ### 3.3.0 (2016-06-05)
 
 * Add an optional timeout to cancel scanning. (#161)
