@@ -97,10 +97,20 @@ public final class CameraManager {
             PreviewCallback callback = this.callback;
             if (cameraResolution != null && callback != null) {
                 int format = camera.getParameters().getPreviewFormat();
-                SourceData source = new SourceData(data, cameraResolution.width, cameraResolution.height, format, getCameraRotation());
-                callback.onPreview(source);
+                try {
+                    SourceData source = new SourceData(data, cameraResolution.width, cameraResolution.height, format, getCameraRotation());
+                    callback.onPreview(source);
+                } catch (IllegalArgumentException e) {
+                    // Image data does not match the resolution
+                    Log.e(TAG, "Camera preview failed", e);
+                    callback.onPreviewError(e);
+                }
             } else {
                 Log.d(TAG, "Got preview callback, but no handler or resolution available");
+                if(callback != null) {
+                    // Should generally not happen
+                    callback.onPreviewError(new Exception("No resolution available"));
+                }
             }
         }
     }
