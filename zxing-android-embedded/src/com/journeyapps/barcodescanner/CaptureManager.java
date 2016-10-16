@@ -63,10 +63,6 @@ public class CaptureManager {
 
     private boolean destroyed = false;
 
-    // Delay long enough that the beep can be played.
-    // TODO: play beep in background
-    private static final long DELAY_BEEP = 150;
-
     private InactivityTimer inactivityTimer;
     private BeepManager beepManager;
 
@@ -78,12 +74,12 @@ public class CaptureManager {
             barcodeView.pause();
             beepManager.playBeepSoundAndVibrate();
 
-            handler.postDelayed(new Runnable() {
+            handler.post(new Runnable() {
                 @Override
                 public void run() {
                     returnResult(result);
                 }
-            }, DELAY_BEEP);
+            });
 
         }
 
@@ -166,7 +162,6 @@ public class CaptureManager {
 
             if (!intent.getBooleanExtra(Intents.Scan.BEEP_ENABLED, true)) {
                 beepManager.setBeepEnabled(false);
-                beepManager.updatePrefs();
             }
 
             if (intent.hasExtra(Intents.Scan.TIMEOUT)) {
@@ -232,7 +227,6 @@ public class CaptureManager {
         } else {
             barcodeView.resume();
         }
-        beepManager.updatePrefs();
         inactivityTimer.start();
     }
 
@@ -280,7 +274,6 @@ public class CaptureManager {
         barcodeView.pause();
 
         inactivityTimer.cancel();
-        beepManager.close();
     }
 
     /**
