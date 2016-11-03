@@ -180,6 +180,11 @@ public final class Intents {
          */
         public static final String RESULT_BARCODE_IMAGE_PATH = "SCAN_RESULT_IMAGE_PATH";
 
+        /***
+         * The scan should be inverted. White becomes black, black becomes white.
+         */
+        public static final String INVERTED_SCAN = "INVERTED_SCAN";
+
         private Scan() {
         }
     }
