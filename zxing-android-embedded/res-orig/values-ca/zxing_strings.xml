@@ -18,5 +18,5 @@
   <string name="zxing_app_name">Barcode Scanner</string>
   <string name="zxing_button_ok">D\'acord</string>
   <string name="zxing_msg_camera_framework_bug">S\'ha produït un problema amb la càmera de l\'Android. Potser haureu de reiniciar el dispositiu.</string>
-  <string name="zxing_msg_default_status">Poseu un codi de barres dins el rectable per escanejar-lo.</string>
+  <string name="zxing_msg_default_status">Poseu un codi de barres dins el rectangle per escanejar-lo.</string>
 </resources>
