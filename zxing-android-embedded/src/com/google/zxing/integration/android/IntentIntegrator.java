@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author Sean Owen
  * @author Fred Lin
  * @author Isaac Potoczny-Jones
@@ -70,6 +69,7 @@ public class IntentIntegrator {
     protected Class<?> getDefaultCaptureActivity() {
         return CaptureActivity.class;
     }
+
     /**
      * @param activity {@link Activity} invoking the integration
      */
@@ -174,6 +174,28 @@ public class IntentIntegrator {
     }
 
     /**
+     * Set beep resource. Require setBeepEnabled to true.
+     * @param resource
+     * @return
+     */
+    public IntentIntegrator setBeepResource(int resource) {
+        addExtra(Intents.Scan.BEEP_RESOURCE, resource);
+        return this;
+    }
+
+
+    /**
+     * set to true to enable vibrate on scan
+     *
+     * @param enabled true to enable vibrate
+     * @return this
+     */
+    public IntentIntegrator setVibrateEnable(boolean enabled) {
+        addExtra(Intents.Scan.VIBRATE_ENABLED, enabled);
+        return this;
+    }
+
+    /**
      * Set to true to enable saving the barcode image and sending its path in the result Intent.
      *
      * @param enabled true to enable barcode image
@@ -205,6 +227,7 @@ public class IntentIntegrator {
     /**
      * Initiates a scan for all known barcode types with the default camera.
      * And starts a timer to finish on timeout
+     *
      * @return Activity.RESULT_CANCELED and true on parameter TIMEOUT.
      */
     public IntentIntegrator setTimeout(long timeout) {

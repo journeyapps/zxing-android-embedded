@@ -13,5 +13,6 @@
     <string name="scanner_with_timeout">Finish Scan in 8 Seconds</string>
     <string name="turn_on_flashlight">Turn on Flashlight</string>
     <string name="turn_off_flashlight">Turn off Flashlight</string>
+    <string name="scanner_resize_scanner">Resize the Scanner</string>
 
 </resources>

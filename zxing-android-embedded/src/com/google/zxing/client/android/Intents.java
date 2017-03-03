@@ -37,7 +37,7 @@ public final class Intents {
          * By default, sending this will decode all barcodes that we understand. However it
          * may be useful to limit scanning to certain formats. Use
          * {@link android.content.Intent#putExtra(String, String)} with one of the values below.
-         *
+         * <p>
          * Setting this is effectively shorthand for setting explicit formats with {@link #FORMATS}.
          * It is overridden by that setting.
          */
@@ -97,6 +97,16 @@ public final class Intents {
          * Set to false to disable beep. Defaults to true.
          */
         public static final String BEEP_ENABLED = "BEEP_ENABLED";
+
+        /**
+         * Set beep resource.
+         */
+        public static final String BEEP_RESOURCE = "BEEP_RESOURCE";
+
+        /**
+         * Set to true to enable vibrate. Defaults to false.
+         */
+        public static final String VIBRATE_ENABLED = "VIBRATE_ENABLED";
 
         /**
          * Set to true to return a path to the barcode's image as it was captured. Defaults to false.

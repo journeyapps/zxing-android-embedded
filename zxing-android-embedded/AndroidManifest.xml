@@ -17,6 +17,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.google.zxing.client.android">
 
   <uses-permission android:name="android.permission.CAMERA"/>
+  <uses-permission android:name="android.permission.VIBRATE" />
 
   <!-- Support Android 2.3+. -->
   <uses-sdk android:minSdkVersion="9" />
