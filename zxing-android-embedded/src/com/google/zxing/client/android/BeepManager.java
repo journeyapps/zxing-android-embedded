@@ -41,6 +41,7 @@ public final class BeepManager {
 
     private boolean beepEnabled = true;
     private boolean vibrateEnabled = false;
+    private int beepResource = -1;
 
     public BeepManager(Activity activity) {
         activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -55,13 +56,21 @@ public final class BeepManager {
 
     /**
      * Call updatePrefs() after setting this.
-     *
+     * <p>
      * If the device is in silent mode, it will not beep.
      *
      * @param beepEnabled true to enable beep
      */
     public void setBeepEnabled(boolean beepEnabled) {
         this.beepEnabled = beepEnabled;
+    }
+
+    public int getBeepResource() {
+        return beepResource;
+    }
+
+    public void setBeepResource(int beepResource) {
+        this.beepResource = beepResource;
     }
 
     public boolean isVibrateEnabled() {
@@ -109,7 +118,14 @@ public final class BeepManager {
             }
         });
         try {
-            AssetFileDescriptor file = context.getResources().openRawResourceFd(R.raw.zxing_beep);
+            AssetFileDescriptor file;
+
+            if (beepResource != -1) {
+                file = context.getResources().openRawResourceFd(beepResource);
+            } else {
+                file = context.getResources().openRawResourceFd(R.raw.zxing_beep);
+            }
+
             try {
                 mediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
             } finally {
@@ -125,4 +141,6 @@ public final class BeepManager {
             return null;
         }
     }
+
+
 }

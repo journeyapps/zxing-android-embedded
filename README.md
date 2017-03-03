@@ -1,5 +1,9 @@
 # ZXing Android Embedded
 
+中文版戳这里：
+[ZXing Android Embedded 使用全解析](http://www.jianshu.com/p/f862b73d07f7).
+在原仓库的基础上修改了一些 bug，并且加入了一些新的设置项。
+
 Barcode scanning library for Android, using [ZXing][2] for decoding.
 
 The project is loosely based on the [ZXing Android Barcode Scanner application][2], but is not affiliated with the official ZXing project.

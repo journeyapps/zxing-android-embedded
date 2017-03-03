@@ -513,7 +513,7 @@ public class CameraPreview extends ViewGroup {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         containerSized(new Size(r - l, b - t));
-
+        Log.e(TAG, "changed:" + changed + ",l:" + l + ",t:" + t + ",r:" + r + ",b:" + b);
         if(surfaceView != null) {
             if (surfaceRect == null) {
                 // Match the container, to reduce the risk of issues. The preview should never be drawn
