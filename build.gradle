@@ -5,8 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
-        classpath 'com.github.JakeWharton:sdk-manager-plugin:220bf7a88a7072df3ed16dc8466fb144f2817070'
+        classpath 'com.android.tools.build:gradle:2.3.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
     }
 }
@@ -19,7 +18,6 @@ subprojects {
 
     version = '3.4.0'
     group = 'com.journeyapps'
-    apply plugin: 'android-sdk-manager'
 
     ext.androidBuildTools = '25.0.2'
     ext.androidTargetSdk = 25

@@ -11,12 +11,21 @@ android {
         versionName "3.4.0"
     }
 
-    Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    def keystoreFile = properties.getProperty('keystore.file')
-    def keystorePassword = properties.getProperty('keystore.password')
-    def keystoreAlias = properties.getProperty('keystore.alias')
-    def validConfig = keystoreFile != null && keystorePassword != null && keystoreAlias != null;
+    def validConfig
+    def keystoreFile
+    def keystorePassword
+    def keystoreAlias
+
+    try {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        keystoreFile = properties.getProperty('keystore.file')
+        keystorePassword = properties.getProperty('keystore.password')
+        keystoreAlias = properties.getProperty('keystore.alias')
+        validConfig = keystoreFile != null && keystorePassword != null && keystoreAlias != null;
+    } catch(error) {
+        validConfig = false;
+    }
 
     if(validConfig) {
         System.out.println("Release signing configured with " + keystoreFile)

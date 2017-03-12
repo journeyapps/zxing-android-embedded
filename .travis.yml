@@ -2,12 +2,17 @@ language: android
 jdk: oraclejdk8
 android:
   components:
+    # Install tools twice to get the latest update
+    - tools
+    - tools
+    - platform-tools
+    - build-tools-25.0.2
+
+    - android-25
+
     - extra-android-support
     - extra-android-m2repository
     - extra-google-m2repository
-    # We need "tools" for build-tools. See https://github.com/travis-ci/travis-ci/issues/5036
-    - tools
-    - build-tools-23.0.2
   licenses:
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
@@ -15,3 +20,5 @@ script:
     # build includes lint and test
     - TERM=dumb ./gradlew build
 
+after_failure:
+    - cat **/build/reports/lint-results.xml
