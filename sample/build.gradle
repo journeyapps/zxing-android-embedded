@@ -48,11 +48,11 @@ dependencies {
     // If you use this from an external project, use the following instead:
     //   compile 'com.journeyapps:zxing-android-embedded:<version>'
     compile project(':zxing-android-embedded')
-    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.android.support:appcompat-v7:25.1.0'
 
 
     // For development purposes only
     // https://github.com/square/leakcanary
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 }

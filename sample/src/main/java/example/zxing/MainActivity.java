@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.zxing.client.android.Intents;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -27,6 +28,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void scanBarcode(View view) {
         new IntentIntegrator(this).initiateScan();
+    }
+
+    public void scanBarcodeInverted(View view){
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.addExtra(Intents.Scan.INVERTED_SCAN, true);
+        integrator.initiateScan();
     }
 
     public void scanBarcodeCustomLayout(View view) {

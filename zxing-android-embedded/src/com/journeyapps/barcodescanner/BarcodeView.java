@@ -60,6 +60,7 @@ public class BarcodeView extends CameraPreview {
                 // Failed. Next preview is automatically tried.
                 return true;
             } else if (message.what == R.id.zxing_possible_result_points) {
+                //noinspection unchecked
                 List<ResultPoint> resultPoints = (List<ResultPoint>) message.obj;
                 if (callback != null && decodeMode != DecodeMode.NONE) {
                     callback.possibleResultPoints(resultPoints);
@@ -73,20 +74,20 @@ public class BarcodeView extends CameraPreview {
 
     public BarcodeView(Context context) {
         super(context);
-        initialize(context, null);
+        initialize();
     }
 
     public BarcodeView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initialize(context, attrs);
+        initialize();
     }
 
     public BarcodeView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initialize(context, attrs);
+        initialize();
     }
 
-    private void initialize(Context context, AttributeSet attrs) {
+    private void initialize() {
         decoderFactory = new DefaultDecoderFactory();
         resultHandler = new Handler(resultCallback);
     }
