@@ -97,6 +97,9 @@ public final class CameraManager {
             PreviewCallback callback = this.callback;
             if (cameraResolution != null && callback != null) {
                 try {
+                    if(data == null) {
+                        throw new NullPointerException("No preview data received");
+                    }
                     int format = camera.getParameters().getPreviewFormat();
                     SourceData source = new SourceData(data, cameraResolution.width, cameraResolution.height, format, getCameraRotation());
                     callback.onPreview(source);
