@@ -173,6 +173,13 @@ public class DecoratedBarcodeView extends FrameLayout {
     }
 
     /**
+     * @see BarcodeView#pauseAndWait()
+     */
+    public void pauseAndWait() {
+        barcodeView.pauseAndWait();
+    }
+
+    /**
      * @see BarcodeView#resume()
      */
     public void resume() {

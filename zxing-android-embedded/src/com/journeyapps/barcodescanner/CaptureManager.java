@@ -68,6 +68,8 @@ public class CaptureManager {
 
     private Handler handler;
 
+    private boolean finishWhenClosed = false;
+
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(final BarcodeResult result) {
@@ -108,6 +110,14 @@ public class CaptureManager {
         @Override
         public void cameraError(Exception error) {
             displayFrameworkBugMessageAndExit();
+        }
+
+        @Override
+        public void cameraClosed() {
+            if(finishWhenClosed) {
+                Log.d(TAG, "Camera closed; finishing activity");
+                finish();
+            }
         }
     };
 
@@ -268,9 +278,9 @@ public class CaptureManager {
      * Call from Activity#onPause().
      */
     public void onPause() {
-        barcodeView.pause();
 
         inactivityTimer.cancel();
+        barcodeView.pauseAndWait();
     }
 
     /**
@@ -363,21 +373,32 @@ public class CaptureManager {
         activity.finish();
     }
 
+    protected void closeAndFinish() {
+        if(barcodeView.getBarcodeView().isCameraClosed()) {
+            finish();
+        } else {
+            finishWhenClosed = true;
+        }
+
+        barcodeView.pause();
+        inactivityTimer.cancel();
+    }
+
     protected void returnResultTimeout() {
         Intent intent = new Intent(Intents.Scan.ACTION);
         intent.putExtra(Intents.Scan.TIMEOUT, true);
         activity.setResult(Activity.RESULT_CANCELED, intent);
-        finish();
+        closeAndFinish();
     }
 
     protected void returnResult(BarcodeResult rawResult) {
         Intent intent = resultIntent(rawResult, getBarcodeImagePath(rawResult));
         activity.setResult(Activity.RESULT_OK, intent);
-        finish();
+        closeAndFinish();
     }
 
     protected void displayFrameworkBugMessageAndExit() {
-        if (activity.isFinishing() || this.destroyed) {
+        if (activity.isFinishing() || this.destroyed || finishWhenClosed) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);

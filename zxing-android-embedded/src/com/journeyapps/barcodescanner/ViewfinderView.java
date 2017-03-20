@@ -115,6 +115,11 @@ public class ViewfinderView extends View {
             public void cameraError(Exception error) {
 
             }
+
+            @Override
+            public void cameraClosed() {
+
+            }
         });
     }
 

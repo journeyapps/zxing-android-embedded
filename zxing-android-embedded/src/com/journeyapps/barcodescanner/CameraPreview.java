@@ -79,6 +79,11 @@ public class CameraPreview extends ViewGroup {
          * @param error the error
          */
         void cameraError(Exception error);
+
+        /**
+         * The camera has been closed.
+         */
+        void cameraClosed();
     }
 
     private static final String TAG = CameraPreview.class.getSimpleName();
@@ -201,6 +206,8 @@ public class CameraPreview extends ViewGroup {
                     pause();
                     fireState.cameraError(error);
                 }
+            } else if(message.what == R.id.zxing_camera_closed) {
+                fireState.cameraClosed();
             }
             return false;
         }
@@ -347,6 +354,13 @@ public class CameraPreview extends ViewGroup {
         public void cameraError(Exception error) {
             for (StateListener listener : stateListeners) {
                 listener.cameraError(error);
+            }
+        }
+
+        @Override
+        public void cameraClosed() {
+            for (StateListener listener : stateListeners) {
+                listener.cameraClosed();
             }
         }
     };
@@ -620,6 +634,8 @@ public class CameraPreview extends ViewGroup {
             cameraInstance.close();
             cameraInstance = null;
             previewActive = false;
+        } else {
+            stateHandler.sendEmptyMessage(R.id.zxing_camera_closed);
         }
         if (currentSurfaceSize == null && surfaceView != null) {
             SurfaceHolder surfaceHolder = surfaceView.getHolder();
@@ -635,6 +651,27 @@ public class CameraPreview extends ViewGroup {
         rotationListener.stop();
 
         fireState.previewStopped();
+    }
+
+    /**
+     * Pause scanning and preview; waiting for the Camera to be closed.
+     *
+     * This blocks the main thread.
+     */
+    public void pauseAndWait() {
+        CameraInstance instance = getCameraInstance();
+        pause();
+        long startTime = System.nanoTime();
+        while(instance != null && !instance.isCameraClosed()) {
+            if(System.nanoTime() - startTime > 2000000000) {
+                break;
+            }
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                break;
+            }
+        }
     }
 
     public Size getFramingRectSize() {
@@ -820,5 +857,13 @@ public class CameraPreview extends ViewGroup {
         super.onRestoreInstanceState(superState);
         boolean torch = myState.getBoolean("torch");
         setTorch(torch);
+    }
+
+    /**
+     *
+     * @return true if the camera has been closed in a background thread.
+     */
+    public boolean isCameraClosed() {
+        return cameraInstance == null || cameraInstance.isCameraClosed();
     }
 }

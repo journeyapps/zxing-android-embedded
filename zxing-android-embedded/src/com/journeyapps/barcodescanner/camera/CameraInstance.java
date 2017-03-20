@@ -24,6 +24,8 @@ public class CameraInstance {
     private Handler readyHandler;
     private DisplayConfiguration displayConfiguration;
     private boolean open = false;
+    private boolean cameraClosed = true;
+
     private CameraSettings cameraSettings = new CameraSettings();
 
     /**
@@ -111,6 +113,7 @@ public class CameraInstance {
         Util.validateMainThread();
 
         open = true;
+        cameraClosed = false;
 
         cameraThread.incrementAndEnqueue(opener);
     }
@@ -147,6 +150,8 @@ public class CameraInstance {
 
         if (open) {
             cameraThread.enqueue(closer);
+        } else {
+            cameraClosed = true;
         }
 
         open = false;
@@ -154,6 +159,10 @@ public class CameraInstance {
 
     public boolean isOpen() {
         return open;
+    }
+
+    public boolean isCameraClosed() {
+        return cameraClosed;
     }
 
     public void requestPreview(final PreviewCallback callback) {
@@ -226,6 +235,10 @@ public class CameraInstance {
             } catch (Exception e) {
                 Log.e(TAG, "Failed to close camera", e);
             }
+
+            cameraClosed = true;
+
+            readyHandler.sendEmptyMessage(R.id.zxing_camera_closed);
 
             cameraThread.decrementInstances();
         }
