@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.journeyapps.barcodescanner.CameraPreview;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -76,6 +77,11 @@ public class MainActivity extends AppCompatActivity {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setTimeout(8000);
         integrator.initiateScan();
+    }
+
+    public void tabs(View view) {
+        Intent intent = new Intent(this, TabbedScanning.class);
+        startActivity(intent);
     }
 
     @Override

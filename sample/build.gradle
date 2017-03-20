@@ -5,7 +5,7 @@ android {
     buildToolsVersion project.androidBuildTools
 
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 13
         targetSdkVersion project.androidTargetSdk
         versionCode 340
         versionName "3.4.0"
@@ -23,11 +23,11 @@ android {
         keystorePassword = properties.getProperty('keystore.password')
         keystoreAlias = properties.getProperty('keystore.alias')
         validConfig = keystoreFile != null && keystorePassword != null && keystoreAlias != null;
-    } catch(error) {
+    } catch (error) {
         validConfig = false;
     }
 
-    if(validConfig) {
+    if (validConfig) {
         System.out.println("Release signing configured with " + keystoreFile)
         signingConfigs {
             release {
@@ -43,7 +43,7 @@ android {
 
     buildTypes {
         release {
-            if(validConfig) {
+            if (validConfig) {
                 signingConfig signingConfigs.release
             }
 
@@ -53,15 +53,16 @@ android {
     }
 }
 
+
 dependencies {
     // If you use this from an external project, use the following instead:
     //   compile 'com.journeyapps:zxing-android-embedded:<version>'
     compile project(':zxing-android-embedded')
-    compile 'com.android.support:appcompat-v7:25.1.0'
-
 
     // For development purposes only
     // https://github.com/square/leakcanary
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.android.support:support-v13:25.2.0'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 }
