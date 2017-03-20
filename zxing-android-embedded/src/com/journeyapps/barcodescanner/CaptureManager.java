@@ -279,6 +279,7 @@ public class CaptureManager {
     public void onDestroy() {
         destroyed = true;
         inactivityTimer.cancel();
+        handler.removeCallbacksAndMessages(null);
     }
 
     /**
