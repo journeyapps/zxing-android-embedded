@@ -446,26 +446,36 @@ public final class CameraManager {
 
     public void setTorch(boolean on) {
         if (camera != null) {
-            boolean isOn = isTorchOn();
-            if (on != isOn) {
-                if (autoFocusManager != null) {
-                    autoFocusManager.stop();
-                }
+            try {
+                boolean isOn = isTorchOn();
+                if (on != isOn) {
+                    if (autoFocusManager != null) {
+                        autoFocusManager.stop();
+                    }
 
-                Camera.Parameters parameters = camera.getParameters();
-                CameraConfigurationUtils.setTorch(parameters, on);
-                if (settings.isExposureEnabled()) {
-                    CameraConfigurationUtils.setBestExposure(parameters, on);
-                }
-                camera.setParameters(parameters);
+                    Camera.Parameters parameters = camera.getParameters();
+                    CameraConfigurationUtils.setTorch(parameters, on);
+                    if (settings.isExposureEnabled()) {
+                        CameraConfigurationUtils.setBestExposure(parameters, on);
+                    }
+                    camera.setParameters(parameters);
 
-                if (autoFocusManager != null) {
-                    autoFocusManager.start();
+                    if (autoFocusManager != null) {
+                        autoFocusManager.start();
+                    }
                 }
+            } catch(RuntimeException e) {
+                // Camera error. Could happen if the camera is being closed.
+                Log.e(TAG, "Failed to set torch", e);
             }
         }
     }
 
+    /**
+     *
+     * @return true if the torch is on
+     * @throws RuntimeException if there is a camera error
+     */
     public boolean isTorchOn() {
         Camera.Parameters parameters = camera.getParameters();
         if (parameters != null) {
