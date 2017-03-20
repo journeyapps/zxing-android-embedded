@@ -1,7 +1,6 @@
 buildscript {
     repositories {
         jcenter()
-        maven { url 'https://jitpack.io' }  // for sdk-manager-plugin
     }
 
     dependencies {
@@ -16,7 +15,7 @@ subprojects {
         mavenLocal()
     }
 
-    version = '3.4.0'
+    version = '3.5.0'
     group = 'com.journeyapps'
 
     ext.androidBuildTools = '25.0.2'

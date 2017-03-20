@@ -1,11 +1,24 @@
+### 3.5.0 (2017-03-20)
+
+* Allow changing the REQUEST_CODE value (#234).
+* Add support for inverted scans (#235).
+* Use zxing:core 3.3.0 by default (#265).
+
+Fixes:
+
+* Fix memory leak when using scan timeout (#283).
+* Better handling of various camera errors (#241, #268, #270)
+
 ### 3.4.0 (2016-10-16)
 
 Changes:
+
 * Beep on scan is now controlled only by the media volume, and still plays
   even if the device is in "silent mode", as long as the media volume is not muted.
 * The 150ms delay after scanning is removed.
   
 Fixes:
+
 * An issue where the beep sometimes played twice is fixed (#221).
 * Fix rare crash (#209)
 * Fix orientation lock issue (#181)

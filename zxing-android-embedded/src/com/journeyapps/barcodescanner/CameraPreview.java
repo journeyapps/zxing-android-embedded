@@ -664,6 +664,7 @@ public class CameraPreview extends ViewGroup {
         long startTime = System.nanoTime();
         while(instance != null && !instance.isCameraClosed()) {
             if(System.nanoTime() - startTime > 2000000000) {
+                // Don't wait for longer than 2 seconds
                 break;
             }
             try {
