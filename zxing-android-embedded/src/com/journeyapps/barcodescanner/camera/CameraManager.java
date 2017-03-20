@@ -96,12 +96,14 @@ public final class CameraManager {
             Size cameraResolution = resolution;
             PreviewCallback callback = this.callback;
             if (cameraResolution != null && callback != null) {
-                int format = camera.getParameters().getPreviewFormat();
                 try {
+                    int format = camera.getParameters().getPreviewFormat();
                     SourceData source = new SourceData(data, cameraResolution.width, cameraResolution.height, format, getCameraRotation());
                     callback.onPreview(source);
-                } catch (IllegalArgumentException e) {
-                    // Image data does not match the resolution
+                } catch (RuntimeException e) {
+                    // Could be:
+                    // java.lang.RuntimeException: getParameters failed (empty parameters)
+                    // IllegalArgumentException: Image data does not match the resolution
                     Log.e(TAG, "Camera preview failed", e);
                     callback.onPreviewError(e);
                 }
