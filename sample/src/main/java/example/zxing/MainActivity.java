@@ -21,6 +21,8 @@ import com.journeyapps.barcodescanner.CameraPreview;
 
 public class MainActivity extends AppCompatActivity {
 
+    public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void scanBarcode(View view) {
         new IntentIntegrator(this).initiateScan();
+    }
+
+    public void scanBarcodeWithCustomizedRequestCode(View view) {
+        new IntentIntegrator(this, CUSTOMIZED_REQUEST_CODE).initiateScan();
     }
 
     public void scanBarcodeInverted(View view){
@@ -87,6 +93,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case CUSTOMIZED_REQUEST_CODE: {
+                Toast.makeText(this, "REQUEST_CODE = " + requestCode, Toast.LENGTH_LONG).show();
+                break;
+            }
+            case IntentIntegrator.REQUEST_CODE: {
+                Toast.makeText(this, "IntentIntegrator default REQUEST_CODE = " + requestCode, Toast.LENGTH_LONG).show();
+                break;
+            }
+            default:
+                break;
+        }
         if(result != null) {
             if(result.getContents() == null) {
                 Log.d("MainActivity", "Cancelled scan");

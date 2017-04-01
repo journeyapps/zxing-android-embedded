@@ -44,7 +44,9 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class IntentIntegrator {
 
-    public static int REQUEST_CODE = 0x0000c0de; // Only use bottom 16 bits
+    public static final int REQUEST_CODE = 0x0000c0de; // Only use bottom 16 bits
+    private static int requestCodeValue;
+
     private static final String TAG = IntentIntegrator.class.getSimpleName();
 
     // supported barcode formats
@@ -73,8 +75,18 @@ public class IntentIntegrator {
     /**
      * @param activity {@link Activity} invoking the integration
      */
+    public IntentIntegrator(Activity activity, int request_code) {
+        this.activity = activity;
+        if (request_code > 0 && request_code <= 0x0000ffff) {
+            requestCodeValue = request_code;
+        } else {
+            requestCodeValue = REQUEST_CODE;
+        }
+    }
+
     public IntentIntegrator(Activity activity) {
         this.activity = activity;
+        requestCodeValue = REQUEST_CODE;
     }
 
     public Class<?> getCaptureActivity() {
@@ -199,7 +211,7 @@ public class IntentIntegrator {
      * Initiates a scan for all known barcode types with the default camera.
      */
     public final void initiateScan() {
-        startActivityForResult(createScanIntent(), REQUEST_CODE);
+        startActivityForResult(createScanIntent(), requestCodeValue);
     }
 
     /**
@@ -297,7 +309,7 @@ public class IntentIntegrator {
      * the fields will be null.
      */
     public static IntentResult parseActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == REQUEST_CODE) {
+        if (requestCode == requestCodeValue) {
             if (resultCode == Activity.RESULT_OK) {
                 String contents = intent.getStringExtra(Intents.Scan.RESULT);
                 String formatName = intent.getStringExtra(Intents.Scan.RESULT_FORMAT);
