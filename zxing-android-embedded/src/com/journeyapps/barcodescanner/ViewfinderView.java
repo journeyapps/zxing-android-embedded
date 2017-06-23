@@ -88,8 +88,8 @@ public class ViewfinderView extends View {
         attributes.recycle();
 
         scannerAlpha = 0;
-        possibleResultPoints = new ArrayList<>(5);
-        lastPossibleResultPoints = null;
+        possibleResultPoints = new ArrayList<>(MAX_RESULT_POINTS);
+        lastPossibleResultPoints = new ArrayList<>(MAX_RESULT_POINTS);
     }
 
     public void setCameraPreview(CameraPreview view) {
@@ -135,7 +135,6 @@ public class ViewfinderView extends View {
         }
     }
 
-    @SuppressLint("DrawAllocation")
     @Override
     public void onDraw(Canvas canvas) {
         refreshSizes();
@@ -143,11 +142,11 @@ public class ViewfinderView extends View {
             return;
         }
 
-        Rect frame = framingRect;
-        Rect previewFrame = previewFramingRect;
+        final Rect frame = framingRect;
+        final Rect previewFrame = previewFramingRect;
 
-        int width = canvas.getWidth();
-        int height = canvas.getHeight();
+        final int width = canvas.getWidth();
+        final int height = canvas.getHeight();
 
         // Draw the exterior (i.e. outside the framing rect) darkened
         paint.setColor(resultBitmap != null ? resultColor : maskColor);
@@ -166,38 +165,47 @@ public class ViewfinderView extends View {
             paint.setColor(laserColor);
             paint.setAlpha(SCANNER_ALPHA[scannerAlpha]);
             scannerAlpha = (scannerAlpha + 1) % SCANNER_ALPHA.length;
-            int middle = frame.height() / 2 + frame.top;
+            final int middle = frame.height() / 2 + frame.top;
             canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1, middle + 2, paint);
 
-            float scaleX = frame.width() / (float) previewFrame.width();
-            float scaleY = frame.height() / (float) previewFrame.height();
+            final float scaleX = frame.width() / (float) previewFrame.width();
+            final float scaleY = frame.height() / (float) previewFrame.height();
 
-            List<ResultPoint> currentPossible = possibleResultPoints;
-            List<ResultPoint> currentLast = lastPossibleResultPoints;
-            int frameLeft = frame.left;
-            int frameTop = frame.top;
-            if (currentPossible.isEmpty()) {
-                lastPossibleResultPoints = null;
-            } else {
-                possibleResultPoints = new ArrayList<>(5);
-                lastPossibleResultPoints = currentPossible;
-                paint.setAlpha(CURRENT_POINT_OPACITY);
-                paint.setColor(resultPointColor);
-                for (ResultPoint point : currentPossible) {
-                    canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
-                            frameTop + (int) (point.getY() * scaleY),
-                            POINT_SIZE, paint);
-                }
-            }
-            if (currentLast != null) {
+            final int frameLeft = frame.left;
+            final int frameTop = frame.top;
+
+            // draw the last possible result points
+            if (!lastPossibleResultPoints.isEmpty()) {
                 paint.setAlpha(CURRENT_POINT_OPACITY / 2);
                 paint.setColor(resultPointColor);
                 float radius = POINT_SIZE / 2.0f;
-                for (ResultPoint point : currentLast) {
-                    canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
+                for (final ResultPoint point : lastPossibleResultPoints) {
+                    canvas.drawCircle(
+                            frameLeft + (int) (point.getX() * scaleX),
                             frameTop + (int) (point.getY() * scaleY),
-                            radius, paint);
+                            radius, paint
+                    );
                 }
+                lastPossibleResultPoints.clear();
+            }
+
+            // draw current possible result points
+            if (!possibleResultPoints.isEmpty()) {
+                paint.setAlpha(CURRENT_POINT_OPACITY);
+                paint.setColor(resultPointColor);
+                for (final ResultPoint point : possibleResultPoints) {
+                    canvas.drawCircle(
+                            frameLeft + (int) (point.getX() * scaleX),
+                            frameTop + (int) (point.getY() * scaleY),
+                            POINT_SIZE, paint
+                    );
+                }
+
+                // swap and clear buffers
+                final List<ResultPoint> temp = possibleResultPoints;
+                possibleResultPoints = lastPossibleResultPoints;
+                lastPossibleResultPoints = temp;
+                possibleResultPoints.clear();
             }
 
             // Request another update at the animation interval, but only repaint the laser line,
@@ -235,12 +243,7 @@ public class ViewfinderView extends View {
      * @param point a point to draw, relative to the preview frame
      */
     public void addPossibleResultPoint(ResultPoint point) {
-        List<ResultPoint> points = possibleResultPoints;
-        points.add(point);
-        int size = points.size();
-        if (size > MAX_RESULT_POINTS) {
-            // trim it
-            points.subList(0, size - MAX_RESULT_POINTS / 2).clear();
-        }
+        if (possibleResultPoints.size() < MAX_RESULT_POINTS)
+            possibleResultPoints.add(point);
     }
 }
