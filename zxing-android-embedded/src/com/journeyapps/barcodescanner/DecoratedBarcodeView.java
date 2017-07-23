@@ -16,6 +16,7 @@ import com.google.zxing.client.android.DecodeFormatManager;
 import com.google.zxing.client.android.DecodeHintManager;
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.R;
+import com.journeyapps.barcodescanner.camera.CameraParametersCallback;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 import java.util.List;
@@ -232,6 +233,16 @@ public class DecoratedBarcodeView extends FrameLayout {
         if (torchListener != null) {
             torchListener.onTorchOff();
         }
+    }
+
+    /**
+     * Changes the settings for Camera.
+     * Must be called after {@link #resume()}.
+     *
+     * @param callback {@link CameraParametersCallback}
+     */
+    public void changeCameraParameters(CameraParametersCallback callback) {
+        barcodeView.changeCameraParameters(callback);
     }
 
     /**

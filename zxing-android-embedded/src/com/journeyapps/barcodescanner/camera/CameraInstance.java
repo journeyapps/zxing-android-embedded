@@ -145,6 +145,24 @@ public class CameraInstance {
         }
     }
 
+    /**
+     * Changes the settings for Camera.
+     *
+     * @param callback {@link CameraParametersCallback}
+     */
+    public void changeCameraParameters(final CameraParametersCallback callback) {
+        Util.validateMainThread();
+
+        if (open) {
+            cameraThread.enqueue(new Runnable() {
+                @Override
+                public void run() {
+                    cameraManager.changeCameraParameters(callback);
+                }
+            });
+        }
+    }
+
     public void close() {
         Util.validateMainThread();
 

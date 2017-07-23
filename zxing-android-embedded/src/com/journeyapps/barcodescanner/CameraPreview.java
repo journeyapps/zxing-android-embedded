@@ -23,6 +23,7 @@ import android.view.WindowManager;
 
 import com.google.zxing.client.android.R;
 import com.journeyapps.barcodescanner.camera.CameraInstance;
+import com.journeyapps.barcodescanner.camera.CameraParametersCallback;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.journeyapps.barcodescanner.camera.CameraSurface;
 import com.journeyapps.barcodescanner.camera.CenterCropStrategy;
@@ -409,6 +410,17 @@ public class CameraPreview extends ViewGroup {
         torchOn = on;
         if (cameraInstance != null) {
             cameraInstance.setTorch(on);
+        }
+    }
+
+    /**
+     * Changes the settings for Camera.
+     *
+     * @param callback {@link CameraParametersCallback}
+     */
+    public void changeCameraParameters(CameraParametersCallback callback) {
+        if (cameraInstance != null) {
+            cameraInstance.changeCameraParameters(callback);
         }
     }
 
