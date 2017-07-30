@@ -415,6 +415,7 @@ public class CameraPreview extends ViewGroup {
 
     /**
      * Changes the settings for Camera.
+     * Must be called after {@link #resume()}.
      *
      * @param callback {@link CameraParametersCallback}
      */
