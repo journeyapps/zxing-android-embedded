@@ -25,6 +25,7 @@ public class CameraInstance {
     private DisplayConfiguration displayConfiguration;
     private boolean open = false;
     private boolean cameraClosed = true;
+    private Handler mainHandler;
 
     private CameraSettings cameraSettings = new CameraSettings();
 
@@ -41,6 +42,7 @@ public class CameraInstance {
         this.cameraThread = CameraThread.getInstance();
         this.cameraManager = new CameraManager(context);
         this.cameraManager.setCameraSettings(cameraSettings);
+        this.mainHandler = new Handler();
     }
 
     /**
@@ -166,12 +168,20 @@ public class CameraInstance {
     }
 
     public void requestPreview(final PreviewCallback callback) {
-        validateOpen();
-
-        cameraThread.enqueue(new Runnable() {
+        mainHandler.post(new Runnable() {
             @Override
             public void run() {
-                cameraManager.requestPreviewFrame(callback);
+                if(!open) {
+                    Log.d(TAG, "Camera is closed, not requesting preview");
+                    return;
+                }
+
+                cameraThread.enqueue(new Runnable() {
+                    @Override
+                    public void run() {
+                        cameraManager.requestPreviewFrame(callback);
+                    }
+                });
             }
         });
     }
