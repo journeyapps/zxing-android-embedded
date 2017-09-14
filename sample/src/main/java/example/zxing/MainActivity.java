@@ -37,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
         integrator.initiateScan();
     }
 
+    public void scanMixedBarcodes(View view){
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.addExtra(Intents.Scan.MIXED_SCAN, true);
+        integrator.initiateScan();
+    }
+
     public void scanBarcodeCustomLayout(View view) {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setCaptureActivity(AnyOrientationCaptureActivity.class);

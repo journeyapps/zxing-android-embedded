@@ -185,6 +185,11 @@ public final class Intents {
          */
         public static final String INVERTED_SCAN = "INVERTED_SCAN";
 
+        /***
+         * Scan for inverted and normal badcodes at the same time.
+         */
+        public static final String MIXED_SCAN = "MIXED_SCAN";
+
         private Scan() {
         }
     }

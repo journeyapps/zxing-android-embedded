@@ -16,15 +16,17 @@ public class DefaultDecoderFactory implements DecoderFactory {
     private Map<DecodeHintType, ?> hints;
     private String characterSet;
     private boolean inverted;
+    private boolean mixedScan;
 
     public DefaultDecoderFactory() {
     }
 
-    public DefaultDecoderFactory(Collection<BarcodeFormat> decodeFormats, Map<DecodeHintType, ?> hints, String characterSet, boolean inverted) {
+    public DefaultDecoderFactory(Collection<BarcodeFormat> decodeFormats, Map<DecodeHintType, ?> hints, String characterSet, boolean inverted, boolean mixedScan) {
         this.decodeFormats = decodeFormats;
         this.hints = hints;
         this.characterSet = characterSet;
         this.inverted = inverted;
+        this.mixedScan = mixedScan;
     }
 
     @Override
@@ -48,7 +50,10 @@ public class DefaultDecoderFactory implements DecoderFactory {
         MultiFormatReader reader = new MultiFormatReader();
         reader.setHints(hints);
 
-        return inverted ? new InvertedDecoder(reader) : new Decoder(reader);
+        if (mixedScan)
+            return new MixedDecoder(reader);
+        else
+            return inverted ? new InvertedDecoder(reader) : new Decoder(reader);
 
     }
 }

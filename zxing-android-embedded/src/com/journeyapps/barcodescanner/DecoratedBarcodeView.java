@@ -149,13 +149,16 @@ public class DecoratedBarcodeView extends FrameLayout {
         // Check to see if the scan should be inverted.
         boolean inverted = intent.getBooleanExtra(Intents.Scan.INVERTED_SCAN, false);
 
+        //Check if the scan should include inverted and normal barcodes
+        boolean mixedScan = intent.getBooleanExtra(Intents.Scan.MIXED_SCAN, false);
+
         String characterSet = intent.getStringExtra(Intents.Scan.CHARACTER_SET);
 
         MultiFormatReader reader = new MultiFormatReader();
         reader.setHints(decodeHints);
 
         barcodeView.setCameraSettings(settings);
-        barcodeView.setDecoderFactory(new DefaultDecoderFactory(decodeFormats, decodeHints, characterSet, inverted));
+        barcodeView.setDecoderFactory(new DefaultDecoderFactory(decodeFormats, decodeHints, characterSet, inverted, mixedScan));
     }
 
     public void setStatusText(String text) {
