@@ -195,11 +195,14 @@ public final class Intents {
          */
         public static final int INVERTED_SCAN = 1;
 
+<<<<<<< HEAD
         /***
          * Scan for inverted and normal badcodes at the same time.
          */
         public static final int MIXED_SCAN = 2;
 
+=======
+>>>>>>> parent of cf4c0dc... Added a mixed scan mode to enable scanning inverted and normal barcodes
         private Scan() {
         }
     }

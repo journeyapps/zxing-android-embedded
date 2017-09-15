@@ -26,13 +26,6 @@
             android:onClick="scanBarcodeInverted"/>
 
         <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="scanMixedBarcodes"
-            android:text="Scan Mixed Barcodes" />
-
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/any_orientation"
