@@ -181,14 +181,24 @@ public final class Intents {
         public static final String RESULT_BARCODE_IMAGE_PATH = "SCAN_RESULT_IMAGE_PATH";
 
         /***
+         * Define the scan type.
+         */
+        public static final String SCAN_TYPE = "SCAN_TYPE";
+
+        /***
+         * Scan normal barcodes white on black
+         */
+        public static final int NORMAL_SCAN = 0;
+
+        /***
          * The scan should be inverted. White becomes black, black becomes white.
          */
-        public static final String INVERTED_SCAN = "INVERTED_SCAN";
+        public static final int INVERTED_SCAN = 1;
 
         /***
          * Scan for inverted and normal badcodes at the same time.
          */
-        public static final String MIXED_SCAN = "MIXED_SCAN";
+        public static final int MIXED_SCAN = 2;
 
         private Scan() {
         }

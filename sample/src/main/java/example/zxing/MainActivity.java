@@ -33,13 +33,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void scanBarcodeInverted(View view){
         IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.addExtra(Intents.Scan.INVERTED_SCAN, true);
+        integrator.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.INVERTED_SCAN);
         integrator.initiateScan();
     }
 
     public void scanMixedBarcodes(View view){
         IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.addExtra(Intents.Scan.MIXED_SCAN, true);
+        integrator.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
         integrator.initiateScan();
     }
 
