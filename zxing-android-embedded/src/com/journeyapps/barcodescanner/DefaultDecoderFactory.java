@@ -15,28 +15,16 @@ public class DefaultDecoderFactory implements DecoderFactory {
     private Collection<BarcodeFormat> decodeFormats;
     private Map<DecodeHintType, ?> hints;
     private String characterSet;
-<<<<<<< HEAD
     private int scanType;
-=======
-    private boolean inverted;
->>>>>>> parent of cf4c0dc... Added a mixed scan mode to enable scanning inverted and normal barcodes
 
     public DefaultDecoderFactory() {
     }
 
-<<<<<<< HEAD
     public DefaultDecoderFactory(Collection<BarcodeFormat> decodeFormats, Map<DecodeHintType, ?> hints, String characterSet, int scanType) {
         this.decodeFormats = decodeFormats;
         this.hints = hints;
         this.characterSet = characterSet;
         this.scanType = scanType;
-=======
-    public DefaultDecoderFactory(Collection<BarcodeFormat> decodeFormats, Map<DecodeHintType, ?> hints, String characterSet, boolean inverted) {
-        this.decodeFormats = decodeFormats;
-        this.hints = hints;
-        this.characterSet = characterSet;
-        this.inverted = inverted;
->>>>>>> parent of cf4c0dc... Added a mixed scan mode to enable scanning inverted and normal barcodes
     }
 
     @Override
@@ -60,7 +48,6 @@ public class DefaultDecoderFactory implements DecoderFactory {
         MultiFormatReader reader = new MultiFormatReader();
         reader.setHints(hints);
 
-<<<<<<< HEAD
         switch (scanType){
             case 0:
                 return new Decoder(reader);
@@ -74,9 +61,6 @@ public class DefaultDecoderFactory implements DecoderFactory {
 
         }
 
-=======
-        return inverted ? new InvertedDecoder(reader) : new Decoder(reader);
->>>>>>> parent of cf4c0dc... Added a mixed scan mode to enable scanning inverted and normal barcodes
 
     }
 }

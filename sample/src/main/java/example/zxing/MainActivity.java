@@ -37,15 +37,12 @@ public class MainActivity extends AppCompatActivity {
         integrator.initiateScan();
     }
 
-<<<<<<< HEAD
     public void scanMixedBarcodes(View view){
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
         integrator.initiateScan();
     }
 
-=======
->>>>>>> parent of cf4c0dc... Added a mixed scan mode to enable scanning inverted and normal barcodes
     public void scanBarcodeCustomLayout(View view) {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setCaptureActivity(AnyOrientationCaptureActivity.class);
