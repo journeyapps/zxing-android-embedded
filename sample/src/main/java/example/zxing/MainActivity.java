@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setCaptureActivity(AnyOrientationCaptureActivity.class);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
-        integrator.setPrompt("Scan something");
+        integrator.setPrompt("Scan something. Wow this text sample is very looooooong !");
         integrator.setOrientationLocked(false);
         integrator.setBeepEnabled(false);
         integrator.initiateScan();

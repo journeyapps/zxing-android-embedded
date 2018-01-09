@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -162,6 +163,7 @@ public class DecoratedBarcodeView extends FrameLayout {
         // statusView is optional when using a custom layout
         if(statusView != null) {
             statusView.setText(text);
+            statusView.setGravity(Gravity.CENTER);
         }
     }
 
