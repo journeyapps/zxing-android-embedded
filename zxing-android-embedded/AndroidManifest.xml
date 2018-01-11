@@ -32,7 +32,8 @@
   <uses-feature android:name="android.hardware.wifi" android:required="false"/>
 
 
-  <application>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <application>
       <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"
                 android:clearTaskOnLaunch="true"
                 android:screenOrientation="sensorLandscape"

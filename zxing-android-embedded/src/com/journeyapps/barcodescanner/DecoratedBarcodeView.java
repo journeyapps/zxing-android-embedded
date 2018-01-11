@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -89,7 +90,7 @@ public class DecoratedBarcodeView extends FrameLayout {
 
         inflate(getContext(), scannerLayout, this);
 
-        barcodeView = (BarcodeView) findViewById(R.id.zxing_barcode_surface);
+        barcodeView = findViewById(R.id.zxing_barcode_surface);
 
         if (barcodeView == null) {
             throw new IllegalArgumentException(
@@ -101,7 +102,7 @@ public class DecoratedBarcodeView extends FrameLayout {
         barcodeView.initializeAttributes(attrs);
 
 
-        viewFinder = (ViewfinderView) findViewById(R.id.zxing_viewfinder_view);
+        viewFinder = findViewById(R.id.zxing_viewfinder_view);
 
         if (viewFinder == null) {
             throw new IllegalArgumentException(
@@ -162,6 +163,7 @@ public class DecoratedBarcodeView extends FrameLayout {
         // statusView is optional when using a custom layout
         if(statusView != null) {
             statusView.setText(text);
+            statusView.setGravity(Gravity.CENTER);
         }
     }
 

@@ -38,7 +38,7 @@ public class ContinuousCaptureActivity extends Activity {
             beepManager.playBeepSoundAndVibrate();
 
             //Added preview of scanned barcode
-            ImageView imageView = (ImageView) findViewById(R.id.barcodePreview);
+            ImageView imageView = findViewById(R.id.barcodePreview);
             imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.YELLOW));
         }
 
@@ -53,7 +53,7 @@ public class ContinuousCaptureActivity extends Activity {
 
         setContentView(R.layout.continuous_scan);
 
-        barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
+        barcodeView = findViewById(R.id.barcode_scanner);
         barcodeView.decodeContinuous(callback);
 
         beepManager = new BeepManager(this);

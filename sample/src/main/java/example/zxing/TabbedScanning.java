@@ -44,7 +44,7 @@ public class TabbedScanning extends AppCompatActivity implements ActionBar.TabLi
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         // Set up the action bar.
@@ -112,7 +112,7 @@ public class TabbedScanning extends AppCompatActivity implements ActionBar.TabLi
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_tabbed_scanning, container, false);
-            barcodeView = (DecoratedBarcodeView)rootView.findViewById(R.id.barcode_view);
+            barcodeView = rootView.findViewById(R.id.barcode_view);
             return rootView;
         }
 
@@ -165,7 +165,7 @@ public class TabbedScanning extends AppCompatActivity implements ActionBar.TabLi
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_tabbed_camera, container, false);
-            cameraPreview = (CameraPreview)rootView.findViewById(R.id.camera_preview);
+            cameraPreview = rootView.findViewById(R.id.camera_preview);
             return rootView;
         }
 
