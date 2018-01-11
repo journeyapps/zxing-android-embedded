@@ -23,7 +23,7 @@ public class MainActivity extends Activity {
     }
 
     public void scanBarcode(View view) {
-        new IntentIntegrator((Activity)this).initiateScan();
+        new IntentIntegrator(this).initiateScan();
     }
 
     public void scanBarcodeCustomOptions(View view) {
@@ -67,7 +67,7 @@ public class MainActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_scan, container, false);
-            Button scan = (Button) view.findViewById(R.id.scan_from_fragment);
+            Button scan = view.findViewById(R.id.scan_from_fragment);
             scan.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

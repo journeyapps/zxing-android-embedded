@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         jcenter()
+        google()
     }
 
     dependencies {
@@ -13,12 +14,13 @@ subprojects {
     repositories {
         jcenter()
         mavenLocal()
+        google()
     }
 
     version = '3.5.0'
     group = 'com.journeyapps'
 
-    ext.androidBuildTools = '25.0.2'
-    ext.androidTargetSdk = 25
-    ext.zxingCore = 'com.google.zxing:core:3.3.0'
+    ext.androidBuildTools = '27.0.2'
+    ext.androidTargetSdk = 27
+    ext.zxingCore = 'com.google.zxing:core:3.3.1'
 }

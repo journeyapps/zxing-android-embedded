@@ -5,7 +5,7 @@ android {
     buildToolsVersion project.androidBuildTools
 
     defaultConfig {
-        minSdkVersion 13
+        minSdkVersion 14
         targetSdkVersion project.androidTargetSdk
         versionCode 350
         versionName "3.5.0"
@@ -61,8 +61,8 @@ dependencies {
 
     // For development purposes only
     // https://github.com/square/leakcanary
-    compile 'com.android.support:appcompat-v7:25.2.0'
-    compile 'com.android.support:support-v13:25.2.0'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    compile 'com.android.support:appcompat-v7:27.0.2'
+    compile 'com.android.support:support-v13:27.0.2'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 }
