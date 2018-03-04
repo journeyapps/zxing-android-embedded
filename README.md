@@ -79,6 +79,19 @@ integrator.initiateScan();
 
 See [IntentIntegrator][5] for more options.
 
+### Generate Barcode example
+QR CODE
+```java
+try {
+  BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+  Bitmap bitmap = barcodeEncoder.encodeBitmap("content", BarcodeFormat.QR_CODE, 400, 400);
+  ImageView imageViewQrCode = (ImageView) findViewById(R.id.qrCode);
+  imageViewQrCode.setImageBitmap(bitmap);
+} catch(Exception e) {
+
+}
+```
+
 ### Changing the orientation
 
 To change the orientation, specify the orientation in your `AndroidManifest.xml` and let the `ManifestMerger` to update the Activity's definition.
@@ -138,7 +151,7 @@ You can then use your local version by specifying in your `build.gradle` file:
 Licensed under the [Apache License 2.0][7]
 
 	Copyright (C) 2012-2017 ZXing authors, Journey Mobile
-	
+
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
