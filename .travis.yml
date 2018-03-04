@@ -16,6 +16,7 @@ android:
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
 before_install:
+    # Android SDK installation is a mess, especially with licenses. Not sure if all of this is required, but it works.
     - echo "$ANDROID_HOME"
     - mkdir -p "$ANDROID_HOME/licenses"
     - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"

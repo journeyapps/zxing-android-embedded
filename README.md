@@ -15,7 +15,7 @@ A sample application is available in [Releases](https://github.com/journeyapps/z
 
 ## Adding aar dependency with Gradle
 
-From version 3 this is a single library, supporting Gingerbread and later versions of Android
+From version 3.6.0, only Android SDK 19+ is supported.this is a single library, supporting Gingerbread and later versions of Android
 (API level 9+). If you need support for earlier Android versions, use [version 2][4].
 
 Add the following to your build.gradle file:
@@ -26,12 +26,31 @@ repositories {
 }
 
 dependencies {
-    compile 'com.journeyapps:zxing-android-embedded:3.5.0'
-    compile 'com.android.support:appcompat-v7:23.1.0'   // Version 23+ is required
+    compile 'com.journeyapps:zxing-android-embedded:3.6.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'   // Version 23+ is required
 }
 
 android {
-    buildToolsVersion '23.0.2' // Older versions may give compile errors
+    buildToolsVersion '27.0.3' // Older versions may give compile errors
+}
+
+```
+
+Android 14+ support can still be achieved by downgrading zxing:core:
+
+```groovy
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
+    compile 'com.android.support:appcompat-v7:25.3.1'   // Version 23+ is required
+    compile 'com.google.zxing:core:3.3.0'
+}
+
+android {
+    buildToolsVersion '27.0.3' // Older versions may give compile errors
 }
 
 ```
@@ -80,7 +99,10 @@ integrator.initiateScan();
 See [IntentIntegrator][5] for more options.
 
 ### Generate Barcode example
-QR CODE
+
+While this is not the primary purpose of this library, it does include basic support for
+generating some barcode types:
+
 ```java
 try {
   BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
@@ -150,7 +172,7 @@ You can then use your local version by specifying in your `build.gradle` file:
 
 Licensed under the [Apache License 2.0][7]
 
-	Copyright (C) 2012-2017 ZXing authors, Journey Mobile
+	Copyright (C) 2012-2018 ZXing authors, Journey Mobile
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.

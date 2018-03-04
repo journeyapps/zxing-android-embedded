@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion project.androidTargetSdk
-        versionCode 350
-        versionName "3.5.0"
+        versionCode 360
+        versionName "3.6.0"
     }
 
     def validConfig
