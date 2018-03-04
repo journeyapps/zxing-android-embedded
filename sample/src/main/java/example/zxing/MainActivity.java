@@ -59,6 +59,16 @@ public class MainActivity extends AppCompatActivity {
         integrator.initiateScan();
     }
 
+    public void scanPDF417(View view) {
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.PDF_417);
+        integrator.setPrompt("Scan something");
+        integrator.setOrientationLocked(false);
+        integrator.setBeepEnabled(false);
+        integrator.initiateScan();
+    }
+
+
     public void scanBarcodeFrontCamera(View view) {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setCameraId(Camera.CameraInfo.CAMERA_FACING_FRONT);

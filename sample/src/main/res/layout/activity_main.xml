@@ -22,6 +22,12 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Scan PDF417"
+            android:onClick="scanPDF417"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/scan_barcode_with_request_code"
             android:onClick="scanBarcodeWithCustomizedRequestCode"/>
 

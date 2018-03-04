@@ -7,12 +7,17 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,6 +40,7 @@ public class ContinuousCaptureActivity extends Activity {
 
             lastText = result.getText();
             barcodeView.setStatusText(result.getText());
+
             beepManager.playBeepSoundAndVibrate();
 
             //Added preview of scanned barcode
@@ -54,6 +60,8 @@ public class ContinuousCaptureActivity extends Activity {
         setContentView(R.layout.continuous_scan);
 
         barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
+        Collection<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE, BarcodeFormat.CODE_39);
+        barcodeView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(formats));
         barcodeView.decodeContinuous(callback);
 
         beepManager = new BeepManager(this);

@@ -48,13 +48,34 @@ public class IntentIntegrator {
 
     private static final String TAG = IntentIntegrator.class.getSimpleName();
 
+
     // supported barcode formats
-    public static final Collection<String> PRODUCT_CODE_TYPES = list("UPC_A", "UPC_E", "EAN_8", "EAN_13", "RSS_14");
+
+    // Product Codes
+    public static final String UPC_A = "UPC_A";
+    public static final String UPC_E = "UPC_E";
+    public static final String EAN_8 = "EAN_8";
+    public static final String EAN_13 = "EAN_13";
+    public static final String RSS_14 = "RSS_14";
+
+    // Other 1D
+    public static final String CODE_39 = "CODE_39";
+    public static final String CODE_93 = "CODE_93";
+    public static final String CODE_128 = "CODE_128";
+    public static final String ITF = "ITF";
+
+    public static final String RSS_EXPANDED = "RSS_EXPANDED";
+
+    // 2D
+    public static final String QR_CODE = "QR_CODE";
+    public static final String DATA_MATRIX = "DATA_MATRIX";
+    public static final String PDF_417 = "PDF_417";
+
+
+    public static final Collection<String> PRODUCT_CODE_TYPES = list(UPC_A, UPC_E, EAN_8, EAN_13, RSS_14);
     public static final Collection<String> ONE_D_CODE_TYPES =
-            list("UPC_A", "UPC_E", "EAN_8", "EAN_13", "CODE_39", "CODE_93", "CODE_128",
-                    "ITF", "RSS_14", "RSS_EXPANDED");
-    public static final Collection<String> QR_CODE_TYPES = Collections.singleton("QR_CODE");
-    public static final Collection<String> DATA_MATRIX_TYPES = Collections.singleton("DATA_MATRIX");
+            list(UPC_A, UPC_E, EAN_8, EAN_13, RSS_14, CODE_39, CODE_93, CODE_128,
+                    ITF, RSS_14, RSS_EXPANDED);
 
     public static final Collection<String> ALL_CODE_TYPES = null;
 
@@ -208,6 +229,17 @@ public class IntentIntegrator {
      */
     public IntentIntegrator setDesiredBarcodeFormats(Collection<String> desiredBarcodeFormats) {
         this.desiredBarcodeFormats = desiredBarcodeFormats;
+        return this;
+    }
+
+    /**
+     * Set the desired barcode formats to scan.
+     *
+     * @param desiredBarcodeFormats names of {@code BarcodeFormat}s to scan for
+     * @return this
+     */
+    public IntentIntegrator setDesiredBarcodeFormats(String... desiredBarcodeFormats) {
+        this.desiredBarcodeFormats = Arrays.asList(desiredBarcodeFormats);
         return this;
     }
 

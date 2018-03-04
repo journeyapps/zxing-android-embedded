@@ -20,6 +20,12 @@ public class DefaultDecoderFactory implements DecoderFactory {
     public DefaultDecoderFactory() {
     }
 
+
+
+    public DefaultDecoderFactory(Collection<BarcodeFormat> decodeFormats) {
+        this.decodeFormats = decodeFormats;
+    }
+
     public DefaultDecoderFactory(Collection<BarcodeFormat> decodeFormats, Map<DecodeHintType, ?> hints, String characterSet, int scanType) {
         this.decodeFormats = decodeFormats;
         this.hints = hints;
