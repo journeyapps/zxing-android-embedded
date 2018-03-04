@@ -34,6 +34,12 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Scan Normal and Inverted"
+            android:onClick="scanMixedBarcodes"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/any_orientation"
             android:onClick="scanBarcodeCustomLayout"/>
 
