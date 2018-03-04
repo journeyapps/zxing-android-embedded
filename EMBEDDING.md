@@ -10,9 +10,24 @@ For more control over the UI or scanning behaviour, some components may be used 
 
 These components can be used from any Activity or Fragment.
 
+This is much more low-level than using IntentIntegrator. Your code becomes responsible for:
+* Setting up the BarcodeView (doesn't have all the helpers from IntentIntegrator)*
+* Requesting permission to do the Camera.
+* Making sure only one Camera instance is active at a time.
+* Handling the scan results.
+
 Samples:
 * [ContinuousCaptureActivity][6]: continuously scan and display results (instead of a once-off scan).
 * [ToolbarCaptureActivity][8]: Same as the normal CaptureActivity, but with a Lollipop Toolbar.
+
+
+## Notes on threading
+
+For a responsive user interface, all camera operations happen on a dedicated background thread.
+In most cases this doesn't matter, but it does mean that the camera is not released immediately
+when the BarcodeView is paused. If you want to start using the camera for something else
+immediately after scanning, use `BarcodeView#pauseAndWait()` instead of `BarcodeView#pause()`.
+This will block the main thread until the camera is released.
 
 
 ## Notes on scaling
