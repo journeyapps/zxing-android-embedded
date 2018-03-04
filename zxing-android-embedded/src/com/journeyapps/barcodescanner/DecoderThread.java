@@ -125,9 +125,7 @@ public class DecoderThread {
     };
 
     private void requestNextPreview() {
-        if (cameraInstance.isOpen()) {
-            cameraInstance.requestPreview(previewCallback);
-        }
+        cameraInstance.requestPreview(previewCallback);
     }
 
     protected LuminanceSource createSource(SourceData sourceData) {
