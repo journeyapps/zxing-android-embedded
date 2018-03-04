@@ -2,6 +2,8 @@
 
 * Minimum SDK version 14.
 * Use zxing:core 3.3.1 by default (#360).
+* Fix preview race condition (#324).
+* Request code can now specified per Intent, instead of globally (#287).
 
 ### 3.5.0 (2017-03-20)
 

@@ -45,7 +45,6 @@ import java.util.Map;
 public class IntentIntegrator {
 
     public static final int REQUEST_CODE = 0x0000c0de; // Only use bottom 16 bits
-    private static int requestCodeValue;
 
     private static final String TAG = IntentIntegrator.class.getSimpleName();
 
@@ -69,24 +68,14 @@ public class IntentIntegrator {
 
     private Class<?> captureActivity;
 
+    private int requestCode = REQUEST_CODE;
+
     protected Class<?> getDefaultCaptureActivity() {
         return CaptureActivity.class;
-    }
-    /**
-     * @param activity {@link Activity} invoking the integration
-     */
-    public IntentIntegrator(Activity activity, int request_code) {
-        this.activity = activity;
-        if (request_code > 0 && request_code <= 0x0000ffff) {
-            requestCodeValue = request_code;
-        } else {
-            requestCodeValue = REQUEST_CODE;
-        }
     }
 
     public IntentIntegrator(Activity activity) {
         this.activity = activity;
-        requestCodeValue = REQUEST_CODE;
     }
 
     public Class<?> getCaptureActivity() {
@@ -104,6 +93,21 @@ public class IntentIntegrator {
      */
     public IntentIntegrator setCaptureActivity(Class<?> captureActivity) {
         this.captureActivity = captureActivity;
+        return this;
+    }
+
+    /**
+     * Change the request code that is used for the Intent. If it is changed, it is the caller's
+     * responsibility to check the request code from the result intent.
+     *
+     * @param requestCode the new request code
+     * @return this
+     */
+    public IntentIntegrator setRequestCode(int requestCode) {
+        if (requestCode <= 0 || requestCode > 0x0000ffff) {
+            throw new IllegalArgumentException("requestCode out of range");
+        }
+        this.requestCode = requestCode;
         return this;
     }
 
@@ -211,7 +215,7 @@ public class IntentIntegrator {
      * Initiates a scan for all known barcode types with the default camera.
      */
     public final void initiateScan() {
-        startActivityForResult(createScanIntent(), requestCodeValue);
+        startActivityForResult(createScanIntent(), requestCode);
     }
 
     /**
@@ -297,6 +301,8 @@ public class IntentIntegrator {
      * <p>Call this from your {@link Activity}'s
      * {@link Activity#onActivityResult(int, int, Intent)} method.</p>
      *
+     * This checks that the requestCode is equal to the default REQUEST_CODE.
+     *
      * @param requestCode request code from {@code onActivityResult()}
      * @param resultCode  result code from {@code onActivityResult()}
      * @param intent      {@link Intent} from {@code onActivityResult()}
@@ -305,25 +311,37 @@ public class IntentIntegrator {
      * the fields will be null.
      */
     public static IntentResult parseActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == requestCodeValue) {
-            if (resultCode == Activity.RESULT_OK) {
-                String contents = intent.getStringExtra(Intents.Scan.RESULT);
-                String formatName = intent.getStringExtra(Intents.Scan.RESULT_FORMAT);
-                byte[] rawBytes = intent.getByteArrayExtra(Intents.Scan.RESULT_BYTES);
-                int intentOrientation = intent.getIntExtra(Intents.Scan.RESULT_ORIENTATION, Integer.MIN_VALUE);
-                Integer orientation = intentOrientation == Integer.MIN_VALUE ? null : intentOrientation;
-                String errorCorrectionLevel = intent.getStringExtra(Intents.Scan.RESULT_ERROR_CORRECTION_LEVEL);
-                String barcodeImagePath = intent.getStringExtra(Intents.Scan.RESULT_BARCODE_IMAGE_PATH);
-                return new IntentResult(contents,
-                        formatName,
-                        rawBytes,
-                        orientation,
-                        errorCorrectionLevel,
-                        barcodeImagePath);
-            }
-            return new IntentResult();
+        if (requestCode == REQUEST_CODE) {
+            return parseActivityResult(resultCode, intent);
         }
         return null;
+    }
+
+    /**
+     * Parse activity result, without checking the request code.
+     *
+     * @param resultCode  result code from {@code onActivityResult()}
+     * @param intent      {@link Intent} from {@code onActivityResult()}
+     * @return an {@link IntentResult} containing the result of the scan. If the user cancelled scanning,
+     * the fields will be null.
+     */
+    public static IntentResult parseActivityResult(int resultCode, Intent intent) {
+        if (resultCode == Activity.RESULT_OK) {
+            String contents = intent.getStringExtra(Intents.Scan.RESULT);
+            String formatName = intent.getStringExtra(Intents.Scan.RESULT_FORMAT);
+            byte[] rawBytes = intent.getByteArrayExtra(Intents.Scan.RESULT_BYTES);
+            int intentOrientation = intent.getIntExtra(Intents.Scan.RESULT_ORIENTATION, Integer.MIN_VALUE);
+            Integer orientation = intentOrientation == Integer.MIN_VALUE ? null : intentOrientation;
+            String errorCorrectionLevel = intent.getStringExtra(Intents.Scan.RESULT_ERROR_CORRECTION_LEVEL);
+            String barcodeImagePath = intent.getStringExtra(Intents.Scan.RESULT_BARCODE_IMAGE_PATH);
+            return new IntentResult(contents,
+                    formatName,
+                    rawBytes,
+                    orientation,
+                    errorCorrectionLevel,
+                    barcodeImagePath);
+        }
+        return new IntentResult();
     }
 
     private static List<String> list(String... values) {

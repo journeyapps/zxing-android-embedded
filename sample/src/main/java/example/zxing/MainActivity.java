@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void scanBarcodeWithCustomizedRequestCode(View view) {
-        new IntentIntegrator(this, CUSTOMIZED_REQUEST_CODE).initiateScan();
+        new IntentIntegrator(this).setRequestCode(CUSTOMIZED_REQUEST_CODE).initiateScan();
     }
 
     public void scanBarcodeInverted(View view){
@@ -92,30 +92,28 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (requestCode != CUSTOMIZED_REQUEST_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
+            // This is important, otherwise the result will not be passed to the fragment
+            super.onActivityResult(requestCode, resultCode, data);
+            return;
+        }
         switch (requestCode) {
             case CUSTOMIZED_REQUEST_CODE: {
                 Toast.makeText(this, "REQUEST_CODE = " + requestCode, Toast.LENGTH_LONG).show();
                 break;
             }
-            case IntentIntegrator.REQUEST_CODE: {
-                Toast.makeText(this, "IntentIntegrator default REQUEST_CODE = " + requestCode, Toast.LENGTH_LONG).show();
-                break;
-            }
             default:
                 break;
         }
-        if(result != null) {
-            if(result.getContents() == null) {
-                Log.d("MainActivity", "Cancelled scan");
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-            } else {
-                Log.d("MainActivity", "Scanned");
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-            }
+
+        IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
+
+        if(result.getContents() == null) {
+            Log.d("MainActivity", "Cancelled scan");
+            Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
         } else {
-            // This is important, otherwise the result will not be passed to the fragment
-            super.onActivityResult(requestCode, resultCode, data);
+            Log.d("MainActivity", "Scanned");
+            Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
         }
     }
 
