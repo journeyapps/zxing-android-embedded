@@ -477,6 +477,22 @@ public final class CameraManager {
     }
 
     /**
+     * Changes the settings for Camera.
+     *
+     * @param callback {@link CameraParametersCallback}
+     */
+    public void changeCameraParameters(CameraParametersCallback callback) {
+        if (camera != null) {
+            try {
+                camera.setParameters(callback.changeCameraParameters(camera.getParameters()));
+            } catch(RuntimeException e) {
+                // Camera error. Could happen if the camera is being closed.
+                Log.e(TAG, "Failed to change camera parameters", e);
+            }
+        }
+    }
+
+    /**
      *
      * @return true if the torch is on
      * @throws RuntimeException if there is a camera error
