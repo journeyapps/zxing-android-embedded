@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
@@ -77,13 +78,16 @@ public final class BeepManager {
         this.vibrateEnabled = vibrateEnabled;
     }
 
+    @SuppressLint("MissingPermission")
     public synchronized void playBeepSoundAndVibrate() {
         if (beepEnabled) {
             playBeepSound();
         }
         if (vibrateEnabled) {
             Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-            vibrator.vibrate(VIBRATE_DURATION);
+            if (vibrator != null) {
+                vibrator.vibrate(VIBRATE_DURATION);
+            }
         }
     }
 
