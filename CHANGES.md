@@ -1,3 +1,8 @@
+### 3.6.0 (2018-?)
+
+* Minimum SDK version 14.
+* Use zxing:core 3.3.1 by default (#360).
+
 ### 3.5.0 (2017-03-20)
 
 * Allow changing the REQUEST_CODE value (#234).

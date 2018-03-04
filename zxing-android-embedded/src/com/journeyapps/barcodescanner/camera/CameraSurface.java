@@ -42,12 +42,7 @@ public class CameraSurface {
         if(surfaceHolder != null) {
             camera.setPreviewDisplay(surfaceHolder);
         } else {
-            if(Build.VERSION.SDK_INT >= 11) {
-                camera.setPreviewTexture(surfaceTexture);
-            } else {
-                // This should not happen, but we check for it anyway.
-                throw new IllegalStateException("SurfaceTexture not supported.");
-            }
+            camera.setPreviewTexture(surfaceTexture);
         }
     }
 }

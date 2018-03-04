@@ -302,18 +302,13 @@ public class CameraPreview extends ViewGroup {
         }
     }
 
-    @SuppressWarnings("deprecation")
-    @SuppressLint("NewAPI")
     private void setupSurfaceView() {
-        if(useTextureView && Build.VERSION.SDK_INT >= 14) {
+        if(useTextureView) {
             textureView = new TextureView(getContext());
             textureView.setSurfaceTextureListener(surfaceTextureListener());
             addView(textureView);
         } else {
             surfaceView = new SurfaceView(getContext());
-            if (Build.VERSION.SDK_INT < 11) {
-                surfaceView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-            }
             surfaceView.getHolder().addCallback(surfaceCallback);
             addView(surfaceView);
         }
@@ -523,7 +518,7 @@ public class CameraPreview extends ViewGroup {
         if (currentSurfaceSize != null && previewSize != null && surfaceRect != null) {
             if (surfaceView != null && currentSurfaceSize.equals(new Size(surfaceRect.width(), surfaceRect.height()))) {
                 startCameraPreview(new CameraSurface(surfaceView.getHolder()));
-            } else if(textureView != null && Build.VERSION.SDK_INT >= 14 && textureView.getSurfaceTexture() != null) {
+            } else if(textureView != null && textureView.getSurfaceTexture() != null) {
                 if(previewSize != null) {
                     Matrix transform = calculateTextureTransform(new Size(textureView.getWidth(), textureView.getHeight()), previewSize);
                     textureView.setTransform(transform);
@@ -549,7 +544,7 @@ public class CameraPreview extends ViewGroup {
             } else {
                 surfaceView.layout(surfaceRect.left, surfaceRect.top, surfaceRect.right, surfaceRect.bottom);
             }
-        } else if(textureView != null && Build.VERSION.SDK_INT >= 14) {
+        } else if(textureView != null) {
             textureView.layout(0, 0, getWidth(), getHeight());
         }
     }
@@ -618,7 +613,7 @@ public class CameraPreview extends ViewGroup {
         } else if(surfaceView != null) {
             // Install the callback and wait for surfaceCreated() to init the camera.
             surfaceView.getHolder().addCallback(surfaceCallback);
-        } else if(textureView != null && Build.VERSION.SDK_INT >= 14) {
+        } else if(textureView != null) {
             if(textureView.isAvailable()) {
                 surfaceTextureListener().onSurfaceTextureAvailable(textureView.getSurfaceTexture(), textureView.getWidth(), textureView.getHeight());
             } else {
@@ -654,7 +649,7 @@ public class CameraPreview extends ViewGroup {
             SurfaceHolder surfaceHolder = surfaceView.getHolder();
             surfaceHolder.removeCallback(surfaceCallback);
         }
-        if(currentSurfaceSize == null && textureView != null && Build.VERSION.SDK_INT >= 14) {
+        if(currentSurfaceSize == null && textureView != null) {
             textureView.setSurfaceTextureListener(null);
         }
 

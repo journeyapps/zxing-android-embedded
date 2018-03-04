@@ -263,9 +263,7 @@ public class IntentIntegrator {
      */
     protected void startActivityForResult(Intent intent, int code) {
         if (fragment != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                fragment.startActivityForResult(intent, code);
-            }
+            fragment.startActivityForResult(intent, code);
         } else if (supportFragment != null) {
             supportFragment.startActivityForResult(intent, code);
         } else {
@@ -275,9 +273,7 @@ public class IntentIntegrator {
 
     protected void startActivity(Intent intent) {
         if (fragment != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                fragment.startActivity(intent);
-            }
+            fragment.startActivity(intent);
         } else if (supportFragment != null) {
             supportFragment.startActivity(intent);
         } else {
