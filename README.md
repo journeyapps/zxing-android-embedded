@@ -58,6 +58,16 @@ android {
 
 ```
 
+## Hardware Acceleration
+
+Hardware accelation is required since TextureView is used.
+
+Make sure it is enabled in your manifest file:
+
+```xml
+    <application android:hardwareAccelerated="true" ... >
+```
+
 ## Usage with IntentIntegrator
 
 Launch the intent with the default options:
