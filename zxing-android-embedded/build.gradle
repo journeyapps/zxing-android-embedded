@@ -6,12 +6,12 @@ apply plugin: 'com.jfrog.bintray'
 ext.artifactId = 'zxing-android-embedded'
 
 dependencies {
-    compile project.zxingCore
+    implementation project.zxingCore
 
-    compile 'com.android.support:support-v4:25.3.1'
+    implementation 'com.android.support:support-v4:27.1.1'
 
-    testCompile 'junit:junit:4.12'
-    testCompile "org.mockito:mockito-core:1.9.5"
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.mockito:mockito-core:1.9.5"
 }
 
 android {
