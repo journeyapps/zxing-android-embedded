@@ -89,6 +89,13 @@ public final class Intents {
         public static final String CAMERA_ID = "SCAN_CAMERA_ID";
 
         /**
+         * Optional parameter to switch the torch on at camera startup.
+         * Enables the torch on camera startup
+         * If provided, should be a boolean.
+         */
+        public static final String TORCH_ENABLED = "TORCH_ENABLED";
+
+        /**
          * @see com.google.zxing.DecodeHintType#CHARACTER_SET
          */
         public static final String CHARACTER_SET = "CHARACTER_SET";

@@ -200,6 +200,18 @@ public class IntentIntegrator {
     }
 
     /**
+     * Set to true to enable initial torch
+     *
+     * @param enabled true to enable initial torch
+     * @return this
+     */
+    public IntentIntegrator setTorchEnabled(boolean enabled) {
+        addExtra(Intents.Scan.TORCH_ENABLED, enabled);
+        return this;
+    }
+
+
+    /**
      * Set to false to disable beep on scan.
      *
      * @param enabled false to disable beep
