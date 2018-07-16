@@ -29,8 +29,8 @@ repositories {
 }
 
 dependencies {
-    compile 'com.journeyapps:zxing-android-embedded:3.6.0'
-    compile 'com.android.support:appcompat-v7:25.3.1'   // Minimum 23+ is required
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
+    implementation 'com.android.support:appcompat-v7:25.3.1'   // Minimum 23+ is required
 }
 
 android {
@@ -47,9 +47,9 @@ repositories {
 }
 
 dependencies {
-    compile('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
-    compile 'com.android.support:appcompat-v7:25.3.1'   // Version 23+ is required
-    compile 'com.google.zxing:core:3.3.0'
+    implementation('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
+    implementation 'com.android.support:appcompat-v7:25.3.1'   // Version 23+ is required
+    implementation 'com.google.zxing:core:3.3.0'
 }
 
 android {
