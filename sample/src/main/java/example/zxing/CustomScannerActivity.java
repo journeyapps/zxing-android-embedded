@@ -2,6 +2,7 @@ package example.zxing;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -9,6 +10,9 @@ import android.widget.Button;
 
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.ViewfinderView;
+
+import java.util.Random;
 
 /**
  * Custom Scannner Activity extending from Activity to display a custom layout form scanner view.
@@ -19,6 +23,7 @@ public class CustomScannerActivity extends Activity implements
     private CaptureManager capture;
     private DecoratedBarcodeView barcodeScannerView;
     private Button switchFlashlightButton;
+    private ViewfinderView viewfinderView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +34,8 @@ public class CustomScannerActivity extends Activity implements
         barcodeScannerView.setTorchListener(this);
 
         switchFlashlightButton = (Button)findViewById(R.id.switch_flashlight);
+
+        viewfinderView = (ViewfinderView) findViewById(R.id.zxing_viewfinder_view);
 
         // if the device does not have flashlight in its camera,
         // then remove the switch flashlight button...
@@ -85,6 +92,12 @@ public class CustomScannerActivity extends Activity implements
         } else {
             barcodeScannerView.setTorchOff();
         }
+    }
+
+    public void changeMaskColor(View view) {
+        Random rnd = new Random();
+        int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+        viewfinderView.setMaskColor(color);
     }
 
     @Override
