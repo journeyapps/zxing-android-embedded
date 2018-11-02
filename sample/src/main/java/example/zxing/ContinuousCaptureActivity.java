@@ -61,6 +61,7 @@ public class ContinuousCaptureActivity extends Activity {
         barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
         Collection<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE, BarcodeFormat.CODE_39);
         barcodeView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(formats));
+        barcodeView.initializeFromIntent(getIntent());
         barcodeView.decodeContinuous(callback);
 
         beepManager = new BeepManager(this);
