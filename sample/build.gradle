@@ -65,4 +65,8 @@ dependencies {
     implementation 'com.android.support:support-v13:27.1.1'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+
+    // AboutLibraries
+    implementation "com.mikepenz:aboutlibraries:6.1.1"
+
 }
