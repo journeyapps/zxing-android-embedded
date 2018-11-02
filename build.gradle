@@ -1,17 +1,18 @@
 buildscript {
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.2.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
     }
 }
 
 subprojects {
     repositories {
+        google()
         jcenter()
         mavenLocal()
     }
@@ -19,7 +20,7 @@ subprojects {
     version = '3.6.0'
     group = 'com.journeyapps'
 
-    ext.androidBuildTools = '27.0.3'
+    ext.androidBuildTools = '28.0.3'
     ext.androidTargetSdk = 27
     ext.zxingCore = 'com.google.zxing:core:3.3.2'
 }
