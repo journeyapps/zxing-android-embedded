@@ -50,7 +50,7 @@ public class ViewfinderView extends View {
 
     protected final Paint paint;
     protected Bitmap resultBitmap;
-    protected final int maskColor;
+    protected int maskColor;
     protected final int resultColor;
     protected final int laserColor;
     protected final int resultPointColor;
@@ -245,5 +245,10 @@ public class ViewfinderView extends View {
     public void addPossibleResultPoint(ResultPoint point) {
         if (possibleResultPoints.size() < MAX_RESULT_POINTS)
             possibleResultPoints.add(point);
+    }
+
+    public void setMaskColor(int maskColor) {
+        this.maskColor = maskColor;
+        paint.setColor(resultBitmap != null ? resultColor : maskColor);
     }
 }
