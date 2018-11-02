@@ -2,7 +2,7 @@ package com.journeyapps.barcodescanner;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.KeyEvent;
 
 import com.google.zxing.client.android.R;
