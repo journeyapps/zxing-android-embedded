@@ -46,6 +46,8 @@ public class CustomScannerActivity extends Activity implements
         capture = new CaptureManager(this, barcodeScannerView);
         capture.initializeFromIntent(getIntent(), savedInstanceState);
         capture.decode();
+
+        changeMaskColor(null);
     }
 
     @Override
@@ -96,7 +98,7 @@ public class CustomScannerActivity extends Activity implements
 
     public void changeMaskColor(View view) {
         Random rnd = new Random();
-        int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+        int color = Color.argb(100, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
         viewfinderView.setMaskColor(color);
     }
 

@@ -249,6 +249,5 @@ public class ViewfinderView extends View {
 
     public void setMaskColor(int maskColor) {
         this.maskColor = maskColor;
-        paint.setColor(resultBitmap != null ? resultColor : maskColor);
     }
 }
