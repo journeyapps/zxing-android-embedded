@@ -48,6 +48,16 @@ android {
     defaultConfig {
         minSdkVersion 14
     }
+
+    buildTypes {
+        debug {
+            versionNameSuffix ".debug"
+            resValue "string", "app_version", "${defaultConfig.versionName}${versionNameSuffix}"
+        }
+        release {
+            resValue "string", "app_version", "${defaultConfig.versionName}"
+        }
+    }
 }
 
 task sourceJar(type: Jar) {

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.mikepenz.aboutlibraries.LibsBuilder;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -102,6 +103,10 @@ public class MainActivity extends AppCompatActivity {
     public void tabs(View view) {
         Intent intent = new Intent(this, TabbedScanning.class);
         startActivity(intent);
+    }
+
+    public void about(View view) {
+        new LibsBuilder().start(this);
     }
 
     @Override

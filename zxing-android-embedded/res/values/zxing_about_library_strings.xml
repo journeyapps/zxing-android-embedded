@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ResourceName" >
+    <string name="define_zxingandroidembedded" translatable="false" />
+    <!-- Author section -->
+    <string name="library_zxingandroidembedded_author" translatable="false">JourneyApps</string>
+    <string name="library_zxingandroidembedded_authorWebsite" translatable="false">https://journeyapps.com/</string>
+    <!-- Library section -->
+    <string name="library_zxingandroidembedded_libraryName" translatable="false">ZXing Android Embedded</string>
+    <string name="library_zxingandroidembedded_libraryDescription" translatable="false">Barcode scanning library for Android, using ZXing for decoding.</string>
+    <string name="library_zxingandroidembedded_libraryWebsite" translatable="false">https://github.com/journeyapps/zxing-android-embedded</string>
+    <string name="library_zxingandroidembedded_libraryVersion" translatable="false" />
+    <!-- OpenSource section -->
+    <string name="library_zxingandroidembedded_isOpenSource" translatable="false">true</string>
+    <string name="library_zxingandroidembedded_repositoryLink" translatable="false">https://github.com/journeyapps/zxing-android-embedded</string>
+    <!-- License section -->
+    <string name="library_zxingandroidembedded_licenseId" translatable="false">apache_2_0</string>
+    <!-- Custom variables section -->
+</resources>
+

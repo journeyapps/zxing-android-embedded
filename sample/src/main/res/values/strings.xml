@@ -16,5 +16,6 @@
     <string name="turn_off_flashlight">Turn off Flashlight</string>
     <string name="title_activity_tabbed_scanning">Tabbed Scanning</string>
     <string name="tabs">Tabs</string>
+    <string name="about">About</string>
 
 </resources>
