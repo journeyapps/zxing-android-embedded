@@ -51,6 +51,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 
@@ -58,15 +62,12 @@ dependencies {
     // If you use this from an external project, use the following instead:
     //   compile 'com.journeyapps:zxing-android-embedded:<version>'
     implementation project(':zxing-android-embedded')
-
     // leakcanary is for development purposes only
     // https://github.com/square/leakcanary
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:support-v13:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-
     // AboutLibraries
-    implementation "com.mikepenz:aboutlibraries:6.2.3"
-
+    implementation 'com.mikepenz:aboutlibraries:6.2.3'
 }
