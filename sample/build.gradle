@@ -67,6 +67,6 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 
     // AboutLibraries
-    implementation "com.mikepenz:aboutlibraries:6.1.1"
+    implementation "com.mikepenz:aboutlibraries:6.2.3"
 
 }
