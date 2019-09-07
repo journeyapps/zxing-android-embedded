@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
-
-    <string name="app_name">ZXing Sample</string>
-    <string name="scan_barcode">Scan Barcode</string>
-    <string name="custom_options">Custom Options</string>
-    <string name="scan_from_fragment">Scan from fragment</string>
-
-</resources>
