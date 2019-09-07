@@ -65,12 +65,11 @@ task sourceJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
 }
 
-publishing {
-    publications {
-        // We need this check to cover Android Studio gradle sync
-        if(project.tasks.findByPath('bundleRelease') != null) {
+project.afterEvaluate {
+    publishing {
+        publications {
             maven(MavenPublication) {
-                artifact bundleRelease
+                artifact bundleReleaseAar
                 artifactId project.artifactId
 
                 artifact sourceJar
@@ -81,16 +80,15 @@ publishing {
                     // remove this section.
                     def deps = asNode().appendNode('dependencies')
 
-                    project.configurations.compile.allDependencies.each { dep ->
+                    project.configurations.api.allDependencies.each { dep ->
                         def node = deps.appendNode('dependency')
                         node.appendNode('groupId', dep.group)
                         node.appendNode('artifactId', dep.name)
                         node.appendNode('version', dep.version)
-                        node.appendNode('scope', 'compile')
+                        node.appendNode('scope', 'api')
                     }
 
                 }
-
             }
         }
     }
