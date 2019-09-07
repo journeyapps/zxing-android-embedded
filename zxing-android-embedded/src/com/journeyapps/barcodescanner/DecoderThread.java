@@ -164,8 +164,8 @@ public class DecoderThread {
             }
         }
         if (resultHandler != null) {
-            List<ResultPoint> resultPoints = decoder.getPossibleResultPoints();
-            Message message = Message.obtain(resultHandler, R.id.zxing_possible_result_points, resultPoints);
+            List<ResultPoint> resultPoints = BarcodeResult.transformResultPoints(decoder.getPossibleResultPoints(), sourceData);
+                    Message message = Message.obtain(resultHandler, R.id.zxing_possible_result_points, resultPoints);
             message.sendToTarget();
         }
         requestNextPreview();

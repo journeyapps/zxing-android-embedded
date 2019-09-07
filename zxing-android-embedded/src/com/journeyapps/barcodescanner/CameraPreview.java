@@ -197,6 +197,8 @@ public class CameraPreview extends ViewGroup {
         @Override
         public boolean handleMessage(Message message) {
             if (message.what == R.id.zxing_prewiew_size_ready) {
+                // At this point, we have the camera preview size, and should have containerSize and
+                // surfaceRect.
                 previewSized((Size) message.obj);
                 return true;
             } else if (message.what == R.id.zxing_camera_error) {
@@ -375,7 +377,13 @@ public class CameraPreview extends ViewGroup {
         int width = containerSize.width;
         int height = containerSize.height;
 
-        surfaceRect = displayConfiguration.scalePreview(previewSize);
+        Rect scaledPreview = displayConfiguration.scalePreview(previewSize);
+        if (scaledPreview.width() <= 0 || scaledPreview.height() <= 0) {
+            // Something is not ready yet - we can't start the preview.
+            return;
+        }
+
+        surfaceRect = scaledPreview;
 
         Rect container = new Rect(0, 0, width, height);
         framingRect = calculateFramingRect(container, surfaceRect);
@@ -386,16 +394,6 @@ public class CameraPreview extends ViewGroup {
                 frameInPreview.top * previewHeight / surfaceRect.height(),
                 frameInPreview.right * previewWidth / surfaceRect.width(),
                 frameInPreview.bottom * previewHeight / surfaceRect.height());
-
-        if (surfaceRect.width() != 0 && surfaceRect.height() != 0) {
-            previewFramingRect = new Rect(frameInPreview.left * previewWidth / surfaceRect.width(),
-                    frameInPreview.top * previewHeight / surfaceRect.height(),
-                    frameInPreview.right * previewWidth / surfaceRect.width(),
-                    frameInPreview.bottom * previewHeight / surfaceRect.height());
-
-        } else {
-            previewFramingRect = null;
-        }
 
         if (previewFramingRect == null || previewFramingRect.width() <= 0 || previewFramingRect.height() <= 0) {
             previewFramingRect = null;
@@ -581,6 +579,10 @@ public class CameraPreview extends ViewGroup {
      */
     public Rect getPreviewFramingRect() {
         return previewFramingRect;
+    }
+
+    public Size getPreviewSize() {
+        return previewSize;
     }
 
     /**

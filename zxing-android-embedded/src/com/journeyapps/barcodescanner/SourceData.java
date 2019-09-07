@@ -2,12 +2,12 @@ package com.journeyapps.barcodescanner;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
 
 import com.google.zxing.PlanarYUVLuminanceSource;
+import com.google.zxing.ResultPoint;
 
 import java.io.ByteArrayOutputStream;
 
@@ -15,14 +15,7 @@ import java.io.ByteArrayOutputStream;
  * Raw preview data from a camera.
  */
 public class SourceData {
-    /** Raw YUV data */
-    private byte[] data;
-
-    /** Source data width */
-    private int dataWidth;
-
-    /** Source data height */
-    private int dataHeight;
+    private RawImageData data;
 
     /** The format of the image data. ImageFormat.NV21 and ImageFormat.YUY2 are supported. */
     private int imageFormat;
@@ -34,6 +27,13 @@ public class SourceData {
     private Rect cropRect;
 
     /**
+     * Factor by which to scale down before decoding.
+     */
+    private int scalingFactor = 1;
+
+    private boolean previewMirrored;
+
+    /**
      *
      * @param data the image data
      * @param dataWidth width of the data
@@ -42,15 +42,12 @@ public class SourceData {
      * @param rotation camera rotation relative to display rotation, in degrees (0, 90, 180 or 270).
      */
     public SourceData(byte[] data, int dataWidth, int dataHeight, int imageFormat, int rotation) {
-        this.data = data;
-        this.dataWidth = dataWidth;
-        this.dataHeight = dataHeight;
+        this.data = new RawImageData(data, dataWidth, dataHeight);
         this.rotation = rotation;
         this.imageFormat = imageFormat;
         if(dataWidth * dataHeight > data.length) {
             throw new IllegalArgumentException("Image data does not match the resolution. " + dataWidth + "x" + dataHeight + " > " + data.length);
         }
-
     }
 
     public Rect getCropRect() {
@@ -66,8 +63,24 @@ public class SourceData {
         this.cropRect = cropRect;
     }
 
+    public boolean isPreviewMirrored() {
+        return previewMirrored;
+    }
+
+    public void setPreviewMirrored(boolean previewMirrored) {
+        this.previewMirrored = previewMirrored;
+    }
+
+    public int getScalingFactor() {
+        return scalingFactor;
+    }
+
+    public void setScalingFactor(int scalingFactor) {
+        this.scalingFactor = scalingFactor;
+    }
+
     public byte[] getData() {
-        return data;
+        return data.getData();
     }
 
     /**
@@ -75,7 +88,7 @@ public class SourceData {
      * @return width of the data
      */
     public int getDataWidth() {
-        return dataWidth;
+        return data.getWidth();
     }
 
     /**
@@ -83,7 +96,16 @@ public class SourceData {
      * @return height of the data
      */
     public int getDataHeight() {
-        return dataHeight;
+        return data.getHeight();
+    }
+
+    public ResultPoint translateResultPoint(ResultPoint point) {
+        float x = point.getX() * this.scalingFactor + this.cropRect.left;
+        float y = point.getY() * this.scalingFactor + this.cropRect.top;
+        if (previewMirrored) {
+            x = data.getWidth() - x;
+        }
+        return new ResultPoint(x, y);
     }
 
     /**
@@ -99,15 +121,11 @@ public class SourceData {
     }
 
     public PlanarYUVLuminanceSource createSource() {
-        byte[] rotated = rotateCameraPreview(rotation, data, dataWidth, dataHeight);
-        // TODO: handle mirrored (front) camera. Probably only the ResultPoints should be mirrored,
+        RawImageData rotated = this.data.rotateCameraPreview(rotation);
+        RawImageData scaled = rotated.cropAndScale(this.cropRect, this.scalingFactor);
+
         // not the preview for decoding.
-        if (isRotated()) {
-            //noinspection SuspiciousNameCombination
-            return new PlanarYUVLuminanceSource(rotated, dataHeight, dataWidth, cropRect.left, cropRect.top, cropRect.width(), cropRect.height(), false);
-        } else {
-            return new PlanarYUVLuminanceSource(rotated, dataWidth, dataHeight, cropRect.left, cropRect.top, cropRect.width(), cropRect.height(), false);
-        }
+        return new PlanarYUVLuminanceSource(scaled.getData(), scaled.getWidth(), scaled.getHeight(), 0, 0, scaled.getWidth(), scaled.getHeight(), false);
     }
 
     /**
@@ -129,14 +147,16 @@ public class SourceData {
         return getBitmap(cropRect, scaleFactor);
     }
 
-    private Bitmap getBitmap(Rect cropRect, int scaleFactor) {
-        if(isRotated()) {
+    public Bitmap getBitmap(Rect cropRect, int scaleFactor) {
+        if (cropRect == null) {
+            cropRect = new Rect(0, 0, data.getWidth(), data.getHeight());
+        } else if(isRotated()) {
             //noinspection SuspiciousNameCombination
             cropRect = new Rect(cropRect.top, cropRect.left, cropRect.bottom, cropRect.right);
         }
 
         // TODO: there should be a way to do this without JPEG compression / decompression cycle.
-        YuvImage img = new YuvImage(data, imageFormat, dataWidth, dataHeight, null);
+        YuvImage img = new YuvImage(data.getData(), imageFormat, data.getWidth(), data.getHeight(), null);
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         img.compressToJpeg(cropRect, 90, buffer);
         byte[] jpegData = buffer.toByteArray();
@@ -155,83 +175,4 @@ public class SourceData {
         return bitmap;
     }
 
-    public static byte[] rotateCameraPreview(int cameraRotation, byte[] data, int imageWidth, int imageHeight) {
-        switch (cameraRotation) {
-            case 0:
-                return data;
-            case 90:
-                return rotateCW(data, imageWidth, imageHeight);
-            case 180:
-                return rotate180(data, imageWidth, imageHeight);
-            case 270:
-                return rotateCCW(data, imageWidth, imageHeight);
-            default:
-                // Should not happen
-                return data;
-        }
-    }
-
-    /**
-     * Rotate an image by 90 degrees CW.
-     *
-     * @param data        the image data, in with the first width * height bytes being the luminance data.
-     * @param imageWidth  the width of the image
-     * @param imageHeight the height of the image
-     * @return the rotated bytes
-     */
-    public static byte[] rotateCW(byte[] data, int imageWidth, int imageHeight) {
-        // Adapted from http://stackoverflow.com/a/15775173
-        // data may contain more than just y (u and v), but we are only interested in the y section.
-
-        byte[] yuv = new byte[imageWidth * imageHeight];
-        int i = 0;
-        for (int x = 0; x < imageWidth; x++) {
-            for (int y = imageHeight - 1; y >= 0; y--) {
-                yuv[i] = data[y * imageWidth + x];
-                i++;
-            }
-        }
-        return yuv;
-    }
-
-    /**
-     * Rotate an image by 180 degrees.
-     *
-     * @param data        the image data, in with the first width * height bytes being the luminance data.
-     * @param imageWidth  the width of the image
-     * @param imageHeight the height of the image
-     * @return the rotated bytes
-     */
-    public static byte[] rotate180(byte[] data, int imageWidth, int imageHeight) {
-        int n = imageWidth * imageHeight;
-        byte[] yuv = new byte[n];
-
-        int i = n - 1;
-        for (int j = 0; j < n; j++) {
-            yuv[i] = data[j];
-            i--;
-        }
-        return yuv;
-    }
-
-    /**
-     * Rotate an image by 90 degrees CCW.
-     *
-     * @param data        the image data, in with the first width * height bytes being the luminance data.
-     * @param imageWidth  the width of the image
-     * @param imageHeight the height of the image
-     * @return the rotated bytes
-     */
-    public static byte[] rotateCCW(byte[] data, int imageWidth, int imageHeight) {
-        int n = imageWidth * imageHeight;
-        byte[] yuv = new byte[n];
-        int i = n - 1;
-        for (int x = 0; x < imageWidth; x++) {
-            for (int y = imageHeight - 1; y >= 0; y--) {
-                yuv[i] = data[y * imageWidth + x];
-                i--;
-            }
-        }
-        return yuv;
-    }
 }
