@@ -10,6 +10,10 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,7 +58,14 @@ public class BarcodeResult {
      * @see #getBitmapWithResultPoints(int)
      */
     public Bitmap getBitmap() {
-        return sourceData.getBitmap(mScaleFactor);
+        return sourceData.getBitmap(null, mScaleFactor);
+    }
+
+    public List<ResultPoint> getTransformedResultPoints() {
+        if (this.mResult.getResultPoints() == null) {
+            return Collections.emptyList();
+        }
+        return transformResultPoints(Arrays.asList(this.mResult.getResultPoints()), this.sourceData);
     }
 
     /**
@@ -64,23 +75,23 @@ public class BarcodeResult {
     public Bitmap getBitmapWithResultPoints(int color) {
         Bitmap bitmap = getBitmap();
         Bitmap barcode = bitmap;
-        ResultPoint[] points = mResult.getResultPoints();
+        List<ResultPoint> points = getTransformedResultPoints();
 
-        if (points != null && points.length > 0 && bitmap != null) {
+        if (!points.isEmpty() && bitmap != null) {
             barcode = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(barcode);
             canvas.drawBitmap(bitmap, 0, 0, null);
             Paint paint = new Paint();
             paint.setColor(color);
-            if (points.length == 2) {
+            if (points.size() == 2) {
                 paint.setStrokeWidth(PREVIEW_LINE_WIDTH);
-                drawLine(canvas, paint, points[0], points[1], mScaleFactor);
-            } else if (points.length == 4 &&
+                drawLine(canvas, paint, points.get(0), points.get(1), mScaleFactor);
+            } else if (points.size() == 4 &&
                     (mResult.getBarcodeFormat() == BarcodeFormat.UPC_A ||
                             mResult.getBarcodeFormat() == BarcodeFormat.EAN_13)) {
                 // Hacky special case -- draw two lines, for the barcode and metadata
-                drawLine(canvas, paint, points[0], points[1], mScaleFactor);
-                drawLine(canvas, paint, points[2], points[3], mScaleFactor);
+                drawLine(canvas, paint, points.get(0), points.get(1), mScaleFactor);
+                drawLine(canvas, paint, points.get(2), points.get(3), mScaleFactor);
             } else {
                 paint.setStrokeWidth(PREVIEW_DOT_WIDTH);
                 for (ResultPoint point : points) {
@@ -152,5 +163,14 @@ public class BarcodeResult {
     @Override
     public String toString() {
         return mResult.getText();
+    }
+
+
+    public static List<ResultPoint> transformResultPoints(List<ResultPoint> resultPoints, SourceData sourceData) {
+        List<ResultPoint> scaledPoints = new ArrayList<>(resultPoints.size());
+        for (ResultPoint point : resultPoints) {
+            scaledPoints.add(sourceData.translateResultPoint(point));
+        }
+        return scaledPoints;
     }
 }

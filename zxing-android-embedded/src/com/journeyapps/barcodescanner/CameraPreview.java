@@ -581,6 +581,10 @@ public class CameraPreview extends ViewGroup {
         return previewFramingRect;
     }
 
+    public Size getPreviewSize() {
+        return previewSize;
+    }
+
     /**
      * @return the CameraSettings currently in use
      */

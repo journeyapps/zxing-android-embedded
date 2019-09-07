@@ -102,6 +102,10 @@ public final class CameraManager {
                     }
                     int format = camera.getParameters().getPreviewFormat();
                     SourceData source = new SourceData(data, cameraResolution.width, cameraResolution.height, format, getCameraRotation());
+
+                    if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                        source.setPreviewMirrored(true);
+                    }
                     callback.onPreview(source);
                 } catch (RuntimeException e) {
                     // Could be:
@@ -312,7 +316,7 @@ public final class CameraManager {
         if (rawSupportedSizes == null) {
             Camera.Size defaultSize = parameters.getPreviewSize();
             if (defaultSize != null) {
-                // Work around potential platform bugs
+                Size previewSize = new Size(defaultSize.width, defaultSize.height);
                 previewSizes.add(new Size(defaultSize.width, defaultSize.height));
             }
             return previewSizes;

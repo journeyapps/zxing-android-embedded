@@ -59,10 +59,10 @@ public class ViewfinderView extends View {
     protected List<ResultPoint> lastPossibleResultPoints;
     protected CameraPreview cameraPreview;
 
-    // Cache the framingRect and previewFramingRect, so that we can still draw it after the preview
+    // Cache the framingRect and previewSize, so that we can still draw it after the preview
     // stopped.
     protected Rect framingRect;
-    protected Rect previewFramingRect;
+    protected Size previewSize;
 
     // This constructor is used when the class is built from an XML resource.
     public ViewfinderView(Context context, AttributeSet attrs) {
@@ -128,22 +128,22 @@ public class ViewfinderView extends View {
             return;
         }
         Rect framingRect = cameraPreview.getFramingRect();
-        Rect previewFramingRect = cameraPreview.getPreviewFramingRect();
-        if(framingRect != null && previewFramingRect != null) {
+        Size previewSize = cameraPreview.getPreviewSize();
+        if(framingRect != null && previewSize != null) {
             this.framingRect = framingRect;
-            this.previewFramingRect = previewFramingRect;
+            this.previewSize = previewSize;
         }
     }
 
     @Override
     public void onDraw(Canvas canvas) {
         refreshSizes();
-        if (framingRect == null || previewFramingRect == null) {
+        if (framingRect == null || previewSize == null) {
             return;
         }
 
         final Rect frame = framingRect;
-        final Rect previewFrame = previewFramingRect;
+        final Size previewSize = this.previewSize;
 
         final int width = canvas.getWidth();
         final int height = canvas.getHeight();
@@ -168,11 +168,8 @@ public class ViewfinderView extends View {
             final int middle = frame.height() / 2 + frame.top;
             canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1, middle + 2, paint);
 
-            final float scaleX = frame.width() / (float) previewFrame.width();
-            final float scaleY = frame.height() / (float) previewFrame.height();
-
-            final int frameLeft = frame.left;
-            final int frameTop = frame.top;
+            final float scaleX = this.getWidth() / (float) previewSize.width;
+            final float scaleY = this.getHeight() / (float) previewSize.height;
 
             // draw the last possible result points
             if (!lastPossibleResultPoints.isEmpty()) {
@@ -181,8 +178,8 @@ public class ViewfinderView extends View {
                 float radius = POINT_SIZE / 2.0f;
                 for (final ResultPoint point : lastPossibleResultPoints) {
                     canvas.drawCircle(
-                            frameLeft + (int) (point.getX() * scaleX),
-                            frameTop + (int) (point.getY() * scaleY),
+                             (int) (point.getX() * scaleX),
+                             (int) (point.getY() * scaleY),
                             radius, paint
                     );
                 }
@@ -195,8 +192,8 @@ public class ViewfinderView extends View {
                 paint.setColor(resultPointColor);
                 for (final ResultPoint point : possibleResultPoints) {
                     canvas.drawCircle(
-                            frameLeft + (int) (point.getX() * scaleX),
-                            frameTop + (int) (point.getY() * scaleY),
+                            (int) (point.getX() * scaleX),
+                            (int) (point.getY() * scaleY),
                             POINT_SIZE, paint
                     );
                 }
