@@ -80,12 +80,12 @@ project.afterEvaluate {
                     // remove this section.
                     def deps = asNode().appendNode('dependencies')
 
-                    project.configurations.compile.allDependencies.each { dep ->
+                    project.configurations.api.allDependencies.each { dep ->
                         def node = deps.appendNode('dependency')
                         node.appendNode('groupId', dep.group)
                         node.appendNode('artifactId', dep.name)
                         node.appendNode('version', dep.version)
-                        node.appendNode('scope', 'compile')
+                        node.appendNode('scope', 'api')
                     }
 
                 }

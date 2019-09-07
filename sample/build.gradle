@@ -60,7 +60,7 @@ android {
 
 dependencies {
     // If you use this from an external project, use the following instead:
-    //   compile 'com.journeyapps:zxing-android-embedded:<version>'
+    //   implementation 'com.journeyapps:zxing-android-embedded:<version>'
     implementation project(':zxing-android-embedded')
 
     implementation 'androidx.appcompat:appcompat:1.0.2'
