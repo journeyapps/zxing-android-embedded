@@ -17,12 +17,12 @@ subprojects {
         mavenLocal()
     }
 
-    version = '3.6.0'
+    version = '4.0.0'
     group = 'com.journeyapps'
 
     ext.androidBuildTools = '28.0.3'
     ext.androidTargetSdk = 28
-    ext.zxingCore = 'com.google.zxing:core:3.3.2'
+    ext.zxingCore = 'com.google.zxing:core:3.4.0'
 }
 
 repositories {

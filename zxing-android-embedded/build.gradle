@@ -46,7 +46,7 @@ android {
         unitTests.returnDefaultValues = true
     }
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 24
     }
 
     buildTypes {
