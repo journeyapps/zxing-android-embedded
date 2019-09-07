@@ -1,10 +1,14 @@
-### 4.0.0 (2019-09-07)
+### 4.0.1 (2019-09-07)
 
 * Use androidx.
 * Use zxing:core 3.4.0 by default.
 * Minimum SDK version 24.
 * Fix ArithmeticException.
 * Fix ResultPoint locations when camera is mirrored.
+
+### 4.0.0 (2019-09-07)
+
+* Broken release - use 4.0.1.
 
 ### 3.6.0 (2018-03-04)
 
