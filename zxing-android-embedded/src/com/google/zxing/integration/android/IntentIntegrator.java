@@ -81,7 +81,7 @@ public class IntentIntegrator {
 
     private final Activity activity;
     private android.app.Fragment fragment;
-    private android.support.v4.app.Fragment supportFragment;
+    private androidx.fragment.app.Fragment supportFragment;
 
     private final Map<String, Object> moreExtras = new HashMap<>(3);
 
@@ -137,7 +137,7 @@ public class IntentIntegrator {
      *                 {@link #startActivityForResult(Intent, int)} will be called on the {@link Fragment} instead
      *                 of an {@link Activity}
      */
-    public static IntentIntegrator forSupportFragment(android.support.v4.app.Fragment fragment) {
+    public static IntentIntegrator forSupportFragment(androidx.fragment.app.Fragment fragment) {
         IntentIntegrator integrator = new IntentIntegrator(fragment.getActivity());
         integrator.supportFragment = fragment;
         return integrator;

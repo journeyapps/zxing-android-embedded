@@ -61,12 +61,11 @@ dependencies {
 
     // leakcanary is for development purposes only
     // https://github.com/square/leakcanary
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:support-v13:27.1.1'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 
     // AboutLibraries
-    implementation "com.mikepenz:aboutlibraries:6.1.1"
-
+    implementation "com.mikepenz:aboutlibraries:6.2.0"
 }
