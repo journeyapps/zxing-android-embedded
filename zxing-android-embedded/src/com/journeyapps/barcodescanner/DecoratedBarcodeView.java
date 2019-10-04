@@ -142,6 +142,12 @@ public class DecoratedBarcodeView extends FrameLayout {
             }
         }
 
+        if (intent.hasExtra(Intents.Scan.TORCH_ENABLED)) {
+            if(intent.getBooleanExtra(Intents.Scan.TORCH_ENABLED, false)) {
+                this.setTorchOn();
+            }
+        }
+
         String customPromptMessage = intent.getStringExtra(Intents.Scan.PROMPT_MESSAGE);
         if (customPromptMessage != null) {
             setStatusText(customPromptMessage);

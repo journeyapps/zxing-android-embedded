@@ -94,6 +94,13 @@ public final class Intents {
         public static final String CHARACTER_SET = "CHARACTER_SET";
 
         /**
+         * Optional parameter to switch the torch on at camera startup.
+         * Enables the torch on camera startup
+         * If provided, should be a boolean.
+         */
+        public static final String TORCH_ENABLED = "TORCH_ENABLED";
+
+        /**
          * Set to false to disable beep. Defaults to true.
          */
         public static final String BEEP_ENABLED = "BEEP_ENABLED";
