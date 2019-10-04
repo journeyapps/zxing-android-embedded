@@ -165,7 +165,7 @@ public class DecoratedBarcodeView extends FrameLayout {
         barcodeView.setDecoderFactory(new DefaultDecoderFactory(decodeFormats, decodeHints, characterSet, scanType));
     }
 
-    public void setStatusText(String text) {
+    private void setStatusText(String text) {
         // statusView is optional when using a custom layout
         if(statusView != null) {
             statusView.setText(text);
