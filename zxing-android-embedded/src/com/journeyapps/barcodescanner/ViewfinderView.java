@@ -54,6 +54,7 @@ public class ViewfinderView extends View {
     protected final int resultColor;
     protected final int laserColor;
     protected final int resultPointColor;
+    protected boolean laserVisibility;
     protected int scannerAlpha;
     protected List<ResultPoint> possibleResultPoints;
     protected List<ResultPoint> lastPossibleResultPoints;
@@ -84,6 +85,8 @@ public class ViewfinderView extends View {
                 resources.getColor(R.color.zxing_viewfinder_laser));
         this.resultPointColor = attributes.getColor(R.styleable.zxing_finder_zxing_possible_result_points,
                 resources.getColor(R.color.zxing_possible_result_points));
+        this.laserVisibility = attributes.getBoolean(R.styleable.zxing_finder_zxing_viewfinder_laser_visibility,
+                true);
 
         attributes.recycle();
 
@@ -160,13 +163,16 @@ public class ViewfinderView extends View {
             paint.setAlpha(CURRENT_POINT_OPACITY);
             canvas.drawBitmap(resultBitmap, null, frame, paint);
         } else {
+            // If wanted, draw a red "laser scanner" line through the middle to show decoding is active
+            if (laserVisibility) {
+                paint.setColor(laserColor);
 
-            // Draw a red "laser scanner" line through the middle to show decoding is active
-            paint.setColor(laserColor);
-            paint.setAlpha(SCANNER_ALPHA[scannerAlpha]);
-            scannerAlpha = (scannerAlpha + 1) % SCANNER_ALPHA.length;
-            final int middle = frame.height() / 2 + frame.top;
-            canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1, middle + 2, paint);
+                paint.setAlpha(SCANNER_ALPHA[scannerAlpha]);
+                scannerAlpha = (scannerAlpha + 1) % SCANNER_ALPHA.length;
+
+                final int middle = frame.height() / 2 + frame.top;
+                canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1, middle + 2, paint);
+            }
 
             final float scaleX = this.getWidth() / (float) previewSize.width;
             final float scaleY = this.getHeight() / (float) previewSize.height;
@@ -246,5 +252,9 @@ public class ViewfinderView extends View {
 
     public void setMaskColor(int maskColor) {
         this.maskColor = maskColor;
+    }
+
+    public void setLaserVisibility(boolean visible) {
+        this.laserVisibility = visible;
     }
 }
