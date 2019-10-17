@@ -17,6 +17,7 @@
         app:zxing_possible_result_points="@color/zxing_custom_possible_result_points"
         app:zxing_result_view="@color/zxing_custom_result_view"
         app:zxing_viewfinder_laser="@color/zxing_custom_viewfinder_laser"
+        app:zxing_viewfinder_laser_visibility="true"
         app:zxing_viewfinder_mask="@color/zxing_custom_viewfinder_mask"/>
 
     <TextView
