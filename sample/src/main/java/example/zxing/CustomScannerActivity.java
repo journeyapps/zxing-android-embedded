@@ -48,6 +48,7 @@ public class CustomScannerActivity extends Activity implements
         capture.decode();
 
         changeMaskColor(null);
+        changeLaserVisibility(true);
     }
 
     @Override
@@ -100,6 +101,10 @@ public class CustomScannerActivity extends Activity implements
         Random rnd = new Random();
         int color = Color.argb(100, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
         viewfinderView.setMaskColor(color);
+    }
+
+    public void changeLaserVisibility(boolean visible) {
+        viewfinderView.setLaserVisibility(visible);
     }
 
     @Override
