@@ -163,13 +163,16 @@ public class ViewfinderView extends View {
             paint.setAlpha(CURRENT_POINT_OPACITY);
             canvas.drawBitmap(resultBitmap, null, frame, paint);
         } else {
+            // If wanted, draw a red "laser scanner" line through the middle to show decoding is active
+            if (laserVisibility) {
+                paint.setColor(laserColor);
 
-            // Draw a red "laser scanner" line through the middle to show decoding is active
-            paint.setColor(laserColor);
-            paint.setAlpha(SCANNER_ALPHA[scannerAlpha]);
-            scannerAlpha = (scannerAlpha + 1) % SCANNER_ALPHA.length;
-            final int middle = frame.height() / 2 + frame.top;
-            canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1, middle + 2, paint);
+                paint.setAlpha(SCANNER_ALPHA[scannerAlpha]);
+                scannerAlpha = (scannerAlpha + 1) % SCANNER_ALPHA.length;
+
+                final int middle = frame.height() / 2 + frame.top;
+                canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1, middle + 2, paint);
+            }
 
             final float scaleX = this.getWidth() / (float) previewSize.width;
             final float scaleY = this.getHeight() / (float) previewSize.height;
