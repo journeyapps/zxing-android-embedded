@@ -253,4 +253,8 @@ public class ViewfinderView extends View {
     public void setMaskColor(int maskColor) {
         this.maskColor = maskColor;
     }
+
+    public void setLaserVisibility(boolean visible) {
+        this.laserVisibility = visible;
+    }
 }
