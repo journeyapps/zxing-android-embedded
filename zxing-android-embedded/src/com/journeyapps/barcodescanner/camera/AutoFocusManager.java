@@ -64,12 +64,9 @@ public final class AutoFocusManager {
     private final Camera.AutoFocusCallback autoFocusCallback = new Camera.AutoFocusCallback() {
         @Override
         public void onAutoFocus(boolean success, Camera theCamera) {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    focusing = false;
-                    autoFocusAgainLater();
-                }
+            handler.post(() -> {
+                focusing = false;
+                autoFocusAgainLater();
             });
         }
     };

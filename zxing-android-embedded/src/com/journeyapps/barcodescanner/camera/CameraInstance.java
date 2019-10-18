@@ -138,12 +138,7 @@ public class CameraInstance {
         Util.validateMainThread();
 
         if (open) {
-            cameraThread.enqueue(new Runnable() {
-                @Override
-                public void run() {
-                    cameraManager.setTorch(on);
-                }
-            });
+            cameraThread.enqueue(() -> cameraManager.setTorch(on));
         }
     }
 
@@ -156,12 +151,7 @@ public class CameraInstance {
         Util.validateMainThread();
 
         if (open) {
-            cameraThread.enqueue(new Runnable() {
-                @Override
-                public void run() {
-                    cameraManager.changeCameraParameters(callback);
-                }
-            });
+            cameraThread.enqueue(() -> cameraManager.changeCameraParameters(callback));
         }
     }
 
@@ -186,21 +176,13 @@ public class CameraInstance {
     }
 
     public void requestPreview(final PreviewCallback callback) {
-        mainHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if(!open) {
-                    Log.d(TAG, "Camera is closed, not requesting preview");
-                    return;
-                }
-
-                cameraThread.enqueue(new Runnable() {
-                    @Override
-                    public void run() {
-                        cameraManager.requestPreviewFrame(callback);
-                    }
-                });
+        mainHandler.post(() -> {
+            if(!open) {
+                Log.d(TAG, "Camera is closed, not requesting preview");
+                return;
             }
+
+            cameraThread.enqueue(() -> cameraManager.requestPreviewFrame(callback));
         });
     }
 

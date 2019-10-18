@@ -220,12 +220,7 @@ public class CameraPreview extends ViewGroup {
         @Override
         public void onRotationChanged(int rotation) {
             // Make sure this is run on the main thread.
-            stateHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    rotationChanged();
-                }
-            }, ROTATION_LISTENER_DELAY_MS);
+            stateHandler.postDelayed(() -> rotationChanged(), ROTATION_LISTENER_DELAY_MS);
         }
     };
 

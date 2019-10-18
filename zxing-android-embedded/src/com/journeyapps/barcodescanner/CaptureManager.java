@@ -76,13 +76,7 @@ public class CaptureManager {
             barcodeView.pause();
             beepManager.playBeepSoundAndVibrate();
 
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    returnResult(result);
-                }
-            });
-
+            handler.post(() -> returnResult(result));
         }
 
         @Override
@@ -128,12 +122,9 @@ public class CaptureManager {
 
         handler = new Handler();
 
-        inactivityTimer = new InactivityTimer(activity, new Runnable() {
-            @Override
-            public void run() {
-                Log.d(TAG, "Finishing due to inactivity");
-                finish();
-            }
+        inactivityTimer = new InactivityTimer(activity, () -> {
+            Log.d(TAG, "Finishing due to inactivity");
+            finish();
         });
 
         beepManager = new BeepManager(activity);
@@ -172,13 +163,7 @@ public class CaptureManager {
             }
 
             if (intent.hasExtra(Intents.Scan.TIMEOUT)) {
-                Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        returnResultTimeout();
-                    }
-                };
-                handler.postDelayed(runnable, intent.getLongExtra(Intents.Scan.TIMEOUT, 0L));
+                handler.postDelayed(this::returnResultTimeout, intent.getLongExtra(Intents.Scan.TIMEOUT, 0L));
             }
 
             if (intent.getBooleanExtra(Intents.Scan.BARCODE_IMAGE_ENABLED, false)) {
