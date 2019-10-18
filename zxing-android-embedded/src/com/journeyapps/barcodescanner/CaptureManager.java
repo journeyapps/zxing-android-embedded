@@ -229,17 +229,12 @@ public class CaptureManager {
      * Call from Activity#onResume().
      */
     public void onResume() {
-        if(Build.VERSION.SDK_INT >= 23) {
-            openCameraWithPermission();
-        } else {
-            barcodeView.resume();
-        }
+        openCameraWithPermission();
         inactivityTimer.start();
     }
 
     private boolean askedPermission = false;
 
-    @TargetApi(23)
     private void openCameraWithPermission() {
         if (ContextCompat.checkSelfPermission(this.activity, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -260,7 +255,7 @@ public class CaptureManager {
      *     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
      *     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
      */
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         if(requestCode == cameraPermissionReqCode) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // permission was granted
