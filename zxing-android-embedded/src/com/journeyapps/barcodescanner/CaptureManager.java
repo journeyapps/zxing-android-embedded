@@ -174,6 +174,13 @@ public class CaptureManager {
                 beepManager.setBeepEnabled(false);
             }
 
+            if (intent.hasExtra(Intents.Scan.SHOW_MISSING_CAMERA_PERMISSION_DIALOG)) {
+                setShowMissingCameraPermissionDialog(
+                        intent.getBooleanExtra(Intents.Scan.SHOW_MISSING_CAMERA_PERMISSION_DIALOG, true),
+                        intent.getStringExtra(Intents.Scan.MISSING_CAMERA_PERMISSION_DIALOG_MESSAGE)
+                );
+            }
+
             if (intent.hasExtra(Intents.Scan.TIMEOUT)) {
                 Runnable runnable = new Runnable() {
                     @Override
@@ -437,8 +444,8 @@ public class CaptureManager {
      * In both cases, the activity result is set to {@link Intents.Scan#MISSING_CAMERA_PERMISSION}
      * and cancelled
      */
-    public void setShowDialogIfMissingCameraPermission(boolean visible) {
-        setShowDialogIfMissingCameraPermission(visible, "");
+    public void setShowMissingCameraPermissionDialog(boolean visible) {
+        setShowMissingCameraPermissionDialog(visible, "");
     }
 
     /**
@@ -449,7 +456,7 @@ public class CaptureManager {
      * In both cases, the activity result is set to {@link Intents.Scan#MISSING_CAMERA_PERMISSION}
      * and cancelled
      */
-    public void setShowDialogIfMissingCameraPermission(boolean visible, String message) {
+    public void setShowMissingCameraPermissionDialog(boolean visible, String message) {
         showDialogIfMissingCameraPermission = visible;
         missingCameraPermissionDialogMessage = message != null ? message : "";
     }
