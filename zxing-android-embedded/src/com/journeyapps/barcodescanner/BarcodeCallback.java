@@ -22,7 +22,10 @@ public interface BarcodeCallback {
      *
      * Do not depend on this being called at any specific point in the decode cycle.
      *
+     * This is a default method and can be omitted by the implementing class.
+     *
      * @param resultPoints points potentially identifying a barcode
      */
-    void possibleResultPoints(List<ResultPoint> resultPoints);
+    default void possibleResultPoints(List<ResultPoint> resultPoints) {
+    }
 }
