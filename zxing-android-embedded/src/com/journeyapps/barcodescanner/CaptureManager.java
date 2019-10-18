@@ -1,7 +1,6 @@
 package com.journeyapps.barcodescanner;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -10,16 +9,16 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
 import android.view.Window;
 import android.view.WindowManager;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
@@ -60,6 +59,8 @@ public class CaptureManager {
     private int orientationLock = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
     private static final String SAVED_ORIENTATION_LOCK = "SAVED_ORIENTATION_LOCK";
     private boolean returnBarcodeImagePath = false;
+
+    private boolean showDialogIfMissingCameraPermission = true;
 
     private boolean destroyed = false;
 
@@ -261,8 +262,10 @@ public class CaptureManager {
                 // permission was granted
                 barcodeView.resume();
             } else {
-                // TODO: display better error message.
-                displayFrameworkBugMessageAndExit();
+                if (showDialogIfMissingCameraPermission) {
+                    // TODO: display better error message.
+                    displayFrameworkBugMessageAndExit();
+                }
             }
         }
     }
