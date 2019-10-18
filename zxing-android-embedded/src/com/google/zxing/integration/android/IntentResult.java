@@ -16,6 +16,8 @@
 
 package com.google.zxing.integration.android;
 
+import android.content.Intent;
+
 /**
  * <p>Encapsulates the result of a barcode scan invoked through {@link IntentIntegrator}.</p>
  *
@@ -29,9 +31,14 @@ public final class IntentResult {
     private final Integer orientation;
     private final String errorCorrectionLevel;
     private final String barcodeImagePath;
+    private final Intent originalIntent;
 
     IntentResult() {
-        this(null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null);
+    }
+
+    IntentResult(Intent intent) {
+        this(null, null, null, null, null, null, intent);
     }
 
     IntentResult(String contents,
@@ -39,13 +46,15 @@ public final class IntentResult {
                  byte[] rawBytes,
                  Integer orientation,
                  String errorCorrectionLevel,
-                 String barcodeImagePath) {
+                 String barcodeImagePath,
+                 Intent originalIntent) {
         this.contents = contents;
         this.formatName = formatName;
         this.rawBytes = rawBytes;
         this.orientation = orientation;
         this.errorCorrectionLevel = errorCorrectionLevel;
         this.barcodeImagePath = barcodeImagePath;
+        this.originalIntent = originalIntent;
     }
 
     /**
@@ -90,6 +99,13 @@ public final class IntentResult {
         return barcodeImagePath;
     }
 
+    /**
+     * @return the original intent
+     */
+    public Intent getOriginalIntent() {
+        return originalIntent;
+    }
+
     @Override
     public String toString() {
         int rawBytesLength = rawBytes == null ? 0 : rawBytes.length;
@@ -98,6 +114,7 @@ public final class IntentResult {
             "Raw bytes: (" + rawBytesLength + " bytes)\n" +
             "Orientation: " + orientation + '\n' +
             "EC level: " + errorCorrectionLevel + '\n' +
-            "Barcode image: " + barcodeImagePath + '\n';
+            "Barcode image: " + barcodeImagePath + '\n' +
+            "Original intent: " + originalIntent + '\n';
     }
 }
