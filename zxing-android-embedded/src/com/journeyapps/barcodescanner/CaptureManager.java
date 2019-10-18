@@ -249,9 +249,7 @@ public class CaptureManager {
                     new String[]{Manifest.permission.CAMERA},
                     cameraPermissionReqCode);
             askedPermission = true;
-        } else {
-            // Wait for permission result
-        }
+        } // else wait for permission result
     }
 
     /**
