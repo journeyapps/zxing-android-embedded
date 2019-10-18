@@ -3,7 +3,6 @@ package com.journeyapps.barcodescanner;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -61,6 +60,7 @@ public class CaptureManager {
     private boolean returnBarcodeImagePath = false;
 
     private boolean showDialogIfMissingCameraPermission = true;
+    private String missingCameraPermissionDialogMessage = "";
 
     private boolean destroyed = false;
 
@@ -110,7 +110,9 @@ public class CaptureManager {
 
         @Override
         public void cameraError(Exception error) {
-            displayFrameworkBugMessageAndExit();
+            displayFrameworkBugMessageAndExit(
+                    activity.getString(R.string.zxing_msg_camera_framework_bug)
+            );
         }
 
         @Override
@@ -262,9 +264,12 @@ public class CaptureManager {
                 // permission was granted
                 barcodeView.resume();
             } else {
+                setMissingCameraPermissionResult();
+
                 if (showDialogIfMissingCameraPermission) {
-                    // TODO: display better error message.
-                    displayFrameworkBugMessageAndExit();
+                    displayFrameworkBugMessageAndExit(missingCameraPermissionDialogMessage);
+                } else {
+                    closeAndFinish();
                 }
             }
         }
@@ -380,6 +385,12 @@ public class CaptureManager {
         inactivityTimer.cancel();
     }
 
+    private void setMissingCameraPermissionResult() {
+        Intent intent = new Intent(Intents.Scan.ACTION);
+        intent.putExtra(Intents.Scan.MISSING_CAMERA_PERMISSION, true);
+        activity.setResult(Activity.RESULT_CANCELED, intent);
+    }
+
     protected void returnResultTimeout() {
         Intent intent = new Intent(Intents.Scan.ACTION);
         intent.putExtra(Intents.Scan.TIMEOUT, true);
@@ -393,25 +404,20 @@ public class CaptureManager {
         closeAndFinish();
     }
 
-    protected void displayFrameworkBugMessageAndExit() {
+    protected void displayFrameworkBugMessageAndExit(String message) {
         if (activity.isFinishing() || this.destroyed || finishWhenClosed) {
             return;
         }
+
+        if (message.isEmpty()) {
+            message = activity.getString(R.string.zxing_msg_camera_framework_bug);
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(activity.getString(R.string.zxing_app_name));
-        builder.setMessage(activity.getString(R.string.zxing_msg_camera_framework_bug));
-        builder.setPositiveButton(R.string.zxing_button_ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                finish();
-            }
-        });
+        builder.setMessage(message);
+        builder.setPositiveButton(R.string.zxing_button_ok, (dialog, which) -> finish());
+        builder.setOnCancelListener(dialog -> finish());
         builder.show();
     }
 
@@ -421,5 +427,30 @@ public class CaptureManager {
 
     public static void setCameraPermissionReqCode(int cameraPermissionReqCode) {
         CaptureManager.cameraPermissionReqCode = cameraPermissionReqCode;
+    }
+
+    /**
+     * If set to true, shows the default error dialog if camera permission is missing.
+     * <p>
+     * If set to false, instead the capture manager just finishes.
+     * <p>
+     * In both cases, the activity result is set to {@link Intents.Scan#MISSING_CAMERA_PERMISSION}
+     * and cancelled
+     */
+    public void setShowDialogIfMissingCameraPermission(boolean visible) {
+        setShowDialogIfMissingCameraPermission(visible, "");
+    }
+
+    /**
+     * If set to true, shows the specified error dialog message if camera permission is missing.
+     * <p>
+     * If set to false, instead the capture manager just finishes.
+     * <p>
+     * In both cases, the activity result is set to {@link Intents.Scan#MISSING_CAMERA_PERMISSION}
+     * and cancelled
+     */
+    public void setShowDialogIfMissingCameraPermission(boolean visible, String message) {
+        showDialogIfMissingCameraPermission = visible;
+        missingCameraPermissionDialogMessage = message != null ? message : "";
     }
 }
