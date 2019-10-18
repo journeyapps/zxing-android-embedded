@@ -265,7 +265,7 @@ public class CaptureManager {
      *     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
      *     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
      */
-    void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         if(requestCode == cameraPermissionReqCode) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // permission was granted
