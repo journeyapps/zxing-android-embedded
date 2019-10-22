@@ -18,7 +18,7 @@ To support SDK 14+, downgrade `zxing:core` to 3.3.0 -
 see [instructions](#adding-aar-dependency-with-gradle). You'll also need this in your Android manifest:
 
 ```xml
-<uses-sdk android:minSdkVersion="14" tools:overrideLibrary="com.google.zxing.client.android" />
+<uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
 ```
 
 No guarantees are made on support for older SDK versions - you'll have to test to make sure it's compatible.
