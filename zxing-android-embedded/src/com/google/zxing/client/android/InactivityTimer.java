@@ -108,12 +108,7 @@ public final class InactivityTimer {
                 // 0 indicates that we're on battery
                 final boolean onBatteryNow = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1) <= 0;
                 // post on handler to run in main thread
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        onBattery(onBatteryNow);
-                    }
-                });
+                handler.post(() -> onBattery(onBatteryNow));
             }
         }
     }

@@ -71,12 +71,7 @@ public final class AmbientLightManager implements SensorEventListener {
     }
 
     private void setTorch(final boolean on) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                cameraManager.setTorch(on);
-            }
-        });
+        handler.post(() -> cameraManager.setTorch(on));
     }
 
     @Override
