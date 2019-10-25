@@ -239,12 +239,17 @@ public class CaptureManager {
      * Call from Activity#onResume().
      */
     public void onResume() {
-        openCameraWithPermission();
+        if(Build.VERSION.SDK_INT >= 23) {
+            openCameraWithPermission();
+        } else {
+            barcodeView.resume();
+        }
         inactivityTimer.start();
     }
 
     private boolean askedPermission = false;
 
+    @TargetApi(23)
     private void openCameraWithPermission() {
         if (ContextCompat.checkSelfPermission(this.activity, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED) {
