@@ -23,6 +23,11 @@ see [instructions](#adding-aar-dependency-with-gradle). You'll also need this in
 
 No guarantees are made on support for older SDK versions - you'll have to test to make sure it's compatible.
 
+**Note: A rewrite of a large part of the codebase is currently in progress on the
+[3.x branch](https://github.com/journeyapps/zxing-android-embedded/tree/3.x). This
+will provide much more control over the UI for applications that require it. Any
+new contributions should be done on the 3.x branch.**
+
 ## Adding aar dependency with Gradle
 
 From version 4.0.0, only Android SDK 24+ is supported by default, and androidx is required.
