@@ -30,12 +30,12 @@ public class CustomScannerActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_scanner);
 
-        barcodeScannerView = (DecoratedBarcodeView)findViewById(R.id.zxing_barcode_scanner);
+        barcodeScannerView = findViewById(R.id.zxing_barcode_scanner);
         barcodeScannerView.setTorchListener(this);
 
-        switchFlashlightButton = (Button)findViewById(R.id.switch_flashlight);
+        switchFlashlightButton = findViewById(R.id.switch_flashlight);
 
-        viewfinderView = (ViewfinderView) findViewById(R.id.zxing_viewfinder_view);
+        viewfinderView = findViewById(R.id.zxing_viewfinder_view);
 
         // if the device does not have flashlight in its camera,
         // then remove the switch flashlight button...

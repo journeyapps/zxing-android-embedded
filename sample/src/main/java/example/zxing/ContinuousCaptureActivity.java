@@ -24,7 +24,6 @@ import java.util.List;
  * a barcode is scanned.
  */
 public class ContinuousCaptureActivity extends Activity {
-    private static final String TAG = ContinuousCaptureActivity.class.getSimpleName();
     private DecoratedBarcodeView barcodeView;
     private BeepManager beepManager;
     private String lastText;
@@ -43,7 +42,7 @@ public class ContinuousCaptureActivity extends Activity {
             beepManager.playBeepSoundAndVibrate();
 
             //Added preview of scanned barcode
-            ImageView imageView = (ImageView) findViewById(R.id.barcodePreview);
+            ImageView imageView = findViewById(R.id.barcodePreview);
             imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.YELLOW));
         }
 
@@ -58,7 +57,7 @@ public class ContinuousCaptureActivity extends Activity {
 
         setContentView(R.layout.continuous_scan);
 
-        barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
+        barcodeView = findViewById(R.id.barcode_scanner);
         Collection<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE, BarcodeFormat.CODE_39);
         barcodeView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(formats));
         barcodeView.initializeFromIntent(getIntent());
