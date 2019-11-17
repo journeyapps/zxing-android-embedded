@@ -17,7 +17,6 @@ dependencies {
 android {
     resourcePrefix 'zxing_'
     compileSdkVersion project.androidTargetSdk
-    buildToolsVersion project.androidBuildTools
 
     sourceSets {
         main {
