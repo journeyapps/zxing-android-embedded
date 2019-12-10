@@ -117,7 +117,7 @@ public class DecoratedBarcodeView extends FrameLayout {
     }
 
     /**
-     * Initialize with no custom attributes setted.
+     * Initialize with no custom attributes set.
      */
     private void initialize() {
         initialize(null);
