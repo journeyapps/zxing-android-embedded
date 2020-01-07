@@ -8,6 +8,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
+
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.ViewfinderView;
@@ -45,6 +47,7 @@ public class CustomScannerActivity extends Activity implements
 
         capture = new CaptureManager(this, barcodeScannerView);
         capture.initializeFromIntent(getIntent(), savedInstanceState);
+        capture.setShowMissingCameraPermissionDialog(false);
         capture.decode();
 
         changeMaskColor(null);
@@ -115,5 +118,10 @@ public class CustomScannerActivity extends Activity implements
     @Override
     public void onTorchOff() {
         switchFlashlightButton.setText(R.string.turn_on_flashlight);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        capture.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

@@ -383,9 +383,10 @@ public class IntentIntegrator {
                     rawBytes,
                     orientation,
                     errorCorrectionLevel,
-                    barcodeImagePath);
+                    barcodeImagePath,
+                    intent);
         }
-        return new IntentResult();
+        return new IntentResult(intent);
     }
 
     private static List<String> list(String... values) {

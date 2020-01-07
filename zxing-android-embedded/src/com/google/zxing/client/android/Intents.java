@@ -116,6 +116,21 @@ public final class Intents {
         public static final String TIMEOUT = "TIMEOUT";
 
         /**
+         * Set the time to finish the scan screen.
+         */
+        public static final String MISSING_CAMERA_PERMISSION = "MISSING_CAMERA_PERMISSION";
+
+        /**
+         * Set the time to finish the scan screen.
+         */
+        public static final String SHOW_MISSING_CAMERA_PERMISSION_DIALOG = "SHOW_MISSING_CAMERA_PERMISSION_DIALOG";
+
+        /**
+         * Set the time to finish the scan screen.
+         */
+        public static final String MISSING_CAMERA_PERMISSION_DIALOG_MESSAGE = "MISSING_CAMERA_PERMISSION_DIALOG_MESSAGE";
+
+        /**
          * Whether or not the orientation should be locked when the activity is first started.
          * Defaults to true.
          */
