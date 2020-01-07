@@ -156,13 +156,8 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_scan, container, false);
-            Button scan = (Button) view.findViewById(R.id.scan_from_fragment);
-            scan.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    scanFromFragment();
-                }
-            });
+            Button scan = view.findViewById(R.id.scan_from_fragment);
+            scan.setOnClickListener(v -> scanFromFragment());
             return view;
         }
 
