@@ -177,7 +177,7 @@ public class CameraInstance {
 
     public void requestPreview(final PreviewCallback callback) {
         mainHandler.post(() -> {
-            if(!open) {
+            if (!open) {
                 Log.d(TAG, "Camera is closed, not requesting preview");
                 return;
             }

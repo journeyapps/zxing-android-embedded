@@ -108,7 +108,7 @@ public class CaptureManager {
 
         @Override
         public void cameraClosed() {
-            if(finishWhenClosed) {
+            if (finishWhenClosed) {
                 Log.d(TAG, "Camera closed; finishing activity");
                 finish();
             }
@@ -147,7 +147,7 @@ public class CaptureManager {
             this.orientationLock = savedInstanceState.getInt(SAVED_ORIENTATION_LOCK, ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         }
 
-        if(intent != null) {
+        if (intent != null) {
             // Only lock the orientation if it's not locked to something else yet
             boolean orientationLocked = intent.getBooleanExtra(Intents.Scan.ORIENTATION_LOCKED, true);
             if (orientationLocked) {
@@ -214,7 +214,7 @@ public class CaptureManager {
      * Call from Activity#onResume().
      */
     public void onResume() {
-        if(Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= 23) {
             openCameraWithPermission();
         } else {
             barcodeView.resume();
@@ -229,7 +229,7 @@ public class CaptureManager {
         if (ContextCompat.checkSelfPermission(this.activity, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED) {
             barcodeView.resume();
-        } else if(!askedPermission) {
+        } else if (!askedPermission) {
             ActivityCompat.requestPermissions(this.activity,
                     new String[]{Manifest.permission.CAMERA},
                     cameraPermissionReqCode);
@@ -248,7 +248,7 @@ public class CaptureManager {
      *     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
      */
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        if(requestCode == cameraPermissionReqCode) {
+        if (requestCode == cameraPermissionReqCode) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // permission was granted
                 barcodeView.resume();
@@ -359,7 +359,7 @@ public class CaptureManager {
     }
 
     protected void closeAndFinish() {
-        if(barcodeView.getBarcodeView().isCameraClosed()) {
+        if (barcodeView.getBarcodeView().isCameraClosed()) {
             finish();
         } else {
             finishWhenClosed = true;

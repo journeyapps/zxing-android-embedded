@@ -39,11 +39,11 @@ public class DefaultDecoderFactory implements DecoderFactory {
 
         hints.putAll(baseHints);
 
-        if(this.hints != null) {
+        if (this.hints != null) {
             hints.putAll(this.hints);
         }
 
-        if(this.decodeFormats != null) {
+        if (this.decodeFormats != null) {
             hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
         }
 

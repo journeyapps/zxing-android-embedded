@@ -27,7 +27,7 @@ public class FitCenterStrategy extends PreviewScalingStrategy {
      */
     @Override
     protected float getScore(Size size, Size desired) {
-        if(size.width <= 0 || size.height <= 0) {
+        if (size.width <= 0 || size.height <= 0) {
             return 0f;
         }
         Size scaled = size.scaleFit(desired);
@@ -36,7 +36,7 @@ public class FitCenterStrategy extends PreviewScalingStrategy {
 
         // Treat downscaling as slightly better than upscaling
         float scaleScore;
-        if(scaleRatio > 1.0f) {
+        if (scaleRatio > 1.0f) {
             // Upscaling
             scaleScore = (float)Math.pow(1.0f / scaleRatio, 1.1);
         } else {

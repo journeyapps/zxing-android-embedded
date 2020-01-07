@@ -127,12 +127,12 @@ public class ViewfinderView extends View {
     }
 
     protected void refreshSizes() {
-        if(cameraPreview == null) {
+        if (cameraPreview == null) {
             return;
         }
         Rect framingRect = cameraPreview.getFramingRect();
         Size previewSize = cameraPreview.getPreviewSize();
-        if(framingRect != null && previewSize != null) {
+        if (framingRect != null && previewSize != null) {
             this.framingRect = framingRect;
             this.previewSize = previewSize;
         }

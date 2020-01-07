@@ -97,7 +97,7 @@ project.afterEvaluate {
 // To release, place bintray_user and bintray_key properties in ~/.gradle/gradle.properties,
 // and run ./gradlew clean assembleRelease bintrayUpload
 
-if(project.hasProperty('bintray_user') && project.hasProperty('bintray_key')) {
+if (project.hasProperty('bintray_user') && project.hasProperty('bintray_key')) {
     bintray {
         user = bintray_user
         key = bintray_key

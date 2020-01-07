@@ -97,7 +97,7 @@ public final class CameraManager {
             PreviewCallback callback = this.callback;
             if (cameraResolution != null && callback != null) {
                 try {
-                    if(data == null) {
+                    if (data == null) {
                         throw new NullPointerException("No preview data received");
                     }
                     int format = camera.getParameters().getPreviewFormat();
@@ -116,7 +116,7 @@ public final class CameraManager {
                 }
             } else {
                 Log.d(TAG, "Got preview callback, but no handler or resolution available");
-                if(callback != null) {
+                if (callback != null) {
                     // Should generally not happen
                     callback.onPreviewError(new Exception("No resolution available"));
                 }
@@ -157,7 +157,7 @@ public final class CameraManager {
      * Must be called from camera thread.
      */
     public void configure() {
-        if(camera == null) {
+        if (camera == null) {
             throw new RuntimeException("Camera not open");
         }
         setParameters();
@@ -227,7 +227,7 @@ public final class CameraManager {
      * @return true if the camera rotation is perpendicular to the current display rotation.
      */
     public boolean isCameraRotated() {
-        if(rotationDegrees == -1) {
+        if (rotationDegrees == -1) {
             throw new IllegalStateException("Rotation not calculated yet. Call configure() first.");
         }
         return rotationDegrees % 180 != 0;
