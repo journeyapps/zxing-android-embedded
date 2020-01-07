@@ -6,8 +6,8 @@ android {
     defaultConfig {
         minSdkVersion 24
         targetSdkVersion project.androidTargetSdk
-        versionCode 402
-        versionName "4.0.2"
+        versionCode 410
+        versionName "4.1.0"
     }
 
     def validConfig
