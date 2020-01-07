@@ -209,7 +209,7 @@ public class CameraPreview extends ViewGroup {
                     pause();
                     fireState.cameraError(error);
                 }
-            } else if(message.what == R.id.zxing_camera_closed) {
+            } else if (message.what == R.id.zxing_camera_closed) {
                 fireState.cameraClosed();
             }
             return false;
@@ -280,11 +280,11 @@ public class CameraPreview extends ViewGroup {
 
         // See zxing_attrs.xml for the enum values
         int scalingStrategyNumber = styledAttributes.getInteger(R.styleable.zxing_camera_preview_zxing_preview_scaling_strategy, -1);
-        if(scalingStrategyNumber == 1) {
+        if (scalingStrategyNumber == 1) {
             previewScalingStrategy = new CenterCropStrategy();
-        } else if(scalingStrategyNumber == 2) {
+        } else if (scalingStrategyNumber == 2) {
             previewScalingStrategy = new FitCenterStrategy();
-        } else if(scalingStrategyNumber == 3) {
+        } else if (scalingStrategyNumber == 3) {
             previewScalingStrategy = new FitXYStrategy();
         }
 
@@ -293,14 +293,14 @@ public class CameraPreview extends ViewGroup {
 
     private void rotationChanged() {
         // Confirm that it did actually change
-        if(isActive() && getDisplayRotation() != openedOrientation) {
+        if (isActive() && getDisplayRotation() != openedOrientation) {
             pause();
             resume();
         }
     }
 
     private void setupSurfaceView() {
-        if(useTextureView) {
+        if (useTextureView) {
             textureView = new TextureView(getContext());
             textureView.setSurfaceTextureListener(surfaceTextureListener());
             addView(textureView);
@@ -431,7 +431,7 @@ public class CameraPreview extends ViewGroup {
                 displayConfiguration.setPreviewScalingStrategy(getPreviewScalingStrategy());
                 cameraInstance.setDisplayConfiguration(displayConfiguration);
                 cameraInstance.configureCamera();
-                if(torchOn) {
+                if (torchOn) {
                     cameraInstance.setTorch(torchOn);
                 }
             }
@@ -451,14 +451,14 @@ public class CameraPreview extends ViewGroup {
      * Override this to specify a different preview scaling strategy.
      */
     public PreviewScalingStrategy getPreviewScalingStrategy() {
-        if(previewScalingStrategy != null) {
+        if (previewScalingStrategy != null) {
             return previewScalingStrategy;
         }
 
         // If we are using SurfaceTexture, it is safe to use centerCrop.
         // For SurfaceView, it's better to use fitCenter, otherwise the preview may overlap to
         // other views.
-        if(textureView != null) {
+        if (textureView != null) {
             return new CenterCropStrategy();
         } else {
             return new FitCenterStrategy();
@@ -521,8 +521,8 @@ public class CameraPreview extends ViewGroup {
         if (currentSurfaceSize != null && previewSize != null && surfaceRect != null) {
             if (surfaceView != null && currentSurfaceSize.equals(new Size(surfaceRect.width(), surfaceRect.height()))) {
                 startCameraPreview(new CameraSurface(surfaceView.getHolder()));
-            } else if(textureView != null && textureView.getSurfaceTexture() != null) {
-                if(previewSize != null) {
+            } else if (textureView != null && textureView.getSurfaceTexture() != null) {
+                if (previewSize != null) {
                     Matrix transform = calculateTextureTransform(new Size(textureView.getWidth(), textureView.getHeight()), previewSize);
                     textureView.setTransform(transform);
                 }
@@ -539,7 +539,7 @@ public class CameraPreview extends ViewGroup {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         containerSized(new Size(r - l, b - t));
 
-        if(surfaceView != null) {
+        if (surfaceView != null) {
             if (surfaceRect == null) {
                 // Match the container, to reduce the risk of issues. The preview should never be drawn
                 // while the surface has this size.
@@ -547,7 +547,7 @@ public class CameraPreview extends ViewGroup {
             } else {
                 surfaceView.layout(surfaceRect.left, surfaceRect.top, surfaceRect.right, surfaceRect.bottom);
             }
-        } else if(textureView != null) {
+        } else if (textureView != null) {
             textureView.layout(0, 0, getWidth(), getHeight());
         }
     }
@@ -617,11 +617,11 @@ public class CameraPreview extends ViewGroup {
             // The activity was paused but not stopped, so the surface still exists. Therefore
             // surfaceCreated() won't be called, so init the camera here.
             startPreviewIfReady();
-        } else if(surfaceView != null) {
+        } else if (surfaceView != null) {
             // Install the callback and wait for surfaceCreated() to init the camera.
             surfaceView.getHolder().addCallback(surfaceCallback);
-        } else if(textureView != null) {
-            if(textureView.isAvailable()) {
+        } else if (textureView != null) {
+            if (textureView.isAvailable()) {
                 surfaceTextureListener().onSurfaceTextureAvailable(textureView.getSurfaceTexture(), textureView.getWidth(), textureView.getHeight());
             } else {
                 textureView.setSurfaceTextureListener(surfaceTextureListener());
@@ -656,7 +656,7 @@ public class CameraPreview extends ViewGroup {
             SurfaceHolder surfaceHolder = surfaceView.getHolder();
             surfaceHolder.removeCallback(surfaceCallback);
         }
-        if(currentSurfaceSize == null && textureView != null) {
+        if (currentSurfaceSize == null && textureView != null) {
             textureView.setSurfaceTextureListener(null);
         }
 
@@ -678,7 +678,7 @@ public class CameraPreview extends ViewGroup {
         pause();
         long startTime = System.nanoTime();
         while(instance != null && !instance.isCameraClosed()) {
-            if(System.nanoTime() - startTime > 2000000000) {
+            if (System.nanoTime() - startTime > 2000000000) {
                 // Don't wait for longer than 2 seconds
                 break;
             }
@@ -714,7 +714,7 @@ public class CameraPreview extends ViewGroup {
      * @param marginFraction the fraction
      */
     public void setMarginFraction(double marginFraction) {
-        if(marginFraction >= 0.5d) {
+        if (marginFraction >= 0.5d) {
             throw new IllegalArgumentException("The margin fraction must be less than 0.5");
         }
         this.marginFraction = marginFraction;
@@ -835,7 +835,7 @@ public class CameraPreview extends ViewGroup {
         Rect intersection = new Rect(container);
         boolean intersects = intersection.intersect(surface);
 
-        if(framingRectSize != null) {
+        if (framingRectSize != null) {
             // Specific size is specified. Make sure it's not larger than the container or surface.
             int horizontalMargin = Math.max(0, (intersection.width() - framingRectSize.width) / 2);
             int verticalMargin = Math.max(0, (intersection.height() - framingRectSize.height) / 2);
@@ -864,7 +864,7 @@ public class CameraPreview extends ViewGroup {
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
-        if(!(state instanceof Bundle)) {
+        if (!(state instanceof Bundle)) {
             super.onRestoreInstanceState(state);
             return;
         }

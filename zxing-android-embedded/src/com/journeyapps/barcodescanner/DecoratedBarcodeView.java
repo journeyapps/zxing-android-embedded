@@ -143,7 +143,7 @@ public class DecoratedBarcodeView extends FrameLayout {
         }
 
         if (intent.hasExtra(Intents.Scan.TORCH_ENABLED)) {
-            if(intent.getBooleanExtra(Intents.Scan.TORCH_ENABLED, false)) {
+            if (intent.getBooleanExtra(Intents.Scan.TORCH_ENABLED, false)) {
                 this.setTorchOn();
             }
         }
@@ -183,7 +183,7 @@ public class DecoratedBarcodeView extends FrameLayout {
 
     public void setStatusText(String text) {
         // statusView is optional when using a custom layout
-        if(statusView != null) {
+        if (statusView != null) {
             statusView.setText(text);
         }
     }

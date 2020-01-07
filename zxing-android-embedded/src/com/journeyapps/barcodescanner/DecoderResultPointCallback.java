@@ -26,7 +26,7 @@ public class DecoderResultPointCallback implements ResultPointCallback {
 
     @Override
     public void foundPossibleResultPoint(ResultPoint point) {
-        if(decoder != null) {
+        if (decoder != null) {
             decoder.foundPossibleResultPoint(point);
         }
     }

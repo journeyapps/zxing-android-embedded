@@ -45,7 +45,7 @@ public class SourceData {
         this.data = new RawImageData(data, dataWidth, dataHeight);
         this.rotation = rotation;
         this.imageFormat = imageFormat;
-        if(dataWidth * dataHeight > data.length) {
+        if (dataWidth * dataHeight > data.length) {
             throw new IllegalArgumentException("Image data does not match the resolution. " + dataWidth + "x" + dataHeight + " > " + data.length);
         }
     }
@@ -150,7 +150,7 @@ public class SourceData {
     public Bitmap getBitmap(Rect cropRect, int scaleFactor) {
         if (cropRect == null) {
             cropRect = new Rect(0, 0, data.getWidth(), data.getHeight());
-        } else if(isRotated()) {
+        } else if (isRotated()) {
             //noinspection SuspiciousNameCombination
             cropRect = new Rect(cropRect.top, cropRect.left, cropRect.bottom, cropRect.right);
         }
