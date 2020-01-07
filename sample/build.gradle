@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion project.androidTargetSdk
-    buildToolsVersion project.androidBuildTools
 
     defaultConfig {
         minSdkVersion 24
@@ -22,9 +21,9 @@ android {
         keystoreFile = properties.getProperty('keystore.file')
         keystorePassword = properties.getProperty('keystore.password')
         keystoreAlias = properties.getProperty('keystore.alias')
-        validConfig = keystoreFile != null && keystorePassword != null && keystoreAlias != null;
+        validConfig = keystoreFile != null && keystorePassword != null && keystoreAlias != null
     } catch (error) {
-        validConfig = false;
+        validConfig = false
     }
 
     if (validConfig) {
@@ -63,7 +62,7 @@ dependencies {
     //   implementation 'com.journeyapps:zxing-android-embedded:<version>'
     implementation project(':zxing-android-embedded')
 
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
 
     // leakcanary is for development purposes only
