@@ -25,7 +25,7 @@ No guarantees are made on support for older SDK versions - you'll have to test t
 
 ## Adding aar dependency with Gradle
 
-From version 4.0.0, only Android SDK 24+ is supported by default, and androidx is required.
+From version 4.0.2, only Android SDK 24+ is supported by default, and androidx is required.
 
 Add the following to your `build.gradle` file:
 
@@ -35,7 +35,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.journeyapps:zxing-android-embedded:4.0.0'
+    implementation 'com.journeyapps:zxing-android-embedded:4.0.2'
     implementation 'androidx.appcompat:appcompat:1.0.2'
 }
 
