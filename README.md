@@ -13,19 +13,11 @@ Features:
 
 A sample application is available in [Releases](https://github.com/journeyapps/zxing-android-embedded/releases).
 
-By default, Android SDK 24+ is required because of `zxing:core` 3.4.0.
-To support SDK 14+, downgrade `zxing:core` to 3.3.0 -
-see [instructions](#adding-aar-dependency-with-gradle). You'll also need this in your Android manifest:
-
-```xml
-<uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
-```
-
-No guarantees are made on support for older SDK versions - you'll have to test to make sure it's compatible.
+By default, Android SDK 24+ is required because of `zxing:core` 3.4.0. To support SDK 14+, see [Older SDK versions](#older-sdk-versions). 
 
 ## Adding aar dependency with Gradle
 
-From version 4.0.2, only Android SDK 24+ is supported by default, and androidx is required.
+From version 4.x, only Android SDK 24+ is supported by default, and androidx is required.
 
 Add the following to your `build.gradle` file:
 
@@ -35,7 +27,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.journeyapps:zxing-android-embedded:4.0.2'
+    implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'
 }
 
@@ -45,7 +37,9 @@ android {
 
 ```
 
-For Android 14+ support, downgrade `zxing:core` to 3.3.0 or earlier:
+## Older SDK versions
+
+For Android SDK versions < 24, you can downgrade `zxing:core` to 3.3.0 or earlier for Android 14+ support:
 
 ```groovy
 repositories {
@@ -53,7 +47,7 @@ repositories {
 }
 
 dependencies {
-    implementation('com.journeyapps:zxing-android-embedded:4.0.2') { transitive = false }
+    implementation('com.journeyapps:zxing-android-embedded:4.1.0') { transitive = false }
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.zxing:core:3.3.0'
 }
@@ -63,6 +57,13 @@ android {
 }
 
 ```
+You'll also need this in your Android manifest:
+
+```xml
+<uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
+```
+
+No guarantees are made on support for older SDK versions - you'll have to test to make sure it's compatible.
 
 ## Hardware Acceleration
 
