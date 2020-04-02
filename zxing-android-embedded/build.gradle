@@ -73,6 +73,20 @@ project.afterEvaluate {
 
                 artifact sourceJar
 
+
+                pom {
+                    name = "ZXing Android Embedded"
+                    description = "Barcode scanner library for Android, based on the ZXing decoder"
+                    url = "https://github.com/journeyapps/zxing-android-embedded"
+                    // Set your license
+                    licenses {
+                        license {
+                            name = "The Apache License, Version 2.0"
+                            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                        }
+                    }
+                }
+
                 pom.withXml {
                     // HACK to add dependencies to POM.
                     // When maven-publish can do this automatically for Android projects,
@@ -106,6 +120,7 @@ if (project.hasProperty('bintray_user') && project.hasProperty('bintray_key')) {
             userOrg = 'journeyapps'
             repo = 'maven'
             name = 'zxing-android-embedded'
+            licenses = 'Apache-2.0'
         }
     }
 }
