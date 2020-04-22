@@ -16,7 +16,6 @@
 
 package com.journeyapps.barcodescanner;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -26,6 +25,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.core.content.ContextCompat;
 
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.R;
@@ -55,6 +56,7 @@ public class ViewfinderView extends View {
     protected final int laserColor;
     protected final int resultPointColor;
     protected boolean laserVisibility;
+    protected boolean pointVisibility;
     protected int scannerAlpha;
     protected List<ResultPoint> possibleResultPoints;
     protected List<ResultPoint> lastPossibleResultPoints;
@@ -77,16 +79,12 @@ public class ViewfinderView extends View {
         // Get setted attributes on view
         TypedArray attributes = getContext().obtainStyledAttributes(attrs, R.styleable.zxing_finder);
 
-        this.maskColor = attributes.getColor(R.styleable.zxing_finder_zxing_viewfinder_mask,
-                resources.getColor(R.color.zxing_viewfinder_mask));
-        this.resultColor = attributes.getColor(R.styleable.zxing_finder_zxing_result_view,
-                resources.getColor(R.color.zxing_result_view));
-        this.laserColor = attributes.getColor(R.styleable.zxing_finder_zxing_viewfinder_laser,
-                resources.getColor(R.color.zxing_viewfinder_laser));
-        this.resultPointColor = attributes.getColor(R.styleable.zxing_finder_zxing_possible_result_points,
-                resources.getColor(R.color.zxing_possible_result_points));
-        this.laserVisibility = attributes.getBoolean(R.styleable.zxing_finder_zxing_viewfinder_laser_visibility,
-                true);
+        maskColor = attributes.getColor(R.styleable.zxing_finder_zxing_viewfinder_mask, ContextCompat.getColor(this.getContext(), R.color.zxing_viewfinder_mask));
+        resultColor = attributes.getColor(R.styleable.zxing_finder_zxing_result_view, ContextCompat.getColor(this.getContext(), R.color.zxing_result_view));
+        laserColor = attributes.getColor(R.styleable.zxing_finder_zxing_viewfinder_laser, ContextCompat.getColor(this.getContext(), R.color.zxing_viewfinder_laser));
+        resultPointColor = attributes.getColor(R.styleable.zxing_finder_zxing_possible_result_points, ContextCompat.getColor(this.getContext(), R.color.zxing_possible_result_points));
+        laserVisibility = attributes.getBoolean(R.styleable.zxing_finder_zxing_viewfinder_laser_visibility, true);
+        pointVisibility = attributes.getBoolean(R.styleable.zxing_finder_zxing_viewfinder_point_visibility, true);
 
         attributes.recycle();
 
@@ -178,7 +176,7 @@ public class ViewfinderView extends View {
             final float scaleY = this.getHeight() / (float) previewSize.height;
 
             // draw the last possible result points
-            if (!lastPossibleResultPoints.isEmpty()) {
+            if (!lastPossibleResultPoints.isEmpty() && pointVisibility) {
                 paint.setAlpha(CURRENT_POINT_OPACITY / 2);
                 paint.setColor(resultPointColor);
                 float radius = POINT_SIZE / 2.0f;
@@ -193,7 +191,7 @@ public class ViewfinderView extends View {
             }
 
             // draw current possible result points
-            if (!possibleResultPoints.isEmpty()) {
+            if (!possibleResultPoints.isEmpty() && pointVisibility) {
                 paint.setAlpha(CURRENT_POINT_OPACITY);
                 paint.setColor(resultPointColor);
                 for (final ResultPoint point : possibleResultPoints) {
