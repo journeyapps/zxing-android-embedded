@@ -2,7 +2,6 @@ package com.journeyapps.barcodescanner.camera;
 
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
-import android.os.Build;
 import android.view.SurfaceHolder;
 
 import java.io.IOException;

@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,8 +26,8 @@ import com.journeyapps.barcodescanner.camera.CameraParametersCallback;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.journeyapps.barcodescanner.camera.CameraSurface;
 import com.journeyapps.barcodescanner.camera.CenterCropStrategy;
-import com.journeyapps.barcodescanner.camera.FitCenterStrategy;
 import com.journeyapps.barcodescanner.camera.DisplayConfiguration;
+import com.journeyapps.barcodescanner.camera.FitCenterStrategy;
 import com.journeyapps.barcodescanner.camera.FitXYStrategy;
 import com.journeyapps.barcodescanner.camera.PreviewScalingStrategy;
 
