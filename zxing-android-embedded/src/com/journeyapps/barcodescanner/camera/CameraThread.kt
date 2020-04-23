@@ -91,6 +91,7 @@ open class CameraThread private constructor() {
 
     companion object {
         private val TAG = CameraThread::class.java.simpleName
+
         @JvmStatic
         var instance: CameraThread? = null
             get() {

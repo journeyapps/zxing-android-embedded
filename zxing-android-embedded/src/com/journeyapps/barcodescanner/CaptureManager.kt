@@ -370,7 +370,7 @@ open class CaptureManager(private val activity: Activity, private val barcodeVie
             }
 
             val metadata = rawResult.resultMetadata
-            metadata?.let { data ->
+            metadata.let { data ->
                 if (data.containsKey(ResultMetadataType.UPC_EAN_EXTENSION)) {
                     intent.putExtra(Intents.Scan.RESULT_UPC_EAN_EXTENSION,
                             data[ResultMetadataType.UPC_EAN_EXTENSION].toString())

@@ -14,7 +14,7 @@ class DefaultDecoderFactory : DecoderFactory {
     private var characterSet: String? = null
     private var scanType = 0
 
-    constructor() {}
+    constructor()
     constructor(decodeFormats: Collection<BarcodeFormat>) {
         this.decodeFormats = decodeFormats
     }
