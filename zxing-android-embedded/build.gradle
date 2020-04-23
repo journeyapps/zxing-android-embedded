@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
@@ -12,6 +14,8 @@ dependencies {
 
     testImplementation 'junit:junit:4.13'
     testImplementation "org.mockito:mockito-core:1.9.5"
+    implementation "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 android {
@@ -108,5 +112,8 @@ if (project.hasProperty('bintray_user') && project.hasProperty('bintray_key')) {
             name = 'zxing-android-embedded'
         }
     }
+}
+repositories {
+    mavenCentral()
 }
 

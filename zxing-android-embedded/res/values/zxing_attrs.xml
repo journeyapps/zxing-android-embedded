@@ -22,6 +22,7 @@
     <attr name="zxing_viewfinder_laser" format="color"/>
     <attr name="zxing_viewfinder_mask" format="color"/>
     <attr name="zxing_viewfinder_laser_visibility" format="boolean"/>
+    <attr name="zxing_viewfinder_point_visibility" format="boolean"/>
   </declare-styleable>
 
 </resources>

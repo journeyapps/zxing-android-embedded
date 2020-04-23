@@ -15,6 +15,8 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -30,8 +32,12 @@ public class ContinuousCaptureActivity extends Activity {
 
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
+        public void possibleResultPoints(@NotNull List<? extends ResultPoint> resultPoints) { }
+
+        @Override
         public void barcodeResult(BarcodeResult result) {
-            if(result.getText() == null || result.getText().equals(lastText)) {
+            result.getText();
+            if(result.getText().equals(lastText)) {
                 // Prevent duplicate scans
                 return;
             }
@@ -44,10 +50,6 @@ public class ContinuousCaptureActivity extends Activity {
             //Added preview of scanned barcode
             ImageView imageView = findViewById(R.id.barcodePreview);
             imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.YELLOW));
-        }
-
-        @Override
-        public void possibleResultPoints(List<ResultPoint> resultPoints) {
         }
     };
 
