@@ -1,6 +1,7 @@
 package com.journeyapps.barcodescanner
 
 import android.graphics.Bitmap
+import android.graphics.Color
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.MultiFormatWriter
@@ -65,7 +66,7 @@ class BarcodeEncoder {
     }
 
     companion object {
-        private const val WHITE = -0x1
-        private const val BLACK = -0x1000000
+        private const val WHITE = Color.WHITE
+        private const val BLACK = Color.BLACK
     }
 }

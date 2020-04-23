@@ -25,7 +25,7 @@ open class CaptureActivity : Activity() {
      *
      * @return the DecoratedBarcodeView
      */
-    protected open fun initializeContent(): DecoratedBarcodeView? {
+    protected open fun initializeContent(): DecoratedBarcodeView {
         setContentView(R.layout.zxing_capture)
         return findViewById<View>(R.id.zxing_barcode_scanner) as DecoratedBarcodeView
     }

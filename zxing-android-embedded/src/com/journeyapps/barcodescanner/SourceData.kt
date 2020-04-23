@@ -120,6 +120,8 @@ class SourceData(data: ByteArray, dataWidth: Int, dataHeight: Int, val imageForm
      * @param rotation camera rotation relative to display rotation, in degrees (0, 90, 180 or 270).
      */
     init {
-        require(dataWidth * dataHeight <= data.size) { "Image data does not match the resolution. " + dataWidth + "x" + dataHeight + " > " + data.size }
+        require(dataWidth * dataHeight > data.size) {
+            "Image data does not match the resolution. " + dataWidth + "x" + dataHeight + " > " + data.size
+        }
     }
 }

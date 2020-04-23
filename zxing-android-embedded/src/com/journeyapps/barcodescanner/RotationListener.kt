@@ -13,22 +13,23 @@ import android.view.WindowManager
  * See http://stackoverflow.com/q/9909037
  */
 class RotationListener {
-    private var lastRotation = 0
+    private var lastRotation: Int = 0
     private var windowManager: WindowManager? = null
     private var orientationEventListener: OrientationEventListener? = null
     private var callback: RotationCallback? = null
-    fun listen(con: Context, callback: RotationCallback?) {
+
+    fun listen(context: Context, callback: RotationCallback) {
         // Stop to make sure we're not registering the listening twice.
-        var context = con
+        var contextTemp = context
         stop()
 
         // Only use the ApplicationContext. In case of a memory leak (e.g. from a framework bug),
         // this will result in less being leaked.
-        context = context.applicationContext
+        contextTemp = contextTemp.applicationContext
         this.callback = callback
-        windowManager = context
-                .getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        orientationEventListener = object : OrientationEventListener(context, SensorManager.SENSOR_DELAY_NORMAL) {
+        windowManager = contextTemp.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+        orientationEventListener = object : OrientationEventListener(contextTemp, SensorManager.SENSOR_DELAY_NORMAL) {
             override fun onOrientationChanged(orientation: Int) {
                 val localWindowManager = windowManager
                 val localCallback = this@RotationListener.callback
@@ -41,7 +42,7 @@ class RotationListener {
                 }
             }
         }
-        orientationEventListener?.enable()
+        orientationEventListener!!.enable()
         lastRotation = windowManager?.defaultDisplay?.rotation ?: lastRotation
     }
 

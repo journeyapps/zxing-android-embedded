@@ -6,7 +6,7 @@ import android.util.Log
 import android.view.SurfaceHolder
 import com.google.zxing.client.android.R
 import com.journeyapps.barcodescanner.Size
-import com.journeyapps.barcodescanner.Util.validateMainThread
+import com.journeyapps.barcodescanner.Util
 import com.journeyapps.barcodescanner.camera.CameraInstance
 import com.journeyapps.barcodescanner.camera.CameraThread.Companion.instance
 
@@ -63,7 +63,7 @@ open class CameraInstance {
      * @param context the Android Context
      */
     constructor(context: Context) {
-        validateMainThread()
+        Util.validateMainThread()
         cameraThread = instance!!
         cameraManager = CameraManager(context)
         cameraManager.cameraSettings = cameraSettings
@@ -76,7 +76,7 @@ open class CameraInstance {
      * @param cameraManager the CameraManager to use
      */
     constructor(cameraManager: CameraManager) {
-        validateMainThread()
+        Util.validateMainThread()
         this.cameraManager = cameraManager
     }
 
@@ -105,26 +105,26 @@ open class CameraInstance {
         get() = cameraManager.cameraRotation
 
     fun open() {
-        validateMainThread()
+        Util.validateMainThread()
         isOpen = true
         isCameraClosed = false
         cameraThread.incrementAndEnqueue(opener)
     }
 
     fun configureCamera() {
-        validateMainThread()
+        Util.validateMainThread()
         validateOpen()
         cameraThread.enqueue(configure)
     }
 
     fun startPreview() {
-        validateMainThread()
+        Util.validateMainThread()
         validateOpen()
         cameraThread.enqueue(previewStarter)
     }
 
     fun setTorch(on: Boolean) {
-        validateMainThread()
+        Util.validateMainThread()
         if (isOpen) {
             cameraThread.enqueue(Runnable { cameraManager.setTorch(on) })
         }
@@ -135,15 +135,15 @@ open class CameraInstance {
      *
      * @param callback [CameraParametersCallback]
      */
-    fun changeCameraParameters(callback: CameraParametersCallback?) {
-        validateMainThread()
+    fun changeCameraParameters(callback: CameraParametersCallback) {
+        Util.validateMainThread()
         if (isOpen) {
             cameraThread.enqueue(Runnable { cameraManager.changeCameraParameters(callback) })
         }
     }
 
     fun close() {
-        validateMainThread()
+        Util.validateMainThread()
         if (isOpen) {
             cameraThread.enqueue(closer)
         } else {

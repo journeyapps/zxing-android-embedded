@@ -6,6 +6,8 @@ import android.util.AttributeSet
 import android.view.KeyEvent
 import android.widget.FrameLayout
 import android.widget.TextView
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.DecodeHintType
 import com.google.zxing.MultiFormatReader
 import com.google.zxing.ResultPoint
 import com.google.zxing.client.android.DecodeFormatManager
@@ -14,6 +16,7 @@ import com.google.zxing.client.android.Intents
 import com.google.zxing.client.android.R
 import com.journeyapps.barcodescanner.camera.CameraParametersCallback
 import com.journeyapps.barcodescanner.camera.CameraSettings
+import java.util.*
 
 /**
  * Encapsulates BarcodeView, ViewfinderView and status text.
@@ -55,7 +58,7 @@ open class DecoratedBarcodeView : FrameLayout {
         initialize(attrs)
     }
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int = 0) : super(context, attrs, defStyleAttr) {
         initialize(attrs)
     }
     /**
@@ -68,11 +71,13 @@ open class DecoratedBarcodeView : FrameLayout {
      */
     private fun initialize(attrs: AttributeSet? = null) {
         // Get attributes set on view
-        val attributes = context.obtainStyledAttributes(attrs, R.styleable.zxing_view)
+        val attributes = this.context.obtainStyledAttributes(attrs, R.styleable.zxing_view)
+
         val scannerLayout = attributes.getResourceId(
                 R.styleable.zxing_view_zxing_scanner_layout, R.layout.zxing_barcode_scanner)
+
         attributes.recycle()
-        inflate(context, scannerLayout, this)
+        inflate(this.context, scannerLayout, this)
         barcodeView = findViewById(R.id.zxing_barcode_surface)
 
         // Pass on any preview-related attributes
@@ -91,9 +96,11 @@ open class DecoratedBarcodeView : FrameLayout {
      */
     fun initializeFromIntent(intent: Intent) {
         // Scan the formats the intent requested, and return the result to the calling activity.
-        val decodeFormats = DecodeFormatManager.parseDecodeFormats(intent)
-        val decodeHints = DecodeHintManager.parseDecodeHints(intent)
+        val decodeFormats: MutableSet<BarcodeFormat> = DecodeFormatManager.parseDecodeFormats(intent)
+        val decodeHints: MutableMap<DecodeHintType, *> = DecodeHintManager.parseDecodeHints(intent)
+
         val settings = CameraSettings()
+
         if (intent.hasExtra(Intents.Scan.CAMERA_ID)) {
             val cameraId = intent.getIntExtra(Intents.Scan.CAMERA_ID, -1)
             if (cameraId >= 0) {
@@ -105,16 +112,19 @@ open class DecoratedBarcodeView : FrameLayout {
                 setTorchOn()
             }
         }
+
         val customPromptMessage = intent.getStringExtra(Intents.Scan.PROMPT_MESSAGE)
         customPromptMessage?.let { setStatusText(it) }
 
         // Check what type of scan. Default: normal scan
         val scanType = intent.getIntExtra(Intents.Scan.SCAN_TYPE, 0)
         val characterSet = intent.getStringExtra(Intents.Scan.CHARACTER_SET)
-        val reader = MultiFormatReader()
-        reader.setHints(decodeHints)
-        barcodeView.cameraSettings = settings
-        barcodeView.decoderFactory = DefaultDecoderFactory(decodeFormats, decodeHints, characterSet, scanType)
+        val reader = MultiFormatReader().apply { setHints(decodeHints) }
+
+        barcodeView.apply {
+            cameraSettings = settings
+            decoderFactory = DefaultDecoderFactory(decodeFormats, decodeHints, characterSet, scanType)
+        }
     }
 
     var decoderFactory: DecoderFactory?

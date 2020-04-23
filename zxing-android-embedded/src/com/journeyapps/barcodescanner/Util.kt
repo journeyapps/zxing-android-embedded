@@ -5,9 +5,11 @@ import android.os.Looper
 /**
  *
  */
-object Util {
-    @JvmStatic
-    fun validateMainThread() {
-        check(Looper.getMainLooper() == Looper.myLooper()) { "Must be called from the main thread." }
+class Util {
+    companion object {
+        @JvmStatic
+        fun validateMainThread() {
+            check(Looper.getMainLooper() == Looper.myLooper()) { "Must be called from the main thread." }
+        }
     }
 }

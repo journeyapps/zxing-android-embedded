@@ -9,7 +9,6 @@ import android.util.Log
 import com.google.zxing.LuminanceSource
 import com.google.zxing.Result
 import com.google.zxing.client.android.R
-import com.journeyapps.barcodescanner.Util.validateMainThread
 import com.journeyapps.barcodescanner.camera.CameraInstance
 import com.journeyapps.barcodescanner.camera.PreviewCallback
 
@@ -41,7 +40,7 @@ open class DecoderThread(cameraInstance: CameraInstance?, decoder: Decoder?, res
      * This must be called from the UI thread.
      */
     fun start() {
-        validateMainThread()
+        Util.validateMainThread()
         thread = HandlerThread(TAG)
         thread!!.start()
         handler = Handler(thread!!.looper, callback)
@@ -55,7 +54,7 @@ open class DecoderThread(cameraInstance: CameraInstance?, decoder: Decoder?, res
      * This must be called from the UI thread.
      */
     fun stop() {
-        validateMainThread()
+        Util.validateMainThread()
         synchronized(LOCK) {
             running = false
             handler?.removeCallbacksAndMessages(null)
@@ -138,7 +137,7 @@ open class DecoderThread(cameraInstance: CameraInstance?, decoder: Decoder?, res
     }
 
     init {
-        validateMainThread()
+        Util.validateMainThread()
         this.cameraInstance = cameraInstance
         this.decoder = decoder
         this.resultHandler = resultHandler

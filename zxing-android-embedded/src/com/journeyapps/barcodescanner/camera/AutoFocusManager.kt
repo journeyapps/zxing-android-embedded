@@ -16,7 +16,6 @@
 package com.journeyapps.barcodescanner.camera
 
 import android.hardware.Camera
-import android.hardware.Camera.AutoFocusCallback
 import android.os.Handler
 import android.util.Log
 import java.util.*
@@ -61,7 +60,7 @@ class AutoFocusManager(var camera: Camera?, settings: CameraSettings) {
         start()
     }
 
-    private val autoFocusCallback = AutoFocusCallback { _, _ ->
+    private val autoFocusCallback = Camera.AutoFocusCallback { _, _ ->
         handler.post {
             focusing = false
             autoFocusAgainLater()

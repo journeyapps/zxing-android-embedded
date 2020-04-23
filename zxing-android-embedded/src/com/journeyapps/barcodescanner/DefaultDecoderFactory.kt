@@ -26,12 +26,12 @@ class DefaultDecoderFactory : DecoderFactory {
         this.scanType = scanType
     }
 
-    override fun createDecoder(baseHints: Map<DecodeHintType?, *>): Decoder {
-        val hints: MutableMap<DecodeHintType?, Any?> = EnumMap(DecodeHintType::class.java)
+    override fun createDecoder(baseHints: Map<DecodeHintType, *>): Decoder {
+        val hints: MutableMap<DecodeHintType, Any?> = EnumMap(DecodeHintType::class.java)
         hints.putAll(baseHints)
 
         this.hints?.let { hints.putAll(it) }
-        decodeFormats?.let { hints[DecodeHintType.POSSIBLE_FORMATS] = it }
+        this.decodeFormats?.let { hints[DecodeHintType.POSSIBLE_FORMATS] = it }
         characterSet?.let { hints[DecodeHintType.CHARACTER_SET] = it }
 
         val reader = MultiFormatReader()

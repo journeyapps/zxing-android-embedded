@@ -5,28 +5,30 @@ import android.graphics.Rect
 class RawImageData(val data: ByteArray, val width: Int, val height: Int) {
 
     fun cropAndScale(cropRect: Rect, scale: Int): RawImageData {
-        val width = cropRect.width() / scale
-        val height = cropRect.height() / scale
+        val widthTemp = cropRect.width() / scale
+        val heightTemp = cropRect.height() / scale
+
         val top = cropRect.top
-        val area = width * height
+        val area = widthTemp * heightTemp
         val matrix = ByteArray(area)
+
         if (scale == 1) {
             var inputOffset = top * this.width + cropRect.left
 
             // Copy one cropped row at a time.
-            for (y in 0 until height) {
-                val outputOffset = y * width
-                System.arraycopy(data, inputOffset, matrix, outputOffset, width)
+            for (y in 0 until heightTemp) {
+                val outputOffset = y * widthTemp
+                System.arraycopy(data, inputOffset, matrix, outputOffset, widthTemp)
                 inputOffset += this.width
             }
         } else {
             var inputOffset = top * this.width + cropRect.left
 
             // Copy one cropped row at a time.
-            for (y in 0 until height) {
-                var outputOffset = y * width
+            for (y in 0 until heightTemp) {
+                var outputOffset = y * widthTemp
                 var xOffset = inputOffset
-                for (x in 0 until width) {
+                for (x in 0 until widthTemp) {
                     matrix[outputOffset] = data[xOffset]
                     xOffset += scale
                     outputOffset += 1
@@ -34,7 +36,7 @@ class RawImageData(val data: ByteArray, val width: Int, val height: Int) {
                 inputOffset += this.width * scale
             }
         }
-        return RawImageData(matrix, width, height)
+        return RawImageData(matrix, widthTemp, height)
     }
 
     fun rotateCameraPreview(cameraRotation: Int): RawImageData {

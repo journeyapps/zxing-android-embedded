@@ -85,9 +85,9 @@ open class ViewfinderView(context: Context, attrs: AttributeSet?) : View(context
             return
         }
         val frame: Rect = framingRect!!
-        val previewSize = previewSize
-        val width = width
-        val height = height
+        val preview = previewSize!!
+        val width = canvas.width
+        val height = canvas.height
 
         // Draw the exterior (i.e. outside the framing rect) darkened
         paint.color = if (resultBitmap != null) resultColor else maskColor
@@ -95,6 +95,7 @@ open class ViewfinderView(context: Context, attrs: AttributeSet?) : View(context
         canvas.drawRect(0f, frame.top.toFloat(), frame.left.toFloat(), frame.bottom + 1.toFloat(), paint)
         canvas.drawRect(frame.right + 1.toFloat(), frame.top.toFloat(), width.toFloat(), frame.bottom + 1.toFloat(), paint)
         canvas.drawRect(0f, frame.bottom + 1.toFloat(), width.toFloat(), height.toFloat(), paint)
+
         if (resultBitmap != null) {
             // Draw the opaque result bitmap over the scanning rectangle
             paint.alpha = CURRENT_POINT_OPACITY
@@ -105,11 +106,13 @@ open class ViewfinderView(context: Context, attrs: AttributeSet?) : View(context
                 paint.color = laserColor
                 paint.alpha = SCANNER_ALPHA[scannerAlpha]
                 scannerAlpha = (scannerAlpha + 1) % SCANNER_ALPHA.size
+
                 val middle = frame.height() / 2 + frame.top
                 canvas.drawRect(frame.left + 2.toFloat(), middle - 1.toFloat(), frame.right - 1.toFloat(), middle + 2.toFloat(), paint)
             }
-            val scaleX = width / previewSize!!.width.toFloat()
-            val scaleY = height / previewSize.height.toFloat()
+
+            val scaleX = this.width / preview.width.toFloat()
+            val scaleY = this.height / preview.height.toFloat()
 
             // draw the last possible result points
             if (lastPossibleResultPoints.isNotEmpty() && pointVisibility) {
@@ -156,7 +159,7 @@ open class ViewfinderView(context: Context, attrs: AttributeSet?) : View(context
     }
 
     fun drawViewfinder() {
-        val resultBitmap = resultBitmap
+        val resultBitmap = this.resultBitmap
         this.resultBitmap = null
         resultBitmap?.recycle()
         invalidate()
@@ -190,13 +193,7 @@ open class ViewfinderView(context: Context, attrs: AttributeSet?) : View(context
         protected const val POINT_SIZE = 6
     }
 
-    // This constructor is used when the class is built from an XML resource.
     init {
-
-        // Initialize these once for performance rather than calling them every time in onDraw().
-        val resources = resources
-
-        // Get setted attributes on view
         val attributes = getContext().obtainStyledAttributes(attrs, R.styleable.zxing_finder)
         maskColor = attributes.getColor(R.styleable.zxing_finder_zxing_viewfinder_mask, ContextCompat.getColor(this.context, R.color.zxing_viewfinder_mask))
         resultColor = attributes.getColor(R.styleable.zxing_finder_zxing_result_view, ContextCompat.getColor(this.context, R.color.zxing_result_view))

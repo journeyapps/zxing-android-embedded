@@ -44,11 +44,11 @@ open class BarcodeResult(
      * @return [Bitmap] with result points on it, or plain bitmap, if no result points
      */
     fun getBitmapWithResultPoints(color: Int): Bitmap? {
-        val bitmap: Bitmap? = bitmap
-        var barcode = bitmap
+        val bitmapTemp: Bitmap = bitmap
+        var barcode = bitmapTemp
         val points = transformedResultPoints
-        if (points.isNotEmpty() && bitmap != null) {
-            barcode = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+        if (points.isNotEmpty()) {
+            barcode = Bitmap.createBitmap(bitmapTemp.width, bitmapTemp.height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(barcode)
             canvas.drawBitmap(bitmap, 0f, 0f, null)
             val paint = Paint()

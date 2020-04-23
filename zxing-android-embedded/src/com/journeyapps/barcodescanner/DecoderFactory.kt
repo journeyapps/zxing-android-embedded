@@ -17,5 +17,5 @@ interface DecoderFactory {
      * @param baseHints default hints. Typically specifies DecodeHintType.NEED_RESULT_POINT_CALLBACK.
      * @return a new Decoder
      */
-    fun createDecoder(baseHints: Map<DecodeHintType?, *>): Decoder
+    fun createDecoder(baseHints: Map<DecodeHintType, *>): Decoder
 }

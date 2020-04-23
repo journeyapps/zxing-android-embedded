@@ -303,16 +303,16 @@ open class CaptureManager(private val activity: Activity, private val barcodeVie
     }
 
     protected open fun displayFrameworkBugMessageAndExit(message: String) {
-        var message = message
+        var messageTemp = message
         if (activity.isFinishing || destroyed || finishWhenClosed) {
             return
         }
-        if (message.isEmpty()) {
-            message = activity.getString(R.string.zxing_msg_camera_framework_bug)
+        if (messageTemp.isEmpty()) {
+            messageTemp = activity.getString(R.string.zxing_msg_camera_framework_bug)
         }
         val builder = AlertDialog.Builder(activity)
         builder.setTitle(activity.getString(R.string.zxing_app_name))
-        builder.setMessage(message)
+        builder.setMessage(messageTemp)
         builder.setPositiveButton(R.string.zxing_button_ok) { _: DialogInterface?, _: Int -> finish() }
         builder.setOnCancelListener { finish() }
         builder.show()

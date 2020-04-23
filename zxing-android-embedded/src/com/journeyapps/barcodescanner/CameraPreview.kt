@@ -15,7 +15,6 @@ import android.util.Log
 import android.view.*
 import android.view.TextureView.SurfaceTextureListener
 import com.google.zxing.client.android.R
-import com.journeyapps.barcodescanner.Util.validateMainThread
 import com.journeyapps.barcodescanner.camera.*
 import java.util.*
 import kotlin.math.max
@@ -252,8 +251,12 @@ open class CameraPreview : ViewGroup {
         initialize(context, attrs, 0, 0)
     }
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int = 0) : super(context, attrs, defStyleAttr) {
         initialize(context, attrs, defStyleAttr, 0)
+    }
+
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int = 0, defStyleRes: Int = 0) : super(context, attrs, defStyleAttr, defStyleRes) {
+        initialize(context, attrs, defStyleAttr, defStyleRes)
     }
 
     private fun initialize(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
@@ -288,15 +291,9 @@ open class CameraPreview : ViewGroup {
 
         // See zxing_attrs.xml for the enum values
         when (styledAttributes.getInteger(R.styleable.zxing_camera_preview_zxing_preview_scaling_strategy, -1)) {
-            1 -> {
-                previewScalingStrategy = CenterCropStrategy()
-            }
-            2 -> {
-                previewScalingStrategy = FitCenterStrategy()
-            }
-            3 -> {
-                previewScalingStrategy = FitXYStrategy()
-            }
+            1 -> previewScalingStrategy = CenterCropStrategy()
+            2 -> previewScalingStrategy = FitCenterStrategy()
+            3 -> previewScalingStrategy = FitXYStrategy()
         }
         styledAttributes.recycle()
     }
@@ -311,11 +308,11 @@ open class CameraPreview : ViewGroup {
 
     private fun setupSurfaceView() {
         if (isUseTextureView) {
-            textureView = TextureView(context)
+            textureView = TextureView(this.context)
             textureView!!.surfaceTextureListener = surfaceTextureListener()
             addView(textureView)
         } else {
-            surfaceView = SurfaceView(context)
+            surfaceView = SurfaceView(this.context)
             surfaceView!!.holder.addCallback(surfaceCallback)
             addView(surfaceView)
         }
@@ -412,7 +409,7 @@ open class CameraPreview : ViewGroup {
      *
      * @param callback [CameraParametersCallback]
      */
-    fun changeCameraParameters(callback: CameraParametersCallback?) {
+    fun changeCameraParameters(callback: CameraParametersCallback) {
         cameraInstance?.changeCameraParameters(callback)
     }
 
@@ -525,7 +522,7 @@ open class CameraPreview : ViewGroup {
      */
     fun resume() {
         // This must be safe to call multiple times
-        validateMainThread()
+        Util.validateMainThread()
         Log.d(TAG, "resume()")
 
         // initCamera() does nothing if called twice, but does log a warning
@@ -558,7 +555,7 @@ open class CameraPreview : ViewGroup {
      */
     open fun pause() {
         // This must be safe to call multiple times.
-        validateMainThread()
+        Util.validateMainThread()
         Log.d(TAG, "pause()")
         openedOrientation = -1
         if (cameraInstance != null) {
