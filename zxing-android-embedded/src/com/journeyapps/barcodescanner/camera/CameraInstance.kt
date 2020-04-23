@@ -20,7 +20,7 @@ open class CameraInstance {
      *
      * @return the CameraThread used to manage the camera
      */
-    protected open var cameraThread: CameraThread? = null
+    protected open lateinit var cameraThread: CameraThread
 
     /**
      *
@@ -64,7 +64,7 @@ open class CameraInstance {
      */
     constructor(context: Context) {
         validateMainThread()
-        cameraThread = instance
+        cameraThread = instance!!
         cameraManager = CameraManager(context)
         cameraManager.cameraSettings = cameraSettings
         mainHandler = Handler()
@@ -108,25 +108,25 @@ open class CameraInstance {
         validateMainThread()
         isOpen = true
         isCameraClosed = false
-        cameraThread?.incrementAndEnqueue(opener)
+        cameraThread.incrementAndEnqueue(opener)
     }
 
     fun configureCamera() {
         validateMainThread()
         validateOpen()
-        cameraThread?.enqueue(configure)
+        cameraThread.enqueue(configure)
     }
 
     fun startPreview() {
         validateMainThread()
         validateOpen()
-        cameraThread?.enqueue(previewStarter)
+        cameraThread.enqueue(previewStarter)
     }
 
     fun setTorch(on: Boolean) {
         validateMainThread()
         if (isOpen) {
-            cameraThread?.enqueue(Runnable { cameraManager.setTorch(on) })
+            cameraThread.enqueue(Runnable { cameraManager.setTorch(on) })
         }
     }
 
@@ -138,14 +138,14 @@ open class CameraInstance {
     fun changeCameraParameters(callback: CameraParametersCallback?) {
         validateMainThread()
         if (isOpen) {
-            cameraThread?.enqueue(Runnable { cameraManager.changeCameraParameters(callback) })
+            cameraThread.enqueue(Runnable { cameraManager.changeCameraParameters(callback) })
         }
     }
 
     fun close() {
         validateMainThread()
         if (isOpen) {
-            cameraThread?.enqueue(closer)
+            cameraThread.enqueue(closer)
         } else {
             isCameraClosed = true
         }
@@ -158,7 +158,7 @@ open class CameraInstance {
                 Log.d(TAG, "Camera is closed, not requesting preview")
                 return@post
             }
-            cameraThread?.enqueue(Runnable { cameraManager.requestPreviewFrame(callback) })
+            cameraThread.enqueue(Runnable { cameraManager.requestPreviewFrame(callback) })
         }
     }
 
@@ -206,7 +206,7 @@ open class CameraInstance {
         }
         isCameraClosed = true
         readyHandler?.sendEmptyMessage(R.id.zxing_camera_closed)
-        cameraThread?.decrementInstances()
+        cameraThread.decrementInstances()
     }
 
     private fun notifyError(error: Exception) {

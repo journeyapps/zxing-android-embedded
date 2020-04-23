@@ -136,7 +136,6 @@ class CameraManager(private val context: Context) {
         val cameraId = OpenCameraInterface.getCameraId(cameraSettings.requestedCameraId)
         cameraInfo = CameraInfo()
         Camera.getCameraInfo(cameraId, cameraInfo)
-        configure()
     }
 
     /**
