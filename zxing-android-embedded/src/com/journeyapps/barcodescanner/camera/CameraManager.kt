@@ -447,5 +447,6 @@ class CameraManager(private val context: Context) {
 
     init {
         cameraPreviewCallback = CameraPreviewCallback()
+        configure()
     }
 }
