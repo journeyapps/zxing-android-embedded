@@ -224,7 +224,7 @@ class CameraManager(private val context: Context) {
         }
 
     private val defaultCameraParameters: Camera.Parameters
-        private get() {
+        get() {
             val parameters = camera!!.parameters
             if (defaultParameters == null) {
                 defaultParameters = parameters.flatten()
@@ -433,7 +433,6 @@ class CameraManager(private val context: Context) {
             if (rawSupportedSizes == null) {
                 val defaultSize = parameters.previewSize
                 if (defaultSize != null) {
-                    val previewSize = Size(defaultSize.width, defaultSize.height)
                     previewSizes.add(Size(defaultSize.width, defaultSize.height))
                 }
                 return previewSizes

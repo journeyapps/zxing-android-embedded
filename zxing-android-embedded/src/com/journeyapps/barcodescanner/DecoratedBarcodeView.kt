@@ -47,15 +47,15 @@ open class DecoratedBarcodeView : FrameLayout {
 
     }
 
-    constructor(context: Context?) : super(context) {
+    constructor(context: Context) : super(context) {
         initialize()
     }
 
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         initialize(attrs)
     }
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         initialize(attrs)
     }
     /**
@@ -221,7 +221,7 @@ open class DecoratedBarcodeView : FrameLayout {
     }
 
     /**
-     * The Listener to torch/fflashlight events (turn on, turn off).
+     * The Listener to torch/flashlight events (turn on, turn off).
      */
     interface TorchListener {
         fun onTorchOn()

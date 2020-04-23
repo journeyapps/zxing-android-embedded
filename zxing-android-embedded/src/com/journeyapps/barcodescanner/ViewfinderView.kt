@@ -34,7 +34,7 @@ import java.util.*
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-open class ViewfinderView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
+open class ViewfinderView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     protected open val paint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     protected open var resultBitmap: Bitmap? = null
     var maskColor: Int
@@ -86,8 +86,8 @@ open class ViewfinderView(context: Context?, attrs: AttributeSet?) : View(contex
         }
         val frame: Rect = framingRect!!
         val previewSize = previewSize
-        val width = canvas.width
-        val height = canvas.height
+        val width = width
+        val height = height
 
         // Draw the exterior (i.e. outside the framing rect) darkened
         paint.color = if (resultBitmap != null) resultColor else maskColor
@@ -98,7 +98,7 @@ open class ViewfinderView(context: Context?, attrs: AttributeSet?) : View(contex
         if (resultBitmap != null) {
             // Draw the opaque result bitmap over the scanning rectangle
             paint.alpha = CURRENT_POINT_OPACITY
-            canvas.drawBitmap(resultBitmap, null, frame, paint)
+            canvas.drawBitmap(resultBitmap!!, null, frame, paint)
         } else {
             // If wanted, draw a red "laser scanner" line through the middle to show decoding is active
             if (laserVisibility) {
@@ -167,7 +167,7 @@ open class ViewfinderView(context: Context?, attrs: AttributeSet?) : View(contex
      *
      * @param result An image of the result.
      */
-    fun drawResultBitmap(result: Bitmap?) {
+    fun drawResultBitmap(result: Bitmap) {
         resultBitmap = result
         invalidate()
     }

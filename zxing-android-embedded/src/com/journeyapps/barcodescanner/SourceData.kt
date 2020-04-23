@@ -86,17 +86,17 @@ class SourceData(data: ByteArray, dataWidth: Int, dataHeight: Int, val imageForm
     }
 
     fun getBitmap(cropRect: Rect?, scaleFactor: Int): Bitmap {
-        var cropRect = cropRect
-        if (cropRect == null) {
-            cropRect = Rect(0, 0, data.width, data.height)
+        var cropRectTemp = cropRect
+        if (cropRectTemp == null) {
+            cropRectTemp = Rect(0, 0, data.width, data.height)
         } else if (isRotated) {
-            cropRect = Rect(cropRect.top, cropRect.left, cropRect.bottom, cropRect.right)
+            cropRectTemp = Rect(cropRectTemp.top, cropRectTemp.left, cropRectTemp.bottom, cropRectTemp.right)
         }
 
         // TODO: there should be a way to do this without JPEG compression / decompression cycle.
         val img = YuvImage(data.data, imageFormat, data.width, data.height, null)
         val buffer = ByteArrayOutputStream()
-        img.compressToJpeg(cropRect, 90, buffer)
+        img.compressToJpeg(cropRectTemp, 90, buffer)
         val jpegData = buffer.toByteArray()
         val options = BitmapFactory.Options()
         options.inSampleSize = scaleFactor

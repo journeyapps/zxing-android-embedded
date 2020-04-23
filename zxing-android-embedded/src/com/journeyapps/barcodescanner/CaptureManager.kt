@@ -49,7 +49,7 @@ open class CaptureManager(private val activity: Activity, private val barcodeVie
     private var orientationLock = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     private var returnBarcodeImagePath = false
     private var showDialogIfMissingCameraPermission = true
-    private var missingCameraPermissionDialogMessage = ""
+    private var missingCameraPermissionDialogMessage = String()
     private var destroyed = false
     private val inactivityTimer: InactivityTimer
     private val beepManager: BeepManager
@@ -365,7 +365,7 @@ open class CaptureManager(private val activity: Activity, private val barcodeVie
             intent.putExtra(Intents.Scan.RESULT, rawResult.toString())
             intent.putExtra(Intents.Scan.RESULT_FORMAT, rawResult.barcodeFormat.toString())
             val rawBytes = rawResult.rawBytes
-            if (rawBytes != null && rawBytes.isNotEmpty()) {
+            if (rawBytes.isNotEmpty()) {
                 intent.putExtra(Intents.Scan.RESULT_BYTES, rawBytes)
             }
 

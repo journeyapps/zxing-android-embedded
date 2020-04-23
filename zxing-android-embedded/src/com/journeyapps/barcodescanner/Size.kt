@@ -87,10 +87,10 @@ class Size(val width: Int, val height: Int) : Comparable<Size> {
         return width.toString() + "x" + height
     }
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) return true
-        if (o == null || javaClass != o.javaClass) return false
-        val size = o as Size
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || javaClass != other.javaClass) return false
+        val size = other as Size
         return width == size.width && height == size.height
     }
 

@@ -20,7 +20,7 @@ open class CameraInstance {
      *
      * @return the CameraThread used to manage the camera
      */
-    protected open lateinit var cameraThread: CameraThread
+    protected lateinit var cameraThread: CameraThread
 
     /**
      *
@@ -35,7 +35,7 @@ open class CameraInstance {
      *
      * @return the CameraManager used
      */
-    protected open lateinit var cameraManager: CameraManager
+    protected lateinit var cameraManager: CameraManager
     private var readyHandler: Handler? = null
     var displayConfiguration: DisplayConfiguration? = null
         set(configuration) {

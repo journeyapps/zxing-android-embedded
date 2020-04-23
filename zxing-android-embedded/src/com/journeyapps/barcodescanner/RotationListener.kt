@@ -17,9 +17,9 @@ class RotationListener {
     private var windowManager: WindowManager? = null
     private var orientationEventListener: OrientationEventListener? = null
     private var callback: RotationCallback? = null
-    fun listen(context: Context, callback: RotationCallback?) {
+    fun listen(con: Context, callback: RotationCallback?) {
         // Stop to make sure we're not registering the listening twice.
-        var context = context
+        var context = con
         stop()
 
         // Only use the ApplicationContext. In case of a memory leak (e.g. from a framework bug),

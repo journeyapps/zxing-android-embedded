@@ -15,12 +15,12 @@ import java.util.*
  * This class delegate all read-only fields of [com.google.zxing.Result],
  * and adds a bitmap with scanned barcode.
  */
-class BarcodeResult(
+open class BarcodeResult(
         /**
          * @return wrapped [com.google.zxing.Result]
          */
         var result: Result,
-        protected var sourceData: SourceData) {
+        protected open var sourceData: SourceData) {
     /**
      *
      * @return Bitmap preview scale factor
@@ -37,7 +37,7 @@ class BarcodeResult(
     val transformedResultPoints: List<ResultPoint>
         get() = if (result.resultPoints == null) {
             emptyList()
-        } else transformResultPoints(Arrays.asList(*result.resultPoints), sourceData)
+        } else transformResultPoints(listOf(*result.resultPoints), sourceData)
 
     /**
      * @param color Color of result points

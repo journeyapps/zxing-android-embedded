@@ -497,8 +497,6 @@ open class CameraPreview : ViewGroup {
                     textureView!!.setTransform(transform)
                 }
                 startCameraPreview(CameraSurface(textureView!!.surfaceTexture))
-            } else {
-                // Surface is not the correct size yet
             }
         }
     }
@@ -689,7 +687,6 @@ open class CameraPreview : ViewGroup {
     protected open fun calculateFramingRect(container: Rect?, surface: Rect?): Rect {
         // intersection is the part of the container that is used for the preview
         val intersection = Rect(container)
-        val intersects = intersection.intersect(surface)
         if (framingRectSize != null) {
             // Specific size is specified. Make sure it's not larger than the container or surface.
             val horizontalMargin = max(0, (intersection.width() - framingRectSize!!.width) / 2)
