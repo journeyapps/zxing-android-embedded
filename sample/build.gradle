@@ -67,7 +67,7 @@ dependencies {
 
     // leakcanary is for development purposes only
     // https://github.com/square/leakcanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 
     // AboutLibraries
