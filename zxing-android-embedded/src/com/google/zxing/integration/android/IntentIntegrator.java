@@ -355,7 +355,7 @@ public class IntentIntegrator {
      * the fields will be null.
      */
     public static IntentResult parseActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == REQUEST_CODE) {
+        if (requestCode == this.requestCode ) {
             return parseActivityResult(resultCode, intent);
         }
         return null;
