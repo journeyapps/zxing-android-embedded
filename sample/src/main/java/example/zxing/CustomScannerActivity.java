@@ -12,9 +12,6 @@ import androidx.annotation.NonNull;
 
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-import com.journeyapps.barcodescanner.ViewfinderView;
-
-import java.util.Random;
 
 /**
  * Custom Scannner Activity extending from Activity to display a custom layout form scanner view.
@@ -25,7 +22,6 @@ public class CustomScannerActivity extends Activity implements
     private CaptureManager capture;
     private DecoratedBarcodeView barcodeScannerView;
     private Button switchFlashlightButton;
-    private ViewfinderView viewfinderView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +33,6 @@ public class CustomScannerActivity extends Activity implements
 
         switchFlashlightButton = findViewById(R.id.switch_flashlight);
 
-        viewfinderView = findViewById(R.id.zxing_viewfinder_view);
-
         // if the device does not have flashlight in its camera,
         // then remove the switch flashlight button...
         if (!hasFlash()) {
@@ -49,9 +43,6 @@ public class CustomScannerActivity extends Activity implements
         capture.initializeFromIntent(getIntent(), savedInstanceState);
         capture.setShowMissingCameraPermissionDialog(false);
         capture.decode();
-
-        changeMaskColor(null);
-        changeLaserVisibility(true);
     }
 
     @Override
@@ -98,16 +89,6 @@ public class CustomScannerActivity extends Activity implements
         } else {
             barcodeScannerView.setTorchOff();
         }
-    }
-
-    public void changeMaskColor(View view) {
-        Random rnd = new Random();
-        int color = Color.argb(100, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-        viewfinderView.setMaskColor(color);
-    }
-
-    public void changeLaserVisibility(boolean visible) {
-        viewfinderView.setLaserVisibility(visible);
     }
 
     @Override
