@@ -22,7 +22,7 @@ android {
         keystorePassword = properties.getProperty('keystore.password')
         keystoreAlias = properties.getProperty('keystore.alias')
         validConfig = keystoreFile != null && keystorePassword != null && keystoreAlias != null
-    } catch (error) {
+    } catch (ignored) {
         validConfig = false
     }
 
@@ -62,7 +62,7 @@ dependencies {
     //   implementation 'com.journeyapps:zxing-android-embedded:<version>'
     implementation project(':zxing-android-embedded')
 
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
 
     // leakcanary is for development purposes only

@@ -35,7 +35,7 @@ dependencies {
 
     api 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.1'
     testImplementation "org.mockito:mockito-core:1.9.5"
 }
 
