@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,9 +19,6 @@ import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-
-import androidx.annotation.FloatRange;
-import androidx.annotation.IntRange;
 
 import com.google.zxing.client.android.R;
 import com.journeyapps.barcodescanner.camera.CameraInstance;
