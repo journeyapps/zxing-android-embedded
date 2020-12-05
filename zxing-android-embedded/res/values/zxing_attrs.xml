@@ -8,6 +8,8 @@
   <declare-styleable name="zxing_camera_preview">
     <attr name="zxing_framing_rect_width" format="dimension" />
     <attr name="zxing_framing_rect_height" format="dimension" />
+    <attr name="zxing_framing_offset_y" format="dimension" />
+    <attr name="zxing_framing_offset_y_ratio" format="float" />
     <attr name="zxing_use_texture_view" format="boolean" />
     <attr name="zxing_preview_scaling_strategy" format="enum">
       <enum name="centerCrop" value="1" />
