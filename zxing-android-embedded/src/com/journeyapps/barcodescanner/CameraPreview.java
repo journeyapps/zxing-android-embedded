@@ -284,7 +284,7 @@ public class CameraPreview extends ViewGroup {
         this.framingOffsetY = styledAttributes.getDimensionPixelSize(R.styleable.zxing_camera_preview_zxing_framing_offset_y, -1);
 
         float framingOffsetYRatio = styledAttributes.getFloat(R.styleable.zxing_camera_preview_zxing_framing_offset_y_ratio, 0.5f);
-        if (framingOffsetYRatio >= 0 && framingOffsetYRatio <= 1.0) {
+        if (framingOffsetYRatio >= 0.0f && framingOffsetYRatio <= 1.0f) {
             this.framingOffsetYRatio = framingOffsetYRatio;
         }
 
@@ -852,6 +852,14 @@ public class CameraPreview extends ViewGroup {
             int horizontalMargin = Math.max(0, (intersection.width() - framingRectSize.width) / 2);
             int verticalMargin = Math.max(0, (intersection.height() - framingRectSize.height) / 2);
             intersection.inset(horizontalMargin, verticalMargin);
+
+            // Y axis offset
+            if (framingOffsetY == -1) {
+                intersection.offset(0, (int) ((container.height() - intersection.height()) * framingOffsetYRatio - verticalMargin));
+            } else {
+                intersection.offset(0, framingOffsetY - verticalMargin);
+            }
+
             return intersection;
         }
         // margin as 10% (default) of the smaller of width, height
