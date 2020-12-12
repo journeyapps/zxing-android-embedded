@@ -20,12 +20,12 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.util.Log;
 
-import java.io.Closeable;
 import java.io.IOException;
 
 /**
@@ -94,7 +94,8 @@ public final class BeepManager {
 
     public MediaPlayer playBeepSound() {
         MediaPlayer mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setAudioAttributes(new AudioAttributes.Builder().setContentType(
+                AudioAttributes.CONTENT_TYPE_MUSIC).build());
         mediaPlayer.setOnCompletionListener(mp -> {
             mp.stop();
             mp.reset();
