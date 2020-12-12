@@ -95,22 +95,18 @@ public final class BeepManager {
     public MediaPlayer playBeepSound() {
         MediaPlayer mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                mp.stop();
-                mp.release();
-            }
+        mediaPlayer.setOnCompletionListener(mp -> {
+            mp.stop();
+            mp.reset();
+            mp.release();
         });
-        mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                Log.w(TAG, "Failed to beep " + what + ", " + extra);
-                // possibly media player error, so release and recreate
-                mp.stop();
-                mp.release();
-                return true;
-            }
+        mediaPlayer.setOnErrorListener((mp, what, extra) -> {
+            Log.w(TAG, "Failed to beep " + what + ", " + extra);
+            // possibly media player error, so release and recreate
+            mp.stop();
+            mp.reset();
+            mp.release();
+            return true;
         });
         try {
             AssetFileDescriptor file = context.getResources().openRawResourceFd(R.raw.zxing_beep);
@@ -125,6 +121,7 @@ public final class BeepManager {
             return mediaPlayer;
         } catch (IOException ioe) {
             Log.w(TAG, ioe);
+            mediaPlayer.reset();
             mediaPlayer.release();
             return null;
         }
