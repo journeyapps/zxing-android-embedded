@@ -72,6 +72,16 @@ project.afterEvaluate {
                 artifactId project.artifactId
 
                 artifact sourceJar
+                
+                pom {
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'https://github.com/journeyapps/zxing-android-embedded/blob/master/COPYING'
+                        }
+                    }
+                }
+
 
                 pom.withXml {
                     // HACK to add dependencies to POM.
