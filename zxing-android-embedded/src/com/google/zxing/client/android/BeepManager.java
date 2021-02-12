@@ -20,12 +20,12 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.util.Log;
 
-import java.io.Closeable;
 import java.io.IOException;
 
 /**
@@ -94,23 +94,20 @@ public final class BeepManager {
 
     public MediaPlayer playBeepSound() {
         MediaPlayer mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                mp.stop();
-                mp.release();
-            }
+        mediaPlayer.setAudioAttributes(new AudioAttributes.Builder().setContentType(
+                AudioAttributes.CONTENT_TYPE_MUSIC).build());
+        mediaPlayer.setOnCompletionListener(mp -> {
+            mp.stop();
+            mp.reset();
+            mp.release();
         });
-        mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                Log.w(TAG, "Failed to beep " + what + ", " + extra);
-                // possibly media player error, so release and recreate
-                mp.stop();
-                mp.release();
-                return true;
-            }
+        mediaPlayer.setOnErrorListener((mp, what, extra) -> {
+            Log.w(TAG, "Failed to beep " + what + ", " + extra);
+            // possibly media player error, so release and recreate
+            mp.stop();
+            mp.reset();
+            mp.release();
+            return true;
         });
         try {
             AssetFileDescriptor file = context.getResources().openRawResourceFd(R.raw.zxing_beep);
@@ -125,6 +122,7 @@ public final class BeepManager {
             return mediaPlayer;
         } catch (IOException ioe) {
             Log.w(TAG, ioe);
+            mediaPlayer.reset();
             mediaPlayer.release();
             return null;
         }
