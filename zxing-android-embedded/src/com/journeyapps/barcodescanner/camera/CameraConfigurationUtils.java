@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.android.camera;
+package com.journeyapps.barcodescanner.camera;
 
 import android.annotation.TargetApi;
 import android.graphics.Rect;
