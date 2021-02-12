@@ -24,7 +24,6 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 
 import com.google.zxing.client.android.AmbientLightManager;
-import com.google.zxing.client.android.camera.CameraConfigurationUtils;
 import com.google.zxing.client.android.camera.open.OpenCameraInterface;
 import com.journeyapps.barcodescanner.Size;
 import com.journeyapps.barcodescanner.SourceData;
