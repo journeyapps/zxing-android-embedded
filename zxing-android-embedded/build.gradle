@@ -10,7 +10,7 @@ dependencies {
 
     api 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.1'
     testImplementation "org.mockito:mockito-core:1.9.5"
 }
 
@@ -25,7 +25,7 @@ android {
             res.srcDirs = ['res-orig', 'res']
             assets.srcDirs = ['assets']
         }
-        test.setRoot('test');
+        test.setRoot('test')
     }
 
     // This is bad practice - we should fix the warnings instead.
