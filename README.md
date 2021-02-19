@@ -13,11 +13,11 @@ Features:
 
 A sample application is available in [Releases](https://github.com/journeyapps/zxing-android-embedded/releases).
 
-By default, Android SDK 24+ is required because of `zxing:core` 3.4.0. To support SDK 14+, see [Older SDK versions](#older-sdk-versions). 
+By default, Android SDK 19+ is required because of `zxing:core` 3.4.0. To support SDK 14+, see [Older SDK versions](#older-sdk-versions).
 
 ## Adding aar dependency with Gradle
 
-From version 4.x, only Android SDK 24+ is supported by default, and androidx is required.
+From version 4.x, only Android SDK 19+ is supported by default, and androidx is required.
 
 Add the following to your `build.gradle` file:
 
@@ -39,7 +39,7 @@ android {
 
 ## Older SDK versions
 
-For Android SDK versions < 24, you can downgrade `zxing:core` to 3.3.0 or earlier for Android 14+ support:
+For Android SDK versions < 19, you can downgrade `zxing:core` to 3.3.0 or earlier for Android 14+ support:
 
 ```groovy
 repositories {
