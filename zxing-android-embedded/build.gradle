@@ -1,9 +1,34 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
-
+apply plugin: 'signing'
 
 ext.artifactId = 'zxing-android-embedded'
+
+
+// Publishing config from https://getstream.io/blog/publishing-libraries-to-mavencentral-2021/
+ext["signing.keyId"] = ''
+ext["signing.password"] = ''
+ext["signing.secretKeyRingFile"] = ''
+ext["ossrhUsername"] = ''
+ext["ossrhPassword"] = ''
+ext["sonatypeStagingProfileId"] = ''
+
+File secretPropsFile = project.rootProject.file('local.properties')
+if (secretPropsFile.exists()) {
+    Properties p = new Properties()
+    p.load(new FileInputStream(secretPropsFile))
+    p.each { name, value ->
+        ext[name] = value
+    }
+} else {
+    ext["signing.keyId"] = System.getenv('SIGNING_KEY_ID')
+    ext["signing.password"] = System.getenv('SIGNING_PASSWORD')
+    ext["signing.secretKeyRingFile"] = System.getenv('SIGNING_SECRET_KEY_RING_FILE')
+    ext["ossrhUsername"] = System.getenv('OSSRH_USERNAME')
+    ext["ossrhPassword"] = System.getenv('OSSRH_PASSWORD')
+    ext["sonatypeStagingProfileId"] = System.getenv('SONATYPE_STAGING_PROFILE_ID')
+}
+
 
 dependencies {
     api project.zxingCore
@@ -74,11 +99,30 @@ project.afterEvaluate {
                 artifact sourceJar
                 
                 pom {
+                    name = project.artifactId
+                    description = 'Barcode scanner library for Android, based on the ZXing decoder'
+                    url = 'https://github.com/journeyapps/zxing-android-embedded'
+
                     licenses {
                         license {
                             name = 'The Apache License, Version 2.0'
                             url = 'https://github.com/journeyapps/zxing-android-embedded/blob/master/COPYING'
                         }
+                    }
+
+                    developers {
+                        developer {
+                            id = ''
+                            name = 'Ralf Kistner'
+                            email = 'ralf@journeyapps.com'
+                            organization = 'Journey Mobile, Inc'
+                            organizationUrl = 'https://journeyapps.com'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:github.com/journeyapps/zxing-android-embedded.git'
+                        developerConnection = 'scm:git:ssh://github.com/journeyapps/zxing-android-embedded.git'
+                        url = 'https://github.com/journeyapps/zxing-android-embedded'
                     }
                 }
 
@@ -100,23 +144,20 @@ project.afterEvaluate {
                 }
             }
         }
-    }
-}
 
-// To release, place bintray_user and bintray_key properties in ~/.gradle/gradle.properties,
-// and run ./gradlew clean assembleRelease bintrayUpload
-
-if (project.hasProperty('bintray_user') && project.hasProperty('bintray_key')) {
-    bintray {
-        user = bintray_user
-        key = bintray_key
-        publications = ['maven']
-        publish = true
-        pkg {
-            userOrg = 'journeyapps'
-            repo = 'maven'
-            name = 'zxing-android-embedded'
+        repositories {
+            maven {
+                name = "sonatype"
+                url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+                credentials {
+                    username ossrhUsername
+                    password ossrhPassword
+                }
+            }
         }
     }
 }
 
+signing {
+    sign publishing.publications
+}
