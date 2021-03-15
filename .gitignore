@@ -8,3 +8,6 @@ maven-repository
 local.properties
 mvn-clone
 *.keystore
+.project
+.settings
+.classpath

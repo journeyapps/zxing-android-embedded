@@ -23,11 +23,11 @@ Add the following to your `build.gradle` file:
 
 ```groovy
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
-    implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
+    implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'
 }
 
@@ -43,11 +43,11 @@ For Android SDK versions < 24, you can downgrade `zxing:core` to 3.3.0 or earlie
 
 ```groovy
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
-    implementation('com.journeyapps:zxing-android-embedded:4.1.0') { transitive = false }
+    implementation('com.journeyapps:zxing-android-embedded:4.2.0') { transitive = false }
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.zxing:core:3.3.0'
 }

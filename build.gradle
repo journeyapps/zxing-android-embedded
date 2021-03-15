@@ -1,23 +1,34 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+        jcenter {
+            content {
+                // https://youtrack.jetbrains.com/issue/IDEA-261387
+                includeModule("org.jetbrains.trove4j", "trove4j")
+            }
+        }
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
     }
 }
 
 subprojects {
     repositories {
         google()
-        jcenter()
         mavenLocal()
+        mavenCentral()
+        jcenter {
+            content {
+                // https://youtrack.jetbrains.com/issue/IDEA-261387
+                includeModule("org.jetbrains.trove4j", "trove4j")
+            }
+        }
     }
 
-    version = '4.1.1'
+    version = '4.2.0'
     group = 'com.journeyapps'
 
     ext.androidTargetSdk = 28
