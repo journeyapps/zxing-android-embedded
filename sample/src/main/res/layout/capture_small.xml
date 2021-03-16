@@ -33,6 +33,7 @@
         android:layout_marginTop="150dp"
         android:layout_marginBottom="150dp"
         android:id="@+id/zxing_barcode_scanner"
+        app:zxing_framing_offset_y_ratio="0.32"
         app:zxing_use_texture_view="false"
         app:zxing_preview_scaling_strategy="fitXY"/>
 

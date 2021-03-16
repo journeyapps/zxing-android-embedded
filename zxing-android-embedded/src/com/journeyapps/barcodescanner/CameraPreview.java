@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -138,6 +137,12 @@ public class CameraPreview extends ViewGroup {
     // Fraction of the width / heigth to use as a margin. This fraction is used on each size, so
     // must be smaller than 0.5;
     private double marginFraction = 0.1d;
+
+    // Frame rectangle Y axis offset
+    private int framingOffsetY;
+
+    // Frame rectangle Y axis offset percentage
+    private float framingOffsetYRatio = 0.5f;
 
     private PreviewScalingStrategy previewScalingStrategy = null;
 
@@ -274,6 +279,13 @@ public class CameraPreview extends ViewGroup {
 
         if (framingRectWidth > 0 && framingRectHeight > 0) {
             this.framingRectSize = new Size(framingRectWidth, framingRectHeight);
+        }
+
+        this.framingOffsetY = styledAttributes.getDimensionPixelSize(R.styleable.zxing_camera_preview_zxing_framing_offset_y, -1);
+
+        float framingOffsetYRatio = styledAttributes.getFloat(R.styleable.zxing_camera_preview_zxing_framing_offset_y_ratio, 0.5f);
+        if (framingOffsetYRatio >= 0.0f && framingOffsetYRatio <= 1.0f) {
+            this.framingOffsetYRatio = framingOffsetYRatio;
         }
 
         this.useTextureView = styledAttributes.getBoolean(R.styleable.zxing_camera_preview_zxing_use_texture_view, true);
@@ -840,6 +852,14 @@ public class CameraPreview extends ViewGroup {
             int horizontalMargin = Math.max(0, (intersection.width() - framingRectSize.width) / 2);
             int verticalMargin = Math.max(0, (intersection.height() - framingRectSize.height) / 2);
             intersection.inset(horizontalMargin, verticalMargin);
+
+            // Y axis offset
+            if (framingOffsetY == -1) {
+                intersection.offset(0, (int) ((container.height() - intersection.height()) * framingOffsetYRatio - verticalMargin));
+            } else {
+                intersection.offset(0, framingOffsetY - verticalMargin);
+            }
+
             return intersection;
         }
         // margin as 10% (default) of the smaller of width, height
@@ -849,6 +869,14 @@ public class CameraPreview extends ViewGroup {
             // We don't want a frame that is taller than wide.
             intersection.inset(0, (intersection.height() - intersection.width()) / 2);
         }
+
+        // Y axis offset
+        if (framingOffsetY == -1) {
+            intersection.offset(0, (int) ((container.height() - intersection.height()) * (framingOffsetYRatio - 0.5f)));
+        } else {
+            intersection.offset(0, (int) (framingOffsetY - ((container.height() - intersection.height()) * 0.5f)));
+        }
+
         return intersection;
     }
 
