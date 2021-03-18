@@ -47,7 +47,7 @@ repositories {
 }
 
 dependencies {
-    implementation('com.journeyapps:zxing-android-embedded:4.2.0') { transitive = false }
+    implementation('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.zxing:core:3.3.0'
 }
