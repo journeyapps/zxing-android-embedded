@@ -14,3 +14,8 @@ jobs:
           java-version: '11'
       - name: Build and Lint with Gradle
         run: ./gradlew build
+      - name: Archive lint results
+        uses: actions/upload-artifact@v2
+        with:
+          name: lint-results
+          path: "**/build/reports/lint-results.xml"
