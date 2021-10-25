@@ -39,6 +39,7 @@ import java.util.Map;
  * @author Isaac Potoczny-Jones
  * @author Brad Drehmer
  * @author gcstang
+ * @deprecated Use ScanOptions and ScanContract instead.
  */
 @SuppressWarnings("unused")
 public class IntentIntegrator {
@@ -353,6 +354,7 @@ public class IntentIntegrator {
      * @return null if the event handled here was not related to this class, or
      * else an {@link IntentResult} containing the result of the scan. If the user cancelled scanning,
      * the fields will be null.
+     * @deprecated Not compatible with setRequestCode(). Use parseActivityResult(resultCode, intent) instead.
      */
     public static IntentResult parseActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == REQUEST_CODE) {

@@ -3,8 +3,6 @@ package example.zxing;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +11,33 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.zxing.client.android.Intents;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
 import com.mikepenz.aboutlibraries.LibsBuilder;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 
 public class MainActivity extends AppCompatActivity {
+    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
+            result -> {
+                if(result.getContents() == null) {
+                    Intent originalIntent = result.getOriginalIntent();
+                    if (originalIntent == null) {
+                        Log.d("MainActivity", "Cancelled scan");
+                        Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
+                    } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
+                        Log.d("MainActivity", "Cancelled scan due to missing camera permission");
+                        Toast.makeText(MainActivity.this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Log.d("MainActivity", "Scanned");
+                    Toast.makeText(MainActivity.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                }
+            });
 
-    public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,49 +46,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void scanBarcode(View view) {
-        new IntentIntegrator(this).initiateScan();
-    }
-
-    public void scanBarcodeWithCustomizedRequestCode(View view) {
-        new IntentIntegrator(this).setRequestCode(CUSTOMIZED_REQUEST_CODE).initiateScan();
+        barcodeLauncher.launch(new ScanOptions());
     }
 
     public void scanBarcodeInverted(View view){
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.INVERTED_SCAN);
-        integrator.initiateScan();
+        ScanOptions options = new ScanOptions();
+        options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.INVERTED_SCAN);
+        barcodeLauncher.launch(options);
     }
 
     public void scanMixedBarcodes(View view){
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
-        integrator.initiateScan();
+        ScanOptions options = new ScanOptions();
+        options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
+        barcodeLauncher.launch(options);
     }
 
     public void scanBarcodeCustomLayout(View view) {
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setCaptureActivity(AnyOrientationCaptureActivity.class);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
-        integrator.setPrompt("Scan something");
-        integrator.setOrientationLocked(false);
-        integrator.setBeepEnabled(false);
-        integrator.initiateScan();
+        ScanOptions options = new ScanOptions();
+        options.setCaptureActivity(AnyOrientationCaptureActivity.class);
+        options.setDesiredBarcodeFormats(ScanOptions.ONE_D_CODE_TYPES);
+        options.setPrompt("Scan something");
+        options.setOrientationLocked(false);
+        options.setBeepEnabled(false);
+        barcodeLauncher.launch(options);
     }
 
     public void scanPDF417(View view) {
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.PDF_417);
-        integrator.setPrompt("Scan something");
-        integrator.setOrientationLocked(false);
-        integrator.setBeepEnabled(false);
-        integrator.initiateScan();
+        ScanOptions options = new ScanOptions();
+        options.setDesiredBarcodeFormats(ScanOptions.PDF_417);
+        options.setPrompt("Scan something");
+        options.setOrientationLocked(false);
+        options.setBeepEnabled(false);
+        barcodeLauncher.launch(options);
     }
 
 
     public void scanBarcodeFrontCamera(View view) {
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setCameraId(Camera.CameraInfo.CAMERA_FACING_FRONT);
-        integrator.initiateScan();
+        ScanOptions options = new ScanOptions();
+        options.setCameraId(Camera.CameraInfo.CAMERA_FACING_FRONT);
+        barcodeLauncher.launch(options);
     }
 
     public void scanContinuous(View view) {
@@ -80,24 +93,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void scanToolbar(View view) {
-        new IntentIntegrator(this).setCaptureActivity(ToolbarCaptureActivity.class).initiateScan();
+        ScanOptions options = new ScanOptions().setCaptureActivity(ToolbarCaptureActivity.class);
+        barcodeLauncher.launch(options);
     }
 
     public void scanCustomScanner(View view) {
-        new IntentIntegrator(this).setOrientationLocked(false).setCaptureActivity(CustomScannerActivity.class).initiateScan();
+        ScanOptions options = new ScanOptions().setOrientationLocked(false).setCaptureActivity(CustomScannerActivity.class);
+        barcodeLauncher.launch(options);
     }
 
     public void scanMarginScanner(View view) {
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setOrientationLocked(false);
-        integrator.setCaptureActivity(SmallCaptureActivity.class);
-        integrator.initiateScan();
+        ScanOptions options = new ScanOptions();
+        options.setOrientationLocked(false);
+        options.setCaptureActivity(SmallCaptureActivity.class);
+        barcodeLauncher.launch(options);
     }
 
     public void scanWithTimeout(View view) {
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setTimeout(8000);
-        integrator.initiateScan();
+        ScanOptions options = new ScanOptions();
+        options.setTimeout(8000);
+        barcodeLauncher.launch(options);
     }
 
     public void tabs(View view) {
@@ -109,53 +124,20 @@ public class MainActivity extends AppCompatActivity {
         new LibsBuilder().start(this);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode != CUSTOMIZED_REQUEST_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
-            // This is important, otherwise the result will not be passed to the fragment
-            super.onActivityResult(requestCode, resultCode, data);
-            return;
-        }
-        switch (requestCode) {
-            case CUSTOMIZED_REQUEST_CODE: {
-                Toast.makeText(this, "REQUEST_CODE = " + requestCode, Toast.LENGTH_LONG).show();
-                break;
-            }
-            default:
-                break;
-        }
-
-        IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
-
-        if(result.getContents() == null) {
-            Intent originalIntent = result.getOriginalIntent();
-            if (originalIntent == null) {
-                Log.d("MainActivity", "Cancelled scan");
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-            } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
-                Log.d("MainActivity", "Cancelled scan due to missing camera permission");
-                Toast.makeText(this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
-            }
-        } else {
-            Log.d("MainActivity", "Scanned");
-            Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-        }
-    }
-
     /**
      * Sample of scanning from a Fragment
      */
     public static class ScanFragment extends Fragment {
-        private String toast;
+        private final ActivityResultLauncher<ScanOptions> fragmentLauncher = registerForActivityResult(new ScanContract(),
+                result -> {
+                    if(result.getContents() == null) {
+                        Toast.makeText(getContext(), "Cancelled from fragment", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getContext(), "Scanned from fragment: " + result.getContents(), Toast.LENGTH_LONG).show();
+                    }
+                });
 
         public ScanFragment() {
-        }
-
-        @Override
-        public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-
-            displayToast();
         }
 
         @Override
@@ -168,29 +150,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void scanFromFragment() {
-            IntentIntegrator.forSupportFragment(this).initiateScan();
-        }
-
-        private void displayToast() {
-            if(getActivity() != null && toast != null) {
-                Toast.makeText(getActivity(), toast, Toast.LENGTH_LONG).show();
-                toast = null;
-            }
-        }
-
-        @Override
-        public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-            if(result != null) {
-                if(result.getContents() == null) {
-                    toast = "Cancelled from fragment";
-                } else {
-                    toast = "Scanned from fragment: " + result.getContents();
-                }
-
-                // At this point we may or may not have a reference to the activity
-                displayToast();
-            }
+            fragmentLauncher.launch(new ScanOptions());
         }
     }
 }

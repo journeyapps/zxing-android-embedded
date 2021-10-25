@@ -27,19 +27,19 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 }
-
-android {
-    buildToolsVersion '28.0.3' // Older versions may give compile errors
-}
-
 ```
 
 ## Older SDK versions
 
-For Android SDK versions < 24, you can downgrade `zxing:core` to 3.3.0 or earlier for Android 14+ support:
+By default, only SDK 24+ is supported, even though the library specifies 19 as the minimum version.
+No guarantees are made on support for SDK versions below 24 - you'll have to test to make sure it's compatible.
+
+SDK versions 19 - 23 should also work, but one of the changes changes below are required,
+and this is not routinely tested.
+
+### Option 1. Downgrade zxing:core to 3.3.0
 
 ```groovy
 repositories {
@@ -47,23 +47,40 @@ repositories {
 }
 
 dependencies {
-    implementation('com.journeyapps:zxing-android-embedded:4.2.0') { transitive = false }
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation('com.journeyapps:zxing-android-embedded:4.3.0') { transitive = false }
     implementation 'com.google.zxing:core:3.3.0'
 }
+```
 
+### Option 2: Desugaring (Advanced)
+
+This option does not require changing library versions, but may complicate the build process.
+
+See [Java 8+ API desugaring support](https://developer.android.com/studio/write/java8-support#library-desugaring).
+
+```groovy
 android {
-    buildToolsVersion '28.0.3'
+    defaultConfig {
+        // Important: multidex must be enabled
+        // https://developer.android.com/studio/build/multidex#mdex-gradle
+        multiDexEnabled true
+        minSdkVersion 19
+    }
+
+    compileOptions {
+        // Flag to enable support for the new language APIs
+        coreLibraryDesugaringEnabled true
+        // Sets Java compatibility to Java 8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    implementation "androidx.multidex:multidex:2.0.1"
+}
 ```
-You'll also need this in your Android manifest:
-
-```xml
-<uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
-```
-
-No guarantees are made on support for older SDK versions - you'll have to test to make sure it's compatible.
 
 ## Hardware Acceleration
 
@@ -75,48 +92,42 @@ Make sure it is enabled in your manifest file:
     <application android:hardwareAccelerated="true" ... >
 ```
 
-## Usage with IntentIntegrator
+## Usage with ScanContract
 
-Launch the intent with the default options:
+Note: `startActivityForResult` is deprecated, so this example uses `registerForActivityResult` instead.
+See for details: https://developer.android.com/training/basics/intents/result
+
+`startActivityForResult` can still be used via `IntentIntegrator`, but that is not recommended anymore.
+
 ```java
-new IntentIntegrator(this).initiateScan(); // `this` is the current Activity
+// Register the launcher and result handler
+private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
+        result -> {
+            if(result.getContents() == null) {
+                Toast.makeText(MyActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(MyActivity.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+            }
+        });
 
-
-// Get the results:
-@Override
-protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-    if(result != null) {
-        if(result.getContents() == null) {
-            Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-        }
-    } else {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+// Launch
+public void onButtonClick(View view) {
+    barcodeLauncher.launch(new ScanOptions());
 }
-```
-
-Use from a Fragment:
-```java
-IntentIntegrator.forFragment(this).initiateScan(); // `this` is the current Fragment
-
-// If you're using the support library, use IntentIntegrator.forSupportFragment(this) instead.
 ```
 
 Customize options:
 ```java
-IntentIntegrator integrator = new IntentIntegrator(this);
-integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
-integrator.setPrompt("Scan a barcode");
-integrator.setCameraId(0);  // Use a specific camera of the device
-integrator.setBeepEnabled(false);
-integrator.setBarcodeImageEnabled(true);
-integrator.initiateScan();
+ScanOptions options = new ScanOptions();
+options.setDesiredBarcodeFormats(ScanOptions.ONE_D_CODE_TYPES);
+options.setPrompt("Scan a barcode");
+options.setCameraId(0);  // Use a specific camera of the device
+options.setBeepEnabled(false);
+options.setBarcodeImageEnabled(true);
+barcodeLauncher.launch(options);
 ```
 
-See [IntentIntegrator][5] for more options.
+See [BarcodeOptions][5] for more options.
 
 ### Generate Barcode example
 
@@ -152,9 +163,9 @@ Sample:
 ```
 
 ```java
-IntentIntegrator integrator = new IntentIntegrator(this);
-integrator.setOrientationLocked(false);
-integrator.initiateScan();
+ScanOptions options = new ScanOptions();
+options.setOrientationLocked(false);
+barcodeLauncher.launch(options);
 ```
 
 ### Customization and advanced options
@@ -198,7 +209,7 @@ You can then use your local version by specifying in your `build.gradle` file:
 
 Licensed under the [Apache License 2.0][7]
 
-	Copyright (C) 2012-2018 ZXing authors, Journey Mobile
+	Copyright (C) 2012-201 ZXing authors, Journey Mobile
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -216,7 +227,5 @@ Licensed under the [Apache License 2.0][7]
 
 [1]: http://journeyapps.com
 [2]: https://github.com/zxing/zxing/
-[3]: https://github.com/zxing/zxing/wiki/Scanning-Via-Intent
-[4]: https://github.com/journeyapps/zxing-android-embedded/blob/2.x/README.md
-[5]: zxing-android-embedded/src/com/google/zxing/integration/android/IntentIntegrator.java
+[5]: zxing-android-embedded/src/com/journeyapps/barcodescanner/ScanOptions.java
 [7]: http://www.apache.org/licenses/LICENSE-2.0

@@ -1,3 +1,17 @@
+### 4.3.0 (2021-10-25)
+
+* Minimum SDK version 19, but requires additional config (see readme) for < 24 compatibility.
+* Add ScanOptions and ScanContract for use with `registerForActivityResult()`.
+* Deprecates IntentIntegrator.
+* Use minimal AndroidX libraries.
+
+### 4.2.0 (2021-03-15)
+
+* Fix MediaPlayer warnings (#587).
+* Prevent CameraConfigurationUtils clash (#609).
+* Add licenses to POM (#556).
+* Bug: Crashes on SDK versions older than 21 (#645).
+
 ### 4.1.0 (2020-01-07)
 
 * Ability to hide the laser in ViewfinderView (#503).

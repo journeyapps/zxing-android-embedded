@@ -33,10 +33,11 @@ if (secretPropsFile.exists()) {
 dependencies {
     api project.zxingCore
 
-    api 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.core:core:1.6.0'
+    implementation 'androidx.fragment:fragment:1.3.6'
 
-    testImplementation 'junit:junit:4.13'
-    testImplementation "org.mockito:mockito-core:1.9.5"
+    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'org.mockito:mockito-core:1.9.5'
 }
 
 android {
@@ -50,7 +51,7 @@ android {
             res.srcDirs = ['res-orig', 'res']
             assets.srcDirs = ['assets']
         }
-        test.setRoot('test');
+        test.setRoot('test')
     }
 
     // This is bad practice - we should fix the warnings instead.
@@ -69,8 +70,9 @@ android {
         // We test with primitives such as Rect, and rely on their default behaviour working.
         unitTests.returnDefaultValues = true
     }
+
     defaultConfig {
-        minSdkVersion 24
+        minSdkVersion 19
     }
 
     buildTypes {

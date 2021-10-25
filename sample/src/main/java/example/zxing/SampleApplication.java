@@ -1,16 +1,13 @@
 package example.zxing;
 
-import android.app.Application;
-
-import com.squareup.leakcanary.LeakCanary;
+import androidx.multidex.MultiDexApplication;
 
 /**
  *
  */
-public class SampleApplication extends Application {
+public class SampleApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        LeakCanary.install(this);
     }
 }

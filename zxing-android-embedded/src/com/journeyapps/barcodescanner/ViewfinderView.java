@@ -16,7 +16,6 @@
 
 package com.journeyapps.barcodescanner;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -74,7 +73,7 @@ public class ViewfinderView extends View {
 
         Resources resources = getResources();
 
-        // Get setted attributes on view
+        // Get set attributes on view
         TypedArray attributes = getContext().obtainStyledAttributes(attrs, R.styleable.zxing_finder);
 
         this.maskColor = attributes.getColor(R.styleable.zxing_finder_zxing_viewfinder_mask,
@@ -148,8 +147,8 @@ public class ViewfinderView extends View {
         final Rect frame = framingRect;
         final Size previewSize = this.previewSize;
 
-        final int width = canvas.getWidth();
-        final int height = canvas.getHeight();
+        final int width = getWidth();
+        final int height = getHeight();
 
         // Draw the exterior (i.e. outside the framing rect) darkened
         paint.setColor(resultBitmap != null ? resultColor : maskColor);
