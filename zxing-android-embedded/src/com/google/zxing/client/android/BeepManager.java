@@ -23,6 +23,7 @@ import android.content.res.AssetFileDescriptor;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Vibrator;
 import android.util.Log;
 
@@ -94,8 +95,13 @@ public final class BeepManager {
 
     public MediaPlayer playBeepSound() {
         MediaPlayer mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioAttributes(new AudioAttributes.Builder().setContentType(
-                AudioAttributes.CONTENT_TYPE_MUSIC).build());
+        if (Build.VERSION.SDK_INT >= 21) {
+            mediaPlayer.setAudioAttributes(new AudioAttributes.Builder().setContentType(
+                    AudioAttributes.CONTENT_TYPE_MUSIC).build());
+        } else {
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        }
+
         mediaPlayer.setOnCompletionListener(mp -> {
             mp.stop();
             mp.reset();
