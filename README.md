@@ -28,7 +28,6 @@ repositories {
 
 dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
 }
 
 android {
@@ -39,7 +38,12 @@ android {
 
 ## Older SDK versions
 
-For Android SDK versions < 24, you can downgrade `zxing:core` to 3.3.0 or earlier for Android 14+ support:
+By default, only SDK 24+ is supported, even though the library specifies 19 as the minimum version.
+No guarantees are made on support for SDK versions below 24 - you'll have to test to make sure it's compatible.
+
+For versions 19 - 23, one of two changes are required:
+
+### Option 1. Downgrade zxing:core to 3.3.0
 
 ```groovy
 repositories {
@@ -48,22 +52,43 @@ repositories {
 
 dependencies {
     implementation('com.journeyapps:zxing-android-embedded:4.2.0') { transitive = false }
-    implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.zxing:core:3.3.0'
 }
 
 android {
     buildToolsVersion '28.0.3'
 }
-
-```
-You'll also need this in your Android manifest:
-
-```xml
-<uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
 ```
 
-No guarantees are made on support for older SDK versions - you'll have to test to make sure it's compatible.
+### Option 2: Desugaring
+
+This option does not require changing library versions, but may complicate the build process.
+
+See [Java 8+ API desugaring support](https://developer.android.com/studio/write/java8-support#library-desugaring).
+
+```groovy
+android {
+    defaultConfig {
+        // Important: multidex must be enabled
+        // https://developer.android.com/studio/build/multidex#mdex-gradle
+        multiDexEnabled true
+        minSdkVersion 19
+    }
+
+    compileOptions {
+        // Flag to enable support for the new language APIs
+        coreLibraryDesugaringEnabled true
+        // Sets Java compatibility to Java 8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    implementation "androidx.multidex:multidex:2.0.1"
+}
+```
 
 ## Hardware Acceleration
 
