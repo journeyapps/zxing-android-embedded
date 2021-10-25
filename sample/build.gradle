@@ -51,10 +51,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+
     compileOptions {
         coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        // Error: The lint detector
+        //    androidx.appcompat.view.OnClickXmlDetector
+        // called context.getMainProject() during module analysis.
+        disable 'UsingOnClickInXml'
     }
 }
 
