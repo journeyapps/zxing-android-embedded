@@ -27,13 +27,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 }
-
-android {
-    buildToolsVersion '28.0.3' // Older versions may give compile errors
-}
-
 ```
 
 ## Older SDK versions
@@ -51,16 +46,12 @@ repositories {
 }
 
 dependencies {
-    implementation('com.journeyapps:zxing-android-embedded:4.2.0') { transitive = false }
+    implementation('com.journeyapps:zxing-android-embedded:4.3.0') { transitive = false }
     implementation 'com.google.zxing:core:3.3.0'
-}
-
-android {
-    buildToolsVersion '28.0.3'
 }
 ```
 
-### Option 2: Desugaring
+### Option 2: Desugaring (Advanced)
 
 This option does not require changing library versions, but may complicate the build process.
 
@@ -108,23 +99,20 @@ See for details: https://developer.android.com/training/basics/intents/result
 `startActivityForResult` can still be used via `IntentIntegrator`, but that is not recommended anymore.
 
 ```java
-    // Note: startActivityForResult is deprecated, so this example uses registerForActivityResult instead.
-    // See for details: https://developer.android.com/training/basics/intents/result
+// Register the launcher and result handler
+private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
+        result -> {
+            if(result.getContents() == null) {
+                Toast.makeText(MyActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(MyActivity.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+            }
+        });
 
-    // Register the launcher and result handler
-    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
-            result -> {
-                if(result.getContents() == null) {
-                    Toast.makeText(MyActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(MyActivity.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                }
-            });
-
-    // Launch
-    public void onButtonClick(View view) {
-        barcodeLauncher.launch(new ScanOptions());
-    }
+// Launch
+public void onButtonClick(View view) {
+    barcodeLauncher.launch(new ScanOptions());
+}
 ```
 
 Customize options:
