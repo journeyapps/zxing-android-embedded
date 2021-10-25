@@ -128,28 +128,16 @@ public class MainActivity extends AppCompatActivity {
      * Sample of scanning from a Fragment
      */
     public static class ScanFragment extends Fragment {
-        private String toast;
-
         private final ActivityResultLauncher<ScanOptions> fragmentLauncher = registerForActivityResult(new ScanContract(),
                 result -> {
                     if(result.getContents() == null) {
-                        toast = "Cancelled from fragment";
+                        Toast.makeText(getContext(), "Cancelled from fragment", Toast.LENGTH_LONG).show();
                     } else {
-                        toast = "Scanned from fragment: " + result.getContents();
+                        Toast.makeText(getContext(), "Scanned from fragment: " + result.getContents(), Toast.LENGTH_LONG).show();
                     }
-
-                    // At this point we may or may not have a reference to the activity
-                    displayToast();
                 });
 
         public ScanFragment() {
-        }
-
-        @Override
-        public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-
-            displayToast();
         }
 
         @Override
@@ -163,13 +151,6 @@ public class MainActivity extends AppCompatActivity {
 
         public void scanFromFragment() {
             fragmentLauncher.launch(new ScanOptions());
-        }
-
-        private void displayToast() {
-            if(getActivity() != null && toast != null) {
-                Toast.makeText(getActivity(), toast, Toast.LENGTH_LONG).show();
-                toast = null;
-            }
         }
     }
 }
