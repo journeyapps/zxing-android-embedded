@@ -50,7 +50,7 @@ android {
             res.srcDirs = ['res-orig', 'res']
             assets.srcDirs = ['assets']
         }
-        test.setRoot('test');
+        test.setRoot('test')
     }
 
     // This is bad practice - we should fix the warnings instead.
@@ -70,7 +70,7 @@ android {
         unitTests.returnDefaultValues = true
     }
     defaultConfig {
-        minSdkVersion 24
+        minSdkVersion 19
     }
 
     buildTypes {
