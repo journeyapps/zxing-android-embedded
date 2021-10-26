@@ -13,15 +13,16 @@ Features:
 
 A sample application is available in [Releases](https://github.com/journeyapps/zxing-android-embedded/releases).
 
-By default, Android SDK 24+ is required because of `zxing:core` 3.4.0. To support SDK 14+, see [Older SDK versions](#older-sdk-versions). 
+By default, Android SDK 24+ is required because of `zxing:core` 3.4.x.
+SDK 19+ is supported with additional configuration, see [Older SDK versions](#older-sdk-versions).
 
 ## Adding aar dependency with Gradle
-
-From version 4.x, only Android SDK 24+ is supported by default, and androidx is required.
 
 Add the following to your `build.gradle` file:
 
 ```groovy
+// Config for SDK 24+
+
 repositories {
     mavenCentral()
 }
@@ -33,11 +34,10 @@ dependencies {
 
 ## Older SDK versions
 
-By default, only SDK 24+ is supported, even though the library specifies 19 as the minimum version.
-No guarantees are made on support for SDK versions below 24 - you'll have to test to make sure it's compatible.
+By default, only SDK 24+ will work, even though the library specifies 19 as the minimum version.
 
-SDK versions 19 - 23 should also work, but one of the changes changes below are required,
-and this is not routinely tested.
+For SDK versions 19+, one of the changes changes below are required.
+Some older SDK versions below 19 may work, but this is not tested or supported.
 
 ### Option 1. Downgrade zxing:core to 3.3.0
 
@@ -56,13 +56,40 @@ dependencies {
 
 This option does not require changing library versions, but may complicate the build process.
 
+This requires Android Gradle Plugin version 4.0.0 or later.
+
 See [Java 8+ API desugaring support](https://developer.android.com/studio/write/java8-support#library-desugaring).
+
+Example for SDK 21+:
 
 ```groovy
 android {
     defaultConfig {
-        // Important: multidex must be enabled
-        // https://developer.android.com/studio/build/multidex#mdex-gradle
+        minSdkVersion 21
+    }
+
+    compileOptions {
+        // Flag to enable support for the new language APIs
+        coreLibraryDesugaringEnabled true
+        // Sets Java compatibility to Java 8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+}
+```
+
+SDK 19+ additionally requires multiDex. In addition to these gradle config changes, the Application
+class must also be changed. See for details: [Configure your app for multidex](https://developer.android.com/studio/build/multidex#mdex-gradle).
+
+```groovy
+android {
+    defaultConfig {
         multiDexEnabled true
         minSdkVersion 19
     }
@@ -77,6 +104,8 @@ android {
 }
 
 dependencies {
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation "androidx.multidex:multidex:2.0.1"
 }
