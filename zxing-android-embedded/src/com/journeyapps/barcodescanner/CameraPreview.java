@@ -266,7 +266,7 @@ public class CameraPreview extends ViewGroup {
      *
      * @param attrs the attributes
      */
-    protected void initializeAttributes(AttributeSet attrs) {
+    public void initializeAttributes(AttributeSet attrs) {
         TypedArray styledAttributes = getContext().obtainStyledAttributes(attrs, R.styleable.zxing_camera_preview);
 
         int framingRectWidth = (int) styledAttributes.getDimension(R.styleable.zxing_camera_preview_zxing_framing_rect_width, -1);
