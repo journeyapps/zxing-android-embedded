@@ -231,7 +231,7 @@ You can then use your local version by specifying in your `build.gradle` file:
 
 ## Sponsored by
 
-[JourneyApps][1] - Creating business solutions with mobile apps. Fast.
+[JourneyApps][1]
 
 
 ## License
