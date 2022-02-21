@@ -19,11 +19,19 @@ import java.util.Map;
  * Licensed under the Apache License, Version 2.0.
  */
 public class BarcodeEncoder {
-    private static final int WHITE = 0xFFFFFFFF;
-    private static final int BLACK = 0xFF000000;
+    private int bgColor = 0xFFFFFFFF;
+    private int fgColor = 0xFF000000;
 
 
     public BarcodeEncoder() {
+    }
+
+    public void setBackgroundColor(int bgColor) {
+        this.bgColor = bgColor;
+    }
+
+    public void setForegroundColor(int fgColor)  {
+        this.fgColor = fgColor;
     }
 
     public Bitmap createBitmap(BitMatrix matrix) {
@@ -33,7 +41,7 @@ public class BarcodeEncoder {
         for (int y = 0; y < height; y++) {
             int offset = y * width;
             for (int x = 0; x < width; x++) {
-                pixels[offset + x] = matrix.get(x, y) ? BLACK : WHITE;
+                pixels[offset + x] = matrix.get(x, y) ? fgColor : bgColor;
             }
         }
 

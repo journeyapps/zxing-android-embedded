@@ -172,11 +172,13 @@ try {
 } catch(Exception e) {
 
 }
-
-No customization of the image is currently supported, including changing colors or padding. If you
-require more customization, copy and modify the source for the encoder.
-
 ```
+
+To customize the generated barcode image, use the `setBackgroundColor` and `setForegroundColor` functions of the
+`BarcodeEncoder` class with a [`@ColorInt`](https://developer.android.com/reference/androidx/annotation/ColorInt)
+value to update the background and foreground colors of the barcode respectively. By default, the barcode has a
+white background and black foreground.
+
 
 ### Changing the orientation
 
