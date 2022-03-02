@@ -43,7 +43,7 @@ public class ScanOptions {
 
     public static final Collection<String> PRODUCT_CODE_TYPES = list(UPC_A, UPC_E, EAN_8, EAN_13, RSS_14);
     public static final Collection<String> ONE_D_CODE_TYPES =
-            list(UPC_A, UPC_E, EAN_8, EAN_13, RSS_14, CODE_39, CODE_93, CODE_128,
+            list(UPC_A, UPC_E, EAN_8, EAN_13, CODE_39, CODE_93, CODE_128,
                     ITF, RSS_14, RSS_EXPANDED);
 
     public static final Collection<String> ALL_CODE_TYPES = null;
