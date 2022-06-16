@@ -36,7 +36,7 @@ dependencies {
 
 By default, only SDK 24+ will work, even though the library specifies 19 as the minimum version.
 
-For SDK versions 19+, one of the changes changes below are required.
+For SDK versions 19+, one of the changes below are required.
 Some older SDK versions below 19 may work, but this is not tested or supported.
 
 ### Option 1. Downgrade zxing:core to 3.3.0
