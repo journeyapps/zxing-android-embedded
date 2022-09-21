@@ -4,14 +4,17 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
@@ -38,10 +41,10 @@ import java.util.Map;
  * Manages barcode scanning for a CaptureActivity. This class may be used to have a custom Activity
  * (e.g. with a customized look and feel, or a different superclass), but not the barcode scanning
  * process itself.
- *
+ * <p>
  * This is intended for an Activity that is dedicated to capturing a single barcode and returning
  * it via setResult(). For other use cases, use DefaultBarcodeScannerView or BarcodeView directly.
- *
+ * <p>
  * The following is managed by this class:
  * - Orientation lock
  * - InactivityTimer
@@ -138,7 +141,7 @@ public class CaptureManager {
     /**
      * Perform initialization, according to preferences set in the intent.
      *
-     * @param intent the intent containing the scanning preferences
+     * @param intent             the intent containing the scanning preferences
      * @param savedInstanceState saved state, containing orientation lock
      */
     public void initializeFromIntent(Intent intent, Bundle savedInstanceState) {
@@ -242,20 +245,47 @@ public class CaptureManager {
                 == PackageManager.PERMISSION_GRANTED) {
             barcodeView.resume();
         } else if (!askedPermission) {
-            ActivityCompat.requestPermissions(this.activity,
-                    new String[]{Manifest.permission.CAMERA},
-                    cameraPermissionReqCode);
+            showPermissionRequiredDialog();
             askedPermission = true;
         } // else wait for permission result
     }
 
+    private void showPermissionRequiredDialog() {
+        Dialog dialog = new AlertDialog.Builder(activity)
+                .setMessage(R.string.camera_permission_request_explanation)
+                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+                    dialogInterface.cancel();
+                    requestPermissionOrNavigateToSettings();
+                })
+                .setNegativeButton(android.R.string.no, (dialogInterface, i) -> {
+                    dialogInterface.cancel();
+                    activity.finish();
+                })
+                .create();
+        dialog.show();
+    }
+
+    private void requestPermissionOrNavigateToSettings() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CAMERA)) {
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            intent.setData(Uri.parse("package:" + activity.getPackageName()));
+            activity.startActivity(intent);
+        } else {
+            ActivityCompat.requestPermissions(this.activity,
+                    new String[]{Manifest.permission.CAMERA},
+                    cameraPermissionReqCode);
+        }
+    }
+
     /**
      * Call from Activity#onRequestPermissionsResult
-     * @param requestCode The request code passed in {@link androidx.core.app.ActivityCompat#requestPermissions(Activity, String[], int)}.
-     * @param permissions The requested permissions.
+     *
+     * @param requestCode  The request code passed in {@link androidx.core.app.ActivityCompat#requestPermissions(Activity, String[], int)}.
+     * @param permissions  The requested permissions.
      * @param grantResults The grant results for the corresponding permissions
-     *     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
-     *     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
+     *                     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
+     *                     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
      */
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         if (requestCode == cameraPermissionReqCode) {
@@ -302,7 +332,7 @@ public class CaptureManager {
     /**
      * Create a intent to return as the Activity result.
      *
-     * @param rawResult the BarcodeResult, must not be null.
+     * @param rawResult        the BarcodeResult, must not be null.
      * @param barcodeImagePath a path to an exported file of the Barcode Image, can be null.
      * @return the Intent
      */
