@@ -240,7 +240,7 @@ You can then use your local version by specifying in your `build.gradle` file:
 
 Licensed under the [Apache License 2.0][7]
 
-	Copyright (C) 2012-201 ZXing authors, Journey Mobile
+	Copyright (C) 2012-2022 ZXing authors, Journey Mobile
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
