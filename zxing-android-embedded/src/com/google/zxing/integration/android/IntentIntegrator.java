@@ -209,6 +209,20 @@ public class IntentIntegrator {
         addExtra(Intents.Scan.TORCH_ENABLED, enabled);
         return this;
     }
+      public IntentIntegrator setFlashEnabled(boolean enabled) {
+         CameraManager cameraManager = (CameraManager) act.getSystemService(Context.CAMERA_SERVICE);
+        if (cameraManager == null)
+            
+        try {
+            String cameraId = cameraManager.getCameraIdList()[0];
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                cameraManager.setTorchMode(cameraId, enabled);
+            }
+        } catch (CameraAccessException ignored) {
+            ignored.printStackTrace();
+        }
+        return this;
+    }
 
 
     /**
