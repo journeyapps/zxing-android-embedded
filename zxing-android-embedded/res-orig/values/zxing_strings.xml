@@ -19,4 +19,5 @@
   <string name="zxing_button_ok">OK</string>
   <string name="zxing_msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the device.</string>
   <string name="zxing_msg_default_status">Place a barcode inside the viewfinder rectangle to scan it.</string>
+  <string name="camera_permission_request_explanation">To make app function properly, you should give camera permission. Would you like to give permission?</string>
 </resources>
