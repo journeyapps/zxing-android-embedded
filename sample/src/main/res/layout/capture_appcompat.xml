@@ -38,6 +38,7 @@
         android:layout_below="@+id/my_awesome_toolbar"
         android:layout_alignParentBottom="true"
         android:id="@+id/zxing_barcode_scanner"
+        app:zxing_framing_offset_y="100dp"
         app:zxing_use_texture_view="true"/>
 
 
