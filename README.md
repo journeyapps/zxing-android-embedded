@@ -113,13 +113,9 @@ dependencies {
 
 ## Hardware Acceleration
 
-Hardware acceleration is required since TextureView is used.
+Hardware acceleration is required since TextureView is used. This is enabled by default if the Target API level is >=14, as said in the [documentation](https://developer.android.com/guide/topics/graphics/hardware-accel).
 
-Make sure it is enabled in your manifest file:
-
-```xml
-    <application android:hardwareAccelerated="true" ... >
-```
+Check that `android:hardwareAccelerated` is not set to `false` in the `AndroidManifest.xml`.
 
 ## Usage with ScanContract
 
