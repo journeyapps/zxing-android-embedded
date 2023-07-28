@@ -11,6 +11,7 @@ public class CameraSettings {
     private boolean barcodeSceneModeEnabled = false;
     private boolean meteringEnabled = false;
     private boolean autoFocusEnabled = true;
+    private long autoFocusDelay = 2000L;
     private boolean continuousFocusEnabled = false;
     private boolean exposureEnabled = false;
     private boolean autoTorchEnabled = false;
@@ -112,6 +113,19 @@ public class CameraSettings {
         } else {
             focusMode = null;
         }
+    }
+
+    /**
+     * Returns the delay of auto-focus, in milliseconds
+     *
+     * @return delay in milliseconds
+     */
+    public long getAutoFocusDelay() {
+        return autoFocusDelay;
+    }
+
+    public void setAutoFocusDelay(long autoFocusDelay) {
+        this.autoFocusDelay = autoFocusDelay;
     }
 
     /**

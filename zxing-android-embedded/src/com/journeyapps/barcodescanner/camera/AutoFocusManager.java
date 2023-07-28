@@ -32,11 +32,12 @@ public final class AutoFocusManager {
 
     private static final String TAG = AutoFocusManager.class.getSimpleName();
 
-    private static final long AUTO_FOCUS_INTERVAL_MS = 2000L;
-
     private boolean stopped;
     private boolean focusing;
     private final boolean useAutoFocus;
+
+    private long autoFocusDelay;
+
     private final Camera camera;
     private Handler handler;
 
@@ -76,13 +77,14 @@ public final class AutoFocusManager {
         this.camera = camera;
         String currentFocusMode = camera.getParameters().getFocusMode();
         useAutoFocus = settings.isAutoFocusEnabled() && FOCUS_MODES_CALLING_AF.contains(currentFocusMode);
+        autoFocusDelay = settings.getAutoFocusDelay();
         Log.i(TAG, "Current focus mode '" + currentFocusMode + "'; use auto focus? " + useAutoFocus);
         start();
     }
 
     private synchronized void autoFocusAgainLater() {
         if (!stopped && !handler.hasMessages(MESSAGE_FOCUS)) {
-            handler.sendMessageDelayed(handler.obtainMessage(MESSAGE_FOCUS), AUTO_FOCUS_INTERVAL_MS);
+            handler.sendMessageDelayed(handler.obtainMessage(MESSAGE_FOCUS), autoFocusDelay);
         }
     }
 
