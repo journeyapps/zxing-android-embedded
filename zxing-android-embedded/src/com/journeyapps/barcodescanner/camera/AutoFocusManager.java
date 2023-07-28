@@ -35,9 +35,7 @@ public final class AutoFocusManager {
     private boolean stopped;
     private boolean focusing;
     private final boolean useAutoFocus;
-
     private long autoFocusDelay;
-
     private final Camera camera;
     private Handler handler;
 
