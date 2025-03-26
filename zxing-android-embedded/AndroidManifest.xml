@@ -14,7 +14,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.google.zxing.client.android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.google.zxing.client.android">
 
   <uses-permission android:name="android.permission.CAMERA"/>
 
@@ -35,7 +37,8 @@
                 android:screenOrientation="sensorLandscape"
                 android:stateNotNeeded="true"
                 android:theme="@style/zxing_CaptureTheme"
-                android:windowSoftInputMode="stateAlwaysHidden"/>
+                android:windowSoftInputMode="stateAlwaysHidden"
+          tools:ignore="DiscouragedApi" />
   </application>
 
 </manifest>
