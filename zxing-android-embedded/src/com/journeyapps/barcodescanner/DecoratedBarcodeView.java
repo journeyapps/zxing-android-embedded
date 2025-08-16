@@ -15,7 +15,6 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.DecodeFormatManager;
 import com.google.zxing.client.android.DecodeHintManager;
 import com.google.zxing.client.android.Intents;
-import com.google.zxing.client.android.R;
 import com.journeyapps.barcodescanner.camera.CameraParametersCallback;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 

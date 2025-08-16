@@ -27,6 +27,8 @@ import android.os.Build;
 import android.os.Vibrator;
 import android.util.Log;
 
+import com.journeyapps.barcodescanner.R;
+
 import java.io.IOException;
 
 /**

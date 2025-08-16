@@ -64,6 +64,7 @@ android {
         // called context.getMainProject() during module analysis.
         disable 'UsingOnClickInXml'
     }
+    namespace 'example.zxing'
 }
 
 

@@ -26,7 +26,6 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
 import com.google.zxing.client.android.InactivityTimer;
 import com.google.zxing.client.android.Intents;
-import com.google.zxing.client.android.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
