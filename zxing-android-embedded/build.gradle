@@ -33,6 +33,7 @@ if (secretPropsFile.exists()) {
 dependencies {
     api project.zxingCore
 
+    implementation 'androidx.activity:activity:1.8.0'
     implementation 'androidx.core:core:1.6.0'
     implementation 'androidx.fragment:fragment:1.3.6'
 
