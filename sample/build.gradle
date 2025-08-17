@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
     compileSdkVersion project.androidTargetSdk
@@ -64,6 +65,7 @@ android {
         // called context.getMainProject() during module analysis.
         disable 'UsingOnClickInXml'
     }
+    namespace 'example.zxing'
 }
 
 

@@ -27,7 +27,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.google.zxing.ResultPoint;
-import com.google.zxing.client.android.R;
 
 import java.util.ArrayList;
 import java.util.List;

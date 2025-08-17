@@ -5,8 +5,12 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.3'
+        classpath 'com.android.tools.build:gradle:8.11.1'
     }
+}
+
+plugins {
+    id 'org.jetbrains.kotlin.android' version '1.8.0' apply false
 }
 
 subprojects {
@@ -19,6 +23,6 @@ subprojects {
     version = '4.3.0'
     group = 'com.journeyapps'
 
-    ext.androidTargetSdk = 30
+    ext.androidTargetSdk = 35
     ext.zxingCore = 'com.google.zxing:core:3.4.1'
 }

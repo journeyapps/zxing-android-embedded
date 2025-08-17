@@ -33,6 +33,7 @@ if (secretPropsFile.exists()) {
 dependencies {
     api project.zxingCore
 
+    implementation 'androidx.activity:activity:1.8.0'
     implementation 'androidx.core:core:1.6.0'
     implementation 'androidx.fragment:fragment:1.3.6'
 
@@ -41,6 +42,7 @@ dependencies {
 }
 
 android {
+    namespace 'com.journeyapps.barcodescanner'
     resourcePrefix 'zxing_'
     compileSdkVersion project.androidTargetSdk
 
@@ -73,11 +75,13 @@ android {
 
     defaultConfig {
         minSdkVersion 19
+        aarMetadata {
+            minCompileSdk 19
+        }
     }
 
     buildTypes {
         debug {
-            versionNameSuffix ".debug"
             resValue "string", "app_version", "${defaultConfig.versionName}${versionNameSuffix}"
         }
         release {
@@ -87,7 +91,7 @@ android {
 }
 
 task sourceJar(type: Jar) {
-    classifier = 'sources'
+    archiveClassifier = 'sources'
     from android.sourceSets.main.java.srcDirs
 }
 
