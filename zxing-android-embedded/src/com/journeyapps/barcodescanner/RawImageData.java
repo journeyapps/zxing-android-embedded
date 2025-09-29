@@ -85,18 +85,18 @@ public class RawImageData {
      * @return the rotated bytes
      */
     public static byte[] rotateCW(byte[] data, int imageWidth, int imageHeight) {
-        // Adapted from http://stackoverflow.com/a/15775173
         // data may contain more than just y (u and v), but we are only interested in the y section.
 
-        byte[] yuv = new byte[imageWidth * imageHeight];
-        int i = 0;
+        byte[] flippedLuma = new byte[imageWidth * imageHeight];
+
+        int destIndex  = 0;
         for (int x = 0; x < imageWidth; x++) {
             for (int y = imageHeight - 1; y >= 0; y--) {
-                yuv[i] = data[y * imageWidth + x];
-                i++;
+                flippedLuma[destIndex] = data[y * imageWidth + x];
+                destIndex++;
             }
         }
-        return yuv;
+        return flippedLuma;
     }
 
     /**
